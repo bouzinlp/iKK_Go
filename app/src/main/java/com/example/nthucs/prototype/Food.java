@@ -12,6 +12,8 @@ public class Food implements java.io.Serializable {
     private String title;
     private String content;
 
+    private boolean selected;
+
     public Food() {
         this.title = new String();
         this.content = new String();
@@ -50,6 +52,13 @@ public class Food implements java.io.Serializable {
     }
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 }
 

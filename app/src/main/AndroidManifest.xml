@@ -18,9 +18,9 @@
         <activity android:name=".FoodActivity" >
             <intent-filter>
 
-                <action android:name="net.macdidi.myandroidtutorial.ADD_FOOD" />
+                <action android:name="com.example.nthucs.prototype.ADD_FOOD" />
 
-                <action android:name="net.macdidi.myandroidtutorial.EDIT_FOOD" />
+                <action android:name="com.example.nthucs.prototype.EDIT_FOOD" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
