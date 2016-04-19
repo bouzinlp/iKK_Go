@@ -31,15 +31,6 @@ public class Food implements java.io.Serializable {
     public long getId() {return this.id;}
     public void setId(long id) {this.id = id;}
 
-    public float getCalorie() {return this.calorie;}
-    public void setCalorie(float calorie) {this.calorie = calorie;}
-
-    public float getPortions() {return this.portions;}
-    public void setPortions(float portions) {this.portions = portions;}
-
-    public float getGrams() {return this.grams;}
-    public void setGrams(float grams) {this.grams = grams;}
-
     public String getTitle() {
         return title;
     }
@@ -53,6 +44,15 @@ public class Food implements java.io.Serializable {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public float getCalorie() {return this.calorie;}
+    public void setCalorie(float calorie) {this.calorie = calorie;}
+
+    public float getPortions() {return this.portions;}
+    public void setPortions(float portions) {this.portions = portions;}
+
+    public float getGrams() {return this.grams;}
+    public void setGrams(float grams) {this.grams = grams;}
 
     public boolean isSelected() {
         return selected;

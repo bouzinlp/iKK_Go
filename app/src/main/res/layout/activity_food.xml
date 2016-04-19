@@ -103,7 +103,7 @@
 
         <TableRow>
             <Button
-                android:id="@+id/ok_teim"
+                android:id="@+id/ok_item"
                 android:text="@android:string/ok"
                 android:onClick="onSubmit"
                 android:padding="6sp"
