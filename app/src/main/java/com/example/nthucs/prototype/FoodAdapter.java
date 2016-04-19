@@ -48,7 +48,7 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         ImageView selectedItem = (ImageView) foodView.findViewById(R.id.selected_item);
         TextView titleView = (TextView) foodView.findViewById(R.id.title_text);
 
-        // 設定記事單一顏色
+        // 設定單一顏色
         GradientDrawable background = (GradientDrawable)typeColor.getBackground();
         Color color = new Color();
         background.setColor(color.parseColor("#3F51B5"));

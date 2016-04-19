@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Food> foods;
 
-    private MenuItem add_food, search_food, revert_food, delete_food;
+    private MenuItem scan_food, add_food, search_food, revert_food, delete_food;
 
     private int selectedCount = 0;
 
@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
+        scan_food = menu.findItem(R.id.scan_food);
         add_food = menu.findItem(R.id.add_food);
         search_food = menu.findItem(R.id.search_food);
         revert_food = menu.findItem(R.id.revert_food);
@@ -139,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
+        scan_food.setVisible(selectedCount==0);
         add_food.setVisible(selectedCount==0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount>0);
