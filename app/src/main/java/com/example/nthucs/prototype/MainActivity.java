@@ -15,7 +15,6 @@ import android.widget.ListView;
 
 import java.util.List;
 
-
 public class MainActivity extends AppCompatActivity {
 
     private ListView food_list;
@@ -58,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
             }
-            else if (resultCode==1) {
+            else if (requestCode==1) {
                 int position = data.getIntExtra("position", -1);
 
                 if (position != -1) {
@@ -151,6 +150,8 @@ public class MainActivity extends AppCompatActivity {
         int foodId = item.getItemId();
 
         switch (foodId) {
+            case R.id.scan_food:
+                break;
             case R.id.add_food:
                 Intent intent = new Intent("com.example.nthucs.prototype.ADD_FOOD");
                 startActivityForResult(intent, 0);

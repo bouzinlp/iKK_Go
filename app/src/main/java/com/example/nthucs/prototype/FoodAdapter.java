@@ -35,8 +35,7 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         if (convertView == null) {
             foodView = new LinearLayout(getContext());
             String inflater = Context.LAYOUT_INFLATER_SERVICE;
-            LayoutInflater li = (LayoutInflater)
-                    getContext().getSystemService(inflater);
+            LayoutInflater li = (LayoutInflater)getContext().getSystemService(inflater);
             li.inflate(resource, foodView, true);
         }
         else {
