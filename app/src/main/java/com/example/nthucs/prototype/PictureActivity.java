@@ -14,6 +14,10 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class PictureActivity extends AppCompatActivity {
     // 寫入外部儲存設備授權請求代碼
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
