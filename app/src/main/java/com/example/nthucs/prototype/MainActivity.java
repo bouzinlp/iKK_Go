@@ -1,26 +1,18 @@
 package com.example.nthucs.prototype;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,15 +25,12 @@ public class MainActivity extends AppCompatActivity {
 
     private MenuItem scan_food, add_food, search_food, revert_food, delete_food;
 
+    private static final int ADD_FOOD = 0;
+    private static final int EDIT_FOOD = 1;
+
     private int selectedCount = 0;
 
     private FoodDAO foodDAO;
-
-    // 寫入外部儲存設備授權請求代碼
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
-    private static final int START_CAMERA = 2;
-    private String fileName;
-    private ImageView picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +51,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            Food food = (Food)data.getExtras().getSerializable(
-                    "com.example.nthucs.prototype.Food");
 
-            if (requestCode==0) {
+            Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.Food");
+
+            if (requestCode == ADD_FOOD) {
                 food = foodDAO.insert(food);
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
-            }
-            else if (requestCode==1) {
+            } else if (requestCode == EDIT_FOOD) {
                 int position = data.getIntExtra("position", -1);
 
                 if (position != -1) {
@@ -80,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
                     foods.set(position, food);
                     foodAdapter.notifyDataSetChanged();
                 }
+            } else if (requestCode == 2) {
+
             }
         }
     }
@@ -100,23 +90,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // 覆寫請求授權後執行的方法
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                takePicture();
-            }
-            else {
-                Toast.makeText(this, R.string.write_external_storage_denied,
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-        else {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        }
-    }
-
     private void processControllers() {
         // 建立選單食物點擊監聽物件
         AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
@@ -135,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("position", position);
                     intent.putExtra("com.example.nthucs.prototype.Food", food);
 
-                    startActivityForResult(intent, 1);
+                    startActivityForResult(intent, EDIT_FOOD);
                 }
             }
         };
@@ -173,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
         scan_food.setVisible(selectedCount==0);
         add_food.setVisible(selectedCount==0);
         search_food.setVisible(selectedCount==0);
-        revert_food.setVisible(selectedCount>0);
-        delete_food.setVisible(selectedCount>0);
+        revert_food.setVisible(selectedCount > 0);
+        delete_food.setVisible(selectedCount > 0);
     }
 
     public void clickMenuItem(MenuItem item) {
@@ -182,12 +155,12 @@ public class MainActivity extends AppCompatActivity {
 
         switch (foodId) {
             case R.id.scan_food:
-                // 讀取與處理寫入外部儲存設備授權請求
-                requestStoragePermission();
+                Intent intent1 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                startActivityForResult(intent1, 2);
                 break;
             case R.id.add_food:
                 Intent intent = new Intent("com.example.nthucs.prototype.ADD_FOOD");
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent, ADD_FOOD);
                 break;
             case R.id.search_food:
 
@@ -233,38 +206,5 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
-    }
-
-    private void requestStoragePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            int hasPermission = checkSelfPermission(
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-            if (hasPermission != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
-                return;
-            }
-        }
-
-        takePicture();
-    }
-
-    private void takePicture() {
-        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        File pictureFile = configFileName("P", ".jpg");
-        Uri uri = Uri.fromFile(pictureFile);
-
-        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-        startActivityForResult(intentCamera, START_CAMERA);
-    }
-
-    private File configFileName(String prefix, String extension) {
-        fileName = FileUtil.getUniqueFileName();
-        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
-                prefix + fileName + extension);
     }
 }

@@ -34,6 +34,8 @@
 
         <activity android:name=".PictureActivity">
             <intent-filter>
+                // take pictire
+                <action android:name="com.example.nthucs.prototype.TAKE_PICT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
