@@ -25,7 +25,11 @@ public class PictureActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_picture);
 
+        Intent intent = getIntent();
+        String action = intent.getAction();
 
+        if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
+        requestStoragePermission();
     }
 
     // 覆寫請求授權後執行的方法
