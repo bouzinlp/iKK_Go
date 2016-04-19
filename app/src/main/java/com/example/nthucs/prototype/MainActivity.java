@@ -1,18 +1,25 @@
 package com.example.nthucs.prototype;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,6 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private int selectedCount = 0;
 
     private FoodDAO foodDAO;
+
+    // 寫入外部儲存設備授權請求代碼
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
+    private static final int START_CAMERA = 0;
+    private String fileName;
+    private ImageView picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (foodId) {
             case R.id.scan_food:
+                // 讀取與處理寫入外部儲存設備授權請求
+                requestStoragePermission();
                 break;
             case R.id.add_food:
                 Intent intent = new Intent("com.example.nthucs.prototype.ADD_FOOD");
@@ -200,5 +215,39 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    private void requestStoragePermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasPermission = checkSelfPermission(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+            if (hasPermission != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION);
+                return;
+            }
+        }
+
+        takePicture();
+    }
+
+    private void takePicture() {
+        Intent intentCamera =
+                new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        File pictureFile = configFileName("P", ".jpg");
+        Uri uri = Uri.fromFile(pictureFile);
+
+        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+        startActivityForResult(intentCamera, START_CAMERA);
+    }
+
+    private File configFileName(String prefix, String extension) {
+        fileName = FileUtil.getUniqueFileName();
+        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
+                prefix + fileName + extension);
     }
 }
