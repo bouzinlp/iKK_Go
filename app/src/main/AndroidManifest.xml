@@ -23,10 +23,17 @@
 
         <activity android:name=".FoodActivity" >
             <intent-filter>
-
+                // add food
                 <action android:name="com.example.nthucs.prototype.ADD_FOOD" />
-
+                // edit food
                 <action android:name="com.example.nthucs.prototype.EDIT_FOOD" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".PictureActivity">
+            <intent-filter>
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

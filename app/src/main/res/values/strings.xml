@@ -15,5 +15,6 @@
     <string name="enter_portions">input portions</string>string>
     <string name="grams">grams</string>string>
     <string name="enter_grams">input grams</string>string>
+    <string name="write_external_storage_denied">沒有寫入外部儲存設備授權</string>
 
 </resources>

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -38,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 寫入外部儲存設備授權請求代碼
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
-    private static final int START_CAMERA = 0;
+    private static final int START_CAMERA = 2;
     private String fileName;
     private ImageView picture;
 
@@ -97,6 +98,23 @@ public class MainActivity extends AppCompatActivity {
         processMenu(null);
 
         return true;
+    }
+
+    // 覆寫請求授權後執行的方法
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                takePicture();
+            }
+            else {
+                Toast.makeText(this, R.string.write_external_storage_denied,
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private void processControllers() {
@@ -234,8 +252,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void takePicture() {
-        Intent intentCamera =
-                new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         File pictureFile = configFileName("P", ".jpg");
         Uri uri = Uri.fromFile(pictureFile);
