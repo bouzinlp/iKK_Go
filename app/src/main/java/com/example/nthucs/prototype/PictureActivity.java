@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,7 +30,7 @@ public class PictureActivity extends AppCompatActivity {
         String action = intent.getAction();
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
-        requestStoragePermission();
+            requestStoragePermission();
     }
 
     // 覆寫請求授權後執行的方法
@@ -46,6 +47,18 @@ public class PictureActivity extends AppCompatActivity {
         }
         else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        File file = configFileName("P", ".jpg");
+
+        if (file.exists()) {
+            picture.setVisibility(View.VISIBLE);
+            FileUtil.fileToImageView(file.getAbsolutePath(), picture);
         }
     }
 
@@ -77,7 +90,10 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private File configFileName(String prefix, String extension) {
-        fileName = FileUtil.getUniqueFileName();
+        if (fileName == null) {
+            fileName = FileUtil.getUniqueFileName();
+        }
+
         return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
                 prefix + fileName + extension);
     }
