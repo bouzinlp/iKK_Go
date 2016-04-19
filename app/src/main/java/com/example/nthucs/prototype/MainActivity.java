@@ -1,6 +1,8 @@
 package com.example.nthucs.prototype;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -47,7 +48,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            Food food = (Food)data.getExtras().getSerializable(
+                    "com.example.nthucs.prototype.Food");
 
+            if (requestCode==0) {
+                food = foodDAO.insert(food);
+
+                foods.add(food);
+                foodAdapter.notifyDataSetChanged();
+            }
+            else if (resultCode==1) {
+                int position = data.getIntExtra("position", -1);
+
+                if (position != -1) {
+                    foodDAO.update(food);
+
+                    foods.set(position, food);
+                    foodAdapter.notifyDataSetChanged();
+                }
+            }
+        }
     }
 
     @Override
@@ -121,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
         add_food.setVisible(selectedCount==0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount>0);
-        delete_food.setVisible(selectedCount > 0);
+        delete_food.setVisible(selectedCount>0);
     }
 
     public void clickMenuItem(MenuItem item) {
@@ -129,12 +150,51 @@ public class MainActivity extends AppCompatActivity {
 
         switch (foodId) {
             case R.id.add_food:
+                Intent intent = new Intent("com.example.nthucs.prototype.ADD_FOOD");
+                startActivityForResult(intent, 0);
                 break;
             case R.id.search_food:
+
                 break;
             case R.id.revert_food:
+                for (int i = 0 ; i < foodAdapter.getCount() ; i++) {
+                    Food food = foodAdapter.getItem(i);
+
+                    if (food.isSelected()) {
+                        food.setSelected(false);
+                        foodAdapter.set(i, food);
+                    }
+                }
+                selectedCount = 0;
+                processMenu(null);
                 break;
             case R.id.delete_food:
+                if (selectedCount == 0) break;
+
+                AlertDialog.Builder d = new AlertDialog.Builder(this);
+                String message = getString(R.string.delete_food);
+                d.setTitle(R.string.delete).setMessage(String.format(message, selectedCount));
+                d.setPositiveButton(android.R.string.yes,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int index = foodAdapter.getCount() - 1;
+
+                                while (index > -1) {
+                                    Food food = foodAdapter.get(index);
+
+                                    if (food.isSelected()) {
+                                        foodAdapter.remove(food);
+                                        foodDAO.delete(food.getId());
+                                    }
+                                    index--;
+                                }
+                                foodAdapter.notifyDataSetChanged();
+                            }
+                        });
+                d.setNegativeButton(android.R.string.no, null);
+                d.show();
+
                 break;
         }
     }

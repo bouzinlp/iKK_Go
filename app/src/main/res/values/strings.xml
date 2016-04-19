@@ -2,5 +2,18 @@
     <string name="app_name">Prototype</string>
 
     <string name="purpose">Image search or text input?</string>
-    <string name="search_name">food name</string>
+    <string name="search_food">food name</string>
+    <string name="delete_food">Are you sure to delete %1$d foods？</string>
+    <string name="delete">delete</string>
+    <string name="title">food</string>
+    <string name="enter_title">input food</string>
+    <string name="content">description</string>
+    <string name="enter_content">input description</string>
+    <string name="calorie">calorie</string>
+    <string name="enter_calorie">input calorie</string>
+    <string name="portions">portions</string>string>
+    <string name="enter_portions">input portions</string>string>
+    <string name="grams">grams</string>string>
+    <string name="enter_grams">input grams</string>string>
+
 </resources>

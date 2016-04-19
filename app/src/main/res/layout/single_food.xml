@@ -8,7 +8,7 @@
         android:id="@+id/type_color"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_margin="3sp">
+        android:layout_margin="3sp"
         android:background="@drawable/item_drawable" >
 
         <ImageView
