@@ -8,6 +8,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -19,6 +22,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class PictureActivity extends AppCompatActivity {
+
+    private MenuItem search_pic;
+
     // 寫入外部儲存設備授權請求代碼
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
     private static final int START_CAMERA = 2;
@@ -64,6 +70,16 @@ public class PictureActivity extends AppCompatActivity {
             picture.setVisibility(View.VISIBLE);
             FileUtil.fileToImageView(file.getAbsolutePath(), picture);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        search_pic = menu.findItem(R.id.search_pic);
+
+        return true;
     }
 
     private void requestStoragePermission() {
