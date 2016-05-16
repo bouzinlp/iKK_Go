@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int ADD_FOOD = 0;
     private static final int EDIT_FOOD = 1;
+    private static final int SCAN_FOOD = 2;
 
     private int selectedCount = 0;
 
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                     foods.set(position, food);
                     foodAdapter.notifyDataSetChanged();
                 }
-            } else if (requestCode == 2) {
+            } else if (requestCode == SCAN_FOOD) {
 
             }
         }
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
         switch (foodId) {
             case R.id.scan_food:
                 Intent intent1 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                startActivityForResult(intent1, 2);
+                startActivityForResult(intent1, SCAN_FOOD);
                 break;
             case R.id.add_food:
                 Intent intent = new Intent("com.example.nthucs.prototype.ADD_FOOD");
