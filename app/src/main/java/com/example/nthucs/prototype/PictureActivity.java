@@ -77,7 +77,9 @@ public class PictureActivity extends AppCompatActivity {
         File file = configFileName("P", ".jpg");
 
         if (file.exists()) {
+            // 顯示照片元件
             picture.setVisibility(View.VISIBLE);
+            // 設定照片
             FileUtil.fileToImageView(file.getAbsolutePath(), picture);
         }
     }
