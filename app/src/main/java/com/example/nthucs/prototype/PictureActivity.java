@@ -30,13 +30,13 @@ public class PictureActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
     private static final int START_CAMERA = 2;
 
+    // Picture
     private String fileName;
     private ImageView picture;
 
     // Food information
-    private EditText title_text, content_text, calorie_text, portions_text, grams_text;
-
-    private Food food;
+    //private EditText title_text, content_text, calorie_text, portions_text, grams_text;
+    //private Food food;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,9 @@ public class PictureActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String action = intent.getAction();
+
+        // 取得顯示照片的ImageView元件
+        picture = (ImageView) findViewById(R.id.picture);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
