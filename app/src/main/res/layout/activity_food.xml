@@ -96,6 +96,16 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
+    <!-- 顯示圖片 -->
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2sp"
+        android:background="@drawable/rectangle_drawable"
+        android:padding="6sp"
+        android:visibility="invisible" />
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

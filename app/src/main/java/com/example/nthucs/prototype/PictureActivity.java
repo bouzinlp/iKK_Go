@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,8 +29,14 @@ public class PictureActivity extends AppCompatActivity {
     // 寫入外部儲存設備授權請求代碼
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION = 100;
     private static final int START_CAMERA = 2;
+
     private String fileName;
     private ImageView picture;
+
+    // Food information
+    private EditText title_text, content_text, calorie_text, portions_text, grams_text;
+
+    private Food food;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
