@@ -23,8 +23,8 @@
 
         <TableRow>
             <Button
-                android:id="@+id/ok_item"
-                android:text="@android:string/ok"
+                android:id="@+id/search_item"
+                android:text="@string/search_picture"
                 android:onClick="onSubmit"
                 android:padding="6sp"
                 android:layout_margin="2sp"

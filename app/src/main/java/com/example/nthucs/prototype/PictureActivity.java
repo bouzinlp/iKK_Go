@@ -94,6 +94,13 @@ public class PictureActivity extends AppCompatActivity {
         return true;
     }
 
+    public void onSubmit(View view) {
+        if (view.getId() == R.id.search_item) {
+
+        }
+        finish();
+    }
+
     private void requestStoragePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             int hasPermission = checkSelfPermission(
