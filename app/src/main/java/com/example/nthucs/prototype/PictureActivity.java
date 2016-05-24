@@ -183,7 +183,7 @@ public class PictureActivity extends AppCompatActivity {
             localHttpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
             localHttpURLConnection.setRequestProperty("upload", paramString);
 
-            //String str = String.valueOf(new DataOutputStream(localHttpURLConnection.getOutputStream()));
+            DataOutputStream str = new DataOutputStream(localHttpURLConnection.getOutputStream());
             //System.out.println(str);
         } catch (IOException e) {
             e.printStackTrace();
