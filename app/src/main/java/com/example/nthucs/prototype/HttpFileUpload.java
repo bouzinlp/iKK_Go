@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import android.util.Log;
+//import android.util.Log;
 
 public class HttpFileUpload implements Runnable{
     URL connectURL;
@@ -23,7 +23,7 @@ public class HttpFileUpload implements Runnable{
             Title= vTitle;
             Description = vDesc;
         }catch(Exception ex){
-            Log.i("HttpFileUpload","URL Malformatted");
+           // Log.i("HttpFileUpload","URL Malformatted");
         }
     }
 
@@ -40,7 +40,7 @@ public class HttpFileUpload implements Runnable{
         String Tag="fSnd";
         try
         {
-            Log.e(Tag,"Starting Http File Sending to URL");
+           // Log.e(Tag,"Starting Http File Sending to URL");
 
             // Open a HTTP connection to the URL
             HttpURLConnection conn = (HttpURLConnection)connectURL.openConnection();
@@ -59,7 +59,7 @@ public class HttpFileUpload implements Runnable{
 
             conn.setRequestProperty("Connection", "Keep-Alive");
 
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary="+boundary);
+            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 
@@ -79,7 +79,7 @@ public class HttpFileUpload implements Runnable{
             dos.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + iFileName +"\"" + lineEnd);
             dos.writeBytes(lineEnd);
 
-            Log.e(Tag,"Headers are written");
+           // Log.e(Tag,"Headers are written");
 
             // create a buffer of maximum size
             int bytesAvailable = fileInputStream.available();
@@ -106,7 +106,7 @@ public class HttpFileUpload implements Runnable{
 
             dos.flush();
 
-            Log.e(Tag,"File Sent, Response: "+String.valueOf(conn.getResponseCode()));
+            //Log.e(Tag,"File Sent, Response: "+String.valueOf(conn.getResponseCode()));
 
             InputStream is = conn.getInputStream();
 
@@ -116,17 +116,20 @@ public class HttpFileUpload implements Runnable{
             StringBuffer b =new StringBuffer();
             while( ( ch = is.read() ) != -1 ){ b.append( (char)ch ); }
             String s=b.toString();
-            Log.i("Response",s);
+            System.out.println(s);
+           // Log.i("Response", s);
             dos.close();
         }
         catch (MalformedURLException ex)
         {
-            Log.e(Tag, "URL error: " + ex.getMessage(), ex);
+           // Log.e(Tag, "URL error: " + ex.getMessage(), ex);
+            System.out.println("URL error\n");
         }
 
         catch (IOException ioe)
         {
-            Log.e(Tag, "IO error: " + ioe.getMessage(), ioe);
+           // Log.e(Tag, "IO error: " + ioe.getMessage(), ioe);
+            System.out.println("IO error\n");
         }
     }
 

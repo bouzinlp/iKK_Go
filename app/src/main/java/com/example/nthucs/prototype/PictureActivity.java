@@ -108,24 +108,17 @@ public class PictureActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
             // upload picture
-            try {
-                // Set your file path here
-                FileInputStream fstrm = new FileInputStream(picFile);
+            System.out.println("start");
+            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile);
+            asyncTaskConnect.execute();
+            System.out.println("end");
 
-                // Set your server page url (and the file title/description)
-                HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "search picture", "none");
-
-                //hfu.Send_Now(fstrm);
-
-            } catch (FileNotFoundException e) {
-                // Error: File not found
-            }
-            String path = getImagePath(picUri);
+            /*String path = getImagePath(picUri);
             try {
                 getUrlAndLoad(path);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         finish();
     }
@@ -172,6 +165,12 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private void getUrlAndLoad(String paramString) throws MalformedURLException {
+        String attachmentName = "bitmap";
+        String attachmentFileName = "bitmap.bmp";
+        String crlf = "\r\n";
+        String twoHyphens = "--";
+        String boundary =  "*****";
+
         try {
             HttpURLConnection localHttpURLConnection = (HttpURLConnection)new URL(SERVER_URL).openConnection();
             localHttpURLConnection.setDoInput(true);
@@ -179,12 +178,32 @@ public class PictureActivity extends AppCompatActivity {
             localHttpURLConnection.setUseCaches(false);
             localHttpURLConnection.setRequestMethod("POST");
             localHttpURLConnection.setRequestProperty("Connection", "Keep-Alive");
-            localHttpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
-            localHttpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
-            localHttpURLConnection.setRequestProperty("upload", paramString);
+            //localHttpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
+            localHttpURLConnection.setRequestProperty("Cache-Control", "no-cache");
+            localHttpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            //localHttpURLConnection.setRequestProperty("upload", paramString);
 
-            DataOutputStream str = new DataOutputStream(localHttpURLConnection.getOutputStream());
-            //System.out.println(str);
+            //DataOutputStream request = new DataOutputStream(localHttpURLConnection.getOutputStream());
+            DataOutputStream request = new DataOutputStream(
+                    localHttpURLConnection.getOutputStream());
+
+            request.writeBytes(twoHyphens + boundary + crlf);
+            request.writeBytes("Content-Disposition: form-data; name=\"" +
+                    attachmentName + "\";filename=\"" +
+                    attachmentFileName + "\"" + crlf);
+            request.writeBytes(crlf);
+
+            byte[] pixels = new byte[100];
+
+            request.write(pixels);
+
+            request.writeBytes(crlf);
+            request.writeBytes(twoHyphens + boundary +
+                    twoHyphens + crlf);
+
+            request.flush();
+            request.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
