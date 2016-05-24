@@ -109,7 +109,7 @@ public class PictureActivity extends AppCompatActivity {
         if (view.getId() == R.id.search_item) {
             // upload picture
             System.out.println("start");
-            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile);
+            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
             asyncTaskConnect.execute();
             System.out.println("end");
 

@@ -10,9 +10,11 @@ import java.io.IOException;
 public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     File picFile;
+    String picPath;
 
-    AsyncTaskConnect(File picFile) {
+    AsyncTaskConnect(File picFile, String picPath) {
         this.picFile = picFile;
+        this.picPath = picPath;
     }
     @Override
     protected String doInBackground(String... urls) {
@@ -24,7 +26,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
                 // Set your server page url (and the file title/description)
                 HttpFileUpload hfu = new HttpFileUpload("http://uploads.im/api?upload", "search picture", "none");
 
-                hfu.Send_Now(fstrm);
+                hfu.Send_Now(fstrm, picPath);
 
             } catch (FileNotFoundException e) {
                 // Error: File not found

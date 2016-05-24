@@ -17,6 +17,8 @@ public class HttpFileUpload implements Runnable{
     byte[ ] dataToServer;
     FileInputStream fileInputStream = null;
 
+    String filePath;
+
     HttpFileUpload(String urlString, String vTitle, String vDesc){
         try{
             connectURL = new URL(urlString);
@@ -27,8 +29,9 @@ public class HttpFileUpload implements Runnable{
         }
     }
 
-    void Send_Now(FileInputStream fStream){
+    void Send_Now(FileInputStream fStream, String picPath){
         fileInputStream = fStream;
+        filePath = picPath;
         Sending();
     }
 
@@ -59,9 +62,17 @@ public class HttpFileUpload implements Runnable{
 
             conn.setRequestProperty("Connection", "Keep-Alive");
 
+            //conn.setRequestProperty("Cache-Control", "no-cache");
+
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
+            //conn.setRequestProperty("upload", "http://i.imgur.com/HjPdGZKl.jpg");
+
+            System.out.println(filePath);
+
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+
+            //dos.writeBytes("="+filePath);
 
             dos.writeBytes(twoHyphens + boundary + lineEnd);
             dos.writeBytes("Content-Disposition: form-data; name=\"title\""+ lineEnd);
@@ -118,7 +129,7 @@ public class HttpFileUpload implements Runnable{
             String s=b.toString();
             System.out.println(s);
            // Log.i("Response", s);
-            dos.close();
+            //dos.close();
         }
         catch (MalformedURLException ex)
         {
