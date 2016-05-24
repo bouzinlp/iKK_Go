@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,16 +16,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.HttpURLConnection;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.io.File;
 
 public class PictureActivity extends AppCompatActivity {
 
@@ -40,15 +31,10 @@ public class PictureActivity extends AppCompatActivity {
     private String fileName;
     private ImageView picture;
 
-    // Food information
-    //private EditText title_text, content_text, calorie_text, portions_text, grams_text;
-    //private Food food;
+    // URL upload
+    private static final String SERVER_URL = "http://uploads.im/api?upload";
 
     // Search by word
-    String searchUrl = "https://www.googleapis.com/customsearch/v1";
-    String searchItem = "android";
-    String searchQuery = searchUrl + searchItem;
-
     TextView searchResult;
 
 
@@ -154,70 +140,5 @@ public class PictureActivity extends AppCompatActivity {
 
         return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
                 prefix + fileName + extension);
-    }
-
-    private class JsonSearchTask extends AsyncTask<Void, Void, Void> {
-        String searchResultString = "";
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            try {
-                searchResultString = ParseStringResult(sendQuery(searchQuery));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            searchResult.setText(searchResultString);
-            super.onPostExecute(aVoid);
-        }
-    }
-
-    private String sendQuery(String query) throws IOException {
-        String result = "";
-        URL sUrl = new URL(query);
-
-        HttpURLConnection httpURLConnection = (HttpURLConnection) sUrl.openConnection();
-
-        if(httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            InputStreamReader inputStream = new InputStreamReader(httpURLConnection.getInputStream());
-
-            BufferedReader bufferedReader = new BufferedReader(inputStream, 8192);
-
-            String line = null;
-
-            while((line = bufferedReader.readLine()) != null) {
-                result += line;
-            }
-
-            bufferedReader.close();
-        }
-
-        return result;
-    }
-
-    private String ParseStringResult(String json) throws JSONException {
-        String parsedResult = "";
-
-        JSONObject jsonObject = new JSONObject(json);
-        JSONObject jsonObject_responseData = jsonObject.getJSONObject("responseData");
-        JSONArray jsonArray_result = jsonObject_responseData.getJSONArray("results");
-
-        parsedResult += "Google Search for: " + searchItem + "\n";
-        parsedResult += "Number of results returned = " + jsonArray_result.length() + "\n\n";
-
-        for(int i = 0; i < jsonArray_result.length(); i++) {
-            JSONObject jsonObject_i = jsonArray_result.getJSONObject(i);
-            parsedResult += "title: " + jsonObject_i.getString("title") + "\n";
-            parsedResult += "content: " + jsonObject_i.getString("content") + "\n";
-            parsedResult += "url: " + jsonObject_i.getString("url") + "\n\n";
-        }
-
-        return parsedResult;
     }
 }
