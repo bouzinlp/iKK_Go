@@ -18,6 +18,7 @@ public class HttpFileUpload implements Runnable{
     FileInputStream fileInputStream = null;
 
     String filePath;
+    String fileName;
 
     HttpFileUpload(String urlString, String vTitle, String vDesc){
         try{
@@ -32,6 +33,9 @@ public class HttpFileUpload implements Runnable{
     void Send_Now(FileInputStream fStream, String picPath){
         fileInputStream = fStream;
         filePath = picPath;
+        String[] parse = filePath.split("/");
+        fileName = parse[parse.length-1];
+
         Sending();
     }
 
@@ -66,16 +70,15 @@ public class HttpFileUpload implements Runnable{
 
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
 
-            //conn.setRequestProperty("upload", "http://i.imgur.com/HjPdGZKl.jpg");
+            conn.setRequestProperty("upload", fileName);
 
-            System.out.println(filePath);
+            System.out.println(fileName);
 
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 
-            //dos.writeBytes("="+filePath);
-
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"title\""+ lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"upload\";filename=\"" + fileName + "\"" + lineEnd);
+            /*dos.writeBytes("Content-Disposition: form-data; name=\"title\""+ lineEnd);
             dos.writeBytes(lineEnd);
             dos.writeBytes(Title);
             dos.writeBytes(lineEnd);
@@ -87,7 +90,7 @@ public class HttpFileUpload implements Runnable{
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + lineEnd);
 
-            dos.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + iFileName +"\"" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + iFileName +"\"" + lineEnd);*/
             dos.writeBytes(lineEnd);
 
            // Log.e(Tag,"Headers are written");
