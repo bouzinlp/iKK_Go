@@ -17,7 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class PictureActivity extends AppCompatActivity {
 
@@ -35,8 +42,9 @@ public class PictureActivity extends AppCompatActivity {
     private static final String SERVER_URL = "http://uploads.im/api?upload";
 
     // Search by word
-    TextView searchResult;
-
+    private TextView searchResult;
+    private File picFile;
+    private Uri picUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +63,6 @@ public class PictureActivity extends AppCompatActivity {
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
 
-        //new JsonSearchTask().execute();
     }
 
     // 覆寫請求授權後執行的方法
@@ -64,13 +71,11 @@ public class PictureActivity extends AppCompatActivity {
         if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 takePicture();
-            }
-            else {
+            } else {
                 Toast.makeText(this, R.string.write_external_storage_denied,
                         Toast.LENGTH_SHORT).show();
             }
-        }
-        else {
+        } else {
             super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
@@ -80,6 +85,7 @@ public class PictureActivity extends AppCompatActivity {
         super.onResume();
 
         File file = configFileName("P", ".jpg");
+        picFile = file;
 
         if (file.exists()) {
             // 顯示照片元件
@@ -101,7 +107,25 @@ public class PictureActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
+            // upload picture
+            try {
+                // Set your file path here
+                FileInputStream fstrm = new FileInputStream(picFile);
 
+                // Set your server page url (and the file title/description)
+                HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "search picture", "none");
+
+                //hfu.Send_Now(fstrm);
+
+            } catch (FileNotFoundException e) {
+                // Error: File not found
+            }
+            String path = getImagePath(picUri);
+            try {
+                getUrlAndLoad(path);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
         }
         finish();
     }
@@ -127,6 +151,7 @@ public class PictureActivity extends AppCompatActivity {
 
         File pictureFile = configFileName("P", ".jpg");
         Uri uri = Uri.fromFile(pictureFile);
+        picUri = uri;
 
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
@@ -140,5 +165,28 @@ public class PictureActivity extends AppCompatActivity {
 
         return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
                 prefix + fileName + extension);
+    }
+
+    private String getImagePath(Uri paramUri) {
+        return paramUri.getPath();
+    }
+
+    private void getUrlAndLoad(String paramString) throws MalformedURLException {
+        try {
+            HttpURLConnection localHttpURLConnection = (HttpURLConnection)new URL(SERVER_URL).openConnection();
+            localHttpURLConnection.setDoInput(true);
+            localHttpURLConnection.setDoOutput(true);
+            localHttpURLConnection.setUseCaches(false);
+            localHttpURLConnection.setRequestMethod("POST");
+            localHttpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+            localHttpURLConnection.setRequestProperty("ENCTYPE", "multipart/form-data");
+            localHttpURLConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + "*****");
+            localHttpURLConnection.setRequestProperty("upload", paramString);
+
+            //String str = String.valueOf(new DataOutputStream(localHttpURLConnection.getOutputStream()));
+            //System.out.println(str);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
