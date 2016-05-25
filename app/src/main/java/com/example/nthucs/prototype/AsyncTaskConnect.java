@@ -9,8 +9,12 @@ import java.io.IOException;
 
 public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
+    // Picture
     File picFile;
     String picPath;
+
+    // URL upload
+    private static final String SERVER_URL = "http://uploads.im/api?upload";
 
     AsyncTaskConnect(File picFile, String picPath) {
         this.picFile = picFile;
@@ -24,8 +28,9 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
                 FileInputStream fstrm = new FileInputStream(picFile);
 
                 // Set your server page url (and the file title/description)
-                HttpFileUpload hfu = new HttpFileUpload("http://uploads.im/api?upload", "search picture", "none");
+                HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
 
+                // Send to server, pass file input stream and file's path
                 hfu.Send_Now(fstrm, picPath);
 
             } catch (FileNotFoundException e) {
