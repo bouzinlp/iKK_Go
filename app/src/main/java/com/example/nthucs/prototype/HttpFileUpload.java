@@ -131,6 +131,7 @@ public class HttpFileUpload implements Runnable{
             while( ( ch = is.read() ) != -1 ){ b.append( (char)ch ); }
             String s=b.toString();
             System.out.println(s);
+            responseString = s;
            // Log.i("Response", s);
             //dos.close();
         }
