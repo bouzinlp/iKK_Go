@@ -72,7 +72,8 @@ public class HttpFileUpload implements Runnable{
 
             conn.setRequestProperty("upload", fileName);
 
-            System.out.println(fileName);
+            //print out test
+            //System.out.println(fileName);
 
             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
 
@@ -130,9 +131,12 @@ public class HttpFileUpload implements Runnable{
             StringBuffer b =new StringBuffer();
             while( ( ch = is.read() ) != -1 ){ b.append( (char)ch ); }
             String s=b.toString();
-            System.out.println(s);
+
             responseString = s;
-           // Log.i("Response", s);
+            //print out test
+            //System.out.println(responseString);
+
+            //Log.i("Response", s);
             //dos.close();
         }
         catch (MalformedURLException ex)
@@ -151,5 +155,9 @@ public class HttpFileUpload implements Runnable{
     @Override
     public void run() {
         // TODO Auto-generated method stub
+    }
+
+    public String getResponseString() {
+        return responseString;
     }
 }

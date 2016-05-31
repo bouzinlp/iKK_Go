@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -38,9 +41,11 @@ public class PictureActivity extends AppCompatActivity {
     private String fileName;
     private ImageView picture;
 
-    // Picture's file and uri
+    // Picture's file, uri, urlLink;
     private File picFile;
     private Uri picUri;
+    private String responseString;
+    private String picUrl;
 
     // Search by word
     private TextView searchResult;
@@ -107,10 +112,22 @@ public class PictureActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
             // use asyncTask to open httpUrlConnection for upload picture
-            System.out.println("start");
-            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
+            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
             asyncTaskConnect.execute();
-            System.out.println("end");
+
+            // parse response string
+            // Execute some code after 2 seconds have passed
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    //System.out.println(asyncTaskConnect.getResponseString());
+                }
+            }, 3000);
+            System.out.println(asyncTaskConnect.getResponseString());
+            String responseString = asyncTaskConnect.getResponseString();
+            System.out.println(responseString);
+            getParseString(responseString, "status");
         }
         finish();
     }
@@ -154,5 +171,21 @@ public class PictureActivity extends AppCompatActivity {
 
     private String getImagePath(Uri paramUri) {
         return paramUri.getPath();
+    }
+
+    public void setResponseString(String str) {
+        responseString = str;
+    }
+
+    private String getParseString(String jsonStr, String target) {
+        try {
+            String strJson="{\"Employee\" :[ {\"id\":\"01\",\"name\":\"Gopal Varma\",\"salary\":\"500000\"}, {\"id\":\"02\",\"name\":\"Sairamkrishna\",\"salary\":\"500000\"}, {\"id\":\"03\",\"name\":\"Sathish kallakuri\",\"salary\":\"600000\"} ]}";
+            JSONObject jsonObject = new JSONObject(strJson);
+            String status = jsonObject.getString("Employee");
+            System.out.println(jsonStr);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

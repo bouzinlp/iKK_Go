@@ -13,12 +13,19 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     File picFile;
     String picPath;
 
+    // Parent class
+    PictureActivity pictureActivity;
+
     // URL upload
     private static final String SERVER_URL = "http://uploads.im/api?upload";
 
-    AsyncTaskConnect(File picFile, String picPath) {
+    // Http response
+    private String responseString;
+
+    AsyncTaskConnect(File picFile, String picPath, PictureActivity picActivity) {
         this.picFile = picFile;
         this.picPath = picPath;
+        pictureActivity = picActivity;
     }
     @Override
     protected String doInBackground(String... urls) {
@@ -32,6 +39,9 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
                 // Send to server, pass file input stream and file's path
                 hfu.Send_Now(fstrm, picPath);
+
+                // Get the response string from server
+                responseString = hfu.getResponseString();
 
             } catch (FileNotFoundException e) {
                 // Error: File not found
@@ -47,6 +57,10 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        pictureActivity.setResponseString(responseString);
+    }
 
+    public String getResponseString() {
+        return responseString;
     }
 }
