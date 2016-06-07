@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.ExecutionException;
 
 public class PictureActivity extends AppCompatActivity {
 
@@ -112,22 +113,19 @@ public class PictureActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
             // use asyncTask to open httpUrlConnection for upload picture
-            AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
-            asyncTaskConnect.execute();
+            String responseString = new String();
+
+            try{
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
+                responseString =  asyncTaskConnect.execute().get();
+            } catch(InterruptedException e) {
+                System.out.println("Interrupted exception");
+            } catch (ExecutionException e) {
+                System.out.println("Execution exception");
+            }
 
             // parse response string
-            // Execute some code after 2 seconds have passed
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //System.out.println(asyncTaskConnect.getResponseString());
-                }
-            }, 3000);
-            System.out.println(asyncTaskConnect.getResponseString());
-            String responseString = asyncTaskConnect.getResponseString();
-            System.out.println(responseString);
-            getParseString(responseString, "status");
+            getParseString(responseString, "data", "img_url");
         }
         finish();
     }
@@ -177,12 +175,12 @@ public class PictureActivity extends AppCompatActivity {
         responseString = str;
     }
 
-    private String getParseString(String jsonStr, String target) {
+    private String getParseString(String jsonStr, String target1, String target2) {
         try {
-            String strJson="{\"Employee\" :[ {\"id\":\"01\",\"name\":\"Gopal Varma\",\"salary\":\"500000\"}, {\"id\":\"02\",\"name\":\"Sairamkrishna\",\"salary\":\"500000\"}, {\"id\":\"03\",\"name\":\"Sathish kallakuri\",\"salary\":\"600000\"} ]}";
-            JSONObject jsonObject = new JSONObject(strJson);
-            String status = jsonObject.getString("Employee");
-            System.out.println(jsonStr);
+            JSONObject jsonObject = new JSONObject(jsonStr);
+            JSONObject data = jsonObject.getJSONObject(target1);
+            String imageUrl = data.getString(target2);
+            System.out.println(imageUrl);
         } catch (JSONException e) {
             e.printStackTrace();
         }

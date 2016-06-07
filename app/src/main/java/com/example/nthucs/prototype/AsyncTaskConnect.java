@@ -46,7 +46,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
             } catch (FileNotFoundException e) {
                 // Error: File not found
             }
-            return "success";
+            return responseString;
         } /*catch (IOException e) {
             return "Unable to retrieve web page. URL may be invalid.";
         }*/
