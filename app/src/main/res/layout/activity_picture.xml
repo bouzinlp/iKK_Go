@@ -45,4 +45,12 @@
         </TableRow>>
     </TableLayout>
 
+    <LinearLayout>
+        <WebView android:id="@+id/search_result"
+            android:padding="6sp"
+            android:layout_margin="2sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
 </TableLayout>

@@ -57,10 +57,5 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        pictureActivity.setResponseString(responseString);
-    }
-
-    public String getResponseString() {
-        return responseString;
     }
 }

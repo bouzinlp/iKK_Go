@@ -6,13 +6,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,14 +20,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 public class PictureActivity extends AppCompatActivity {
@@ -45,11 +38,13 @@ public class PictureActivity extends AppCompatActivity {
     // Picture's file, uri, urlLink;
     private File picFile;
     private Uri picUri;
-    private String responseString;
-    private String picUrl;
+    private String imageUrl;
 
     // Search by word
     private TextView searchResult;
+
+    // Web View for Google Image
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +56,15 @@ public class PictureActivity extends AppCompatActivity {
 
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
+
+        // web view for Url
+        webView = (WebView) findViewById(R.id.search_result);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setBuiltInZoomControls(true);
+        webView.getSettings().setDisplayZoomControls(false);
+        webView.clearCache(true);
+        registerForContextMenu(this.webView);
+
 
         // text view for input
         searchResult = (TextView) findViewById(R.id.result);
@@ -125,7 +129,7 @@ public class PictureActivity extends AppCompatActivity {
             }
 
             // parse response string
-            getParseString(responseString, "data", "img_url");
+            imageUrl = getParseString(responseString, "data", "img_url");
         }
         finish();
     }
@@ -171,10 +175,6 @@ public class PictureActivity extends AppCompatActivity {
         return paramUri.getPath();
     }
 
-    public void setResponseString(String str) {
-        responseString = str;
-    }
-
     private String getParseString(String jsonStr, String target1, String target2) {
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);
@@ -184,6 +184,6 @@ public class PictureActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return null;
+        return imageUrl;
     }
 }
