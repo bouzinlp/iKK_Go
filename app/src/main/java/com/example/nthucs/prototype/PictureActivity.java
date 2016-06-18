@@ -59,12 +59,12 @@ public class PictureActivity extends AppCompatActivity {
 
         // web view for Url
         webView = (WebView) findViewById(R.id.search_result);
+        //webView.loadUrl("https://www.google.com.tw/");
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
         webView.clearCache(true);
         registerForContextMenu(this.webView);
-
 
         // text view for input
         searchResult = (TextView) findViewById(R.id.result);
@@ -119,6 +119,7 @@ public class PictureActivity extends AppCompatActivity {
             // use asyncTask to open httpUrlConnection for upload picture
             String responseString = new String();
 
+            // use Async Task
             try{
                 AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
                 responseString =  asyncTaskConnect.execute().get();
@@ -130,6 +131,8 @@ public class PictureActivity extends AppCompatActivity {
 
             // parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
+            System.out.println(imageUrl);
+            //webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
         }
         finish();
     }
@@ -176,11 +179,19 @@ public class PictureActivity extends AppCompatActivity {
     }
 
     private String getParseString(String jsonStr, String target1, String target2) {
+        String imageUrl = new String();
         try {
             JSONObject jsonObject = new JSONObject(jsonStr);
             JSONObject data = jsonObject.getJSONObject(target1);
-            String imageUrl = data.getString(target2);
-            System.out.println(imageUrl);
+
+            // add /t/ to get tinny picture link
+            String originUrl = data.getString(target2);
+            int idx = 0;
+            for (int  i = 0 ; i < originUrl.length()-1 ; i++) {
+                if (originUrl.charAt(i) == '/' && originUrl.charAt(i+1) != '/')
+                    idx = i;
+            }
+            imageUrl = originUrl.substring(0, idx) + "/t/" + originUrl.substring(idx+1, originUrl.length());
         } catch (JSONException e) {
             e.printStackTrace();
         }
