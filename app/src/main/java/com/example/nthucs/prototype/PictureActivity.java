@@ -133,6 +133,9 @@ public class PictureActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
+            // retrieve data from google image search
+
+
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
 
