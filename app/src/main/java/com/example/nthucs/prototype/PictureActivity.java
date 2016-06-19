@@ -19,8 +19,11 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class PictureActivity extends AppCompatActivity {
@@ -133,9 +136,12 @@ public class PictureActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
-            // retrieve data from google image search
-
-
+            // retrieve data from google image search result use Jsoup
+            try{
+                Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url="+imageUrl).get();
+            } catch (IOException e) {
+                System.out.println("IO exception");
+            }
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
 
