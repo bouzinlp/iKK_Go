@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.IOException;
@@ -139,6 +140,10 @@ public class PictureActivity extends AppCompatActivity {
             // retrieve data from google image search result use Jsoup
             try{
                 Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url="+imageUrl).get();
+                Elements elem = doc.getElementsByClass("_gUb");
+                String text = elem.text();
+                System.out.println(text);
+
             } catch (IOException e) {
                 System.out.println("IO exception");
             }
