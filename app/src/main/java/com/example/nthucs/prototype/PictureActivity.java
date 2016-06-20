@@ -121,10 +121,10 @@ public class PictureActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
-            // use Async Task to open httpUrlConnection for upload picture
+            // Use Async Task to open httpUrlConnection for upload picture
             String responseString = new String();
 
-            // use Async Task
+            // Use Async Task
             try{
                 AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
                 responseString =  asyncTaskConnect.execute().get();
@@ -134,16 +134,16 @@ public class PictureActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
-            // parse response string
+            // Parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
 
             // output test
             System.out.println(imageUrl);
 
-            // use Async Task to retrieve data from google image search result with Jsoup
+            // Use Async Task to retrieve data from google image search result with Jsoup
             String resultString = new String();
 
-            // use Async Task
+            // Use Async Task
             try{
                 AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
                 resultString = asyncTaskJsoup.execute().get();
@@ -153,14 +153,16 @@ public class PictureActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
-            // get the result text from the response string
+            // Get the result text from the response string
             resultText = resultString;
 
-            Intent picResult = getIntent();
+            // Test: appear result in the text view
+            //searchResult.setText(resultText);
 
+            //Intent picResult = getIntent();
 
             // output test
-            //System.out.println("Suggested result: "+resultText);
+            // System.out.println("Suggested result: "+resultText);
 
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
@@ -213,6 +215,7 @@ public class PictureActivity extends AppCompatActivity {
     private String getParseString(String jsonStr, String target1, String target2) {
         String imageUrl = new String();
         try {
+            // Get Json object twice with two target
             JSONObject jsonObject = new JSONObject(jsonStr);
             JSONObject data = jsonObject.getJSONObject(target1);
 

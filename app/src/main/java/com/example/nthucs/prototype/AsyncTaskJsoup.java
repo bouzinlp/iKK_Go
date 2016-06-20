@@ -31,9 +31,13 @@ public class AsyncTaskJsoup extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... urls) {
         try {
             try {
-                // parse search by image's html
+                // Connect website: google search by image
                 Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + imageUrl).get();
+
+                // Parse html with class name: _gUb
                 Elements elem = doc.getElementsByClass("_gUb");
+
+                // Get the text content
                 resultText = elem.text();
 
                 // output test
