@@ -1,5 +1,4 @@
 package com.example.nthucs.prototype;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,17 +16,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Scanner;
+import com.opencsv.CSVReader;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
-
+import java.io.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
+
+
 public class PictureActivity extends AppCompatActivity {
+    private static CSVReader reader;
+    private static HashMap<String, Double> kcalComsumePerKgByExercise;
+
 
     private MenuItem search_pic;
 
@@ -78,6 +90,42 @@ public class PictureActivity extends AppCompatActivity {
             requestStoragePermission();
 
     }
+
+///////////////////讀檔寫在這裡//////////////////////////////////
+    public  void readData() throws IOException{
+        reader = new CSVReader(new FileReader("src/main/res/calories/sports_cal.csv"));
+        //要讀的檔案名稱自己修改
+        String [] nextLine;
+        int row=0;
+        while ((nextLine = reader.readNext()) != null) {
+            // nextLine[] is an array of values from the line
+
+            if(row>0){
+                kcalComsumePerKgByExercise=new HashMap<String, Double>();
+                kcalComsumePerKgByExercise.put(nextLine[0],Double.parseDouble(nextLine[1]));
+                System.out.println(kcalComsumePerKgByExercise.get(nextLine[0]));
+            }
+            else{
+                //System.out.println(nextLine[0]+nextLine[1]);
+                row++;
+            }
+        }
+        /*
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("請輸入運動項目：");
+        String sports = scanner.nextLine();
+        System.out.println("請輸入體重(kg)：");
+        float weight = scanner.nextFloat();
+        System.out.println("請輸入運動時間(hr)：");
+        float exerciseHours = scanner.nextFloat();
+
+        double comsumekcal = weight*exerciseHours;
+        System.out.println(kcalComsumePerKgByExercise.get(sports));
+        System.out.println("消耗的大卡："+comsumekcal);
+        */
+    }
+/////////////////////////////////////////////////////////////////////////////////////////////////
 
     // 覆寫請求授權後執行的方法
     @Override
@@ -160,10 +208,10 @@ public class PictureActivity extends AppCompatActivity {
 
 
             // output test
-            //System.out.println("Suggested result: "+resultText);
+            System.out.println("===============Suggested result: "+resultText+"=======================");
 
             // image result test
-            // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
+             webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
 
         }
         finish();
