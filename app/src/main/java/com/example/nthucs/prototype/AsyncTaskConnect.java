@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 

@@ -120,14 +120,14 @@ public class PictureActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
-            // use asyncTask to open httpUrlConnection for upload picture
+            // use Async Task to open httpUrlConnection for upload picture
             String responseString = new String();
 
             // use Async Task
             try{
                 AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
                 responseString =  asyncTaskConnect.execute().get();
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
             } catch (ExecutionException e) {
                 System.out.println("Execution exception");
@@ -137,16 +137,19 @@ public class PictureActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
-            // retrieve data from google image search result use Jsoup
-            try{
-                Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url="+imageUrl).get();
-                Elements elem = doc.getElementsByClass("_gUb");
-                String text = elem.text();
-                System.out.println(text);
+            // use Async Task to retrieve data from google image search result with Jsoup
+            String resultText = new String();
 
-            } catch (IOException e) {
-                System.out.println("IO exception");
+            // use Async Task
+            try{
+                AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
+                resultText = asyncTaskJsoup.execute().get();
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted exception");
+            } catch (ExecutionException e) {
+                System.out.println("Execution exception");
             }
+
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
 
