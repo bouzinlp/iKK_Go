@@ -31,12 +31,15 @@ public class AsyncTaskJsoup extends AsyncTask<String, Void, String> {
     protected String doInBackground(String... urls) {
         try {
             try {
+                // parse search by image's html
                 Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + imageUrl).get();
                 Elements elem = doc.getElementsByClass("_gUb");
                 resultText = elem.text();
 
                 // output test
-                //System.out.println(resultText);
+                /*System.out.println("============");
+                System.out.println(elem);
+                System.out.println("============");*/
             } catch (IOException e) {
                 System.out.println("IO exception");
             } catch (Exception e) {

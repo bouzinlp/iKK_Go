@@ -64,8 +64,8 @@ public class PictureActivity extends AppCompatActivity {
 
         // web view for Url
         webView = (WebView) findViewById(R.id.search_result);
-        webView.loadUrl("https://www.google.com.tw/");
-        /*webView.getSettings().setJavaScriptEnabled(true);
+        /*webView.loadUrl("https://www.google.com.tw/");
+        webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setDisplayZoomControls(false);
         webView.clearCache(true);
@@ -147,15 +147,20 @@ public class PictureActivity extends AppCompatActivity {
             try{
                 AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
                 resultString = asyncTaskJsoup.execute().get();
-                resultText = resultString;
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
             } catch (ExecutionException e) {
                 System.out.println("Execution exception");
             }
 
+            // get the result text from the response string
+            resultText = resultString;
+
+            Intent picResult = getIntent();
+
+
             // output test
-            System.out.println("Suggested result: "+resultText);
+            //System.out.println("Suggested result: "+resultText);
 
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
