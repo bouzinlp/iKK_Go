@@ -45,6 +45,7 @@ public class PictureActivity extends AppCompatActivity {
     private String imageUrl;
 
     // Search by word
+    private String resultText;
     private TextView searchResult;
 
     // Web View for Google Image
@@ -135,20 +136,26 @@ public class PictureActivity extends AppCompatActivity {
 
             // parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
+
+            // output test
             System.out.println(imageUrl);
 
             // use Async Task to retrieve data from google image search result with Jsoup
-            String resultText = new String();
+            String resultString = new String();
 
             // use Async Task
             try{
                 AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
-                resultText = asyncTaskJsoup.execute().get();
+                resultString = asyncTaskJsoup.execute().get();
+                resultText = resultString;
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
             } catch (ExecutionException e) {
                 System.out.println("Execution exception");
             }
+
+            // output test
+            System.out.println("Suggested result: "+resultText);
 
             // image result test
             // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);

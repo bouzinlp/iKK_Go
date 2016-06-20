@@ -34,7 +34,9 @@ public class AsyncTaskJsoup extends AsyncTask<String, Void, String> {
                 Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + imageUrl).get();
                 Elements elem = doc.getElementsByClass("_gUb");
                 resultText = elem.text();
-                System.out.println(resultText);
+
+                // output test
+                //System.out.println(resultText);
             } catch (IOException e) {
                 System.out.println("IO exception");
             } catch (Exception e) {
