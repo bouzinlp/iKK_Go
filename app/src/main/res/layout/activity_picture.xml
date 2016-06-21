@@ -43,5 +43,6 @@
                 android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>>
+    </TableLayout>
 
 </TableLayout>
