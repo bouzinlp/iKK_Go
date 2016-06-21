@@ -48,9 +48,6 @@ public class PictureActivity extends AppCompatActivity {
     private String resultText;
     private TextView searchResult;
 
-    // Web View for Google Image
-    private WebView webView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,15 +58,6 @@ public class PictureActivity extends AppCompatActivity {
 
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
-
-        // web view for Url
-        webView = (WebView) findViewById(R.id.search_result);
-        /*webView.loadUrl("https://www.google.com.tw/");
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setDisplayZoomControls(false);
-        webView.clearCache(true);
-        registerForContextMenu(this.webView);*/
 
         // text view for input
         searchResult = (TextView) findViewById(R.id.result);
@@ -163,10 +151,6 @@ public class PictureActivity extends AppCompatActivity {
 
             // output test
             // System.out.println("Suggested result: "+resultText);
-
-            // image result test
-            // webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
-
         }
         finish();
     }
