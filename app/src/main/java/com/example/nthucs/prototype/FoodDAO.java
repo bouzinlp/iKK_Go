@@ -18,13 +18,15 @@ public class FoodDAO {
     public static final String GRAMS_COLUMN = "grams";
     public static final String TITLE_COLUMN = "title";
     public static final String CONTENT_COLUMN = "content";
+    public static final String FILENAME_COLUMN = "filename";
 
-    public static final String CREATE_TABLE = "" +
+    public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
                     PORTIONS_COLUMN + " TEXT NOT NULL, " +
                     GRAMS_COLUMN + " TEXT NOT NULL, " +
+                    FILENAME_COLUMN + " TEXT, " +
                     TITLE_COLUMN + " TEXT NOT NULL, " +
                     CONTENT_COLUMN + " TEXT NOT NULL)";
 
@@ -40,6 +42,7 @@ public class FoodDAO {
         cv.put(CALORIE_COLUMN, food.getCalorie());
         cv.put(PORTIONS_COLUMN, food.getPortions());
         cv.put(GRAMS_COLUMN, food.getGrams());
+        cv.put(FILENAME_COLUMN, food.getFileName());
         cv.put(TITLE_COLUMN, food.getTitle());
         cv.put(CONTENT_COLUMN, food.getContent());
 
@@ -56,6 +59,7 @@ public class FoodDAO {
         cv.put(CALORIE_COLUMN, food.getCalorie());
         cv.put(PORTIONS_COLUMN, food.getPortions());
         cv.put(GRAMS_COLUMN, food.getGrams());
+        cv.put(FILENAME_COLUMN, food.getFileName());
         cv.put(TITLE_COLUMN, food.getTitle());
         cv.put(CONTENT_COLUMN, food.getContent());
 
@@ -101,8 +105,9 @@ public class FoodDAO {
         result.setCalorie(cursor.getFloat(1));
         result.setPortions(cursor.getFloat(2));
         result.setGrams(cursor.getFloat(3));
-        result.setTitle(cursor.getString(4));
-        result.setContent(cursor.getString(5));
+        result.setFileName(cursor.getString(4));
+        result.setTitle(cursor.getString(5));
+        result.setContent(cursor.getString(6));
 
         return result;
     }

@@ -55,11 +55,13 @@ public class MainActivity extends AppCompatActivity {
 
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.Food");
 
+            // Add new food list
             if (requestCode == ADD_FOOD) {
                 food = foodDAO.insert(food);
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
+            // Edit food list
             } else if (requestCode == EDIT_FOOD) {
                 int position = data.getIntExtra("position", -1);
 
@@ -69,8 +71,12 @@ public class MainActivity extends AppCompatActivity {
                     foods.set(position, food);
                     foodAdapter.notifyDataSetChanged();
                 }
+            // Scan picture as adding food
             } else if (requestCode == SCAN_FOOD) {
+                food = foodDAO.insert(food);
 
+                foods.add(food);
+                foodAdapter.notifyDataSetChanged();
             }
         }
     }

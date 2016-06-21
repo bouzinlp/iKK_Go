@@ -6,26 +6,38 @@ import java.util.Locale;
 public class Food implements java.io.Serializable {
 
     private long id;
+    // food's information about calorie, portions, grams
     private float calorie;
     private float portions;
     private float grams;
+    // food's name
     private String title;
+    // food's description
     private String content;
+    // pic' file name
+    private String fileName;
 
     private boolean selected;
 
     public Food() {
         this.title = new String();
         this.content = new String();
+        this.fileName = new String();
     }
 
-    public Food(long id, float calorie, float portions, float grams, String title, String content) {
+    public Food(String title, String fileName) {
+        this.title = title;
+        this.fileName = fileName;
+    }
+
+    public Food(long id, float calorie, float portions, float grams, String title, String content, String fileName) {
         this.id = id;
         this.calorie = calorie;
         this.portions = portions;
         this.grams = grams;
         this.title = title;
         this.content = content;
+        this.fileName = fileName;
     }
 
     public long getId() {return this.id;}
@@ -53,6 +65,13 @@ public class Food implements java.io.Serializable {
 
     public float getGrams() {return this.grams;}
     public void setGrams(float grams) {this.grams = grams;}
+
+    public String getFileName() {
+        return fileName;
+    }
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
 
     public boolean isSelected() {
         return selected;

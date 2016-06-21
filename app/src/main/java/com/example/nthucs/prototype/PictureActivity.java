@@ -1,6 +1,7 @@
 package com.example.nthucs.prototype;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -48,6 +49,9 @@ public class PictureActivity extends AppCompatActivity {
     private String resultText;
     private TextView searchResult;
 
+    // Food storage
+    private Food food;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +65,9 @@ public class PictureActivity extends AppCompatActivity {
 
         // text view for input
         searchResult = (TextView) findViewById(R.id.result);
+
+        // new food
+        food = new Food(resultText, fileName);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
@@ -144,13 +151,23 @@ public class PictureActivity extends AppCompatActivity {
             // Get the result text from the response string
             resultText = resultString;
 
-            // Test: appear result in the text view
-            //searchResult.setText(resultText);
+            // Set food's information(title and picture name)
+            food.setTitle(resultText);
+            food.setContent("blank content");
+            food.setFileName(fileName);
+            food.setCalorie(0);
+            food.setGrams(0);
+            food.setPortions(1);
 
-            //Intent picResult = getIntent();
+            // Test: appear result in the text view
+            // searchResult.setText(resultText);
 
             // output test
-            // System.out.println("Suggested result: "+resultText);
+            System.out.println("Suggested result: " + resultText);
+
+            Intent result = getIntent();
+            result.putExtra("com.example.nthucs.prototype.Food", food);
+            setResult(Activity.RESULT_OK, result);
         }
         finish();
     }

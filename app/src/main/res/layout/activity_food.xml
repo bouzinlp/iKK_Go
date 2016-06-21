@@ -98,7 +98,7 @@
 
     <!-- 顯示圖片 -->
     <ImageView
-        android:id="@+id/picture"
+        android:id="@+id/picture_food"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="2sp"
