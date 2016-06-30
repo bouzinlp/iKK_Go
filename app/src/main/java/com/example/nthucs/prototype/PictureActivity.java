@@ -13,19 +13,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public class PictureActivity extends AppCompatActivity {
@@ -72,6 +67,15 @@ public class PictureActivity extends AppCompatActivity {
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == START_CAMERA) {
+
+            }
+        }
     }
 
     // 覆寫請求授權後執行的方法
