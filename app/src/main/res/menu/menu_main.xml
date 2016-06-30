@@ -5,6 +5,13 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/take_photo"
+        android:icon="@drawable/ic_photo_library_white_48dp"
+        android:title="TAKE"
+        app:showAsAction="always"
+        android:onClick="clickMenuItem" />
+
+    <item
         android:id="@+id/scan_food"
         android:icon="@drawable/ic_photo_camera_white_48dp"
         android:title="SCAN"
