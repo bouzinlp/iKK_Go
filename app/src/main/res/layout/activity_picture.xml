@@ -6,21 +6,6 @@
     android:stretchColumns="1"
     tools:context="com.example.nthucs.prototype.FoodActivity">
 
-    <!-- 顯示圖片 -->
-    <ImageView
-        android:id="@+id/picture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2sp"
-        android:background="@drawable/rectangle_drawable"
-        android:padding="6sp"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,5 +29,20 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>>
     </TableLayout>
+
+    <!-- 顯示圖片 -->
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2sp"
+        android:background="@drawable/rectangle_drawable"
+        android:padding="6sp"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </TableLayout>
