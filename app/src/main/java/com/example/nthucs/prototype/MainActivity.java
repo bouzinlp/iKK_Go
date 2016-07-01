@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 foodAdapter.notifyDataSetChanged();
             // Take photo from library(gallery)
             } else if (requestCode == TAKE_PHOTO) {
+                food = foodDAO.insert(food);
 
+                foods.add(food);
+                foodAdapter.notifyDataSetChanged();
             }
         }
     }

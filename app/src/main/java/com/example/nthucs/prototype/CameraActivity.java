@@ -199,8 +199,6 @@ public class CameraActivity extends AppCompatActivity {
         Uri uri = Uri.fromFile(pictureFile);
         picUri = uri;
 
-        System.out.println(uri.getPath());
-
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         startActivityForResult(intentCamera, START_CAMERA);

@@ -95,18 +95,6 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        File file = configFileName("P", ".jpg");
-        //picFile = file;
-
-        if (file.exists()) {
-            // 顯示照片元件
-            //picture.setVisibility(View.VISIBLE);
-            // 設定照片
-            //FileUtil.fileToImageView(file.getAbsolutePath(), picture);
-            //System.out.println("//////test/////");
-        }
-        //System.out.println(file.getName());
     }
 
     public void onSubmit(View view) {
@@ -129,6 +117,37 @@ public class GalleryActivity extends AppCompatActivity {
 
             // output test
             System.out.println(imageUrl);
+
+            // Use Async Task to retrieve data from google image search result with Jsoup
+            String resultString = new String();
+
+            // Use Async Task
+            try{
+                AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
+                resultString = asyncTaskJsoup.execute().get();
+            } catch (InterruptedException e) {
+                System.out.println("Interrupted exception");
+            } catch (ExecutionException e) {
+                System.out.println("Execution exception");
+            }
+
+            // Get the result text from the response string
+            resultText = resultString;
+
+            // Set food's information(title and picture name)
+            food.setTitle(resultText);
+            food.setContent("blank content");
+            food.setFileName(fileName);
+            food.setCalorie(0);
+            food.setGrams(0);
+            food.setPortions(1);
+
+            // output test
+            System.out.println("Suggested result: " + resultText);
+
+            Intent result = getIntent();
+            result.putExtra("com.example.nthucs.prototype.Food", food);
+            setResult(Activity.RESULT_OK, result);
         }
         finish();
     }
@@ -154,24 +173,7 @@ public class GalleryActivity extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
 
-        File pictureFile = configFileName("P", ".jpg");
-        Uri uri = Uri.fromFile(pictureFile);
-        picUri = uri;
-
-        System.out.println(uri.getPath());
-
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
         startActivityForResult(Intent.createChooser(intent, "Select File"), SELECT_FILE);
-    }
-
-    private File configFileName(String prefix, String extension) {
-        if (fileName == null) {
-            fileName = FileUtil.getUniqueFileName();
-        }
-
-        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
-                prefix + fileName + extension);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -184,30 +186,14 @@ public class GalleryActivity extends AppCompatActivity {
             }
         }
 
-        //create a file to write bitmap data
-        /*picFile = new File(fileName);
-        try {
-            picFile.createNewFile();
-        } catch (IOException e) {
-            System.out.println("IO exception");
-        }*/
+        // the address of the image on the SD card
+        Uri uri = data.getData();
+        picUri = uri;
+        picFile = new File(picUri.getPath());
 
-        //Convert bitmap to byte array
-        /*ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
-        byte[] bitmapdata = bos.toByteArray();*/
+        System.out.println("$$$ "+picFile.toString());
 
-        //write the bytes in file
-        /*FileOutputStream fos;
-        try {
-            fos = new FileOutputStream(picFile);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
+        // set bitmap to imageView
         picture.setImageBitmap(bitmap);
         picture.setVisibility(View.VISIBLE);
     }
@@ -235,5 +221,14 @@ public class GalleryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return imageUrl;
+    }
+
+    private File configFileName(String prefix, String extension) {
+        if (fileName == null) {
+            fileName = FileUtil.getUniqueFileName();
+        }
+
+        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
+                prefix + fileName + extension);
     }
 }
