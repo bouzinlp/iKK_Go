@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="1"
-    tools:context="com.example.nthucs.prototype.CameraActivity">
+    tools:context="com.example.nthucs.prototype.GalleryActivity">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -40,10 +40,5 @@
         android:background="@drawable/rectangle_drawable"
         android:padding="6sp"
         android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
 </TableLayout>

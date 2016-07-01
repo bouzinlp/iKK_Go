@@ -6,6 +6,9 @@
     <!-- 寫入外部儲存設備 -->
     <uses-permission android:name=
         "android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!-- 讀入外部儲存設備 -->
+    <uses-permission android:name=
+        "android.permission.READ_EXTERNAL_STORAGE" />
     <!-- permission to access internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -38,6 +41,15 @@
             <intent-filter>
                 // take pictire
                 <action android:name="com.example.nthucs.prototype.TAKE_PICT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".GalleryActivity">
+            <intent-filter>
+                // take photo from gallery
+                <action android:name="com.example.nthucs.prototype.TAKE_PHOTO" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

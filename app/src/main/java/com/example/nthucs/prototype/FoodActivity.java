@@ -54,6 +54,8 @@ public class FoodActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        fileName = food.getFileName();
+
         if (food.getFileName() != null && food.getFileName().length() > 0) {
 
             File file = configFileName("P", ".jpg");
@@ -63,10 +65,6 @@ public class FoodActivity extends AppCompatActivity {
                 picture.setVisibility(View.VISIBLE);
                 // 設定照片
                 FileUtil.fileToImageView(file.getAbsolutePath(), picture);
-                System.out.println("file found");
-            // test if not exist
-            } else {
-                System.out.println("file not found");
             }
         }
     }
