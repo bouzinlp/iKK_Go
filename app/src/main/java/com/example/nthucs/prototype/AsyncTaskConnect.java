@@ -21,10 +21,9 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     // Http response
     private String responseString;
 
-    AsyncTaskConnect(File picFile, String picPath, CameraActivity picActivity) {
+    AsyncTaskConnect(File picFile, String picPath) {
         this.picFile = picFile;
         this.picPath = picPath;
-        cameraActivity = picActivity;
     }
     @Override
     protected String doInBackground(String... urls) {

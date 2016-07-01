@@ -125,7 +125,7 @@ public class CameraActivity extends AppCompatActivity {
 
             // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
@@ -198,6 +198,8 @@ public class CameraActivity extends AppCompatActivity {
         File pictureFile = configFileName("P", ".jpg");
         Uri uri = Uri.fromFile(pictureFile);
         picUri = uri;
+
+        System.out.println(uri.getPath());
 
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
