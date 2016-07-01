@@ -59,8 +59,10 @@ public class FoodActivity extends AppCompatActivity {
         if (food.getFileName() != null && food.getFileName().length() > 0) {
 
             File file = configFileName("P", ".jpg");
+            System.out.println("!!! "+file.getName());
 
             if (file.exists()) {
+                System.out.println("@@@ "+fileName);
                 // 顯示照片元件
                 picture.setVisibility(View.VISIBLE);
                 // 設定照片

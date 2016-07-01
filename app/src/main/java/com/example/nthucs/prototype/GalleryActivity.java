@@ -190,8 +190,9 @@ public class GalleryActivity extends AppCompatActivity {
         Uri uri = data.getData();
         picUri = uri;
         picFile = new File(picUri.getPath());
+        fileName = picFile.getName().substring(1, 15);
 
-        System.out.println("$$$ "+picFile.toString());
+        System.out.println("$$$ "+fileName);
 
         // set bitmap to imageView
         picture.setImageBitmap(bitmap);
@@ -221,14 +222,5 @@ public class GalleryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return imageUrl;
-    }
-
-    private File configFileName(String prefix, String extension) {
-        if (fileName == null) {
-            fileName = FileUtil.getUniqueFileName();
-        }
-
-        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
-                prefix + fileName + extension);
     }
 }
