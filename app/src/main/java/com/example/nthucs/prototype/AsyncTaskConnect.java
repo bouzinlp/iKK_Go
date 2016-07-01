@@ -13,7 +13,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     String picPath;
 
     // Parent class
-    PictureActivity pictureActivity;
+    CameraActivity cameraActivity;
 
     // URL upload
     private static final String SERVER_URL = "http://uploads.im/api?upload";
@@ -21,10 +21,10 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     // Http response
     private String responseString;
 
-    AsyncTaskConnect(File picFile, String picPath, PictureActivity picActivity) {
+    AsyncTaskConnect(File picFile, String picPath, CameraActivity picActivity) {
         this.picFile = picFile;
         this.picPath = picPath;
-        pictureActivity = picActivity;
+        cameraActivity = picActivity;
     }
     @Override
     protected String doInBackground(String... urls) {

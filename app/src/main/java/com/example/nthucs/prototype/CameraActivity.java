@@ -23,7 +23,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
-public class PictureActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity {
 
     private MenuItem search_pic;
 
@@ -50,7 +50,7 @@ public class PictureActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_picture);
+        setContentView(R.layout.activity_camera);
 
         Intent intent = getIntent();
         String action = intent.getAction();
