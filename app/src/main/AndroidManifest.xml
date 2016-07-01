@@ -6,7 +6,7 @@
     <!-- 寫入外部儲存設備 -->
     <uses-permission android:name=
         "android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <!-- 讀入外部儲存設備 -->
+    <!-- 讀取外部儲存設備 -->
     <uses-permission android:name=
         "android.permission.READ_EXTERNAL_STORAGE" />
     <!-- permission to access internet -->
