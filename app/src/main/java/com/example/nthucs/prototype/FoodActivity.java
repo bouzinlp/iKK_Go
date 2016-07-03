@@ -6,12 +6,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+
+import java.io.File;
 
 public class FoodActivity extends AppCompatActivity {
 
     private EditText title_text, content_text, calorie_text, portions_text, grams_text;
 
+    // food information
     private Food food;
+
+    // picture information
+    private String fileName;
+    private ImageView picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,8 @@ public class FoodActivity extends AppCompatActivity {
         portions_text = (EditText)findViewById(R.id.portions_text);
         grams_text = (EditText)findViewById(R.id.grams_text);
 
+        picture = (ImageView) findViewById(R.id.picture_food);
+
         Intent intent = getIntent();
         String action = intent.getAction();
 
@@ -35,8 +45,28 @@ public class FoodActivity extends AppCompatActivity {
             calorie_text.setText(Float.toString(food.getCalorie()));
             portions_text.setText(Float.toString(food.getPortions()));
             grams_text.setText(Float.toString(food.getGrams()));
-        } else
+        } else if (action.equals("com.example.nthucs.prototype.ADD_FOOD")) {
             food = new Food();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        fileName = food.getFileName();
+
+        if (food.getFileName() != null && food.getFileName().length() > 0) {
+
+            File file = configFileName("P", ".jpg");
+
+            if (file.exists()) {
+                // 顯示照片元件
+                picture.setVisibility(View.VISIBLE);
+                // 設定照片
+                FileUtil.fileToImageView(file.getAbsolutePath(), picture);
+            }
+        }
     }
 
     @Override
@@ -66,6 +96,15 @@ public class FoodActivity extends AppCompatActivity {
             setResult(Activity.RESULT_OK, result);
         }
         finish();
+    }
+
+    private File configFileName(String prefix, String extension) {
+        if (fileName == null) {
+            fileName = FileUtil.getUniqueFileName();
+        }
+
+        return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
+                prefix + fileName + extension);
     }
 
     public void clickFunction(View view) {

@@ -1,5 +1,7 @@
 package com.example.nthucs.prototype;
+
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -11,35 +13,17 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Scanner;
-import com.opencsv.CSVReader;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
-import java.io.*;
+
 import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-
-
-public class PictureActivity extends AppCompatActivity {
-    private static CSVReader reader;
-    private static HashMap<String, Double> kcalComsumePerKgByExercise;
-
+public class CameraActivity extends AppCompatActivity {
 
     private MenuItem search_pic;
 
@@ -60,13 +44,13 @@ public class PictureActivity extends AppCompatActivity {
     private String resultText;
     private TextView searchResult;
 
-    // Web View for Google Image
-    private WebView webView;
+    // Food storage
+    private Food food;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_picture);
+        setContentView(R.layout.activity_camera);
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -74,58 +58,25 @@ public class PictureActivity extends AppCompatActivity {
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
 
-        // web view for Url
-        webView = (WebView) findViewById(R.id.search_result);
-        /*webView.loadUrl("https://www.google.com.tw/");
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setDisplayZoomControls(false);
-        webView.clearCache(true);
-        registerForContextMenu(this.webView);*/
-
         // text view for input
         searchResult = (TextView) findViewById(R.id.result);
+
+        // new food
+        food = new Food(resultText, fileName);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
 
     }
 
-///////////////////讀檔寫在這裡//////////////////////////////////
-    public  void readData() throws IOException{
-        reader = new CSVReader(new FileReader("src/main/res/calories/sports_cal.csv"));
-        //要讀的檔案名稱自己修改
-        String [] nextLine;
-        int row=0;
-        while ((nextLine = reader.readNext()) != null) {
-            // nextLine[] is an array of values from the line
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == START_CAMERA) {
 
-            if(row>0){
-                kcalComsumePerKgByExercise=new HashMap<String, Double>();
-                kcalComsumePerKgByExercise.put(nextLine[0],Double.parseDouble(nextLine[1]));
-                System.out.println(kcalComsumePerKgByExercise.get(nextLine[0]));
-            }
-            else{
-                //System.out.println(nextLine[0]+nextLine[1]);
-                row++;
             }
         }
-        /*
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("請輸入運動項目：");
-        String sports = scanner.nextLine();
-        System.out.println("請輸入體重(kg)：");
-        float weight = scanner.nextFloat();
-        System.out.println("請輸入運動時間(hr)：");
-        float exerciseHours = scanner.nextFloat();
-
-        double comsumekcal = weight*exerciseHours;
-        System.out.println(kcalComsumePerKgByExercise.get(sports));
-        System.out.println("消耗的大卡："+comsumekcal);
-        */
     }
-/////////////////////////////////////////////////////////////////////////////////////////////////
 
     // 覆寫請求授權後執行的方法
     @Override
@@ -169,12 +120,12 @@ public class PictureActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.search_item) {
-            // use Async Task to open httpUrlConnection for upload picture
+            // Use Async Task to open httpUrlConnection for upload picture
             String responseString = new String();
 
-            // use Async Task
+            // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), this);
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
@@ -182,16 +133,16 @@ public class PictureActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
-            // parse response string
+            // Parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
 
             // output test
             System.out.println(imageUrl);
 
-            // use Async Task to retrieve data from google image search result with Jsoup
+            // Use Async Task to retrieve data from google image search result with Jsoup
             String resultString = new String();
 
-            // use Async Task
+            // Use Async Task
             try{
                 AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
                 resultString = asyncTaskJsoup.execute().get();
@@ -201,18 +152,26 @@ public class PictureActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
-            // get the result text from the response string
+            // Get the result text from the response string
             resultText = resultString;
 
-            Intent picResult = getIntent();
+            // Set food's information(title and picture name)
+            food.setTitle(resultText);
+            food.setContent("blank content");
+            food.setFileName(fileName);
+            food.setCalorie(0);
+            food.setGrams(0);
+            food.setPortions(1);
 
+            // Test: appear result in the text view
+            // searchResult.setText(resultText);
 
             // output test
-            System.out.println("===============Suggested result: "+resultText+"=======================");
+            System.out.println("Suggested result: " + resultText);
 
-            // image result test
-             webView.loadUrl("http://images.google.com/searchbyimage?image_url="+imageUrl);
-
+            Intent result = getIntent();
+            result.putExtra("com.example.nthucs.prototype.Food", food);
+            setResult(Activity.RESULT_OK, result);
         }
         finish();
     }
@@ -240,6 +199,8 @@ public class PictureActivity extends AppCompatActivity {
         Uri uri = Uri.fromFile(pictureFile);
         picUri = uri;
 
+        System.out.println(uri.getPath());
+
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
         startActivityForResult(intentCamera, START_CAMERA);
@@ -261,6 +222,7 @@ public class PictureActivity extends AppCompatActivity {
     private String getParseString(String jsonStr, String target1, String target2) {
         String imageUrl = new String();
         try {
+            // Get Json object twice with two target
             JSONObject jsonObject = new JSONObject(jsonStr);
             JSONObject data = jsonObject.getJSONObject(target1);
 

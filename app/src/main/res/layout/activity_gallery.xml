@@ -4,22 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="1"
-    tools:context="com.example.nthucs.prototype.FoodActivity">
-
-    <!-- 顯示圖片 -->
-    <ImageView
-        android:id="@+id/picture"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="2sp"
-        android:background="@drawable/rectangle_drawable"
-        android:padding="6sp"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+    tools:context="com.example.nthucs.prototype.GalleryActivity">
 
     <TableLayout
         android:layout_width="match_parent"
@@ -45,12 +30,15 @@
         </TableRow>>
     </TableLayout>
 
-    <LinearLayout>
-        <WebView android:id="@+id/search_result"
-            android:padding="6sp"
-            android:layout_margin="2sp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    <!-- 顯示圖片 -->
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="false"
+        android:layout_margin="2sp"
+        android:background="@drawable/rectangle_drawable"
+        android:padding="6sp"
+        android:visibility="invisible" />
 
 </TableLayout>

@@ -16,7 +16,10 @@
     <string name="grams">grams</string>string>
     <string name="enter_grams">input grams</string>string>
     <string name="write_external_storage_denied">沒有寫入外部儲存設備授權</string>
+    <string name="read_external_storage_denied">沒有讀取外部儲存設備授權</string>
     <string name="search_title">image search</string>string>
     <string name="search_picture">Search</string>string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main2">Main2Activity</string>
 
 </resources>
