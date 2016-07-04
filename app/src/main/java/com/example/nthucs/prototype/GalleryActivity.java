@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -189,10 +190,17 @@ public class GalleryActivity extends AppCompatActivity {
         // the address of the image on the SD card
         Uri uri = data.getData();
         picUri = uri;
-        picFile = new File(picUri.getPath());
-        fileName = picFile.getName().substring(1, 15);
+        System.out.println(uri);
+        System.out.println(getRealPathFromURI(uri));
+        picFile = new File(getRealPathFromURI(uri));
+        if (picFile.exists()) {
+            System.out.println(picUri);
+            System.out.println(picFile.getName());
+        }
+        //fileName = picFile.getName().substring(1, 15);
+        fileName = FileUtil.getUniqueFileName();
 
-        System.out.println("$$$ "+fileName);
+        System.out.println("$$$ " + fileName);
 
         // set bitmap to imageView
         picture.setImageBitmap(bitmap);
@@ -222,5 +230,21 @@ public class GalleryActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return imageUrl;
+    }
+
+    // if uri is media external format, get the real path from this uri
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        // Source is Dropbox or other similar local file path
+        if (cursor == null) {
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
     }
 }
