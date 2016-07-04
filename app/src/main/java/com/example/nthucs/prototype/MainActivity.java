@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Food> foods;
 
-    private MenuItem scan_food, add_food, search_food, revert_food, delete_food;
+    private MenuItem take_photo, scan_food, add_food, search_food, revert_food, delete_food;
 
     private static final int ADD_FOOD = 0;
     private static final int EDIT_FOOD = 1;
@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
+        take_photo = menu.findItem(R.id.take_photo);
         scan_food = menu.findItem(R.id.scan_food);
         add_food = menu.findItem(R.id.add_food);
         search_food = menu.findItem(R.id.search_food);
@@ -157,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
+        take_photo.setVisible(selectedCount==0);
         scan_food.setVisible(selectedCount==0);
         add_food.setVisible(selectedCount==0);
         search_food.setVisible(selectedCount==0);
