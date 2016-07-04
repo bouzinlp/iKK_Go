@@ -23,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -189,16 +190,24 @@ public class GalleryActivity extends AppCompatActivity {
 
         // the address of the image on the SD card
         Uri uri = data.getData();
-        picUri = uri;
+
+        // test for different storage
         System.out.println(uri);
         System.out.println(getRealPathFromURI(uri));
-        picFile = new File(getRealPathFromURI(uri));
-        if (picFile.exists()) {
-            System.out.println(picUri);
-            System.out.println(picFile.getName());
+
+        // uri is from external media
+        if (uri.getPath().toLowerCase().contains("external")) {
+            // fix bug with invalid extension from passing true picUri
+            String realPath = getRealPathFromURI(uri);
+            picUri = Uri.parse(realPath);
+            picFile = new File(realPath);
+            fileName = FileUtil.getUniqueFileName();
+        // uri is from real path, like: sdcard
+        } else {
+            picUri = uri;
+            picFile = new File(uri.getPath());
+            fileName = picFile.getName().substring(1, 15);
         }
-        //fileName = picFile.getName().substring(1, 15);
-        fileName = FileUtil.getUniqueFileName();
 
         System.out.println("$$$ " + fileName);
 
