@@ -2,6 +2,7 @@ package com.example.nthucs.prototype;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,9 @@ public class FoodActivity extends AppCompatActivity {
     // picture information
     private String fileName;
     private ImageView picture;
+
+    // pass Uri if take photo from library
+    private Uri picUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +64,23 @@ public class FoodActivity extends AppCompatActivity {
 
             File file = configFileName("P", ".jpg");
             System.out.println("!!! "+file.getName());
+            System.out.println("### "+fileName);
 
+            // camera can access this statement
             if (file.exists()) {
                 System.out.println("@@@ "+fileName);
                 // 顯示照片元件
                 picture.setVisibility(View.VISIBLE);
                 // 設定照片
                 FileUtil.fileToImageView(file.getAbsolutePath(), picture);
+            // temporary
+            } else {
+                System.out.println("not exist");
+                /*picUri = food.getPicUri();
+                file = new File(picUri.getPath());
+                if (file.exists()) {
+                    System.out.println("@@@ "+fileName);
+                }*/
             }
         }
     }

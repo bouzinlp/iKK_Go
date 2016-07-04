@@ -97,6 +97,12 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        File file = new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
+                "P" + fileName + ".jpg");
+        if (!file.exists()) {
+            System.out.println("exactly not exist");
+        }
     }
 
     public void onSubmit(View view) {
@@ -150,6 +156,7 @@ public class GalleryActivity extends AppCompatActivity {
             Intent result = getIntent();
             result.putExtra("com.example.nthucs.prototype.Food", food);
             setResult(Activity.RESULT_OK, result);
+
         }
         finish();
     }
@@ -192,8 +199,8 @@ public class GalleryActivity extends AppCompatActivity {
         Uri uri = data.getData();
 
         // test for different storage
-        System.out.println(uri);
-        System.out.println(getRealPathFromURI(uri));
+        //System.out.println(uri);
+        //System.out.println(getRealPathFromURI(uri));
 
         // uri is from external media
         if (uri.getPath().toLowerCase().contains("external")) {
@@ -208,8 +215,6 @@ public class GalleryActivity extends AppCompatActivity {
             picFile = new File(uri.getPath());
             fileName = picFile.getName().substring(1, 15);
         }
-
-        System.out.println("$$$ " + fileName);
 
         // set bitmap to imageView
         picture.setImageBitmap(bitmap);

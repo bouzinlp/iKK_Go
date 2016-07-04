@@ -1,5 +1,7 @@
 package com.example.nthucs.prototype;
 
+import android.net.Uri;
+
 import java.util.Date;
 import java.util.Locale;
 
@@ -10,13 +12,17 @@ public class Food implements java.io.Serializable {
     private float calorie;
     private float portions;
     private float grams;
+
     // food's name
     private String title;
+
     // food's description
     private String content;
+
     // pic' file name
     private String fileName;
 
+    // whether this food is selected
     private boolean selected;
 
     public Food() {
@@ -66,12 +72,8 @@ public class Food implements java.io.Serializable {
     public float getGrams() {return this.grams;}
     public void setGrams(float grams) {this.grams = grams;}
 
-    public String getFileName() {
-        return fileName;
-    }
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+    public String getFileName() {return fileName;}
+    public void setFileName(String fileName) {this.fileName = fileName;}
 
     public boolean isSelected() {
         return selected;
