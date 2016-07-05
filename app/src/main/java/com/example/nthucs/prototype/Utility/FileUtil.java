@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.Utility;
 
 import android.content.Context;
 import android.graphics.Bitmap;

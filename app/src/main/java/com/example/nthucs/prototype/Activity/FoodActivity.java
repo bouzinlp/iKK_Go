@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.Activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.example.nthucs.prototype.Utility.FileUtil;
+import com.example.nthucs.prototype.Food;
+import com.example.nthucs.prototype.R;
 
 import java.io.File;
 

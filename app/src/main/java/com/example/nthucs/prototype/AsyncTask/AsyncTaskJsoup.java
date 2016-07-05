@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.AsyncTask;
 
 /**
  * Created by USER12345678 on 2016/6/20.
@@ -23,7 +23,7 @@ public class AsyncTaskJsoup extends AsyncTask<String, Void, String> {
     // response string
     String resultText;
 
-    AsyncTaskJsoup(String imageUrl) {
+    public AsyncTaskJsoup(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 

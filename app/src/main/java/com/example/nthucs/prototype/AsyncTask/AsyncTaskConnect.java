@@ -1,6 +1,9 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.AsyncTask;
 
 import android.os.AsyncTask;
+
+import com.example.nthucs.prototype.Activity.CameraActivity;
+import com.example.nthucs.prototype.Utility.HttpFileUpload;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,7 +24,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     // Http response
     private String responseString;
 
-    AsyncTaskConnect(File picFile, String picPath) {
+    public AsyncTaskConnect(File picFile, String picPath) {
         this.picFile = picFile;
         this.picPath = picPath;
     }

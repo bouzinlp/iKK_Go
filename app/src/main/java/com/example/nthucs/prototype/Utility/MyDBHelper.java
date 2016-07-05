@@ -1,9 +1,11 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.Utility;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.nthucs.prototype.FoodDAO;
 
 public class MyDBHelper extends SQLiteOpenHelper {
 

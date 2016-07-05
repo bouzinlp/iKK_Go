@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.Utility;
 
 import java.io.DataOutputStream;
 import java.io.FileInputStream;
@@ -20,7 +20,7 @@ public class HttpFileUpload implements Runnable{
     String filePath;
     String fileName;
 
-    HttpFileUpload(String urlString, String vTitle, String vDesc){
+    public HttpFileUpload(String urlString, String vTitle, String vDesc){
         try{
             connectURL = new URL(urlString);
             Title= vTitle;
@@ -30,7 +30,7 @@ public class HttpFileUpload implements Runnable{
         }
     }
 
-    void Send_Now(FileInputStream fStream, String picPath){
+    public void Send_Now(FileInputStream fStream, String picPath){
         fileInputStream = fStream;
         filePath = picPath;
         String[] parse = filePath.split("/");
