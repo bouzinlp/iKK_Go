@@ -26,7 +26,10 @@ public class Food implements java.io.Serializable {
     private boolean selected;
 
     // uri string with take photo from library
-    private String picUri;
+    private String picUriString;
+
+    // boolean value to identify two photo capture way
+    private boolean takeFromCamera;
 
     public Food() {
         this.title = new String();
@@ -34,15 +37,17 @@ public class Food implements java.io.Serializable {
         this.fileName = new String();
     }
 
-    public Food(String title, String fileName) {
+    public Food(String title, String fileName, boolean takeFromCamera) {
         this.title = title;
         this.fileName = fileName;
+        this.takeFromCamera = takeFromCamera;
     }
 
-    public Food(String title, String fileName, String picUri) {
+    public Food(String title, String fileName, String picUriString, boolean takeFromCamera) {
         this.title = title;
         this.fileName = fileName;
-        this.picUri = picUri;
+        this.picUriString = picUriString;
+        this.takeFromCamera = takeFromCamera;
     }
 
     public Food(long id, float calorie, float portions, float grams, String title, String content, String fileName) {
@@ -84,14 +89,15 @@ public class Food implements java.io.Serializable {
     public String getFileName() {return fileName;}
     public void setFileName(String fileName) {this.fileName = fileName;}
 
-    public String getPicUri() {return picUri;}
-    public void setPicUri(String picUri) {this.picUri = picUri;}
+    public String getPicUriString() {return picUriString;}
+    public void setPicUriString(String picUriString) {this.picUriString = picUriString;}
 
-    public boolean isSelected() {
-        return selected;
+    public boolean isSelected() {return selected;}
+    public void setSelected(boolean selected) {this.selected = selected;}
+
+    public boolean isTakeFromCamera() {
+        return takeFromCamera;
     }
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
+    //public void setTakeFromCamera(boolean takeFromCamera) {this.takeFromCamera = takeFromCamera;}
 }
 

@@ -23,7 +23,7 @@ public class FoodActivity extends AppCompatActivity {
     private ImageView picture;
 
     // pass Uri's toString if take photo from library
-    private String picUri;
+    private String picUriString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,26 +61,28 @@ public class FoodActivity extends AppCompatActivity {
         fileName = food.getFileName();
 
         if (food.getFileName() != null && food.getFileName().length() > 0) {
-
-            File file = configFileName("P", ".jpg");
-            System.out.println("!!! "+file.getName());
-            System.out.println("### "+fileName);
-
             // camera can access this statement
-            if (file.exists()) {
-                System.out.println("@@@ "+fileName);
-                // 顯示照片元件
-                picture.setVisibility(View.VISIBLE);
-                // 設定照片
-                FileUtil.fileToImageView(file.getAbsolutePath(), picture);
-            // temporary
-            } else {
-                picUri = food.getPicUri();
+            if (food.isTakeFromCamera() == true) {
+                File file = configFileName("P", ".jpg");
 
-                /*file = new File(Uri.parse(picUri));
                 if (file.exists()) {
-                    System.out.println("@@@ "+fileName);
-                }*/
+                    // 顯示照片元件
+                    picture.setVisibility(View.VISIBLE);
+                    // 設定照片
+                    FileUtil.fileToImageView(file.getAbsolutePath(), picture);
+                }
+            // gallery can access this statement
+            } else {
+                picUriString = food.getPicUriString();
+                Uri picUri = Uri.parse(picUriString);
+                File file2 = new File(picUri.getPath());
+
+                if (file2.exists()) {
+                    // 顯示照片元件
+                    picture.setVisibility(View.VISIBLE);
+                    // 設定照片
+                    FileUtil.fileToImageView(file2.getAbsolutePath(), picture);
+                }
             }
         }
     }
@@ -88,8 +90,6 @@ public class FoodActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-
-
         }
     }
 

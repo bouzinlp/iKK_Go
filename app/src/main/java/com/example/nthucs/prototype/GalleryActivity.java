@@ -63,7 +63,7 @@ public class GalleryActivity extends AppCompatActivity {
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
 
-        food = new Food(resultText, fileName, picUriString);
+        food = new Food(resultText, fileName, picUriString, false);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PHOTO")) {
             // new food
@@ -144,7 +144,7 @@ public class GalleryActivity extends AppCompatActivity {
             food.setCalorie(0);
             food.setGrams(0);
             food.setPortions(1);
-            food.setPicUri(picUriString);
+            food.setPicUriString(picUriString);
 
             // output test
             System.out.println("Suggested result: " + resultText);

@@ -62,7 +62,7 @@ public class CameraActivity extends AppCompatActivity {
         searchResult = (TextView) findViewById(R.id.result);
 
         // new food
-        food = new Food(resultText, fileName);
+        food = new Food(resultText, fileName, true);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
