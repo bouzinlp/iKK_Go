@@ -118,6 +118,8 @@ public class FoodDAO {
         result.setFileName(cursor.getString(4));
         result.setTitle(cursor.getString(5));
         result.setContent(cursor.getString(6));
+        result.setPicUriString(cursor.getString(7));
+        result.setTakeFromCamera(cursor.getInt(8) > 0);
 
         return result;
     }

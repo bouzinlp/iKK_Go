@@ -95,9 +95,7 @@ public class Food implements java.io.Serializable {
     public boolean isSelected() {return selected;}
     public void setSelected(boolean selected) {this.selected = selected;}
 
-    public boolean isTakeFromCamera() {
-        return takeFromCamera;
-    }
-    //public void setTakeFromCamera(boolean takeFromCamera) {this.takeFromCamera = takeFromCamera;}
+    public boolean isTakeFromCamera() {return takeFromCamera;}
+    public void setTakeFromCamera(boolean takeFromCamera) {this.takeFromCamera = takeFromCamera;}
 }
 

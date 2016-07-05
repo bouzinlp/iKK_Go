@@ -53,6 +53,7 @@ public class FoodActivity extends AppCompatActivity {
             calorie_text.setText(Float.toString(food.getCalorie()));
             portions_text.setText(Float.toString(food.getPortions()));
             grams_text.setText(Float.toString(food.getGrams()));
+
         } else if (action.equals("com.example.nthucs.prototype.ADD_FOOD")) {
             food = new Food();
         }
@@ -67,6 +68,7 @@ public class FoodActivity extends AppCompatActivity {
         if (food.getFileName() != null && food.getFileName().length() > 0) {
             // camera can access this statement
             if (food.isTakeFromCamera() == true) {
+                // photo taken from camera display with config way
                 File file = configFileName("P", ".jpg");
 
                 if (file.exists()) {
@@ -77,7 +79,9 @@ public class FoodActivity extends AppCompatActivity {
                 }
             // gallery can access this statement
             } else {
+                // photo taken from gallery display with parsing uri
                 picUriString = food.getPicUriString();
+
                 Uri picUri = Uri.parse(picUriString);
                 File file2 = new File(picUri.getPath());
 

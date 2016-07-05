@@ -168,6 +168,7 @@ public class CameraActivity extends AppCompatActivity {
             food.setCalorie(0);
             food.setGrams(0);
             food.setPortions(1);
+            food.setTakeFromCamera(true);
 
             // Test: appear result in the text view
             // searchResult.setText(resultText);

@@ -147,6 +147,7 @@ public class GalleryActivity extends AppCompatActivity {
             food.setGrams(0);
             food.setPortions(1);
             food.setPicUriString(picUriString);
+            food.setTakeFromCamera(false);
 
             // output test
             System.out.println("Suggested result: " + resultText);
