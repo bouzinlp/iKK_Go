@@ -13,9 +13,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.nthucs.prototype.Food;
-import com.example.nthucs.prototype.FoodAdapter;
-import com.example.nthucs.prototype.FoodDAO;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.FoodList.FoodAdapter;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
 
 import java.util.List;
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
-            Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.Food");
+            Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
 
             // Add new food list
             if (requestCode == ADD_FOOD) {
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                             "com.example.nthucs.prototype.EDIT_FOOD");
 
                     intent.putExtra("position", position);
-                    intent.putExtra("com.example.nthucs.prototype.Food", food);
+                    intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
 
                     startActivityForResult(intent, EDIT_FOOD);
                 }

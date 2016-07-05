@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.FoodList;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.nthucs.prototype.R;
 
 import java.util.List;
 

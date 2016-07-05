@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.example.nthucs.prototype.FoodDAO;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
 
 public class MyDBHelper extends SQLiteOpenHelper {
 
@@ -13,7 +13,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "food.db";
 
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
-    public static final int VERSION = 2;
+    public static final int VERSION = 7;
 
     // 資料庫物件，固定的欄位變數
     private static SQLiteDatabase database;

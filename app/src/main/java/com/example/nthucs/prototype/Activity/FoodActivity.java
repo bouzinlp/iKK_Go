@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.nthucs.prototype.Utility.FileUtil;
-import com.example.nthucs.prototype.Food;
+import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 
 import java.io.File;
@@ -47,7 +47,7 @@ public class FoodActivity extends AppCompatActivity {
 
         if (action.equals("com.example.nthucs.prototype.EDIT_FOOD")) {
             food = (Food)intent.getExtras().getSerializable(
-                    "com.example.nthucs.prototype.Food");
+                    "com.example.nthucs.prototype.FoodList.Food");
             title_text.setText(food.getTitle());
             content_text.setText(food.getContent());
             calorie_text.setText(Float.toString(food.getCalorie()));
@@ -112,7 +112,7 @@ public class FoodActivity extends AppCompatActivity {
             food.setGrams(Float.parseFloat(gramsText));
 
             Intent result = getIntent();
-            result.putExtra("com.example.nthucs.prototype.Food", food);
+            result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
             setResult(Activity.RESULT_OK, result);
         }
         finish();

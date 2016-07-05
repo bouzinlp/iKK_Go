@@ -20,7 +20,7 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.Utility.FileUtil;
-import com.example.nthucs.prototype.Food;
+import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 
 import org.json.JSONException;
@@ -176,7 +176,7 @@ public class CameraActivity extends AppCompatActivity {
             System.out.println("Suggested result: " + resultText);
 
             Intent result = getIntent();
-            result.putExtra("com.example.nthucs.prototype.Food", food);
+            result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
             setResult(Activity.RESULT_OK, result);
         }
         finish();

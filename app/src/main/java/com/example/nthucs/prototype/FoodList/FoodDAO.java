@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.FoodList;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,6 +21,8 @@ public class FoodDAO {
     public static final String TITLE_COLUMN = "title";
     public static final String CONTENT_COLUMN = "content";
     public static final String FILENAME_COLUMN = "filename";
+    public static final String PICURISTRING_COLUMN = "picUriString";
+    public static final String TAKEFROMCAMERA_COLUMN = "takeFromCamera";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -30,7 +32,9 @@ public class FoodDAO {
                     GRAMS_COLUMN + " TEXT NOT NULL, " +
                     FILENAME_COLUMN + " TEXT, " +
                     TITLE_COLUMN + " TEXT NOT NULL, " +
-                    CONTENT_COLUMN + " TEXT NOT NULL)";
+                    CONTENT_COLUMN + " TEXT NOT NULL, "+
+                    PICURISTRING_COLUMN + " TEXT, " +
+                    TAKEFROMCAMERA_COLUMN + " TEXT NOT NULL)";
 
     private SQLiteDatabase db;
 
@@ -47,6 +51,8 @@ public class FoodDAO {
         cv.put(FILENAME_COLUMN, food.getFileName());
         cv.put(TITLE_COLUMN, food.getTitle());
         cv.put(CONTENT_COLUMN, food.getContent());
+        cv.put(PICURISTRING_COLUMN, food.getPicUriString());
+        cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
 
         long id = this.db.insert(TABLE_NAME, null, cv);
 
@@ -64,6 +70,8 @@ public class FoodDAO {
         cv.put(FILENAME_COLUMN, food.getFileName());
         cv.put(TITLE_COLUMN, food.getTitle());
         cv.put(CONTENT_COLUMN, food.getContent());
+        cv.put(PICURISTRING_COLUMN, food.getPicUriString());
+        cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
 
         String where = KEY_ID + "=" + food.getId();
 

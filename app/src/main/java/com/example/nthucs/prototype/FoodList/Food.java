@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.FoodList;
 
 import android.net.Uri;
 
