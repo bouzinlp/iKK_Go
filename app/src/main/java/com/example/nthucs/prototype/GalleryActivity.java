@@ -44,6 +44,7 @@ public class GalleryActivity extends AppCompatActivity {
     private File picFile;
     private Uri picUri;
     private String imageUrl;
+    private String picUriString;
 
     // Search by word
     private String resultText;
@@ -62,7 +63,7 @@ public class GalleryActivity extends AppCompatActivity {
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
 
-        food = new Food(resultText, fileName);
+        food = new Food(resultText, fileName, picUriString);
 
         if (action.equals("com.example.nthucs.prototype.TAKE_PHOTO")) {
             // new food
@@ -97,12 +98,6 @@ public class GalleryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        File file = new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
-                "P" + fileName + ".jpg");
-        if (!file.exists()) {
-            System.out.println("exactly not exist");
-        }
     }
 
     public void onSubmit(View view) {
@@ -149,6 +144,7 @@ public class GalleryActivity extends AppCompatActivity {
             food.setCalorie(0);
             food.setGrams(0);
             food.setPortions(1);
+            food.setPicUri(picUriString);
 
             // output test
             System.out.println("Suggested result: " + resultText);
@@ -215,6 +211,9 @@ public class GalleryActivity extends AppCompatActivity {
             picFile = new File(uri.getPath());
             fileName = picFile.getName().substring(1, 15);
         }
+
+        // assign variable: picUri.toString
+        picUriString = picUri.toString();
 
         // set bitmap to imageView
         picture.setImageBitmap(bitmap);

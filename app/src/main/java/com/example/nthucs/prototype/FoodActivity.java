@@ -22,8 +22,8 @@ public class FoodActivity extends AppCompatActivity {
     private String fileName;
     private ImageView picture;
 
-    // pass Uri if take photo from library
-    private Uri picUri;
+    // pass Uri's toString if take photo from library
+    private String picUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +75,9 @@ public class FoodActivity extends AppCompatActivity {
                 FileUtil.fileToImageView(file.getAbsolutePath(), picture);
             // temporary
             } else {
-                System.out.println("not exist");
-                /*picUri = food.getPicUri();
-                file = new File(picUri.getPath());
+                picUri = food.getPicUri();
+
+                /*file = new File(Uri.parse(picUri));
                 if (file.exists()) {
                     System.out.println("@@@ "+fileName);
                 }*/

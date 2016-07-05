@@ -25,6 +25,9 @@ public class Food implements java.io.Serializable {
     // whether this food is selected
     private boolean selected;
 
+    // uri string with take photo from library
+    private String picUri;
+
     public Food() {
         this.title = new String();
         this.content = new String();
@@ -34,6 +37,12 @@ public class Food implements java.io.Serializable {
     public Food(String title, String fileName) {
         this.title = title;
         this.fileName = fileName;
+    }
+
+    public Food(String title, String fileName, String picUri) {
+        this.title = title;
+        this.fileName = fileName;
+        this.picUri = picUri;
     }
 
     public Food(long id, float calorie, float portions, float grams, String title, String content, String fileName) {
@@ -74,6 +83,9 @@ public class Food implements java.io.Serializable {
 
     public String getFileName() {return fileName;}
     public void setFileName(String fileName) {this.fileName = fileName;}
+
+    public String getPicUri() {return picUri;}
+    public void setPicUri(String picUri) {this.picUri = picUri;}
 
     public boolean isSelected() {
         return selected;
