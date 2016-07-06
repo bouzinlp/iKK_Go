@@ -26,6 +26,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -148,6 +149,7 @@ public class GalleryActivity extends AppCompatActivity {
             food.setPortions(1);
             food.setPicUriString(picUriString);
             food.setTakeFromCamera(false);
+            food.setDatetime(new Date().getTime());
 
             // output test
             System.out.println("Suggested result: " + resultText);

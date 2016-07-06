@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 public class CameraActivity extends AppCompatActivity {
@@ -169,6 +170,7 @@ public class CameraActivity extends AppCompatActivity {
             food.setGrams(0);
             food.setPortions(1);
             food.setTakeFromCamera(true);
+            food.setDatetime(new Date().getTime());
 
             // Test: appear result in the text view
             // searchResult.setText(resultText);

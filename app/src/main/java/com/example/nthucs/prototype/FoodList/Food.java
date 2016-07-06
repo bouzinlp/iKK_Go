@@ -31,6 +31,9 @@ public class Food implements java.io.Serializable {
     // boolean value to identify two photo capture way
     private boolean takeFromCamera;
 
+    // food list's establish time
+    private long datetime;
+
     public Food() {
         this.title = new String();
         this.content = new String();
@@ -97,5 +100,10 @@ public class Food implements java.io.Serializable {
 
     public boolean isTakeFromCamera() {return takeFromCamera;}
     public void setTakeFromCamera(boolean takeFromCamera) {this.takeFromCamera = takeFromCamera;}
+
+    public String getLocaleDatetime() {return String.format(Locale.getDefault(), "%tF  %<tR", new Date(datetime));}
+    public void setDatetime(long datetime) {
+        this.datetime = datetime;
+    }
 }
 

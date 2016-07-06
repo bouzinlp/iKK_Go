@@ -14,6 +14,7 @@ import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 
 import java.io.File;
+import java.util.Date;
 
 public class FoodActivity extends AppCompatActivity {
 
@@ -114,6 +115,11 @@ public class FoodActivity extends AppCompatActivity {
             food.setCalorie(Float.parseFloat(calorieText));
             food.setPortions(Float.parseFloat(portionsText));
             food.setGrams(Float.parseFloat(gramsText));
+
+            // if add food with photo, then also record establish time
+            if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
+                food.setDatetime(new Date().getTime());
+            }
 
             Intent result = getIntent();
             result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);

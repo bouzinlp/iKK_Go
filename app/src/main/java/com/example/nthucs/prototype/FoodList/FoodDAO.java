@@ -23,6 +23,7 @@ public class FoodDAO {
     public static final String FILENAME_COLUMN = "filename";
     public static final String PICURISTRING_COLUMN = "picUriString";
     public static final String TAKEFROMCAMERA_COLUMN = "takeFromCamera";
+    public static final String DATETIME_COLUMN = "datetime";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -34,7 +35,8 @@ public class FoodDAO {
                     TITLE_COLUMN + " TEXT NOT NULL, " +
                     CONTENT_COLUMN + " TEXT NOT NULL, "+
                     PICURISTRING_COLUMN + " TEXT, " +
-                    TAKEFROMCAMERA_COLUMN + " TEXT NOT NULL)";
+                    TAKEFROMCAMERA_COLUMN + " TEXT NOT NULL, " +
+                    DATETIME_COLUMN + " INTEGER NOT NULL)";
 
     private SQLiteDatabase db;
 
@@ -53,6 +55,7 @@ public class FoodDAO {
         cv.put(CONTENT_COLUMN, food.getContent());
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
+        cv.put(DATETIME_COLUMN, food.getLocaleDatetime());
 
         long id = this.db.insert(TABLE_NAME, null, cv);
 
@@ -72,6 +75,7 @@ public class FoodDAO {
         cv.put(CONTENT_COLUMN, food.getContent());
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
+        cv.put(DATETIME_COLUMN, food.getLocaleDatetime());
 
         String where = KEY_ID + "=" + food.getId();
 
@@ -120,6 +124,7 @@ public class FoodDAO {
         result.setContent(cursor.getString(6));
         result.setPicUriString(cursor.getString(7));
         result.setTakeFromCamera(cursor.getInt(8) > 0);
+        result.setDatetime(cursor.getLong(9));
 
         return result;
     }
