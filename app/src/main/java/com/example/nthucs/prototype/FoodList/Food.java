@@ -101,6 +101,7 @@ public class Food implements java.io.Serializable {
     public boolean isTakeFromCamera() {return takeFromCamera;}
     public void setTakeFromCamera(boolean takeFromCamera) {this.takeFromCamera = takeFromCamera;}
 
+    public long getDatetime() {return datetime;}
     public String getLocaleDatetime() {return String.format(Locale.getDefault(), "%tF  %<tR", new Date(datetime));}
     public void setDatetime(long datetime) {
         this.datetime = datetime;

@@ -55,7 +55,7 @@ public class FoodDAO {
         cv.put(CONTENT_COLUMN, food.getContent());
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
-        cv.put(DATETIME_COLUMN, food.getLocaleDatetime());
+        cv.put(DATETIME_COLUMN, food.getDatetime());
 
         long id = this.db.insert(TABLE_NAME, null, cv);
 
@@ -75,7 +75,7 @@ public class FoodDAO {
         cv.put(CONTENT_COLUMN, food.getContent());
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
-        cv.put(DATETIME_COLUMN, food.getLocaleDatetime());
+        cv.put(DATETIME_COLUMN, food.getDatetime());
 
         String where = KEY_ID + "=" + food.getId();
 

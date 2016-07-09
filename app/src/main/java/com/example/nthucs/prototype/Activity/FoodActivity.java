@@ -66,6 +66,8 @@ public class FoodActivity extends AppCompatActivity {
 
         fileName = food.getFileName();
 
+        System.out.println("date time: "+food.getLocaleDatetime());
+
         if (food.getFileName() != null && food.getFileName().length() > 0) {
             // camera can access this statement
             if (food.isTakeFromCamera() == true) {
