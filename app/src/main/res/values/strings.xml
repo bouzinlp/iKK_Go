@@ -19,5 +19,5 @@
     <string name="read_external_storage_denied">沒有讀取外部儲存設備授權</string>
     <string name="search_title">image search</string>string>
     <string name="search_picture">Search</string>string>
-
+    <string name="action_settings">Settings</string>
 </resources>

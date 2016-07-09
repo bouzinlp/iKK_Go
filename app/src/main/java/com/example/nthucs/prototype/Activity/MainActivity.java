@@ -175,6 +175,11 @@ public class MainActivity extends AppCompatActivity {
         int foodId = item.getItemId();
 
         switch (foodId) {
+            case R.id.calendar_food:
+                Intent intent_calender = new Intent();
+                intent_calender.setClass(MainActivity.this , CalendarActivity.class );
+                startActivity(intent_calender);
+                break;
             case R.id.take_photo:
                 Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                 startActivityForResult(intent, TAKE_PHOTO);

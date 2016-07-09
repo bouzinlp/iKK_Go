@@ -1,7 +1,23 @@
 package com.example.nthucs.prototype.Calendar;
 
+import android.view.animation.Animation;
+
 /**
- * Created by NTHUCS on 2016/7/6.
+ * Created by admin on 2016/7/1.
  */
-public class AnimationListener {
+public abstract class AnimationListener implements Animation.AnimationListener {
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }
