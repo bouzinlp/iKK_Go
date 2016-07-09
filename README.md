@@ -1,7 +1,8 @@
 # Prototype
 
-resolveUri failed on bad bitmap uri
+Huawei driver:
+  http://consumer.huawei.com/minisite/HiSuite_en/index.html
 
-http://consumer.huawei.com/minisite/HiSuite_en/index.html
-
-HTC stroage: content://com.android.providers.media.documents/document/image%3A219983
+HTC : 
+  error:  resolveUri failed on bad bitmap uri
+  storage:  content://com.android.providers.media.documents/document/image%3A219983
