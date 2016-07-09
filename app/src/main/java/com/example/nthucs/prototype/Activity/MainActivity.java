@@ -5,7 +5,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,7 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Food> foods;
 
-    private MenuItem take_photo, scan_food, add_food, search_food, revert_food, delete_food;
+    private MenuItem calendar_food, take_photo, scan_food, add_food, search_food, revert_food, delete_food;
+
+    // element for the bottom of the tab content
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     private static final int ADD_FOOD = 0;
     private static final int EDIT_FOOD = 1;
@@ -43,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
@@ -98,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
+        calendar_food = menu.findItem(R.id.calendar_food);
         take_photo = menu.findItem(R.id.take_photo);
         scan_food = menu.findItem(R.id.scan_food);
         add_food = menu.findItem(R.id.add_food);
@@ -163,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
+        calendar_food.setVisible(selectedCount==0);
         take_photo.setVisible(selectedCount==0);
         scan_food.setVisible(selectedCount==0);
         add_food.setVisible(selectedCount==0);
