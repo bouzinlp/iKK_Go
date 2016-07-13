@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.example.nthucs.prototype.R;
 
@@ -49,6 +48,17 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return TabFragment.newInstance(position);
+        switch (position) {
+            case 0:
+                return FirstTabFragment.newInstance();
+            case 1:
+                return TabFragment.newInstance(1);
+            case 2:
+                return TabFragment.newInstance(2);
+            case 3:
+                return TabFragment.newInstance(3);
+            default:
+                return TabFragment.newInstance(position);
+        }
     }
 }

@@ -12,26 +12,17 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.example.nthucs.prototype.Activity.CalendarActivity;
-import com.example.nthucs.prototype.Activity.MainActivity;
 import com.example.nthucs.prototype.R;
 
 /**
- * Created by user on 2016/7/12.
+ * Created by user on 2016/7/13.
  */
-public class TabFragment extends Fragment {
-
+public class FirstTabFragment extends Fragment {
     private static final String ARG_POSITION = "position";
 
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-
-    private int position;
-
-    public static TabFragment newInstance(int position) {
-        TabFragment f = new TabFragment();
+    public static FirstTabFragment newInstance() {
+        FirstTabFragment f = new FirstTabFragment();
         Bundle b = new Bundle();
-        b.putInt(ARG_POSITION, position);
         f.setArguments(b);
         return f;
     }
@@ -39,8 +30,6 @@ public class TabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        position = getArguments().getInt(ARG_POSITION);
     }
 
     @Override
@@ -50,7 +39,6 @@ public class TabFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         AbsListView.LayoutParams params = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, DrawerLayout.LayoutParams.MATCH_PARENT);
 
         FrameLayout fl = new FrameLayout(getActivity());
@@ -61,22 +49,10 @@ public class TabFragment extends Fragment {
         v.setLayoutParams(params);
         v.setGravity(Gravity.CENTER);
         v.setBackgroundResource(R.color.white);
-        v.setText("Tabs " + (position + 1));
+        v.setText("Tabs " + (111));
 
-        System.out.println(position);
-
-        if (position == 0) {
-            //Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-            //startActivity(intent_calender);
-        } else if (position == 1) {
-
-        } else if (position == 2) {
-            //Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-            //startActivityForResult(intent, TAKE_PHOTO);
-        } else if (position == 3) {
-            //Intent intent2 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-            //startActivityForResult(intent2, SCAN_FOOD);
-        }
+        Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+        startActivity(intent_calender);
 
         fl.addView(v);
         return fl;

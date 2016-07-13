@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
         }
+
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
 
