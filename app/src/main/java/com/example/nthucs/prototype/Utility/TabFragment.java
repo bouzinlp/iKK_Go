@@ -23,9 +23,6 @@ public class TabFragment extends Fragment {
 
     private static final String ARG_POSITION = "position";
 
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-
     private int position;
 
     public static TabFragment newInstance(int position) {
@@ -57,26 +54,11 @@ public class TabFragment extends Fragment {
         fl.setLayoutParams(params);
 
         TextView v = new TextView(getActivity());
-        v.setLayoutParams(params);
+        /*v.setLayoutParams(params);
         v.setLayoutParams(params);
         v.setGravity(Gravity.CENTER);
         v.setBackgroundResource(R.color.white);
-        v.setText("Tabs " + (position + 1));
-
-        //System.out.println(position);
-
-        if (position == 0) {
-            //Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-            //startActivity(intent_calender);
-        } else if (position == 1) {
-
-        } else if (position == 2) {
-            //Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-            //startActivityForResult(intent, TAKE_PHOTO);
-        } else if (position == 3) {
-            //Intent intent2 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-            //startActivityForResult(intent2, SCAN_FOOD);
-        }
+        v.setText("Tabs " + (position + 1));*/
 
         fl.addView(v);
         return fl;
