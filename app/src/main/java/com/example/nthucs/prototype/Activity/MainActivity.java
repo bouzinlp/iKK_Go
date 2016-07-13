@@ -67,6 +67,20 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        tabLayout.setOnTabSelectedListener(
+            new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    super.onTabSelected(tab);
+                    if (tab.getPosition() == 3) {
+                        Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+                        startActivity(intent_calender);
+                    }
+                    //System.out.println(tab.getPosition());
+                }
+             }
+        );
+
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
 

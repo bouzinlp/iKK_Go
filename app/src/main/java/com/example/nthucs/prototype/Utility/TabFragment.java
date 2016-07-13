@@ -63,7 +63,7 @@ public class TabFragment extends Fragment {
         v.setBackgroundResource(R.color.white);
         v.setText("Tabs " + (position + 1));
 
-        System.out.println(position);
+        //System.out.println(position);
 
         if (position == 0) {
             //Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
