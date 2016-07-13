@@ -39,8 +39,6 @@ public class TabFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        position = getArguments().getInt(ARG_POSITION);
     }
 
     @Override
@@ -68,7 +66,8 @@ public class TabFragment extends Fragment {
 
 
         if (position == 0) {
-
+            //Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+            //startActivity(intent_calender);
         } else if (position == 1) {
 
         } else if (position == 2) {

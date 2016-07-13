@@ -200,8 +200,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (foodId) {
             case R.id.calendar_food:
-                Intent intent_calender = new Intent();
-                intent_calender.setClass(MainActivity.this , CalendarActivity.class );
+                Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+                //intent_calender.setClass(MainActivity.this , CalendarActivity.class );
                 startActivity(intent_calender);
                 break;
             case R.id.take_photo:

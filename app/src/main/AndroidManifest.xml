@@ -56,7 +56,12 @@
         </activity>
 
         <activity android:name=".Activity.CalendarActivity">
+            <intent-filter>
+                // calendar view
+                <action android:name="com.example.nthucs.prototype.CALENDAR" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>>
     </application>
 
