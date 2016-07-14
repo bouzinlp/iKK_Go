@@ -8,7 +8,7 @@
         android:title="@string/action_settings"
         android:orderInCategory="100"
         app:showAsAction="never"/>
-    <item
+    <!--<item
         android:id="@+id/calendar_food"
         android:icon="@drawable/ic_perm_contact_calendar_white_48dp"
         android:title="CALENDAR"
@@ -27,6 +27,7 @@
         android:title="SCAN"
         app:showAsAction="always"
         android:onClick="clickMenuItem" />
+    -->
 
     <item
         android:id="@+id/search_food"

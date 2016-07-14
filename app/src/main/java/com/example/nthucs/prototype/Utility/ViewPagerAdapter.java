@@ -27,11 +27,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             v = LayoutInflater.from(context).inflate(R.layout.foodlist_tab, null);
         } else if (position == 1) {
-            v = LayoutInflater.from(context).inflate(R.layout.calendar_tab, null);
-        } else if (position == 2) {
             v = LayoutInflater.from(context).inflate(R.layout.library_tab, null);
-        } else if (position == 3) {
+        } else if (position == 2) {
             v = LayoutInflater.from(context).inflate(R.layout.camera_tab, null);
+        } else if (position == 3) {
+            v = LayoutInflater.from(context).inflate(R.layout.calendar_tab, null);
         }
         return v;
     }

@@ -31,7 +31,8 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Food> foods;
 
-    private MenuItem calendar_food, take_photo, scan_food, add_food, search_food, revert_food, delete_food;
+    //private MenuItem calendar_food, take_photo, scan_food;
+    private MenuItem add_food, search_food, revert_food, delete_food;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -53,33 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
-        ViewPagerAdapter pagerAdapter =
-                new ViewPagerAdapter(getSupportFragmentManager(), this);
-
-        viewPager.setAdapter(pagerAdapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        for (int i = 0; i < tabLayout.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            if (tab != null) {
-                tab.setCustomView(pagerAdapter.getTabView(i));
-            }
-        }
-
-        tabLayout.setOnTabSelectedListener(
-            new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    super.onTabSelected(tab);
-                    if (tab.getPosition() == 3) {
-                        Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-                        startActivity(intent_calender);
-                    }
-                    //System.out.println(tab.getPosition());
-                }
-             }
-        );
+        processTabLayout();
 
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
@@ -135,9 +110,9 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        calendar_food = menu.findItem(R.id.calendar_food);
+        /*calendar_food = menu.findItem(R.id.calendar_food);
         take_photo = menu.findItem(R.id.take_photo);
-        scan_food = menu.findItem(R.id.scan_food);
+        scan_food = menu.findItem(R.id.scan_food);*/
         add_food = menu.findItem(R.id.add_food);
         search_food = menu.findItem(R.id.search_food);
         revert_food = menu.findItem(R.id.revert_food);
@@ -146,6 +121,43 @@ public class MainActivity extends AppCompatActivity {
         processMenu(null);
 
         return true;
+    }
+
+    private void processTabLayout() {
+        ViewPagerAdapter pagerAdapter =
+                new ViewPagerAdapter(getSupportFragmentManager(), this);
+
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        if (tab.getPosition() == 0) {
+
+                        } else if (tab.getPosition() == 1) {
+                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                            startActivityForResult(intent_gallery, TAKE_PHOTO);
+                        } else if (tab.getPosition() == 2) {
+                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                            startActivityForResult(intent_camera, SCAN_FOOD);
+                        } else if (tab.getPosition() == 3) {
+                            Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+                            startActivity(intent_calender);
+                        }
+                        //System.out.println(tab.getPosition());
+                    }
+                }
+        );
     }
 
     private void processControllers() {
@@ -201,9 +213,9 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
-        calendar_food.setVisible(selectedCount==0);
+        /*calendar_food.setVisible(selectedCount==0);
         take_photo.setVisible(selectedCount==0);
-        scan_food.setVisible(selectedCount==0);
+        scan_food.setVisible(selectedCount==0);*/
         add_food.setVisible(selectedCount==0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount > 0);
@@ -214,9 +226,9 @@ public class MainActivity extends AppCompatActivity {
         int foodId = item.getItemId();
 
         switch (foodId) {
-            case R.id.calendar_food:
+            /*case R.id.calendar_food:
                 Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-                //intent_calender.setClass(MainActivity.this , CalendarActivity.class );
+                intent_calender.setClass(MainActivity.this , CalendarActivity.class );
                 startActivity(intent_calender);
                 break;
             case R.id.take_photo:
@@ -226,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.scan_food:
                 Intent intent2 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
                 startActivityForResult(intent2, SCAN_FOOD);
-                break;
+                break;*/
             case R.id.add_food:
                 Intent intent3 = new Intent("com.example.nthucs.prototype.ADD_FOOD");
                 startActivityForResult(intent3, ADD_FOOD);
