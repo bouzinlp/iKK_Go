@@ -1,7 +1,11 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.widget.ListView;
 import com.example.nthucs.prototype.Calendar.CompactCalendarView;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.Event;
+import com.example.nthucs.prototype.Utility.ViewPagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,10 +37,24 @@ public class CalendarActivity  extends AppCompatActivity {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private boolean shouldShow = false;
 
+    // take action's number
+    private static final int SCAN_FOOD = 2;
+    private static final int TAKE_PHOTO = 3;
+
+    // element for the bottom of the tab content
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        processTabLayout();
+
+        selectTab(3);
 
         final ActionBar actionBar = getSupportActionBar();
         final List<String> mutableBookings = new ArrayList<>();
@@ -190,5 +209,54 @@ public class CalendarActivity  extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Initialize tab layout and listener
+    private void processTabLayout() {
+        ViewPagerAdapter pagerAdapter =
+                new ViewPagerAdapter(getSupportFragmentManager(), this);
+
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // set custom icon for every tab
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+
+        // enable tab selected listener
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+
+                        // temporary added for return food list
+                        if (tab.getPosition() == 0) {
+                            Intent result = getIntent();
+
+                            setResult(Activity.RESULT_OK, result);
+                            finish();
+                        } else if (tab.getPosition() == 1) {
+                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                            startActivityForResult(intent_gallery, TAKE_PHOTO);
+                        } else if (tab.getPosition() == 2) {
+                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                            startActivityForResult(intent_camera, SCAN_FOOD);
+                        } else if (tab.getPosition() == 3) {
+                        }
+                        //System.out.println(tab.getPosition());
+                    }
+                }
+        );
+    }
+
+    // select specific tab
+    private void selectTab(int index) {
+        TabLayout.Tab tab = tabLayout.getTabAt(index);
+        tab.select();
     }
 }

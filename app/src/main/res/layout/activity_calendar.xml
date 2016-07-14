@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
     tools:context="com.example.nthucs.prototype.Activity.CalendarActivity">
 
@@ -12,7 +13,6 @@
         android:text="Previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
-
 
     <Button
         android:layout_alignParentRight="true"
@@ -71,5 +71,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
     </ListView>
+
+    <!--<LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:id="@+id/bottomLinearLayout"
+        android:layout_below="@+id/bookings_listview"
+        android:layout_alignParentBottom="true"
+        android:layout_height="wrap_content">
+        android:layout_weight="10"
+        android:padding="0dip">-->
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_below="@+id/bookings_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"/>
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        android:layout_alignParentBottom="true"
+        android:background="@color/tabColor"/>
 
 </RelativeLayout>

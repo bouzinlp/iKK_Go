@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDIT_FOOD = 1;
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
+    private static final int CALENDAR = 4;
 
     private int selectedCount = 0;
 
@@ -70,6 +71,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
+
+            // Return form calendar
+            if (requestCode == CALENDAR) {
+                selectTab(0);
+                // Because calendar have no food return yet
+                return;
+            }
 
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
 
@@ -102,6 +110,9 @@ public class MainActivity extends AppCompatActivity {
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
             }
+
+            // Always select food list tab after return
+            selectTab(0);
         }
     }
 
@@ -123,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // Initialize tab layout and listener
     private void processTabLayout() {
         ViewPagerAdapter pagerAdapter =
                 new ViewPagerAdapter(getSupportFragmentManager(), this);
@@ -130,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(pagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
 
+        // set custom icon for every tab
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             TabLayout.Tab tab = tabLayout.getTabAt(i);
             if (tab != null) {
@@ -137,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        // enable tab selected listener
         tabLayout.setOnTabSelectedListener(
                 new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
                     @Override
@@ -151,8 +165,8 @@ public class MainActivity extends AppCompatActivity {
                             Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
                             startActivityForResult(intent_camera, SCAN_FOOD);
                         } else if (tab.getPosition() == 3) {
-                            Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-                            startActivity(intent_calender);
+                            Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
+                            startActivityForResult(intent_calendar, CALENDAR);
                         }
                         //System.out.println(tab.getPosition());
                     }
@@ -216,7 +230,7 @@ public class MainActivity extends AppCompatActivity {
         /*calendar_food.setVisible(selectedCount==0);
         take_photo.setVisible(selectedCount==0);
         scan_food.setVisible(selectedCount==0);*/
-        add_food.setVisible(selectedCount==0);
+        add_food.setVisible(selectedCount == 0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount > 0);
         delete_food.setVisible(selectedCount > 0);
@@ -287,5 +301,11 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    // select specific tab
+    private void selectTab(int index) {
+        TabLayout.Tab tab = tabLayout.getTabAt(index);
+        tab.select();
     }
 }
