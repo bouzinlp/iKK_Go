@@ -20,7 +20,10 @@ import com.example.nthucs.prototype.FoodList.FoodAdapter;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.ViewPagerAdapter;
+//import com.opencsv.CSVReader;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FoodAdapter foodAdapter;
 
+    // list of foods
     private List<Food> foods;
 
     //private MenuItem calendar_food, take_photo, scan_food;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    // action number for every activity
     private static final int ADD_FOOD = 0;
     private static final int EDIT_FOOD = 1;
     private static final int SCAN_FOOD = 2;
@@ -46,7 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
     private int selectedCount = 0;
 
+    // data base for storing food list
     private FoodDAO foodDAO;
+
+    // csv reader
+    //private CSVReader foodCalReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
+
+        try {
+            openFoodCalCsv();
+        } catch (IOException e) {
+            System.out.println("open food cal: IO exception");
+        }
     }
 
     @Override
@@ -79,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            // Get food data
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
 
             // Add new food list
@@ -132,6 +148,23 @@ public class MainActivity extends AppCompatActivity {
         processMenu(null);
 
         return true;
+    }
+
+    // Open food calories
+    private void openFoodCalCsv() throws IOException {
+        //System.out.println("@@@@@@@");
+        //foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("src/main/res/calories/sports_cal.csv")));
+
+        //System.out.println("@@@@@@@");
+
+        String [] nextLine;
+
+        /*while ((nextLine = foodCalReader.readNext()) != null) {
+            if (nextLine != null) {
+                System.out.println(Arrays.toString(nextLine));
+            }
+        }*/
+
     }
 
     // Initialize tab layout and listener

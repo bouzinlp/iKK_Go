@@ -25,5 +25,4 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'org.jsoup:jsoup:1.9.2'
-    compile files('src/main/res/libs/opencsv.jar')
 }
