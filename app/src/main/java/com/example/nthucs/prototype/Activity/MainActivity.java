@@ -20,11 +20,12 @@ import com.example.nthucs.prototype.FoodList.FoodAdapter;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.ViewPagerAdapter;
-//import com.opencsv.CSVReader;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private FoodDAO foodDAO;
 
     // csv reader
-    //private CSVReader foodCalReader;
+    private CSVReader foodCalReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Open food calories
     private void openFoodCalCsv() throws IOException {
-        //System.out.println("@@@@@@@");
-        //foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("src/main/res/calories/sports_cal.csv")));
+        System.out.println("@@@@@@@");
+        foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("sports_cal.csv")));
 
-        //System.out.println("@@@@@@@");
+        System.out.println("@@@@@@@");
 
         String [] nextLine;
 
