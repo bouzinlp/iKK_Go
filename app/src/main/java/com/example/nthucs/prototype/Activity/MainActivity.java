@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     // Open food calories
     private void openFoodCalCsv() throws IOException {
         System.out.println("@@@@@@@");
-        foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("sports_cal.csv")));
+        foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
         System.out.println("@@@@@@@");
 
         String [] nextLine;
