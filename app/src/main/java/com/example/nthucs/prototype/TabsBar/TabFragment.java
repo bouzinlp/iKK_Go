@@ -1,20 +1,14 @@
-package com.example.nthucs.prototype.Utility;
+package com.example.nthucs.prototype.TabsBar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-
-import com.example.nthucs.prototype.Activity.CalendarActivity;
-import com.example.nthucs.prototype.Activity.MainActivity;
-import com.example.nthucs.prototype.R;
 
 /**
  * Created by user on 2016/7/12.

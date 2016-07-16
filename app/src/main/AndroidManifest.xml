@@ -69,6 +69,16 @@
         <provider android:authorities="com.facebook.app.FacebookContentProvider1095415993853029"
             android:name="com.facebook.FacebookContentProvider"
             android:exported="true"/>
+
+        <activity android:name=".Activity.SettingsActivity">
+            <intent-filter>
+                // settings view
+                <action android:name="com.example.nthucs.prototype.SETTINGS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>>
+
     </application>
 
 </manifest>
