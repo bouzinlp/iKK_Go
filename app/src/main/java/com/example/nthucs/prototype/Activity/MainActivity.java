@@ -96,6 +96,12 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            // Return from settings
+            if (requestCode == SETTINGS) {
+                selectTab(0);
+                return;
+            }
+
             // Get food data
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
 
