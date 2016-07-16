@@ -1,10 +1,16 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,6 +21,12 @@ import com.example.nthucs.prototype.R;
 
 import java.io.File;
 import java.util.Date;
+
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 
 public class FoodActivity extends AppCompatActivity {
 
@@ -29,11 +41,19 @@ public class FoodActivity extends AppCompatActivity {
 
     // pass Uri's toString if take photo from library
     private String picUriString;
+    private Uri picUri;
+    //facebook sharedialog
+    private ShareDialog shareDialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        shareDialog = new ShareDialog(this);
 
         title_text = (EditText)findViewById(R.id.title_text);
         content_text = (EditText)findViewById(R.id.content_text);
@@ -73,7 +93,6 @@ public class FoodActivity extends AppCompatActivity {
             if (food.isTakeFromCamera() == true) {
                 // photo taken from camera display with config way
                 File file = configFileName("P", ".jpg");
-
                 if (file.exists()) {
                     // 顯示照片元件
                     picture.setVisibility(View.VISIBLE);
@@ -85,7 +104,7 @@ public class FoodActivity extends AppCompatActivity {
                 // photo taken from gallery display with parsing uri
                 picUriString = food.getPicUriString();
 
-                Uri picUri = Uri.parse(picUriString);
+                picUri = Uri.parse(picUriString);
                 File file2 = new File(picUri.getPath());
 
                 if (file2.exists()) {
@@ -141,5 +160,40 @@ public class FoodActivity extends AppCompatActivity {
 
     public void clickFunction(View view) {
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.food_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    public void shareToFB(MenuItem menuItem){
+        try {
+
+            File file = configFileName("P", ".jpg");
+            Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
+            SharePhoto photo = new SharePhoto.Builder()
+                    .setBitmap(image)
+                    .build();
+            SharePhotoContent content = new SharePhotoContent.Builder()
+                    .addPhoto(photo)
+                    .build();
+
+
+            if(shareDialog.canShow(SharePhotoContent.class)){
+                shareDialog.show(content);
+                System.out.println("SET");
+            }
+            else{
+                System.out.println("U CANT");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println("EXCEPTION : "+e);
+        }
     }
 }

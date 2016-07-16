@@ -4,6 +4,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    repositories {
+        mavenCentral()
+    }
+
     defaultConfig {
         applicationId "com.example.nthucs.prototype"
         minSdkVersion 15
@@ -27,4 +31,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile 'org.jsoup:jsoup:1.9.2'
     compile files('libs/opencsv-2.1-1.0.0.jar')
+    compile 'com.facebook.android:facebook-android-sdk:[4,5)'
 }

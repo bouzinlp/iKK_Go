@@ -13,11 +13,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".Activity.createKey"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity android:name=".Activity.MainActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -63,6 +65,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>>
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider1095415993853029"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
     </application>
 
 </manifest>
