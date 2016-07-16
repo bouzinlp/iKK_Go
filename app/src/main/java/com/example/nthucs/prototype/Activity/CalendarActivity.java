@@ -18,7 +18,7 @@ import android.widget.ListView;
 import com.example.nthucs.prototype.Calendar.CompactCalendarView;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.Event;
-import com.example.nthucs.prototype.Utility.ViewPagerAdapter;
+import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,9 +37,10 @@ public class CalendarActivity  extends AppCompatActivity {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private boolean shouldShow = false;
 
-    // take action's number
+    // action number for every activity
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
+    private static final int SETTINGS = 5;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -247,6 +248,9 @@ public class CalendarActivity  extends AppCompatActivity {
                             Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
                             startActivityForResult(intent_camera, SCAN_FOOD);
                         } else if (tab.getPosition() == 3) {
+                        } else if (tab.getPosition() == 4) {
+                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
+                            startActivityForResult(intent_settings, SETTINGS);
                         }
                         //System.out.println(tab.getPosition());
                     }

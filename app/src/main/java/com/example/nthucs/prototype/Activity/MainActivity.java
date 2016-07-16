@@ -19,7 +19,7 @@ import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodAdapter;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
-import com.example.nthucs.prototype.Utility.ViewPagerAdapter;
+import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
     private static final int CALENDAR = 4;
+    private static final int SETTINGS = 5;
 
     private int selectedCount = 0;
 
@@ -155,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
     private void openFoodCalCsv() throws IOException {
         System.out.println("@@@@@@@");
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("sports_cal.csv")));
-
         System.out.println("@@@@@@@");
 
         String [] nextLine;
@@ -201,6 +201,9 @@ public class MainActivity extends AppCompatActivity {
                         } else if (tab.getPosition() == 3) {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
+                        } else if (tab.getPosition() == 4) {
+                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
+                            startActivityForResult(intent_settings, SETTINGS);
                         }
                         //System.out.println(tab.getPosition());
                     }

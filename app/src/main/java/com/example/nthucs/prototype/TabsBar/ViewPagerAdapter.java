@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype.Utility;
+package com.example.nthucs.prototype.TabsBar;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -14,7 +14,7 @@ import com.example.nthucs.prototype.R;
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final String[] tabTitles = { "Tab1", "Tab2", "Tab3", "Tab4"};
+    private final String[] tabTitles = { "Tab1", "Tab2", "Tab3", "Tab4", "Tab5"};
     private Context context;
 
     public ViewPagerAdapter(FragmentManager fm, Context context) {
@@ -32,6 +32,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             v = LayoutInflater.from(context).inflate(R.layout.camera_tab, null);
         } else if (position == 3) {
             v = LayoutInflater.from(context).inflate(R.layout.calendar_tab, null);
+        } else if (position == 4) {
+            v = LayoutInflater.from(context).inflate(R.layout.settings_tab, null);
         }
         return v;
     }
