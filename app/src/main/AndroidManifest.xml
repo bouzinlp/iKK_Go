@@ -79,6 +79,8 @@
             </intent-filter>>
         </activity>>
 
+        <activity android:name=".Activity.MessageActivity"></activity>
+
     </application>
 
 </manifest>

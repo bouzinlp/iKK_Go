@@ -75,6 +75,10 @@ public class SettingsActivity extends AppCompatActivity {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
                         } else if (tab.getPosition() == 4) {
+                        } else if (tab.getPosition() == 5) {
+                            Intent intent_mes = new Intent();
+                            intent_mes.setClass(getApplicationContext(),MessageActivity.class);
+                            startActivity(intent_mes);
                         }
                         //System.out.println(tab.getPosition());
                     }

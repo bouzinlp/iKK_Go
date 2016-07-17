@@ -238,7 +238,6 @@ public class CalendarActivity  extends AppCompatActivity {
                         // temporary added for return food list
                         if (tab.getPosition() == 0) {
                             Intent result = getIntent();
-
                             setResult(Activity.RESULT_OK, result);
                             finish();
                         } else if (tab.getPosition() == 1) {
@@ -251,6 +250,10 @@ public class CalendarActivity  extends AppCompatActivity {
                         } else if (tab.getPosition() == 4) {
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                             startActivityForResult(intent_settings, SETTINGS);
+                        } else if (tab.getPosition() == 5) {
+                            Intent intent_mes = new Intent();
+                            intent_mes.setClass(getApplicationContext(),MessageActivity.class);
+                            startActivity(intent_mes);
                         }
                         //System.out.println(tab.getPosition());
                     }

@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int TAKE_PHOTO = 3;
     private static final int CALENDAR = 4;
     private static final int SETTINGS = 5;
-
     private int selectedCount = 0;
 
     // data base for storing food list
@@ -210,7 +209,12 @@ public class MainActivity extends AppCompatActivity {
                         } else if (tab.getPosition() == 4) {
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                             startActivityForResult(intent_settings, SETTINGS);
+                        } else if (tab.getPosition() == 5) {
+                            Intent intent_mes = new Intent();
+                            intent_mes.setClass(getApplicationContext(),MessageActivity.class);
+                            startActivity(intent_mes);
                         }
+
                         //System.out.println(tab.getPosition());
                     }
                 }
