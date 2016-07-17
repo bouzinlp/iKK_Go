@@ -14,7 +14,7 @@ import com.example.nthucs.prototype.R;
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final String[] tabTitles = { "Tab1", "Tab2", "Tab3", "Tab4", "Tab5" , "Tab6"};
+    private final String[] tabTitles = { "Tab1", "Tab2", "Tab3", "Tab4", "Tab5"};
     private Context context;
 
     public ViewPagerAdapter(FragmentManager fm, Context context) {
@@ -27,15 +27,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         if (position == 0) {
             v = LayoutInflater.from(context).inflate(R.layout.foodlist_tab, null);
         } else if (position == 1) {
-            v = LayoutInflater.from(context).inflate(R.layout.library_tab, null);
+            v = LayoutInflater.from(context).inflate(R.layout.calendar_tab, null);
         } else if (position == 2) {
             v = LayoutInflater.from(context).inflate(R.layout.camera_tab, null);
         } else if (position == 3) {
-            v = LayoutInflater.from(context).inflate(R.layout.calendar_tab, null);
+            v=  LayoutInflater.from(context).inflate(R.layout.message_tab, null);
         } else if (position == 4) {
             v = LayoutInflater.from(context).inflate(R.layout.settings_tab, null);
-        } else if (position == 5) {
-            v=  LayoutInflater.from(context).inflate(R.layout.message_tab, null);
         }
         return v;
     }

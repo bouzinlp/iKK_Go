@@ -89,14 +89,14 @@ public class MainActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
 
             // Return form calendar
-            if (requestCode == CALENDAR) {
+            if (requestCode == CALENDAR && data.getExtras() == null) {
                 selectTab(0);
                 // Because calendar have no food return yet
                 return;
             }
 
             // Return from settings
-            if (requestCode == SETTINGS) {
+            if (requestCode == SETTINGS && data.getExtras() == null) {
                 selectTab(0);
                 return;
             }
@@ -196,16 +196,14 @@ public class MainActivity extends AppCompatActivity {
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
                         if (tab.getPosition() == 0) {
-
+                            // main activity itself
                         } else if (tab.getPosition() == 1) {
-                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                            startActivityForResult(intent_gallery, TAKE_PHOTO);
-                        } else if (tab.getPosition() == 2) {
-                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                            startActivityForResult(intent_camera, SCAN_FOOD);
-                        } else if (tab.getPosition() == 3) {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
+                        } else if (tab.getPosition() == 2) {
+                            selectImage();
+                        } else if (tab.getPosition() == 3) {
+
                         } else if (tab.getPosition() == 4) {
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                             startActivityForResult(intent_settings, SETTINGS);
@@ -354,5 +352,28 @@ public class MainActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // select image with two way
+    private void selectImage() {
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                    startActivityForResult(intent_camera, SCAN_FOOD);
+                } else if (items[index].equals("Choose from Gallery")) {
+                    Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                    startActivityForResult(intent_gallery, TAKE_PHOTO);
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                    selectTab(0);
+                }
+            }
+        });
+        builder.show();
     }
 }

@@ -1,6 +1,8 @@
 package com.example.nthucs.prototype.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -55,7 +57,7 @@ public class CalendarActivity  extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         processTabLayout();
 
-        selectTab(3);
+        selectTab(1);
 
         final ActionBar actionBar = getSupportActionBar();
         final List<String> mutableBookings = new ArrayList<>();
@@ -212,6 +214,13 @@ public class CalendarActivity  extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            //System.out.println(data.getExtras().isEmpty());
+        }
+    }
+
     // Initialize tab layout and listener
     private void processTabLayout() {
         ViewPagerAdapter pagerAdapter =
@@ -241,12 +250,11 @@ public class CalendarActivity  extends AppCompatActivity {
                             setResult(Activity.RESULT_OK, result);
                             finish();
                         } else if (tab.getPosition() == 1) {
-                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                            startActivityForResult(intent_gallery, TAKE_PHOTO);
+                            // calendar itself
                         } else if (tab.getPosition() == 2) {
-                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                            startActivityForResult(intent_camera, SCAN_FOOD);
+                            selectImage();
                         } else if (tab.getPosition() == 3) {
+
                         } else if (tab.getPosition() == 4) {
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                             startActivityForResult(intent_settings, SETTINGS);
@@ -265,5 +273,27 @@ public class CalendarActivity  extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // select image with two way
+    private void selectImage() {
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(CalendarActivity.this);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                    startActivityForResult(intent_camera, SCAN_FOOD);
+                } else if (items[index].equals("Choose from Gallery")) {
+                    Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                    startActivityForResult(intent_gallery, TAKE_PHOTO);
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 }
