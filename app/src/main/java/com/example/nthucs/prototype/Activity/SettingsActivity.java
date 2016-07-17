@@ -1,6 +1,8 @@
 package com.example.nthucs.prototype.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -66,15 +68,14 @@ public class SettingsActivity extends AppCompatActivity {
                             setResult(Activity.RESULT_OK, result);
                             finish();
                         } else if (tab.getPosition() == 1) {
-                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                            startActivityForResult(intent_gallery, TAKE_PHOTO);
-                        } else if (tab.getPosition() == 2) {
-                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                            startActivityForResult(intent_camera, SCAN_FOOD);
-                        } else if (tab.getPosition() == 3) {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
+                        } else if (tab.getPosition() == 2) {
+                            selectImage();
+                        } else if (tab.getPosition() == 3) {
+
                         } else if (tab.getPosition() == 4) {
+                            // settings itself
                         }
                         //System.out.println(tab.getPosition());
                     }
@@ -86,5 +87,27 @@ public class SettingsActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // select image with two way
+    private void selectImage() {
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                    startActivityForResult(intent_camera, SCAN_FOOD);
+                } else if (items[index].equals("Choose from Gallery")) {
+                    Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                    startActivityForResult(intent_gallery, TAKE_PHOTO);
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 }

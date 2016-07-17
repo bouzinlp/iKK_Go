@@ -199,15 +199,12 @@ public class MainActivity extends AppCompatActivity {
                         if (tab.getPosition() == 0) {
 
                         } else if (tab.getPosition() == 1) {
-                            //Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                            //startActivityForResult(intent_gallery, TAKE_PHOTO);
-                        } else if (tab.getPosition() == 2) {
-                            selectImage();
-                            //Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                            //startActivityForResult(intent_camera, SCAN_FOOD);
-                        } else if (tab.getPosition() == 3) {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
+                        } else if (tab.getPosition() == 2) {
+                            selectImage();
+                        } else if (tab.getPosition() == 3) {
+
                         } else if (tab.getPosition() == 4) {
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                             startActivityForResult(intent_settings, SETTINGS);
@@ -369,6 +366,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivityForResult(intent_gallery, TAKE_PHOTO);
                 } else if (items[index].equals("Cancel")) {
                     dialog.dismiss();
+                    selectTab(0);
                 }
             }
         });
