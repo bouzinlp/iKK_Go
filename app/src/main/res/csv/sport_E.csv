@@ -1,0 +1,37 @@
+Item,Cal/Kg*Hr
+walk(4km/hr),3.5
+hike(6km/hr),5.5
+downstairs,3.2
+upstairs,8.4
+jog(8km/hr),8.2
+run(12km/hr),12.7
+run(16km/hr),16.8
+slow bike(10km/hr),4
+fast bike(20km/hr),8.4
+race bike(30km/hr),12.6
+mopping,3.7
+gardening,4.2
+manufaturing,5.3
+farming,7.4
+heavy lifting,8.4
+yoga,3
+dancing,3.1
+fast dancing,5.3
+flying disk,3.2
+volleyball,3.6
+bowling,3.6
+Taijiquan,4.2
+pingpong,4.2
+Baseball and Softball,4.7
+golf,5
+roller-skating,5.1
+badminton,5.1
+slow swim,6.3
+fast swim,10
+basketball (half),6.3
+basketball(full),8.3
+Aerobics,6.8
+Tennis,6.6
+soccer,7.7
+slow rope skipping,8.4
+fast rope skipping,12.6

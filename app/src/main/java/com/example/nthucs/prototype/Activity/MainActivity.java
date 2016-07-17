@@ -1,10 +1,12 @@
-package com.example.nthucs.prototype;
+package com.example.nthucs.prototype.Activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,7 +15,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.FoodList.FoodAdapter;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
+import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
+
+import au.com.bytecode.opencsv.CSVReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,24 +33,40 @@ public class MainActivity extends AppCompatActivity {
 
     private FoodAdapter foodAdapter;
 
+    // list of foods
     private List<Food> foods;
 
-    private MenuItem scan_food, add_food, search_food, revert_food, delete_food, sports;
+    //private MenuItem calendar_food, take_photo, scan_food;
+    private MenuItem add_food, search_food, revert_food, delete_food;
 
+    // element for the bottom of the tab content
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+
+    // action number for every activity
     private static final int ADD_FOOD = 0;
     private static final int EDIT_FOOD = 1;
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
-
+    private static final int CALENDAR = 4;
+    private static final int SETTINGS = 5;
 
     private int selectedCount = 0;
 
+    // data base for storing food list
     private FoodDAO foodDAO;
+
+    // csv reader
+    private CSVReader foodCalReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        processTabLayout();
 
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
@@ -49,13 +77,33 @@ public class MainActivity extends AppCompatActivity {
 
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
+
+        try {
+            openFoodCalCsv();
+        } catch (IOException e) {
+            System.out.println("open food cal: IO exception");
+        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
-            Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.Food");
+            // Return form calendar
+            if (requestCode == CALENDAR) {
+                selectTab(0);
+                // Because calendar have no food return yet
+                return;
+            }
+
+            // Return from settings
+            if (requestCode == SETTINGS) {
+                selectTab(0);
+                return;
+            }
+
+            // Get food data
+            Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
 
             // Add new food list
             if (requestCode == ADD_FOOD) {
@@ -81,8 +129,14 @@ public class MainActivity extends AppCompatActivity {
                 foodAdapter.notifyDataSetChanged();
             // Take photo from library(gallery)
             } else if (requestCode == TAKE_PHOTO) {
+                food = foodDAO.insert(food);
 
+                foods.add(food);
+                foodAdapter.notifyDataSetChanged();
             }
+
+            // Always select food list tab after return
+            selectTab(0);
         }
     }
 
@@ -91,7 +145,9 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        scan_food = menu.findItem(R.id.scan_food);
+        /*calendar_food = menu.findItem(R.id.calendar_food);
+        take_photo = menu.findItem(R.id.take_photo);
+        scan_food = menu.findItem(R.id.scan_food);*/
         add_food = menu.findItem(R.id.add_food);
         search_food = menu.findItem(R.id.search_food);
         revert_food = menu.findItem(R.id.revert_food);
@@ -100,6 +156,65 @@ public class MainActivity extends AppCompatActivity {
         processMenu(null);
 
         return true;
+    }
+
+    // Open food calories
+    private void openFoodCalCsv() throws IOException {
+        System.out.println("@@@@@@@");
+        foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
+        System.out.println("@@@@@@@");
+
+        String [] nextLine;
+
+        /*while ((nextLine = foodCalReader.readNext()) != null) {
+            if (nextLine != null) {
+                System.out.println(Arrays.toString(nextLine));
+            }
+        }*/
+
+    }
+
+    // Initialize tab layout and listener
+    private void processTabLayout() {
+        ViewPagerAdapter pagerAdapter =
+                new ViewPagerAdapter(getSupportFragmentManager(), this);
+
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+
+        // set custom icon for every tab
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+
+        // enable tab selected listener
+        tabLayout.setOnTabSelectedListener(
+                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
+                    @Override
+                    public void onTabSelected(TabLayout.Tab tab) {
+                        super.onTabSelected(tab);
+                        if (tab.getPosition() == 0) {
+
+                        } else if (tab.getPosition() == 1) {
+                            Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                            startActivityForResult(intent_gallery, TAKE_PHOTO);
+                        } else if (tab.getPosition() == 2) {
+                            Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                            startActivityForResult(intent_camera, SCAN_FOOD);
+                        } else if (tab.getPosition() == 3) {
+                            Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
+                            startActivityForResult(intent_calendar, CALENDAR);
+                        } else if (tab.getPosition() == 4) {
+                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
+                            startActivityForResult(intent_settings, SETTINGS);
+                        }
+                        //System.out.println(tab.getPosition());
+                    }
+                }
+        );
     }
 
     private void processControllers() {
@@ -118,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
                             "com.example.nthucs.prototype.EDIT_FOOD");
 
                     intent.putExtra("position", position);
-                    intent.putExtra("com.example.nthucs.prototype.Food", food);
+                    intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
 
                     startActivityForResult(intent, EDIT_FOOD);
                 }
@@ -155,8 +270,10 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
-        scan_food.setVisible(selectedCount==0);
-        add_food.setVisible(selectedCount==0);
+        /*calendar_food.setVisible(selectedCount==0);
+        take_photo.setVisible(selectedCount==0);
+        scan_food.setVisible(selectedCount==0);*/
+        add_food.setVisible(selectedCount == 0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount > 0);
         delete_food.setVisible(selectedCount > 0);
@@ -166,15 +283,10 @@ public class MainActivity extends AppCompatActivity {
         int foodId = item.getItemId();
 
         switch (foodId) {
-            case R.id.calendar_food:
-                Intent intent_calender = new Intent();
-                intent_calender.setClass(MainActivity.this , Main_calendar.class );
+            /*case R.id.calendar_food:
+                Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
+                intent_calender.setClass(MainActivity.this , CalendarActivity.class );
                 startActivity(intent_calender);
-                break;
-            case R.id.sport_button:
-                Intent intent_sport = new Intent();
-                intent_sport.setClass(MainActivity.this , sport.class );
-                startActivity(intent_sport);
                 break;
             case R.id.take_photo:
                 Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
@@ -183,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.scan_food:
                 Intent intent2 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
                 startActivityForResult(intent2, SCAN_FOOD);
-                break;
+                break;*/
             case R.id.add_food:
                 Intent intent3 = new Intent("com.example.nthucs.prototype.ADD_FOOD");
                 startActivityForResult(intent3, ADD_FOOD);
@@ -232,5 +344,11 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    // select specific tab
+    private void selectTab(int index) {
+        TabLayout.Tab tab = tabLayout.getTabAt(index);
+        tab.select();
     }
 }

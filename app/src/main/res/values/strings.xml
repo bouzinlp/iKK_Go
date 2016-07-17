@@ -20,6 +20,5 @@
     <string name="search_title">image search</string>string>
     <string name="search_picture">Search</string>string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main2">Main2Activity</string>
-
+    <string name="facebook_app_id">1095415993853029</string>
 </resources>
