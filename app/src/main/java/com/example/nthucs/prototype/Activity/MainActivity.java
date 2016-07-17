@@ -89,15 +89,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
+            System.out.println("Main "+(data.getExtras() == null));
+
             // Return form calendar
-            if (requestCode == CALENDAR) {
+            if (requestCode == CALENDAR && data.getExtras() == null) {
                 selectTab(0);
                 // Because calendar have no food return yet
                 return;
             }
 
             // Return from settings
-            if (requestCode == SETTINGS) {
+            if (requestCode == SETTINGS && data.getExtras() == null) {
                 selectTab(0);
                 return;
             }
@@ -197,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
                         if (tab.getPosition() == 0) {
-
+                            // main activity itself
                         } else if (tab.getPosition() == 1) {
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);

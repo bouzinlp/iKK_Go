@@ -214,6 +214,13 @@ public class CalendarActivity  extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            //System.out.println(data.getExtras().isEmpty());
+        }
+    }
+
     // Initialize tab layout and listener
     private void processTabLayout() {
         ViewPagerAdapter pagerAdapter =
