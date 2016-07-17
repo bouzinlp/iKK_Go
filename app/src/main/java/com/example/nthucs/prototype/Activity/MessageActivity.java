@@ -245,7 +245,6 @@ public class MessageActivity extends AppCompatActivity {
                     if(jsonTmp.optJSONObject("application").getString("name").equals("Prototype")){
                         //posted img
                         httpUrl = jsonTmp.getString("picture");
-                        System.out.println("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUU "+httpUrl);
                         Thread thread = new Thread(mutiThread);
                         thread.start();
                         try {
@@ -261,7 +260,6 @@ public class MessageActivity extends AppCompatActivity {
                         //person's comment
                         String personComment = comments.getJSONObject(lastIndex).getString("message");
                         Commit commit = new Commit(img,personName,personComment);
-                        System.out.println("YOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO "+img);
                         data.add(commit);
                     }
                 }
