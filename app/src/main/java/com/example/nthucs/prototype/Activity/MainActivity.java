@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
-            System.out.println("Main "+(data.getExtras() == null));
-
             // Return form calendar
             if (requestCode == CALENDAR && data.getExtras() == null) {
                 selectTab(0);
