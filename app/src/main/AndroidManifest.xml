@@ -80,6 +80,7 @@
         </activity>>
 
         <activity android:name=".Activity.MessageActivity"></activity>
+        <activity android:name=".Activity.ChatRoomActivity"></activity>
 
     </application>
 

@@ -26,7 +26,7 @@ public class createKey extends Application {
         // Add code to print out the key hash
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.admin.testlogin",
+                    "com.example.nthucs.prototype",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");

@@ -236,7 +236,6 @@ public class MainActivity extends AppCompatActivity {
 
                     intent.putExtra("position", position);
                     intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
-
                     startActivityForResult(intent, EDIT_FOOD);
                 }
             }

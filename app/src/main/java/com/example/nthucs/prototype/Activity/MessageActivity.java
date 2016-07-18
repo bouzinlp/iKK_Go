@@ -7,14 +7,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -39,8 +41,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,8 +59,8 @@ public class MessageActivity extends AppCompatActivity {
     private AccessToken accessToken;
     public ArrayList<Commit> arrayOfCommit;
     public ListView listView;
-    String httpUrl;
-    static Bitmap img;
+    String httpUrl,postID;
+    static Bitmap img,personImg;
     // action number for every activity
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
@@ -71,6 +72,8 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+
+        Toast.makeText(getApplicationContext(), "Login to show messages", Toast.LENGTH_SHORT).show();
         FacebookSdk.sdkInitialize(getApplicationContext());
         initFBManager();
 
@@ -82,7 +85,7 @@ public class MessageActivity extends AppCompatActivity {
         //listView.setAdapter(adapter);
 
         processTabLayout();
-        selectTab(5);
+        selectTab(3);
     }
 
 
@@ -183,6 +186,7 @@ public class MessageActivity extends AppCompatActivity {
                                     }
                                 };
                             }
+
                             updateMenuTitles(Profile.getCurrentProfile().getName());
                             queryGraphAPI();
                         }
@@ -223,10 +227,21 @@ public class MessageActivity extends AppCompatActivity {
                     public void onCompleted(GraphResponse response) {
                         // Insert your code here
                         arrayOfCommit = new ArrayList<>();
+                        System.out.println(response.getJSONObject());
                         arrayOfCommit = handleJSON(response.getJSONObject());
                         // Create the adapter to convert the array to views
                         MessageAdapter adapter = new MessageAdapter(getApplicationContext(), arrayOfCommit);
                         listView.setAdapter(adapter);
+                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                System.out.println("arraylist "+arrayOfCommit.get(position).getPostID());
+                                postID = arrayOfCommit.get(position).getPostID();
+                                Intent intent_chat = new Intent(getApplicationContext(), ChatRoomActivity.class);
+                                intent_chat.putExtra("postID",postID);
+                                startActivity(intent_chat);
+                            }
+                        });
                     }
                 });
 
@@ -253,15 +268,19 @@ public class MessageActivity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        //person 's comments
-                        JSONArray comments = jsonTmp.getJSONObject("comments").getJSONArray("data");
-                        int lastIndex = comments.length()-1;
-                        //person's name
-                        String personName = comments.getJSONObject(lastIndex).getJSONObject("from").getString("name");
-                        //person's comment
-                        String personComment = comments.getJSONObject(lastIndex).getString("message");
-                        Commit commit = new Commit(img,personName,personComment);
-                        data.add(commit);
+                        if(jsonTmp.optJSONObject("comments")!=null) {
+                            //person 's comments
+                            JSONArray comments = jsonTmp.getJSONObject("comments").getJSONArray("data");
+                            int lastIndex = comments.length() - 1;
+                            //person's name
+                            String personName = comments.getJSONObject(lastIndex).getJSONObject("from").getString("name");
+                            //person's comment
+                            String personComment = comments.getJSONObject(lastIndex).getString("message");
+                            //postID
+                            String postID = jsonTmp.getString("id");
+                            Commit commit = new Commit(img, personName, personComment,postID);
+                            data.add(commit);
+                        }
                     }
                 }
             }
@@ -273,30 +292,21 @@ public class MessageActivity extends AppCompatActivity {
         return data;
     }
 
-
     public static void getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
-            /*HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);*/
             img = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            //img =  myBitmap;
         } catch (IOException e) {
             // Log exception
             System.out.println(e.toString());
         }
     }
-
     private Runnable mutiThread = new Runnable(){
         public void run(){
             // 運行網路連線的程式
             getBitmapFromURL(httpUrl);
         }
     };
-
     // select image with two way
     private void selectImage() {
         final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
