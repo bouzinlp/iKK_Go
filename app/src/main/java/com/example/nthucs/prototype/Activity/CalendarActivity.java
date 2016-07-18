@@ -254,14 +254,14 @@ public class CalendarActivity  extends AppCompatActivity {
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
-
-                        } else if (tab.getPosition() == 4) {
-                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
-                            startActivityForResult(intent_settings, SETTINGS);
-                        } else if (tab.getPosition() == 5) {
+                            // message activity
                             Intent intent_mes = new Intent();
                             intent_mes.setClass(getApplicationContext(),MessageActivity.class);
                             startActivity(intent_mes);
+                        } else if (tab.getPosition() == 4) {
+                            // setting activity
+                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
+                            startActivityForResult(intent_settings, SETTINGS);
                         }
                         //System.out.println(tab.getPosition());
                     }

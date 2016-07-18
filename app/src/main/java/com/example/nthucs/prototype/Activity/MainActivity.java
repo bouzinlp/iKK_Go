@@ -198,21 +198,21 @@ public class MainActivity extends AppCompatActivity {
                         if (tab.getPosition() == 0) {
                             // main activity itself
                         } else if (tab.getPosition() == 1) {
+                            // calendar activity
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
-
-                        } else if (tab.getPosition() == 4) {
-                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
-                            startActivityForResult(intent_settings, SETTINGS);
-                        } else if (tab.getPosition() == 5) {
+                            // message activity
                             Intent intent_mes = new Intent();
                             intent_mes.setClass(getApplicationContext(),MessageActivity.class);
                             startActivity(intent_mes);
+                        } else if (tab.getPosition() == 4) {
+                            // setting activity
+                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
+                            startActivityForResult(intent_settings, SETTINGS);
                         }
-
                         //System.out.println(tab.getPosition());
                     }
                 }

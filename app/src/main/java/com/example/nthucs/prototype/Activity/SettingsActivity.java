@@ -68,21 +68,18 @@ public class SettingsActivity extends AppCompatActivity {
                             setResult(Activity.RESULT_OK, result);
                             finish();
                         } else if (tab.getPosition() == 1) {
+                            // calendar activity
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                             startActivityForResult(intent_calendar, CALENDAR);
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
-
-                        } else if (tab.getPosition() == 4) {
-
-                        } else if (tab.getPosition() == 5) {
+                            // message activity
                             Intent intent_mes = new Intent();
                             intent_mes.setClass(getApplicationContext(),MessageActivity.class);
                             startActivity(intent_mes);
-
+                        } else if (tab.getPosition() == 4) {
                             // settings itself
-
                         }
                         //System.out.println(tab.getPosition());
                     }
