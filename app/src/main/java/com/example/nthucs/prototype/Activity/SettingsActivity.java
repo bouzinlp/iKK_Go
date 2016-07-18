@@ -61,16 +61,16 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
 
-                        // temporary added for return food list
                         if (tab.getPosition() == 0) {
-                            Intent result = getIntent();
-
-                            setResult(Activity.RESULT_OK, result);
-                            finish();
+                            // main activity
+                            Intent result = new Intent();
+                            result.setClass(SettingsActivity.this, MainActivity.class);
+                            startActivity(result);
                         } else if (tab.getPosition() == 1) {
                             // calendar activity
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
-                            startActivityForResult(intent_calendar, CALENDAR);
+                            intent_calendar.setClass(SettingsActivity.this, CalendarActivity.class);
+                            startActivity(intent_calendar);
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
@@ -81,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                         } else if (tab.getPosition() == 4) {
                             // settings itself
                         }
-                        //System.out.println(tab.getPosition());
+                        //System.out.println("setting select: "+tab.getPosition());
                     }
                 }
         );

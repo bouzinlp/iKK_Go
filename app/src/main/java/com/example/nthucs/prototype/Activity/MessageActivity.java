@@ -131,16 +131,16 @@ public class MessageActivity extends AppCompatActivity {
                     public void onTabSelected(TabLayout.Tab tab) {
                         super.onTabSelected(tab);
 
-                        // temporary added for return food list
                         if (tab.getPosition() == 0) {
-                            Intent result = getIntent();
-
-                            setResult(Activity.RESULT_OK, result);
-                            finish();
+                            // main activity
+                            Intent result = new Intent();
+                            result.setClass(MessageActivity.this, MainActivity.class);
+                            startActivity(result);
                         } else if (tab.getPosition() == 1) {
                             // calendar activity
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
-                            startActivityForResult(intent_calendar, CALENDAR);
+                            intent_calendar.setClass(MessageActivity.this, CalendarActivity.class);
+                            startActivity(intent_calendar);
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
@@ -148,7 +148,8 @@ public class MessageActivity extends AppCompatActivity {
                         } else if (tab.getPosition() == 4) {
                             // setting activity
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
-                            startActivityForResult(intent_settings, SETTINGS);
+                            intent_settings.setClass(MessageActivity.this, SettingsActivity.class);
+                            startActivity(intent_settings);
                         }
                         //System.out.println(tab.getPosition());
                     }

@@ -200,20 +200,22 @@ public class MainActivity extends AppCompatActivity {
                         } else if (tab.getPosition() == 1) {
                             // calendar activity
                             Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
-                            startActivityForResult(intent_calendar, CALENDAR);
+                            intent_calendar.setClass(MainActivity.this, CalendarActivity.class);
+                            startActivity(intent_calendar);
                         } else if (tab.getPosition() == 2) {
                             selectImage();
                         } else if (tab.getPosition() == 3) {
                             // message activity
                             Intent intent_mes = new Intent();
-                            intent_mes.setClass(getApplicationContext(),MessageActivity.class);
+                            intent_mes.setClass(MainActivity.this,MessageActivity.class);
                             startActivity(intent_mes);
                         } else if (tab.getPosition() == 4) {
                             // setting activity
                             Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
-                            startActivityForResult(intent_settings, SETTINGS);
+                            intent_settings.setClass(MainActivity.this, SettingsActivity.class);
+                            startActivity(intent_settings);
                         }
-                        //System.out.println(tab.getPosition());
+                        //System.out.println("main select: "+tab.getPosition());
                     }
                 }
         );
@@ -286,9 +288,8 @@ public class MainActivity extends AppCompatActivity {
 
         switch (foodId) {
             /*case R.id.calendar_food:
-                Intent intent_calender = new Intent("com.example.nthucs.prototype.CALENDAR");
-                intent_calender.setClass(MainActivity.this , CalendarActivity.class );
-                startActivity(intent_calender);
+                Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
+                startActivityForResult(intent_calendar, CALENDAR);
                 break;
             case R.id.take_photo:
                 Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
