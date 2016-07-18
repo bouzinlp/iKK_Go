@@ -1,13 +1,12 @@
 package com.example.nthucs.prototype.Activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Parcelable;
+
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +22,7 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.MessageList.Commit;
 import com.example.nthucs.prototype.MessageList.MessageAdapter;
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -41,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,20 +52,19 @@ public class MessageActivity extends AppCompatActivity {
 
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
     private Menu menu;
     private AccessToken accessToken;
     public ArrayList<Commit> arrayOfCommit;
     public ListView listView;
-    String httpUrl,postID;
-    static Bitmap img,personImg;
-    // action number for every activity
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-    private static final int CALENDAR = 4;
-    private static final int SETTINGS = 5;
 
+    String httpUrl,postID;
+    static Bitmap img;
+
+
+
+    // element for the bottom of the tab content
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +82,16 @@ public class MessageActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.messageList);
         //listView.setAdapter(adapter);
 
-        processTabLayout();
+
+        // initialize tabLayout and viewPager
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        initializeTabLayout();
+
+        // call function to active tabs listener
+        TabsController tabsController = new TabsController(3, MessageActivity.this, tabLayout, viewPager);
+        tabsController.processTabLayout();
+
         selectTab(3);
     }
 
@@ -107,12 +114,8 @@ public class MessageActivity extends AppCompatActivity {
 
 
 
-    // Initialize tab layout and listener
-    private void processTabLayout() {
-
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-
+    // Initialize tab layout
+    private void initializeTabLayout() {
         ViewPagerAdapter pagerAdapter =
                 new ViewPagerAdapter(getSupportFragmentManager(), this);
 
@@ -126,37 +129,6 @@ public class MessageActivity extends AppCompatActivity {
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
         }
-
-        // enable tab selected listener
-        tabLayout.setOnTabSelectedListener(
-                new TabLayout.ViewPagerOnTabSelectedListener(viewPager) {
-                    @Override
-                    public void onTabSelected(TabLayout.Tab tab) {
-                        super.onTabSelected(tab);
-
-                        // temporary added for return food list
-                        if (tab.getPosition() == 0) {
-                            Intent result = getIntent();
-
-                            setResult(Activity.RESULT_OK, result);
-                            finish();
-                        } else if (tab.getPosition() == 1) {
-                            // calendar activity
-                            Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
-                            startActivityForResult(intent_calendar, CALENDAR);
-                        } else if (tab.getPosition() == 2) {
-                            selectImage();
-                        } else if (tab.getPosition() == 3) {
-                            // message itself
-                        } else if (tab.getPosition() == 4) {
-                            // setting activity
-                            Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
-                            startActivityForResult(intent_settings, SETTINGS);
-                        }
-                        //System.out.println(tab.getPosition());
-                    }
-                }
-        );
     }
 
     // select specific tab
@@ -307,25 +279,7 @@ public class MessageActivity extends AppCompatActivity {
             getBitmapFromURL(httpUrl);
         }
     };
-    // select image with two way
-    private void selectImage() {
-        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(MessageActivity.this);
-        builder.setTitle("Select Image");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("Take with Camera")) {
-                    Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                    startActivityForResult(intent_camera, SCAN_FOOD);
-                } else if (items[index].equals("Choose from Gallery")) {
-                    Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                    startActivityForResult(intent_gallery, TAKE_PHOTO);
-                } else if (items[index].equals("Cancel")) {
-                    dialog.dismiss();
-                }
-            }
-        });
-        builder.show();
-    }
+
+
+
 }
