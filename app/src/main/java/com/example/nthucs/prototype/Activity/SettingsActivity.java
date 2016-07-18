@@ -21,11 +21,6 @@ public class SettingsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
-    // action number for every activity
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-    private static final int CALENDAR = 4;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

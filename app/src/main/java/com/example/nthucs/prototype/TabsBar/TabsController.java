@@ -99,7 +99,7 @@ public class TabsController {
                     activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                 } else if (items[index].equals("Cancel")) {
                     dialog.dismiss();
-                    selectTab(0);
+                    selectTab(activityIndex);
                 }
             }
         });

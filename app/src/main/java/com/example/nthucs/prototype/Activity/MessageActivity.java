@@ -59,11 +59,6 @@ public class MessageActivity extends AppCompatActivity {
     public ListView listView;
     String httpUrl;
     static Bitmap img;
-    // action number for every activity
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-    private static final int CALENDAR = 4;
-    private static final int SETTINGS = 5;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;

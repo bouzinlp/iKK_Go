@@ -40,11 +40,6 @@ public class CalendarActivity  extends AppCompatActivity {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM - yyyy", Locale.getDefault());
     private boolean shouldShow = false;
 
-    // action number for every activity
-    private static final int SCAN_FOOD = 2;
-    private static final int TAKE_PHOTO = 3;
-    private static final int SETTINGS = 5;
-
     // element for the bottom of the tab content
     private ViewPager viewPager;
     private TabLayout tabLayout;
