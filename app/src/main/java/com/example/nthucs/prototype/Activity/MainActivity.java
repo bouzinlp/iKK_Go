@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
+import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
+import au.com.bytecode.opencsv.bean.CsvToBean;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String csvReader = "alreadyCall";
     private int firstCall = 1;
     private CSVReader foodCalReader;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -176,8 +179,11 @@ public class MainActivity extends AppCompatActivity {
 
     // Open food calories
     private void openFoodCalCsv() throws IOException {
+        CsvToBean csv = new CsvToBean();
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
 
+        // Set column mapping strategy
+        List list = csv.parse(setColumMapping(), foodCalReader);
         String[] nextLine;
 
         while ((nextLine = foodCalReader.readNext()) != null) {
@@ -185,6 +191,13 @@ public class MainActivity extends AppCompatActivity {
                 //System.out.println(Arrays.toString(nextLine));
             }
         }
+    }
+
+    // column position mapping
+    private ColumnPositionMappingStrategy setColumMapping() {
+        ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
+
+        return strategy;
     }
 
     // Initialize tab layout
