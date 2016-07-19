@@ -49,6 +49,7 @@ public class TabsController {
                             // main activity
                             if (activityIndex != MAIN_ACTIVITY) {
                                 Intent result = new Intent();
+                                result.putExtra("alreadyCall", 0);
                                 result.setClass(activity, MainActivity.class);
                                 activity.startActivity(result);
                                 activity.finish();

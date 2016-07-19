@@ -57,16 +57,17 @@ public class MainActivity extends AppCompatActivity {
     private FoodDAO foodDAO;
 
     // csv reader
-    private int firstCall = 0;
+    private static final String csvReader = "alreadyCall";
+    private int firstCall = 1;
     private CSVReader foodCalReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            firstCall = savedInstanceState.getInt("alreadyCall");
-            System.out.println(firstCall);
+        // not the initial created activity
+        if (getIntent().getExtras() != null) {
+            firstCall = getIntent().getExtras().getInt("alreadyCall");
         }
 
         setContentView(R.layout.activity_main);
@@ -90,31 +91,14 @@ public class MainActivity extends AppCompatActivity {
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
 
-        try {
-            openFoodCalCsv();
-        } catch (IOException e) {
-            System.out.println("open food cal: IO exception");
+        // avoid re-call csv file
+        if (firstCall == 1) {
+            try {
+                openFoodCalCsv();
+            } catch (IOException e) {
+                System.out.println("open food cal: IO exception");
+            }
         }
-    }
-
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        savedInstanceState.putInt("alreadyCall", 1);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        // Always call the superclass so it can restore the view hierarchy
-        super.onRestoreInstanceState(savedInstanceState);
-
-        firstCall = savedInstanceState.getInt("alreadyCall");
     }
 
     @Override
@@ -192,18 +176,15 @@ public class MainActivity extends AppCompatActivity {
 
     // Open food calories
     private void openFoodCalCsv() throws IOException {
-        System.out.println("@@@@@@@");
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
-        System.out.println("@@@@@@@");
 
         String[] nextLine;
 
-        /*while ((nextLine = foodCalReader.readNext()) != null) {
+        while ((nextLine = foodCalReader.readNext()) != null) {
             if (nextLine != null) {
                 //System.out.println(Arrays.toString(nextLine));
             }
-        }*/
-
+        }
     }
 
     // Initialize tab layout
