@@ -51,6 +51,7 @@ public class TabsController {
                                 Intent result = new Intent();
                                 result.setClass(activity, MainActivity.class);
                                 activity.startActivity(result);
+                                activity.finish();
                             }
                         } else if (tab.getPosition() == 1) {
                             // calendar activity
@@ -58,6 +59,7 @@ public class TabsController {
                                 Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
                                 intent_calendar.setClass(activity, CalendarActivity.class);
                                 activity.startActivity(intent_calendar);
+                                activity.finish();
                             }
                         } else if (tab.getPosition() == 2) {
                             // start activity for result
@@ -68,6 +70,7 @@ public class TabsController {
                                 Intent intent_mes = new Intent();
                                 intent_mes.setClass(activity, MessageActivity.class);
                                 activity.startActivity(intent_mes);
+                                activity.finish();
                             }
                         } else if (tab.getPosition() == 4) {
                             // setting activity
@@ -75,6 +78,7 @@ public class TabsController {
                                 Intent intent_settings = new Intent("com.example.nthucs.prototype.SETTINGS");
                                 intent_settings.setClass(activity, SettingsActivity.class);
                                 activity.startActivity(intent_settings);
+                                activity.finish();
                             }
                         }
                         //System.out.println("main select: "+tab.getPosition());

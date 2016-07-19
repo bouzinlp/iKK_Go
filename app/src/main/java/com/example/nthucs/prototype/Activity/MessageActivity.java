@@ -60,8 +60,6 @@ public class MessageActivity extends AppCompatActivity {
     String httpUrl,postID;
     static Bitmap img;
 
-
-
     // element for the bottom of the tab content
     private ViewPager viewPager;
     private TabLayout tabLayout;
@@ -111,8 +109,6 @@ public class MessageActivity extends AppCompatActivity {
             return;
         }
     }
-
-
 
     // Initialize tab layout
     private void initializeTabLayout() {

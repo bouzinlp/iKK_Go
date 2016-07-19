@@ -57,11 +57,18 @@ public class MainActivity extends AppCompatActivity {
     private FoodDAO foodDAO;
 
     // csv reader
+    private int firstCall = 0;
     private CSVReader foodCalReader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            firstCall = savedInstanceState.getInt("alreadyCall");
+            System.out.println(firstCall);
+        }
+
         setContentView(R.layout.activity_main);
 
         // initialize tabLayout and viewPager
@@ -88,6 +95,26 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             System.out.println("open food cal: IO exception");
         }
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putInt("alreadyCall", 1);
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        firstCall = savedInstanceState.getInt("alreadyCall");
     }
 
     @Override
@@ -169,11 +196,11 @@ public class MainActivity extends AppCompatActivity {
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
         System.out.println("@@@@@@@");
 
-        String [] nextLine;
+        String[] nextLine;
 
         /*while ((nextLine = foodCalReader.readNext()) != null) {
             if (nextLine != null) {
-                System.out.println(Arrays.toString(nextLine));
+                //System.out.println(Arrays.toString(nextLine));
             }
         }*/
 
