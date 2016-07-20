@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
 
         // Set column mapping strategy
-        List list = csv.parse(setColumMapping(), foodCalReader);
+        //List list = csv.parse(setColumMapping(), foodCalReader);
         String[] nextLine;
 
         while ((nextLine = foodCalReader.readNext()) != null) {
