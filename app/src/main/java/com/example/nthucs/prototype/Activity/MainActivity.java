@@ -17,6 +17,7 @@ import android.widget.ListView;
 
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodAdapter;
+import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.TabsBar.TabsController;
@@ -24,7 +25,10 @@ import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private int firstCall = 1;
     private CSVReader foodCalReader;
 
+    // list of foodCal
+    private List<FoodCal> foodCalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,25 +185,21 @@ public class MainActivity extends AppCompatActivity {
 
     // Open food calories
     private void openFoodCalCsv() throws IOException {
-        CsvToBean csv = new CsvToBean();
+        // Build reader instance
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
 
-        // Set column mapping strategy
-        //List list = csv.parse(setColumMapping(), foodCalReader);
-        String[] nextLine;
+        // Read all rows at once
+        List<String[]> allRows= foodCalReader.readAll();
 
-        while ((nextLine = foodCalReader.readNext()) != null) {
-            if (nextLine != null) {
-                //System.out.println(Arrays.toString(nextLine));
-            }
+        // temporary declarer
+        FoodCal foodCal;
+
+        //Read CSV line by line
+        for (int i = 1 ; i < allRows.size() ; i++) {
+            foodCal = new FoodCal(allRows.get(i)[0], allRows.get(i)[1], allRows.get(i)[2], allRows.get(i)[3], allRows.get(i)[4], allRows.get(i)[5]);
+            foodCalList.add(foodCal);
+            //System.out.println(foodCal.getCalorie());
         }
-    }
-
-    // column position mapping
-    private ColumnPositionMappingStrategy setColumMapping() {
-        ColumnPositionMappingStrategy strategy = new ColumnPositionMappingStrategy();
-
-        return strategy;
     }
 
     // Initialize tab layout
