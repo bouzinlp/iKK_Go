@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
+import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
@@ -55,6 +57,12 @@ public class GalleryActivity extends AppCompatActivity {
     // Food storage
     private Food food;
 
+    // food cal list, only from main activity
+    private ArrayList<FoodCal> foodCalList;
+
+    // cal list data
+    private static final String calDATA = "foodCalList";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +80,7 @@ public class GalleryActivity extends AppCompatActivity {
         if (action.equals("com.example.nthucs.prototype.TAKE_PHOTO")) {
             // new food
             requestStoragePermission();
+            //foodCalList = getIntent().getParcelableArrayListExtra(calDATA);
         }
     }
 

@@ -13,7 +13,7 @@ import com.example.nthucs.prototype.Activity.MessageActivity;
 import com.example.nthucs.prototype.Activity.SettingsActivity;
 import com.example.nthucs.prototype.FoodList.FoodCal;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by user on 2016/7/18.
@@ -26,7 +26,7 @@ public class TabsController {
     private ViewPager viewPager;
 
     // food cal list, only from main activity
-    private List<FoodCal> foodCalList;
+    private ArrayList<FoodCal> foodCalList;
 
     // action number
     private static final int SCAN_FOOD = 2;
@@ -55,7 +55,7 @@ public class TabsController {
         this.viewPager = viewPager;
     }
 
-    public TabsController(int activityIndex, Activity activity, TabLayout tabLayout, ViewPager viewPager, List<FoodCal> foodCalList) {
+    public TabsController(int activityIndex, Activity activity, TabLayout tabLayout, ViewPager viewPager, ArrayList<FoodCal> foodCalList) {
         this.activityIndex = activityIndex;
         this.activity = activity;
         this.tabLayout = tabLayout;
@@ -138,7 +138,7 @@ public class TabsController {
                 } else if (items[index].equals("Choose from Gallery")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                        //intent_gallery.putStringArrayListExtra();
+                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
                         // back to main activity

@@ -1,9 +1,12 @@
 package com.example.nthucs.prototype.FoodList;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by USER12345678 on 2016/7/19.
  */
-public class FoodCal implements java.io.Serializable {
+public class FoodCal implements Parcelable {
 
     private String index;
     private String category;
@@ -12,8 +15,22 @@ public class FoodCal implements java.io.Serializable {
     private int calorie;
     private int modifiedCalorie;
 
+    public static final Parcelable.Creator<FoodCal> CREATOR = new Creator(){
+        @Override
+        public FoodCal createFromParcel(Parcel source) {
+            FoodCal foodCal = new FoodCal(source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString());
+            return foodCal;
+        }
+
+        @Override
+        public FoodCal[] newArray(int size) {
+            return new FoodCal[size];
+        }
+    };
+
     public FoodCal(String index, String category, String chineseName, String englishName, String calorie, String modifiedCalorie) {
         this.index = index;
+        this.category = category;
         this.chineseName = chineseName;
         this.englishName = englishName;
         this.calorie = Integer.parseInt(calorie);
@@ -37,6 +54,21 @@ public class FoodCal implements java.io.Serializable {
 
     public int getModifiedCalorie() {return modifiedCalorie;}
     public void setModifiedCalorie(int modifiedCalorie) {this.modifiedCalorie = modifiedCalorie;}
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel out, int flags) {
+        out.writeString(index);
+        out.writeString(category);
+        out.writeString(chineseName);
+        out.writeString(englishName);
+        out.writeInt(calorie);
+        out.writeInt(modifiedCalorie);
+    }
 
     @Override
     public String toString() {

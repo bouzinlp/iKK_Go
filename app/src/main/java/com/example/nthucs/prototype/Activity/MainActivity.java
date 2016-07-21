@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private CSVReader foodCalReader;
 
     // list of foodCal
-    private List<FoodCal> foodCalList = new ArrayList<>();
+    private ArrayList<FoodCal> foodCalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         foodCalReader = new CSVReader(new InputStreamReader(getAssets().open("food_cal.csv")));
 
         // Read all rows at once
-        List<String[]> allRows= foodCalReader.readAll();
+        ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
         // temporary declarer
         FoodCal foodCal;
