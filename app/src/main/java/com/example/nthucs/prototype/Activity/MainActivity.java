@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
     // list of foods
     private List<Food> foods;
 
-    //private MenuItem calendar_food, take_photo, scan_food;
     private MenuItem add_food, search_food, revert_food, delete_food;
 
     // element for the bottom of the tab content
@@ -108,6 +107,17 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("open food cal: IO exception");
             }
         }
+
+        // other activity's back to take photo from gallery or camera
+        if (getIntent().getExtras() != null) {
+            if (getIntent().getExtras().getInt("scan_food") == SCAN_FOOD) {
+                Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                startActivityForResult(intent_camera, SCAN_FOOD);
+            } else if (getIntent().getExtras().getInt("take_photo") == TAKE_PHOTO) {
+                Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                startActivityForResult(intent_gallery, TAKE_PHOTO);
+            }
+        }
     }
 
     @Override
@@ -170,9 +180,6 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        /*calendar_food = menu.findItem(R.id.calendar_food);
-        take_photo = menu.findItem(R.id.take_photo);
-        scan_food = menu.findItem(R.id.scan_food);*/
         add_food = menu.findItem(R.id.add_food);
         search_food = menu.findItem(R.id.search_food);
         revert_food = menu.findItem(R.id.revert_food);
@@ -271,9 +278,6 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
-        /*calendar_food.setVisible(selectedCount==0);
-        take_photo.setVisible(selectedCount==0);
-        scan_food.setVisible(selectedCount==0);*/
         add_food.setVisible(selectedCount == 0);
         search_food.setVisible(selectedCount==0);
         revert_food.setVisible(selectedCount > 0);
@@ -284,18 +288,6 @@ public class MainActivity extends AppCompatActivity {
         int foodId = item.getItemId();
 
         switch (foodId) {
-            /*case R.id.calendar_food:
-                Intent intent_calendar = new Intent("com.example.nthucs.prototype.CALENDAR");
-                startActivityForResult(intent_calendar, CALENDAR);
-                break;
-            case R.id.take_photo:
-                Intent intent = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                startActivityForResult(intent, TAKE_PHOTO);
-                break;
-            case R.id.scan_food:
-                Intent intent2 = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                startActivityForResult(intent2, SCAN_FOOD);
-                break;*/
             case R.id.add_food:
                 Intent intent3 = new Intent("com.example.nthucs.prototype.ADD_FOOD");
                 startActivityForResult(intent3, ADD_FOOD);

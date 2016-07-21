@@ -97,11 +97,31 @@ public class TabsController {
             @Override
             public void onClick(DialogInterface dialog, int index) {
                 if (items[index].equals("Take with Camera")) {
-                    Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                    activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    if (activityIndex == MAIN_ACTIVITY) {
+                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    } else {
+                        // back to main activity
+                        Intent result = new Intent();
+                        result.putExtra("alreadyCall", 0);
+                        result.putExtra("scan_food", SCAN_FOOD);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
                 } else if (items[index].equals("Choose from Gallery")) {
-                    Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                    activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    if (activityIndex == MAIN_ACTIVITY) {
+                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    } else {
+                        // back to main activity
+                        Intent result = new Intent();
+                        result.putExtra("alreadyCall", 0);
+                        result.putExtra("take_photo", TAKE_PHOTO);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
                 } else if (items[index].equals("Cancel")) {
                     dialog.dismiss();
                     selectTab(activityIndex);
