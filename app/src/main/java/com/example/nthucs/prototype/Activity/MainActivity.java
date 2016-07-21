@@ -26,13 +26,9 @@ import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import au.com.bytecode.opencsv.CSVReader;
-import au.com.bytecode.opencsv.bean.ColumnPositionMappingStrategy;
-import au.com.bytecode.opencsv.bean.CsvToBean;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -54,9 +50,11 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDIT_FOOD = 1;
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
-    private static final int CALENDAR = 4;
-    private static final int SETTINGS = 5;
     private int selectedCount = 0;
+
+    // activity string
+    private static final String FROM_CAMERA = "scan_food";
+    private static final String FROM_GALLERY = "take_photo";
 
     // data base for storing food list
     private FoodDAO foodDAO;
@@ -72,13 +70,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        // not the initial created activity
+        // other activity return, re-value first call
         if (getIntent().getExtras() != null) {
-            firstCall = getIntent().getExtras().getInt("alreadyCall");
+            firstCall = getIntent().getExtras().getInt(csvReader);
         }
 
-        setContentView(R.layout.activity_main);
+        // avoid re-call csv file
+        if (firstCall == 1) {
+            try {
+                openFoodCalCsv();
+            } catch (IOException e) {
+                System.out.println("open food cal: IO exception");
+            }
+        }
 
         // initialize tabLayout and viewPager
         viewPager = (ViewPager)findViewById(R.id.viewPager);
@@ -86,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         initializeTabLayout();
 
         // call function to active tabs listener
-        TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
+        TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager, foodCalList);
         tabsController.processTabLayout();
 
         food_list = (ListView)findViewById(R.id.food_list);
@@ -99,21 +105,12 @@ public class MainActivity extends AppCompatActivity {
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
 
-        // avoid re-call csv file
-        if (firstCall == 1) {
-            try {
-                openFoodCalCsv();
-            } catch (IOException e) {
-                System.out.println("open food cal: IO exception");
-            }
-        }
-
         // other activity's back to take photo from gallery or camera
         if (getIntent().getExtras() != null) {
-            if (getIntent().getExtras().getInt("scan_food") == SCAN_FOOD) {
+            if (getIntent().getExtras().getInt(FROM_CAMERA) == SCAN_FOOD) {
                 Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
                 startActivityForResult(intent_camera, SCAN_FOOD);
-            } else if (getIntent().getExtras().getInt("take_photo") == TAKE_PHOTO) {
+            } else if (getIntent().getExtras().getInt(FROM_GALLERY) == TAKE_PHOTO) {
                 Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                 startActivityForResult(intent_gallery, TAKE_PHOTO);
             }
@@ -123,19 +120,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-
-            // Return form calendar
-            if (requestCode == CALENDAR && data.getExtras() == null) {
-                selectTab(0);
-                // Because calendar have no food return yet
-                return;
-            }
-
-            // Return from settings
-            if (requestCode == SETTINGS && data.getExtras() == null) {
-                selectTab(0);
-                return;
-            }
 
             // Get food data
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
@@ -342,5 +326,10 @@ public class MainActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // get food cal list
+    public List<FoodCal> getFoodCalList() {
+        return foodCalList;
     }
 }

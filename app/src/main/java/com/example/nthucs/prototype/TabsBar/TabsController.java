@@ -11,20 +11,30 @@ import com.example.nthucs.prototype.Activity.CalendarActivity;
 import com.example.nthucs.prototype.Activity.MainActivity;
 import com.example.nthucs.prototype.Activity.MessageActivity;
 import com.example.nthucs.prototype.Activity.SettingsActivity;
+import com.example.nthucs.prototype.FoodList.FoodCal;
+
+import java.util.List;
 
 /**
  * Created by user on 2016/7/18.
  */
 
 public class TabsController {
-    int activityIndex;
-    Activity activity;
-    TabLayout tabLayout;
-    ViewPager viewPager;
+    private int activityIndex;
+    private Activity activity;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+    // food cal list, only from main activity
+    private List<FoodCal> foodCalList;
 
     // action number
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
+
+    // activity string
+    private static final String FROM_CAMERA = "scan_food";
+    private static final String FROM_GALLERY = "take_photo";
 
     // activity number
     private static final int MAIN_ACTIVITY = 0;
@@ -32,12 +42,27 @@ public class TabsController {
     private static final int MESSAGE_ACTIVITY = 3;
     private static final int SETTING_ACTIVITY = 4;
 
+    // csv reader called
+    private static final String csvReader = "alreadyCall";
+
+    // cal list data
+    private static final String calDATA = "foodCalList";
+
     public TabsController(int activityIndex, Activity activity, TabLayout tabLayout, ViewPager viewPager) {
         this.activityIndex = activityIndex;
         this.activity = activity;
         this.tabLayout = tabLayout;
         this.viewPager = viewPager;
     }
+
+    public TabsController(int activityIndex, Activity activity, TabLayout tabLayout, ViewPager viewPager, List<FoodCal> foodCalList) {
+        this.activityIndex = activityIndex;
+        this.activity = activity;
+        this.tabLayout = tabLayout;
+        this.viewPager = viewPager;
+        this.foodCalList = foodCalList;
+    }
+
     public void processTabLayout() {
         // enable tab selected listener
         tabLayout.setOnTabSelectedListener(
@@ -49,7 +74,7 @@ public class TabsController {
                             // main activity
                             if (activityIndex != MAIN_ACTIVITY) {
                                 Intent result = new Intent();
-                                result.putExtra("alreadyCall", 0);
+                                result.putExtra(csvReader, 0);
                                 result.setClass(activity, MainActivity.class);
                                 activity.startActivity(result);
                                 activity.finish();
@@ -99,12 +124,13 @@ public class TabsController {
                 if (items[index].equals("Take with Camera")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
-                        result.putExtra("alreadyCall", 0);
-                        result.putExtra("scan_food", SCAN_FOOD);
+                        result.putExtra(csvReader, 0);
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
@@ -112,12 +138,13 @@ public class TabsController {
                 } else if (items[index].equals("Choose from Gallery")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        //intent_gallery.putStringArrayListExtra();
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
-                        result.putExtra("alreadyCall", 0);
-                        result.putExtra("take_photo", TAKE_PHOTO);
+                        result.putExtra(csvReader, 0);
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
