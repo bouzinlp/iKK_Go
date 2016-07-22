@@ -182,12 +182,17 @@ public class MainActivity extends AppCompatActivity {
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
-        // temporary declarer
-        FoodCal foodCal;
-
         //Read CSV line by line
         for (int i = 1 ; i < allRows.size() ; i++) {
-            foodCal = new FoodCal(allRows.get(i)[0], allRows.get(i)[1], allRows.get(i)[2], allRows.get(i)[3], allRows.get(i)[4], allRows.get(i)[5]);
+            // temporary declarer
+            FoodCal foodCal= new FoodCal();
+            foodCal.setIdx(allRows.get(i)[0]);
+            foodCal.setCategory(allRows.get(i)[1]);
+            foodCal.setChineseName(allRows.get(i)[2]);
+            foodCal.setEnglishName(allRows.get(i)[3]);
+            foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
+            foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
+
             foodCalList.add(foodCal);
             //System.out.println(foodCal.getCalorie());
         }

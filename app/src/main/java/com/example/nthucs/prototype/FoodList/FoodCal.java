@@ -18,7 +18,13 @@ public class FoodCal implements Parcelable {
     public static final Parcelable.Creator<FoodCal> CREATOR = new Creator(){
         @Override
         public FoodCal createFromParcel(Parcel source) {
-            FoodCal foodCal = new FoodCal(source.readString(), source.readString(), source.readString(), source.readString(), source.readString(), source.readString());
+            FoodCal foodCal = new FoodCal();
+            foodCal.setIdx(source.readString());
+            foodCal.setCategory(source.readString());
+            foodCal.setChineseName(source.readString());
+            foodCal.setEnglishName(source.readString());
+            foodCal.setCalorie(source.readInt());
+            foodCal.setModifiedCalorie(source.readInt());
             return foodCal;
         }
 
@@ -28,13 +34,7 @@ public class FoodCal implements Parcelable {
         }
     };
 
-    public FoodCal(String index, String category, String chineseName, String englishName, String calorie, String modifiedCalorie) {
-        this.index = index;
-        this.category = category;
-        this.chineseName = chineseName;
-        this.englishName = englishName;
-        this.calorie = Integer.parseInt(calorie);
-        this.modifiedCalorie = Integer.parseInt(modifiedCalorie);
+    public FoodCal() {
     }
 
     public String getIdx() {return index;}
