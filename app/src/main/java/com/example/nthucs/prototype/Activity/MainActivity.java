@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodAdapter;
 import com.example.nthucs.prototype.FoodList.FoodCal;
@@ -60,30 +61,32 @@ public class MainActivity extends AppCompatActivity {
     private FoodDAO foodDAO;
 
     // csv reader
-    private static final String csvReader = "alreadyCall";
-    private int firstCall = 1;
     private CSVReader foodCalReader;
 
     // list of foodCal
-    private ArrayList<FoodCal> foodCalList = new ArrayList<>();
+    private List<FoodCal> foodCalList = new ArrayList<>();
+
+    // data base for storing calorie data
+    private CalorieDAO calorieDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // other activity return, re-value first call
-        if (getIntent().getExtras() != null) {
-            firstCall = getIntent().getExtras().getInt(csvReader);
-        }
+        // calorie data base
+        calorieDAO = new CalorieDAO(getApplicationContext());
 
-        // avoid re-call csv file
-        if (firstCall == 1) {
+        // if the app is re-install or open in first time, then read csv and store in data base
+        if (calorieDAO.isTableEmpty() == true) {
             try {
                 openFoodCalCsv();
             } catch (IOException e) {
                 System.out.println("open food cal: IO exception");
             }
+        // if open app more once time, just get the data base immediately
+        } else {
+            foodCalList = calorieDAO.getAll();
         }
 
         // initialize tabLayout and viewPager
@@ -92,12 +95,13 @@ public class MainActivity extends AppCompatActivity {
         initializeTabLayout();
 
         // call function to active tabs listener
-        TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager, foodCalList);
+        TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
 
         food_list = (ListView)findViewById(R.id.food_list);
         processControllers();
 
+        // food list data base
         foodDAO = new FoodDAO(getApplicationContext());
 
         foods = foodDAO.getAll();
@@ -183,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
         //Read CSV line by line
-        for (int i = 1 ; i < allRows.size() ; i++) {
+        for (int i = 1; i < allRows.size() ; i++) {
             // temporary declarer
             FoodCal foodCal= new FoodCal();
             foodCal.setIdx(allRows.get(i)[0]);
@@ -193,8 +197,7 @@ public class MainActivity extends AppCompatActivity {
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
 
-            foodCalList.add(foodCal);
-            //System.out.println(foodCal.getCalorie());
+            calorieDAO.insert(foodCal);
         }
     }
 
@@ -331,10 +334,5 @@ public class MainActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
-    }
-
-    // get food cal list
-    public List<FoodCal> getFoodCalList() {
-        return foodCalList;
     }
 }

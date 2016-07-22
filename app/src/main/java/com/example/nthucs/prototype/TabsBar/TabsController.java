@@ -43,7 +43,7 @@ public class TabsController {
     private static final int SETTING_ACTIVITY = 4;
 
     // csv reader called
-    private static final String csvReader = "alreadyCall";
+    //private static final String csvReader = "alreadyCall";
 
     // cal list data
     private static final String calDATA = "foodCalList";
@@ -74,7 +74,6 @@ public class TabsController {
                             // main activity
                             if (activityIndex != MAIN_ACTIVITY) {
                                 Intent result = new Intent();
-                                result.putExtra(csvReader, 0);
                                 result.setClass(activity, MainActivity.class);
                                 activity.startActivity(result);
                                 activity.finish();
@@ -129,7 +128,6 @@ public class TabsController {
                     } else {
                         // back to main activity
                         Intent result = new Intent();
-                        result.putExtra(csvReader, 0);
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
@@ -143,7 +141,6 @@ public class TabsController {
                     } else {
                         // back to main activity
                         Intent result = new Intent();
-                        result.putExtra(csvReader, 0);
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);

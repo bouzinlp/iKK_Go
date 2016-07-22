@@ -8,6 +8,8 @@ import android.os.Parcelable;
  */
 public class FoodCal implements Parcelable {
 
+    private long id;
+
     private String index;
     private String category;
     private String chineseName;
@@ -36,6 +38,9 @@ public class FoodCal implements Parcelable {
 
     public FoodCal() {
     }
+
+    public long getId() {return this.id;}
+    public void setId(long id) {this.id = id;}
 
     public String getIdx() {return index;}
     public void setIdx(String index) {this.index = index;}
