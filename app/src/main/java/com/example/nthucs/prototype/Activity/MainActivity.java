@@ -197,7 +197,8 @@ public class MainActivity extends AppCompatActivity {
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
 
-            calorieDAO.insert(foodCal);
+            // fetch data with not null english name temporary
+            if (allRows.get(i)[3] != null) calorieDAO.insert(foodCal);
         }
     }
 
