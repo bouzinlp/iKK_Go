@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -13,6 +14,8 @@ import com.example.nthucs.prototype.Setting.SettingAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,13 +24,15 @@ import java.util.List;
 public class SettingsActivity extends AppCompatActivity {
 
     // list view adapter for setting list
-    private SettingAdapter settingApapter;
+    private SettingAdapter settingAdapter;
+
+    // settings' title
+    private static final String myProfile = "My Profile";
+    private static final String myWeightLossGoal = "My Weight Loss Goal";
+    private String[] titleStr = new String[]{myProfile, myWeightLossGoal};
 
     // list view for including textView
     private ListView setting_list;
-
-    // my profile entry view
-    private TextView myProfile;
 
     // string list for every setting item's title
     private List<String> setting_title;
@@ -50,25 +55,16 @@ public class SettingsActivity extends AppCompatActivity {
         TabsController tabsController = new TabsController(4, SettingsActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
 
-        // initialize setting list
+        // initialize setting list and process controllers
         setting_list = (ListView)findViewById(R.id.setting_list);
+        processControllers();
 
-        settingApapter = new SettingAdapter(this, R.layout.single_setting, setting_title);
-        setting_list.setAdapter(settingApapter);
-
-        // initialize my profile view
-        myProfile = (TextView)findViewById(R.id.myProfile);
+        // initialize and set adapter, pass title with string
+        setting_title = new ArrayList<>(Arrays.asList(titleStr));
+        settingAdapter = new SettingAdapter(this, R.layout.single_setting, setting_title);
+        setting_list.setAdapter(settingAdapter);
 
         selectTab(4);
-    }
-
-    public void clickSettingItem(View view) {
-        int itemId = view.getId();
-
-        switch (itemId) {
-            case R.id.myProfile:
-                break;
-        }
     }
 
     // Initialize tab layout
@@ -92,5 +88,26 @@ public class SettingsActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // process list click listenr
+    private void processControllers() {
+        // construct settings list click listener
+        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String title = settingAdapter.getItem(position);
+                switch (title) {
+                    case myProfile:
+                        break;
+                    case myWeightLossGoal:
+                        break;
+                }
+            }
+        };
+
+        // register settings list click listener
+        setting_list.setOnItemClickListener(itemListener);
     }
 }

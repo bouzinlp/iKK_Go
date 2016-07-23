@@ -52,8 +52,7 @@ public class SettingAdapter extends ArrayAdapter<String> {
         return  settingView;
     }
 
-    private void processControllers() {
-
+    public String get(int index) {
+        return this.list_title.get(index);
     }
-
 }
