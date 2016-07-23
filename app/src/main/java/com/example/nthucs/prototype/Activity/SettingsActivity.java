@@ -90,7 +90,7 @@ public class SettingsActivity extends AppCompatActivity {
         tab.select();
     }
 
-    // process list click listenr
+    // process list click listener
     private void processControllers() {
         // construct settings list click listener
         AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
