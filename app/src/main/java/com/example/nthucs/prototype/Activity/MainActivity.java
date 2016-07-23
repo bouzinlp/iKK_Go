@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
         // if open app more once time, just get the data base immediately
         } else {
             foodCalList = calorieDAO.getAll();
+
+            // output test
+            /*for (int i = 0 ; i < foodCalList.size() ; i++) {
+                System.out.println(foodCalList.get(i).getEnglishName());
+            }*/
         }
 
         // initialize tabLayout and viewPager

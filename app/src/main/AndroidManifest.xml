@@ -82,6 +82,12 @@
         <activity android:name=".Activity.MessageActivity"></activity>
         <activity android:name=".Activity.ChatRoomActivity"></activity>
 
+        <activity android:name=".Activity.MyProfileActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
     </application>
 
 </manifest>

@@ -16,13 +16,23 @@
 
         <TextView
             android:id="@+id/myProfile"
+            android:clickable="true"
+            android:onClick="clickSettingItem"
             android:text="@string/my_profile_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10sp"
             android:layout_margin="2sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="center_vertical"/>
+            android:gravity="center_vertical" />
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/default_margin"
+            android:id="@+id/setting_list">
+
+        </ListView>
 
     </LinearLayout>>
 

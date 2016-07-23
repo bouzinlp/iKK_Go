@@ -1,28 +1,36 @@
 package com.example.nthucs.prototype.Activity;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Setting.SettingAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+
+import java.util.List;
 
 /**
  * Created by user on 2016/7/16.
  */
 public class SettingsActivity extends AppCompatActivity {
 
+    // list view adapter for setting list
+    private SettingAdapter settingApapter;
+
+    // list view for including textView
+    private ListView setting_list;
+
     // my profile entry view
     private TextView myProfile;
+
+    // string list for every setting item's title
+    private List<String> setting_title;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -42,25 +50,25 @@ public class SettingsActivity extends AppCompatActivity {
         TabsController tabsController = new TabsController(4, SettingsActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
 
+        // initialize setting list
+        setting_list = (ListView)findViewById(R.id.setting_list);
+
+        settingApapter = new SettingAdapter(this, R.layout.single_setting, setting_title);
+        setting_list.setAdapter(settingApapter);
+
         // initialize my profile view
         myProfile = (TextView)findViewById(R.id.myProfile);
-        processControllers();
 
         selectTab(4);
     }
 
-    private void processControllers() {
-        // construct my profile view listener
-        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
+    public void clickSettingItem(View view) {
+        int itemId = view.getId();
 
-            }
-        };
-
-        // register my profile view listrner
-        //myProfile.setOnItemClickListener(itemListener);
+        switch (itemId) {
+            case R.id.myProfile:
+                break;
+        }
     }
 
     // Initialize tab layout
