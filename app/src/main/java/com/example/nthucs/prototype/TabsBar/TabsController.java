@@ -169,10 +169,10 @@ public class TabsController {
     // activity toggle animation
     private void toggleAnimation(int position, int activityIndex) {
         if (position < activityIndex) {
-            // origin activity from right to left
+            // origin activity slide to right, new activity slide from left
             this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         } else if (position > activityIndex) {
-            // origin activity from left to right
+            // origin activity slide to left, new activity slide from right
             this.activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }

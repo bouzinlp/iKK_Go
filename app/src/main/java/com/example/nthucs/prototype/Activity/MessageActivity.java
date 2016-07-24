@@ -67,6 +67,7 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Message");
         setContentView(R.layout.activity_message);
 
         Toast.makeText(getApplicationContext(), "Login to show messages", Toast.LENGTH_SHORT).show();

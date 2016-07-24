@@ -1,5 +1,6 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -44,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("Settings");
         setContentView(R.layout.activity_settings);
 
         // initialize tabLayout and viewPager
@@ -99,7 +101,12 @@ public class SettingsActivity extends AppCompatActivity {
                                     int position, long id) {
                 String title = settingAdapter.getItem(position);
                 switch (title) {
+                    // go to my profile activity
                     case myProfile:
+                        Intent intent = new Intent();
+                        intent.setClass(SettingsActivity.this, MyProfileActivity.class);
+                        startActivity(intent);
+                        finish();
                         break;
                     case myWeightLossGoal:
                         break;
