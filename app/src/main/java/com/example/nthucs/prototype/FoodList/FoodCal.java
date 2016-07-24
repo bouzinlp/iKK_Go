@@ -10,11 +10,22 @@ public class FoodCal implements Parcelable {
 
     private long id;
 
+    // food's index string
     private String index;
+
+    // food's category
     private String category;
+
+    // food in chinese
     private String chineseName;
+
+    // food in english
     private String englishName;
+
+    // calorie in the food, assume portion = 1.0
     private int calorie;
+
+    // modified calorie
     private int modifiedCalorie;
 
     public static final Parcelable.Creator<FoodCal> CREATOR = new Creator(){

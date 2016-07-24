@@ -1,4 +1,4 @@
-package com.example.nthucs.prototype.Setting;
+package com.example.nthucs.prototype.Settings;
 
 import android.content.Context;
 import android.view.LayoutInflater;
