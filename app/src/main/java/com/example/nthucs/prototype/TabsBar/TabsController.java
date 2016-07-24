@@ -12,6 +12,7 @@ import com.example.nthucs.prototype.Activity.MainActivity;
 import com.example.nthucs.prototype.Activity.MessageActivity;
 import com.example.nthucs.prototype.Activity.SettingsActivity;
 import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.R;
 
 import java.util.ArrayList;
 
@@ -159,5 +160,18 @@ public class TabsController {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    // activity toggle animation
+    private void toggleAnimation(int position, int activityIndex) {
+        if (position < activityIndex) {
+            // origin activity from right to left
+            this.activity.overridePendingTransition(R.anim.animation_leave,
+                                                    R.anim.animation_enter);
+        } else if (position > activityIndex) {
+            // origin activity from left to right
+            this.activity.overridePendingTransition(R.anim.animation_enter,
+                                                    R.anim.animation_leave);
+        }
     }
 }
