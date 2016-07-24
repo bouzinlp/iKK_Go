@@ -78,6 +78,7 @@ public class TabsController {
                                 result.setClass(activity, MainActivity.class);
                                 activity.startActivity(result);
                                 activity.finish();
+                                toggleAnimation(tab.getPosition(), activityIndex);
                             }
                         } else if (tab.getPosition() == 1) {
                             // calendar activity
@@ -86,6 +87,7 @@ public class TabsController {
                                 intent_calendar.setClass(activity, CalendarActivity.class);
                                 activity.startActivity(intent_calendar);
                                 activity.finish();
+                                toggleAnimation(tab.getPosition(), activityIndex);
                             }
                         } else if (tab.getPosition() == 2) {
                             // start activity for result
@@ -97,6 +99,7 @@ public class TabsController {
                                 intent_mes.setClass(activity, MessageActivity.class);
                                 activity.startActivity(intent_mes);
                                 activity.finish();
+                                toggleAnimation(tab.getPosition(), activityIndex);
                             }
                         } else if (tab.getPosition() == 4) {
                             // setting activity
@@ -105,6 +108,7 @@ public class TabsController {
                                 intent_settings.setClass(activity, SettingsActivity.class);
                                 activity.startActivity(intent_settings);
                                 activity.finish();
+                                toggleAnimation(tab.getPosition(), activityIndex);
                             }
                         }
                         //System.out.println("main select: "+tab.getPosition());
@@ -166,12 +170,10 @@ public class TabsController {
     private void toggleAnimation(int position, int activityIndex) {
         if (position < activityIndex) {
             // origin activity from right to left
-            this.activity.overridePendingTransition(R.anim.animation_leave,
-                                                    R.anim.animation_enter);
+            this.activity.overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         } else if (position > activityIndex) {
             // origin activity from left to right
-            this.activity.overridePendingTransition(R.anim.animation_enter,
-                                                    R.anim.animation_leave);
+            this.activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         }
     }
 }
