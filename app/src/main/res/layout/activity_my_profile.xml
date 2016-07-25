@@ -19,8 +19,8 @@
             android:padding="12sp"
             android:layout_margin="10sp"
             android:id="@+id/birth_day_button"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-            <!--android:background="@drawable/button_drawable"-->
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <!--android:background="@drawable/button_drawable"-->
 
     </TableRow>
 
@@ -47,6 +47,17 @@
             android:padding="12sp"
             android:layout_margin="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/height_edit_text"
+            android:hint="@string/enter_height"
+            android:background="@drawable/profile_drawable"
+            android:gravity="right"
+            android:padding="7sp"
+            android:layout_margin="10sp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </TableRow>
 
     <TableRow>
@@ -55,6 +66,17 @@
             android:padding="12sp"
             android:layout_margin="10sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/weight_edit_text"
+            android:hint="@string/enter_weight"
+            android:background="@drawable/profile_drawable"
+            android:gravity="right"
+            android:padding="7sp"
+            android:layout_margin="10sp"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </TableRow>
 
 </TableLayout>

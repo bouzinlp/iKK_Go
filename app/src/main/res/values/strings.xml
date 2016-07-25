@@ -26,4 +26,6 @@
     <string name="sex">Choose sex</string>
     <string name="height">Enter your height</string>
     <string name="weight">Enter your weight</string>
+    <string name="enter_height">cm</string>
+    <string name="enter_weight">kg</string>
 </resources>
