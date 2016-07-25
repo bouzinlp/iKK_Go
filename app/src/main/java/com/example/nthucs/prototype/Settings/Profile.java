@@ -28,6 +28,12 @@ public class Profile implements java.io.Serializable {
     // how weight
     private float weight;
 
+    // current weight loss goal
+    private float weightLossGaol;
+
+    // weekly loss weight target
+    private float weeklyLossWeight;
+
     public Profile() {
 
     }
@@ -53,4 +59,10 @@ public class Profile implements java.io.Serializable {
 
     public float getWeight() {return weight;}
     public void setWeight(float weight) {this.weight = weight;}
+
+    public float getWeightLossGaol() {return weightLossGaol;}
+    public void setWeightLossGaol(float weightLossGaol) {this.weightLossGaol = weightLossGaol;}
+
+    public float getWeeklyLossWeight() {return weeklyLossWeight;}
+    public void setWeeklyLossWeight(float weeklyLossWeight) {this.weeklyLossWeight = weeklyLossWeight;}
 }
