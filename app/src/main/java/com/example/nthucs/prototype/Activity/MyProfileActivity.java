@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -36,10 +37,10 @@ public class MyProfileActivity extends AppCompatActivity {
     private Spinner genderSpinner;
 
     // Gender list adapter
-    private ArrayAdapter<String> genderListAdapter;
+    private ArrayAdapter genderListAdapter;
 
-    // Male or Female
-    private String[] sexString = {"Male", "Female"};
+    // Temporary storage for gender before update
+    private String choosen_sex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,10 +135,35 @@ public class MyProfileActivity extends AppCompatActivity {
         genderSpinner = (Spinner)findViewById(R.id.sex_spinner);
 
         // initialize adapter
-        //genderListAdapter = new ArrayAdapter<String>(MyProfileActivity.this, R.layout.activity_my_profile, sexString);
+        genderListAdapter = new ArrayAdapter(MyProfileActivity.this, R.layout.spinner_layout, new String[]{"Male", "Female"});
+
+        // set adapter's drop down view
+        genderListAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
 
         // set adapter to spinner
-        //genderSpinner.setAdapter(genderListAdapter);
+        genderSpinner.setAdapter(genderListAdapter);
 
+        // set adapter view's item selected listener
+        AdapterView.OnItemSelectedListener spinnerlistener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
+                if (adapterView.getId() == R.id.sex_spinner) {
+                    switch (adapterView.getSelectedItemPosition()) {
+                        case 0:
+                            choosen_sex = adapterView.getSelectedItem().toString();
+                            break;
+                        case 1:
+                            choosen_sex = adapterView.getSelectedItem().toString();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView arg0) {}
+        };
+
+        // register to spinner listener
+        genderSpinner.setOnItemSelectedListener(spinnerlistener);
     }
 }
