@@ -35,7 +35,14 @@ public class Profile implements java.io.Serializable {
     private float weeklyLossWeight;
 
     public Profile() {
-
+        this.datetime = 0;
+        this.lastModify = 0;
+        this.birthDay = 0;
+        this.sex = new String("null");
+        this.height = 0;
+        this.weight = 0;
+        this.weightLossGaol = 0;
+        this.weeklyLossWeight = 0;
     }
 
     public long getId() {return this.id;}

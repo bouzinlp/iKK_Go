@@ -49,9 +49,6 @@ public class MyProfileActivity extends AppCompatActivity {
     // Edit text for height, weight
     private EditText height_text, weight_text;
 
-    // Temporary storage for user's height and weight
-    private float inputHeight, inputWeight;
-
     // data base for profile
     private MyProfileDAO myProfileDAO;
 
@@ -73,7 +70,11 @@ public class MyProfileActivity extends AppCompatActivity {
         profileList = myProfileDAO.getAll();
 
         // get the last profile data in the list
-        curProfile = profileList.get(profileList.size()-1);
+        if (myProfileDAO.isTableEmpty() == true) {
+            curProfile = new Profile();
+        } else {
+            curProfile = profileList.get(profileList.size()-1);
+        }
 
         // set new profile for updated
         tempProfile = new Profile();
@@ -163,6 +164,21 @@ public class MyProfileActivity extends AppCompatActivity {
                 }
             }
         });
+
+        // set text with birthday to the button if not empty
+        if (curProfile.getBirthDay() != 0) {
+            // set time in millis to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(curProfile.getBirthDay());
+
+            // set to temporary storage
+            birth_year = calendar.get(Calendar.YEAR);
+            birth_month = calendar.get(Calendar.MONTH)+1;
+            birth_day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            // set text to button
+            birthDayButton.setText(calendar.get(Calendar.MONTH)+1+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
+        }
     }
 
     // process gender spinner
@@ -201,6 +217,19 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // register to spinner listener
         genderSpinner.setOnItemSelectedListener(spinnerlistener);
+
+        // set text with sex if current profile not empty
+        if (curProfile.getSex() != "null") {
+            // set specific position to spinner
+            if (curProfile.getSex().equals("Male")) {
+                genderSpinner.setSelection(0);
+            } else if (curProfile.getSex().equals("Female")) {
+                genderSpinner.setSelection(1);
+            }
+
+            // set to temporary storage
+            chosen_sex = curProfile.getSex();
+        }
     }
 
     // process relative edit text
@@ -208,6 +237,12 @@ public class MyProfileActivity extends AppCompatActivity {
         height_text = (EditText)findViewById(R.id.height_edit_text);
         weight_text = (EditText)findViewById(R.id.weight_edit_text);
 
+        // set text to edit text if current profile not empty
+        if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
+            // set to edit text
+            height_text.setText(Float.toString(curProfile.getHeight()));
+            weight_text.setText(Float.toString(curProfile.getWeight()));
+        }
     }
 
     // process update button
@@ -220,7 +255,9 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View view) {
+        // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            // set the update time and last modify time
             tempProfile.setDatetime(new Date().getTime());
             tempProfile.setLastModify(new Date().getTime());
 
@@ -229,18 +266,19 @@ public class MyProfileActivity extends AppCompatActivity {
             calendar.set(Calendar.MONTH, birth_month - 1);
             calendar.set(Calendar.DAY_OF_MONTH, birth_day);
 
+            // set time in millis
             tempProfile.setBirthDay(calendar.getTimeInMillis());
 
-            //System.out.println("birth " + calendar.getTimeInMillis());
-            //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));
-
+            // set gender, height, weight
             tempProfile.setSex(chosen_sex);
             tempProfile.setHeight(Float.parseFloat(height_text.getText().toString()));
             tempProfile.setWeight(Float.parseFloat(weight_text.getText().toString()));
 
+            // store to my profile data base
             myProfileDAO.insert(tempProfile);
 
-            System.out.println(myProfileDAO.isTableEmpty());
+            // output test for birthday time in millis
+            //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));
         }
     }
 }
