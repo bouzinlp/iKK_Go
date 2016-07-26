@@ -219,7 +219,7 @@ public class MyProfileActivity extends AppCompatActivity {
         genderSpinner.setOnItemSelectedListener(spinnerlistener);
 
         // set text with sex if current profile not empty
-        if (curProfile.getSex() != "null") {
+        if (curProfile.getSex().equals("null") == false) {
             // set specific position to spinner
             if (curProfile.getSex().equals("Male")) {
                 genderSpinner.setSelection(0);
