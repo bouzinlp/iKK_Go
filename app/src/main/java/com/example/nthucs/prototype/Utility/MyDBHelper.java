@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
+import com.example.nthucs.prototype.Settings.MyProfileDAO;
 
 public class MyDBHelper extends SQLiteOpenHelper {
 
@@ -14,7 +15,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "food.db";
 
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
-    public static final int VERSION = 11;
+    public static final int VERSION = 12;
 
     // 資料庫物件，固定的欄位變數
     private static SQLiteDatabase database;
@@ -42,6 +43,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // create calorie table
         db.execSQL(CalorieDAO.CREATE_TABLE);
+
+        // create profile table
+        db.execSQL(MyProfileDAO.CREATE_TABLE);
     }
 
     @Override
@@ -49,8 +53,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // 刪除原有的表格
         db.execSQL("DROP TABLE IF EXISTS " + FoodDAO.TABLE_NAME);
 
-        // delete origin table
+        // delete origin calorie table
         db.execSQL("DROP TABLE IF EXISTS " + CalorieDAO.TABLE_NAME);
+
+        // delete origin profile table
+        db.execSQL("DROP TABLE IF EXISTS " + MyProfileDAO.TABLE_NAME);
 
         // 呼叫onCreate建立新版的表格
         onCreate(db);

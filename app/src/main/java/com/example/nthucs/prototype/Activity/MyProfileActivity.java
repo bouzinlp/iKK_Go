@@ -14,19 +14,22 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.MyProfileDAO;
+import com.example.nthucs.prototype.Settings.Profile;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by user on 2016/7/23.
  */
 public class MyProfileActivity extends AppCompatActivity {
 
-    // Back button
-    private Button backButton;
-
-    // Birth date button
-    private Button birthDayButton;
+    // Back, Birth date, Update button
+    private Button backButton,  birthDayButton, updateButton;
 
     // Calendar
     private Calendar calendar;
@@ -41,7 +44,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private ArrayAdapter genderListAdapter;
 
     // Temporary storage for gender before update
-    private String choosen_sex;
+    private String chosen_sex;
 
     // Edit text for height, weight
     private EditText height_text, weight_text;
@@ -49,13 +52,24 @@ public class MyProfileActivity extends AppCompatActivity {
     // Temporary storage for user's height and weight
     private float inputHeight, inputWeight;
 
-    // Update button
-    private Button updateButton;
+    // data base for profile
+    private MyProfileDAO myProfileDAO;
+
+    // list of profile
+    private List<Profile> profileList = new ArrayList<>();
+
+    // current profile
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_profile);
+
+        // initialize data base
+        myProfileDAO = new MyProfileDAO(getApplicationContext());
+
+        profile = new Profile();
 
         // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -165,10 +179,10 @@ public class MyProfileActivity extends AppCompatActivity {
                 if (adapterView.getId() == R.id.sex_spinner) {
                     switch (adapterView.getSelectedItemPosition()) {
                         case 0:
-                            choosen_sex = adapterView.getSelectedItem().toString();
+                            chosen_sex = adapterView.getSelectedItem().toString();
                             break;
                         case 1:
-                            choosen_sex = adapterView.getSelectedItem().toString();
+                            chosen_sex = adapterView.getSelectedItem().toString();
                             break;
                     }
                 }
@@ -200,7 +214,26 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.update_button) {
+            profile.setDatetime(new Date().getTime());
+            profile.setLastModify(new Date().getTime());
 
+            // set birthday to calendar class
+            calendar.set(Calendar.YEAR, birth_year);
+            calendar.set(Calendar.MONTH, birth_month - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, birth_day);
+
+            profile.setBirthDay(calendar.getTimeInMillis());
+
+            //System.out.println("birth " + calendar.getTimeInMillis());
+            //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));
+
+            profile.setSex(chosen_sex);
+            profile.setHeight(Float.parseFloat(height_text.getText().toString()));
+            profile.setWeight(Float.parseFloat(weight_text.getText().toString()));
+
+            myProfileDAO.insert(profile);
+
+            System.out.println(myProfileDAO.isTableEmpty());
         }
     }
 }
