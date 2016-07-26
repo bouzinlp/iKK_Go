@@ -58,8 +58,8 @@ public class MyProfileActivity extends AppCompatActivity {
     // list of profile
     private List<Profile> profileList = new ArrayList<>();
 
-    // current profile
-    private Profile profile;
+    // currently and temporary profile
+    private Profile curProfile, tempProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,14 @@ public class MyProfileActivity extends AppCompatActivity {
         // initialize data base
         myProfileDAO = new MyProfileDAO(getApplicationContext());
 
-        profile = new Profile();
+        // get all profile data from data base
+        profileList = myProfileDAO.getAll();
+
+        // get the last profile data in the list
+        curProfile = profileList.get(profileList.size()-1);
+
+        // set new profile for updated
+        tempProfile = new Profile();
 
         // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -214,24 +221,24 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.update_button) {
-            profile.setDatetime(new Date().getTime());
-            profile.setLastModify(new Date().getTime());
+            tempProfile.setDatetime(new Date().getTime());
+            tempProfile.setLastModify(new Date().getTime());
 
             // set birthday to calendar class
             calendar.set(Calendar.YEAR, birth_year);
             calendar.set(Calendar.MONTH, birth_month - 1);
             calendar.set(Calendar.DAY_OF_MONTH, birth_day);
 
-            profile.setBirthDay(calendar.getTimeInMillis());
+            tempProfile.setBirthDay(calendar.getTimeInMillis());
 
             //System.out.println("birth " + calendar.getTimeInMillis());
             //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));
 
-            profile.setSex(chosen_sex);
-            profile.setHeight(Float.parseFloat(height_text.getText().toString()));
-            profile.setWeight(Float.parseFloat(weight_text.getText().toString()));
+            tempProfile.setSex(chosen_sex);
+            tempProfile.setHeight(Float.parseFloat(height_text.getText().toString()));
+            tempProfile.setWeight(Float.parseFloat(weight_text.getText().toString()));
 
-            myProfileDAO.insert(profile);
+            myProfileDAO.insert(tempProfile);
 
             System.out.println(myProfileDAO.isTableEmpty());
         }
