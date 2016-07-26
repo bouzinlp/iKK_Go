@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.nthucs.prototype.R;
@@ -42,6 +43,15 @@ public class MyProfileActivity extends AppCompatActivity {
     // Temporary storage for gender before update
     private String choosen_sex;
 
+    // Edit text for height, weight
+    private EditText height_text, weight_text;
+
+    // Temporary storage for user's height and weight
+    private float inputHeight, inputWeight;
+
+    // Update button
+    private Button updateButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +60,6 @@ public class MyProfileActivity extends AppCompatActivity {
         // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.my_profile_menu);
-
-        // initialize calendar
-        calendar = Calendar.getInstance();
 
         // process back button
         processBackControllers();
@@ -63,6 +70,11 @@ public class MyProfileActivity extends AppCompatActivity {
         // process gender spinner
         processGenderControllers();
 
+        // process height and weight edit text
+        processEditTextControllers();
+
+        // process update button
+        processUpdateButtonControllers();
     }
 
     @Override
@@ -101,6 +113,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // avoid all upper case
         birthDayButton.setTransformationMethod(null);
+
+        // initialize calendar
+        calendar = Calendar.getInstance();
 
         // set date picker listener
         final DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -165,5 +180,27 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // register to spinner listener
         genderSpinner.setOnItemSelectedListener(spinnerlistener);
+    }
+
+    // process relative edit text
+    private void processEditTextControllers() {
+        height_text = (EditText)findViewById(R.id.height_edit_text);
+        weight_text = (EditText)findViewById(R.id.weight_edit_text);
+
+    }
+
+    // process update button
+    private void processUpdateButtonControllers() {
+        // initialize button
+        updateButton = (Button)findViewById(R.id.update_button);
+
+        // avoid all upper case
+        updateButton.setTransformationMethod(null);
+    }
+
+    public void onSubmit(View view) {
+        if (view.getId() == R.id.update_button) {
+
+        }
     }
 }

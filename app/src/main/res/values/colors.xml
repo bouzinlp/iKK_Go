@@ -4,6 +4,7 @@
     <color name="black">#000000</color>
     <color name="dark_red">#B71C1C</color>
     <color name="tabColor">#667885</color>
-    <color name="default_button">#D3D3D3</color>>
+    <color name="default_button">#D3D3D3</color>
     <color name="white">#FFFFFF</color>
+    <color name="royal_blue">#4169E1</color>
 </resources>
