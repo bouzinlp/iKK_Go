@@ -29,7 +29,9 @@ public class SettingsActivity extends AppCompatActivity {
     // settings' title
     private static final String myProfile = "My Profile";
     private static final String myWeightLossGoal = "My Weight Loss Goal";
-    private String[] titleStr = new String[]{myProfile, myWeightLossGoal};
+    private static final String weightChart = "Weight Chart";
+    private static final String calorieConsumption = "Calorie Consumption";
+    private String[] titleStr = new String[]{myProfile, myWeightLossGoal, weightChart, calorieConsumption};
 
     // list view for including textView
     private ListView setting_list;
@@ -108,6 +110,10 @@ public class SettingsActivity extends AppCompatActivity {
                         finish();
                         break;
                     case myWeightLossGoal:
+                        break;
+                    case weightChart:
+                        break;
+                    case calorieConsumption:
                         break;
                 }
             }
