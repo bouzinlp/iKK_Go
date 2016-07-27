@@ -20,9 +20,9 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="@string/my_profile_title"
+        android:text="@string/my_weight_loss_goal_title"
         android:textColor="#ffffff"
-        android:id="@+id/my_profile_title"
+        android:id="@+id/my_weight_loss_goal_title"
         android:textSize="21sp" />
 
 </RelativeLayout>

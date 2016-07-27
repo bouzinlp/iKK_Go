@@ -104,12 +104,16 @@ public class SettingsActivity extends AppCompatActivity {
                 switch (title) {
                     // go to my profile activity
                     case myProfile:
-                        Intent intent = new Intent();
-                        intent.setClass(SettingsActivity.this, MyProfileActivity.class);
-                        startActivity(intent);
+                        Intent intent_profile = new Intent();
+                        intent_profile.setClass(SettingsActivity.this, MyProfileActivity.class);
+                        startActivity(intent_profile);
                         finish();
                         break;
                     case myWeightLossGoal:
+                        Intent intent_weight_loss = new Intent();
+                        intent_weight_loss.setClass(SettingsActivity.this, MyWeightLossGoalActivity.class);
+                        startActivity(intent_weight_loss);
+                        finish();
                         break;
                     case weightChart:
                         break;

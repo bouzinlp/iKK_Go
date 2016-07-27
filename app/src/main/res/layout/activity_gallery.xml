@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:adjustViewBounds="false"
-        android:layout_margin="5sp"
+        android:layout_margin="2sp"
         android:background="@drawable/rectangle_drawable"
         android:padding="6sp"
         android:visibility="invisible" />
@@ -28,7 +28,7 @@
                 android:text="@string/search_picture"
                 android:onClick="onSubmit"
                 android:padding="6sp"
-                android:layout_margin="5sp"
+                android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
@@ -36,7 +36,7 @@
                 android:text="@android:string/cancel"
                 android:onClick="onSubmit"
                 android:padding="6sp"
-                android:layout_margin="5sp"
+                android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
     </TableLayout>

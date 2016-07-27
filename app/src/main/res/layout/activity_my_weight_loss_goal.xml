@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.MyWeightLossGoalActivity">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow>
+
+            <TextView
+                android:text="@string/my_target_weight"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:text="@string/my_weekly_target"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSubmit"
+        android:padding="6sp"
+        android:layout_margin="2sp"
+        android:id="@+id/update_button"
+        android:text="@string/update_btn"
+        android:textColor="@color/royal_blue"
+        android:textSize="20sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
