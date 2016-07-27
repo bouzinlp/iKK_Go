@@ -16,9 +16,11 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.example.nthucs.prototype.Calendar.CompactCalendarView;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
-import com.example.nthucs.prototype.Utility.Event;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.Event;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class CalendarActivity  extends AppCompatActivity {
     // element for the bottom of the tab content
     private ViewPager viewPager;
     private TabLayout tabLayout;
+    private List<Food> foods ;
+    private FoodDAO foodDAO;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +61,8 @@ public class CalendarActivity  extends AppCompatActivity {
         processTabLayout();
 
         selectTab(3);
+        foodDAO = new FoodDAO(getApplicationContext());
+        foods = foodDAO.getAll();
 
         final ActionBar actionBar = getSupportActionBar();
         final List<String> mutableBookings = new ArrayList<>();
@@ -81,10 +88,23 @@ public class CalendarActivity  extends AppCompatActivity {
         //test for put color on everyday.
         compactCalendarView.setGreenBackgroundColor(getResources().getColor(R.color.green));
         compactCalendarView.setBlueBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        addEvents(compactCalendarView, -1);
+
+
+        addEvents(compactCalendarView, Calendar.JANUARY);
+        addEvents(compactCalendarView, Calendar.FEBRUARY);
+        addEvents(compactCalendarView, Calendar.MARCH);
+        addEvents(compactCalendarView, Calendar.APRIL);
+        addEvents(compactCalendarView, Calendar.MAY);
+        addEvents(compactCalendarView, Calendar.JUNE);
+        addEvents(compactCalendarView, Calendar.JULY);
+        addEvents(compactCalendarView, Calendar.SEPTEMBER);
+        addEvents(compactCalendarView, Calendar.OCTOBER);
+        addEvents(compactCalendarView, Calendar.NOVEMBER);
         addEvents(compactCalendarView, Calendar.DECEMBER);
         addEvents(compactCalendarView, Calendar.AUGUST);
+
         compactCalendarView.invalidate();
+
 
         // below line will display Sunday as the first day of the week
         // compactCalendarView.setShouldShowMondayAsFirstDay(false);
@@ -159,21 +179,77 @@ public class CalendarActivity  extends AppCompatActivity {
         currentCalender.setTime(new Date());
         currentCalender.set(Calendar.DAY_OF_MONTH, 1);
         Date firstDayOfMonth = currentCalender.getTime();
-        for (int i = 0; i < 6; i++) {
+
             currentCalender.setTime(firstDayOfMonth);
             if (month > -1) {
                 currentCalender.set(Calendar.MONTH, month);
             }
-            currentCalender.add(Calendar.DATE, i);
-            setToMidnight(currentCalender);
-            long timeInMillis = currentCalender.getTimeInMillis();
 
-            List<Event> events = getEvents(timeInMillis, i);
+        int yearclicked =currentCalender.get(Calendar.YEAR);
 
-            compactCalendarView.addEvents(events);
-        }
+            int i , j=0 ;
+            String time ;
+            int monthday ;
+            String name;
+            float calorie = 0;
+
+
+            if((month==1-1)||(month==3-1)||(month==5-1)||(month==7-1)||(month==8-1)||(month==10-1)||(month==12-1)){
+                monthday =31;
+            } else if(month==2-1){
+                if(yearclicked%4 ==0)
+                    monthday = 29;
+                else monthday = 28;
+            } else {
+                monthday = 30;
+            }
+
+            for( i=0; i<monthday ; i++){
+
+                j=0;
+                currentCalender.setTime(firstDayOfMonth);
+
+                    currentCalender.set(Calendar.MONTH, month);
+
+                currentCalender.add(Calendar.DATE, i);
+                setToMidnight(currentCalender);
+                long timeInMillis = currentCalender.getTimeInMillis();
+                int monthclicked =currentCalender.get(Calendar.MONTH);
+                System.out.println(".....month:" + monthclicked);
+                int day = currentCalender.get(Calendar.DATE);
+                System.out.println(".....day:" + day);
+
+                int []getday = new int [3];
+                while(j<foods.size()){
+                    time = foods.get(j).getLocaleDatetime();
+                    System.out.println("...............date time: "+time);
+                    String[] token =time.split("-");
+                    String[] a = token[2].split(" ");
+                    getday[0] = Integer.valueOf(token[0]);
+                    System.out.println(".....ok 0 ");
+                    getday[1] = Integer.valueOf(token[1]);
+                    System.out.println(".....ok 1 ");
+                    getday[2] = Integer.valueOf(a[0]);
+                    System.out.println(".....ok 2 ");
+
+                    System.out.println("...............date time: "+token[0]+"...."+token[1]+"..."+a[0]);
+                    System.out.println(yearclicked+"" +monthclicked +""+ day );
+                    if(yearclicked==Integer.valueOf(token[0])&&monthclicked+1==Integer.valueOf(token[1])&&day==Integer.valueOf(a[0])){
+                        System.out.println("GGGGGGGGGGGGGGGGGGGGG" );
+                        name = foods.get(j).getTitle();
+                        System.out.println(name );
+                        calorie = foods.get(j).getCalorie();
+                        System.out.println(calorie );
+                        List<Event> events = getEvents( timeInMillis , name , calorie );
+                        compactCalendarView.addEvents(events);
+                    }
+                    j++;
+                }
+
+            }
+
     }
-
+    /*
     private List<Event> getEvents(long timeInMillis, int day) {
         if (day < 2) {
             return Arrays.asList(new Event(Color.argb(255, 169, 68, 65), timeInMillis, "Event at " + new Date(timeInMillis)));
@@ -188,7 +264,27 @@ public class CalendarActivity  extends AppCompatActivity {
                     new Event(Color.argb(255, 70, 68, 65), timeInMillis, "Event 3 at " + new Date(timeInMillis)));
         }
     }
+    */
 
+    private List<Event> getEvents(long timeInMillis, String name , float calorie) {
+
+            return Arrays.asList(
+                    new Event(Color.argb(255, 169, 68, 65), timeInMillis, name+" "+calorie  )
+            );
+    }
+
+    /*
+    private List<Event> everydayEvents(int yearclicked ,int monthclicked, int day) {
+        int i =0;
+        String time;
+        while(foods.get(i) != null){
+            time = foods.get(i).getLocaleDatetime();
+            System.out.println("...............date time: "+time);
+            i++;
+        }
+        return Arrays.asList(  );
+    }
+    */
     private void setToMidnight(Calendar calendar) {
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
