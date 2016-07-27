@@ -79,7 +79,8 @@ public class CompactCalendarView extends View {
         super(context, attrs, defStyleAttr);
         compactCalendarController = new com.example.nthucs.prototype.Calendar.CompactCalendarController(new Paint(), new OverScroller(getContext()),
                 new Rect(), attrs, getContext(),  Color.argb(255, 233, 84, 81),
-                Color.argb(255, 64, 64, 64), Color.argb(255, 219, 219, 219), VelocityTracker.obtain(),
+                Color.argb(255, 64, 64, 64), Color.argb(255, 219, 219, 219), Color.argb(255, 219, 219, 219),
+                Color.argb(255, 219, 219, 219),VelocityTracker.obtain(),
                 Color.argb(255, 100, 68, 65));
         gestureDetector = new GestureDetectorCompat(getContext(), gestureListener);
         animationHandler = new com.example.nthucs.prototype.Calendar.AnimationHandler(compactCalendarController, this);
@@ -129,6 +130,14 @@ public class CompactCalendarView extends View {
     public void setCurrentDayBackgroundColor(int currentDayBackgroundColor) {
         compactCalendarController.setCurrentDayBackgroundColor(currentDayBackgroundColor);
         invalidate();
+    }
+
+    public void setGreenBackgroundColor(int greenBackgroundColor){
+        compactCalendarController.setGreenBackgroundColor(greenBackgroundColor);
+    }
+
+    public void setBlueBackgroundColor(int blueBackgroundColor){
+        compactCalendarController.setBlueBackgroundColor(blueBackgroundColor);
     }
 
     public int getHeightPerDay(){

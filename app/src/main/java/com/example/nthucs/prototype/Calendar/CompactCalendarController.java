@@ -101,6 +101,9 @@ public class CompactCalendarController {
     private int calenderTextColor;
     private int currentSelectedDayBackgroundColor;
     private int calenderBackgroundColor = Color.WHITE;
+    private int greenBackgroundColor;
+    private int blueBackgroundColor;
+
 
     private enum Direction {
         NONE, HORIZONTAL, VERTICAL
@@ -108,12 +111,17 @@ public class CompactCalendarController {
 
     CompactCalendarController(Paint dayPaint, OverScroller scroller, Rect textSizeRect, AttributeSet attrs,
                               Context context, int currentDayBackgroundColor, int calenderTextColor,
+                              int greenBackgroundColor,int blueBackgroundColor,
                               int currentSelectedDayBackgroundColor, VelocityTracker velocityTracker,
                               int multiEventIndicatorColor) {
         this.dayPaint = dayPaint;
         this.scroller = scroller;
         this.textSizeRect = textSizeRect;
         this.currentDayBackgroundColor = currentDayBackgroundColor;
+
+        this.greenBackgroundColor = greenBackgroundColor;
+        this.blueBackgroundColor = blueBackgroundColor;
+
         this.calenderTextColor = calenderTextColor;
         this.currentSelectedDayBackgroundColor = currentSelectedDayBackgroundColor;
         this.velocityTracker = velocityTracker;
@@ -264,6 +272,14 @@ public class CompactCalendarController {
         setCalenderToFirstDayOfMonth(calendarWithFirstDayOfMonth, currentCalender.getTime(), 0, -1);
         setCurrentDate(calendarWithFirstDayOfMonth.getTime());
         performMonthScrollCallback();
+    }
+
+    void setGreenBackgroundColor(int greenBackgroundColor){
+        this.greenBackgroundColor = greenBackgroundColor;
+    }
+
+    void setBlueBackgroundColor(int blueBackgroundColor){
+        this.blueBackgroundColor = blueBackgroundColor;
     }
 
     void setLocale(Locale locale) {
@@ -816,11 +832,18 @@ public class CompactCalendarController {
 
         //offset by one because of 0 index based calculations
         firstDayOfMonth = firstDayOfMonth - 1;
+        boolean isSelectMonth31 = (monthToDrawCalender.get(Calendar.MONTH)+1==1)||(monthToDrawCalender.get(Calendar.MONTH)+1==3)
+                ||(monthToDrawCalender.get(Calendar.MONTH)+1==5)||(monthToDrawCalender.get(Calendar.MONTH)+1==7)
+                ||(monthToDrawCalender.get(Calendar.MONTH)+1==8)||(monthToDrawCalender.get(Calendar.MONTH)+1==10)
+                ||(monthToDrawCalender.get(Calendar.MONTH)+1==12);
+        boolean isPreviousYear = monthToDrawCalender.get(Calendar.YEAR) < todayCalender.get(Calendar.YEAR);
+        boolean isPreviousMonth = monthToDrawCalender.get(Calendar.MONTH) < todayCalender.get(Calendar.MONTH);
         boolean isSameMonthAsToday = monthToDrawCalender.get(Calendar.MONTH) == todayCalender.get(Calendar.MONTH);
         boolean isSameYearAsToday = monthToDrawCalender.get(Calendar.YEAR) == todayCalender.get(Calendar.YEAR);
         boolean isSameMonthAsCurrentCalendar = monthToDrawCalender.get(Calendar.MONTH) == currentCalender.get(Calendar.MONTH);
         int todayDayOfMonth = todayCalender.get(Calendar.DAY_OF_MONTH);
         boolean isAnimatingWithExpose = animationStatus == EXPOSE_CALENDAR_ANIMATION;
+        int getCalories = 0;
 
         for (int dayColumn = 0, dayRow = 0; dayColumn <= 6; dayRow++) {
             if (dayRow == 7) {
@@ -845,15 +868,96 @@ public class CompactCalendarController {
                     canvas.drawText(dayColumnNames[dayColumn], xPosition, paddingHeight, dayPaint);
                     dayPaint.setTypeface(Typeface.DEFAULT);
                 }
+
             } else {
                 int day = ((dayRow - 1) * 7 + dayColumn + 1) - firstDayOfMonth;
+                if (isPreviousYear) {
+                    if (isSelectMonth31) {
+                        if ((day <= 31) && (day >= 1) && !isAnimatingWithExpose) {
+                            if (getCalories == 0)
+                                drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                            else
+                                drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                        }
+                    } else {
+                        if (monthToDrawCalender.get(Calendar.MONTH) + 1 == 2) {
+                            if ((monthToDrawCalender.get(Calendar.YEAR) ) % 4 != 0) {
+                                if ((day <= 28) && (day >= 1) && !isAnimatingWithExpose) {
+                                    if (getCalories == 0)
+                                        drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                    else
+                                        drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                                }
+                            } else {
+                                if ((day <= 29) && (day >= 1) && !isAnimatingWithExpose) {
+                                    if (getCalories == 0)
+                                        drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                    else
+                                        drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                                }
+                            }
+                        }
+                        else if ((day <= 30) && (day >= 1) && !isAnimatingWithExpose) {
+                            if (getCalories == 0)
+                                drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                            else
+                                drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                        }
+                    }
+
+                } else {
+
+                    if (isPreviousMonth) {
+                        if (isSelectMonth31) {
+                            if ((day <= 31) && (day >= 1) && !isAnimatingWithExpose) {
+                                if (getCalories == 0)
+                                    drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                else
+                                    drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                            }
+                        } else if (monthToDrawCalender.get(Calendar.MONTH) + 1 == 2) {
+                            if ((monthToDrawCalender.get(Calendar.YEAR) ) % 4 != 0) {
+                                if ((day <= 28) && (day >= 1) && !isAnimatingWithExpose) {
+                                    if (getCalories == 0)
+                                        drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                    else
+                                        drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                                }
+                            } else {
+                                if ((day <= 29) && (day >= 1) && !isAnimatingWithExpose) {
+                                    if (getCalories == 0)
+                                        drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                    else
+                                        drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                                }
+
+                            }
+
+                        } else {
+                            if ((day <= 30) && (day >= 1) && !isAnimatingWithExpose) {
+                                if (getCalories == 0)
+                                    drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                else
+                                    drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                            }
+                        }
+                    } else {
+                        if (isSameYearAsToday && isSameMonthAsToday && todayDayOfMonth > day && !isAnimatingWithExpose) {
+                            if (day > 1) {
+                                if (getCalories == 0)
+                                    drawCircle(canvas, xPosition, yPosition, greenBackgroundColor);
+                                else
+                                    drawCircle(canvas, xPosition, yPosition, blueBackgroundColor);
+                            }
+                        }
+                    }
+                }
                 if (isSameYearAsToday && isSameMonthAsToday && todayDayOfMonth == day && !isAnimatingWithExpose) {
                     // TODO calculate position of circle in a more reliable way
                     drawCircle(canvas, xPosition, yPosition, currentDayBackgroundColor);
                 } else if (currentCalender.get(Calendar.DAY_OF_MONTH) == day && isSameMonthAsCurrentCalendar && !isAnimatingWithExpose) {
                     drawCircle(canvas, xPosition, yPosition, currentSelectedDayBackgroundColor);
-                } else if (day == 1 && !isSameMonthAsCurrentCalendar && !isAnimatingWithExpose
-                        ) {
+                } else if (day == 1 && !isSameMonthAsCurrentCalendar && !isAnimatingWithExpose) {
                     drawCircle(canvas, xPosition, yPosition, currentSelectedDayBackgroundColor);
                 }
                 if (day <= monthToDrawCalender.getActualMaximum(Calendar.DAY_OF_MONTH) && day > 0) {
