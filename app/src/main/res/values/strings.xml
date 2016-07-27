@@ -36,5 +36,6 @@
     <string name="my_weight_loss_goal_title">My Weight Loss Goal</string>
     <string name="my_target_weight">Choose target weight</string>
     <string name="my_weekly_target">Choose weekly target</string>
+    <string name="enter_weekly_target">0.5 ~ 1 kg</string>
 
 </resources>

@@ -18,6 +18,16 @@
                 android:layout_margin="10sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <EditText
+                android:id="@+id/target_weight_edit_text"
+                android:hint="@string/enter_weight"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </TableRow>
 
         <TableRow>
@@ -26,6 +36,16 @@
                 android:text="@string/my_weekly_target"
                 android:padding="12sp"
                 android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/weekly_target_edit_text"
+                android:hint="@string/enter_weekly_target"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
