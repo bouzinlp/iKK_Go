@@ -42,10 +42,9 @@ public class FoodActivity extends AppCompatActivity {
     // pass Uri's toString if take photo from library
     private String picUriString;
     private Uri picUri;
-    //facebook sharedialog
+
+    //facebook share dialog
     private ShareDialog shareDialog;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

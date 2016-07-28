@@ -21,6 +21,8 @@ import com.example.nthucs.prototype.FoodList.FoodAdapter;
 import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.SportList.Sport;
+import com.example.nthucs.prototype.SportList.SportAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
@@ -33,14 +35,23 @@ import au.com.bytecode.opencsv.CSVReader;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ListView food_list;
+    // data base for storing food list
+    private FoodDAO foodDAO;
+
+    // food and sport's list view
+    private ListView food_list, sport_list;
 
     private FoodAdapter foodAdapter;
+
+    private SportAdapter sportAdapter;
 
     // list of foods
     private List<Food> foods;
 
-    private MenuItem add_food, search_food, revert_food, delete_food;
+    // list of sports
+    private List<Sport> sports;
+
+    private MenuItem add_event, search_event, revert_event, delete_event;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -51,14 +62,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int EDIT_FOOD = 1;
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
+    private static final int ADD_SPORT = 4;
+    private static final int EDIT_SPORT = 5;
     private int selectedCount = 0;
 
     // activity string
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
-
-    // data base for storing food list
-    private FoodDAO foodDAO;
 
     // csv reader
     private CSVReader foodCalReader;
@@ -173,10 +183,10 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.menu_main, menu);
 
-        add_food = menu.findItem(R.id.add_food);
-        search_food = menu.findItem(R.id.search_food);
-        revert_food = menu.findItem(R.id.revert_food);
-        delete_food = menu.findItem(R.id.delete_food);
+        add_event = menu.findItem(R.id.add_event);
+        search_event = menu.findItem(R.id.search_event);
+        revert_event = menu.findItem(R.id.revert_event);
+        delete_event = menu.findItem(R.id.delete_event);
 
         processMenu(null);
 
@@ -276,24 +286,43 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount--;
         }
 
-        add_food.setVisible(selectedCount == 0);
-        search_food.setVisible(selectedCount==0);
-        revert_food.setVisible(selectedCount > 0);
-        delete_food.setVisible(selectedCount > 0);
+        add_event.setVisible(selectedCount == 0);
+        search_event.setVisible(selectedCount==0);
+        revert_event.setVisible(selectedCount > 0);
+        delete_event.setVisible(selectedCount > 0);
     }
 
     public void clickMenuItem(MenuItem item) {
         int foodId = item.getItemId();
 
         switch (foodId) {
-            case R.id.add_food:
-                Intent intent3 = new Intent("com.example.nthucs.prototype.ADD_FOOD");
-                startActivityForResult(intent3, ADD_FOOD);
+            case R.id.add_event:
+                // string in dialog
+                final CharSequence[] items = { "New Food", "New Sport", "Cancel" };
+
+                // use alert dialog to select add new food or sport event
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("Add Event");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int index) {
+                        if (items[index].equals("New Food")) {
+                            Intent intent_food = new Intent("com.example.nthucs.prototype.ADD_FOOD");
+                            startActivityForResult(intent_food, ADD_FOOD);
+                        } else if (items[index].equals("New Sport")) {
+                            Intent intent_sport = new Intent("com.example.nthucs.prototype.ADD_SPORT");
+                            startActivityForResult(intent_sport, ADD_SPORT);
+                        } else if (items[index].equals("Cancel")) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+                builder.show();
                 break;
-            case R.id.search_food:
+            case R.id.search_event:
 
                 break;
-            case R.id.revert_food:
+            case R.id.revert_event:
                 for (int i = 0 ; i < foodAdapter.getCount() ; i++) {
                     Food food = foodAdapter.getItem(i);
 
@@ -305,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                 selectedCount = 0;
                 processMenu(null);
                 break;
-            case R.id.delete_food:
+            case R.id.delete_event:
                 if (selectedCount == 0) break;
 
                 AlertDialog.Builder d = new AlertDialog.Builder(this);

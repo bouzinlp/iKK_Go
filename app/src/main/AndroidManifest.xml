@@ -94,6 +94,17 @@
             </intent-filter>>
         </activity>
 
+        <activity android:name=".Activity.SportActivity">
+            <intent-filter>
+                // add sport
+                <action android:name="com.example.nthucs.prototype.ADD_SPORT" />
+                // edit sport
+                <action android:name="com.example.nthucs.prototype.EDIT_SPORT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
     </application>
 
 </manifest>

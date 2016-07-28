@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:stretchColumns="1"
+    tools:context=".Activity.SportActivity">
 
-</LinearLayout>
+    <TableRow>
+
+        <TextView
+            android:text="@string/sport_title"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/title_text"
+            android:hint="@string/enter_sport_title"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow>
+
+        <TextView
+            android:text="@string/content"
+            android:layout_height="70sp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/rectangle_drawable"
+            android:gravity="center"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/content_text"
+            android:hint="@string/enter_content"
+            android:layout_gravity="top"
+            android:layout_height="70sp"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="@string/calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/calorie_text"
+            android:hint="@string/enter_calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow>
+        <TextView
+            android:text="@string/total_time"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/total_time_time"
+            android:hint="@string/enter_total_time"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow>
+            <Button
+                android:id="@+id/ok_item"
+                android:text="@android:string/ok"
+                android:onClick="onSubmit"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:id="@+id/cancel_item"
+                android:text="@android:string/cancel"
+                android:onClick="onSubmit"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+    </TableLayout>
+
+</TableLayout>

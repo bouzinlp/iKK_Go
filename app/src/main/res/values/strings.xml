@@ -5,8 +5,11 @@
     <string name="search_food">food name</string>
     <string name="delete_food">Are you sure to delete %1$d foods？</string>
     <string name="delete">delete</string>
-    <string name="title">food</string>
-    <string name="enter_title">input food</string>
+
+    <string name="food_title">food</string>
+    <string name="sport_title">sport</string>
+    <string name="enter_food_title">input food</string>
+    <string name="enter_sport_title">input sport</string>
     <string name="content">description</string>
     <string name="enter_content">input description</string>
     <string name="calorie">calorie</string>
@@ -15,6 +18,8 @@
     <string name="enter_portions">input portions</string>
     <string name="grams">grams</string>string>
     <string name="enter_grams">input grams</string>
+    <string name="total_time">time</string>string>
+    <string name="enter_total_time">input total time</string>
 
     <string name="write_external_storage_denied">沒有寫入外部儲存設備授權</string>
     <string name="read_external_storage_denied">沒有讀取外部儲存設備授權</string>

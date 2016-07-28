@@ -8,7 +8,7 @@
 
     <TableRow>
         <TextView
-            android:text="@string/title"
+            android:text="@string/food_title"
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
@@ -16,7 +16,7 @@
 
         <EditText
             android:id="@+id/title_text"
-            android:hint="@string/enter_title"
+            android:hint="@string/enter_food_title"
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
@@ -30,6 +30,7 @@
             android:layout_height="70sp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/rectangle_drawable"
+            android:gravity="center"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -128,7 +129,7 @@
                 android:padding="6sp"
                 android:layout_margin="3sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>>
+        </TableRow>
     </TableLayout>
 
 </TableLayout>
