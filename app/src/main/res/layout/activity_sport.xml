@@ -73,7 +73,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/total_time_time"
+            android:id="@+id/total_time_text"
             android:hint="@string/enter_total_time"
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"

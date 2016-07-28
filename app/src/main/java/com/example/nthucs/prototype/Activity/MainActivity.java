@@ -23,6 +23,7 @@ import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportAdapter;
+import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
 
     // data base for storing food list
     private FoodDAO foodDAO;
+
+    // data base for storing sport list
+    private SportDAO sportDAO;
 
     // food and sport's list view
     private ListView food_list, sport_list;
@@ -113,16 +117,26 @@ public class MainActivity extends AppCompatActivity {
         TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
 
+        // initialize food list and process controllers
         food_list = (ListView)findViewById(R.id.food_list);
-        processControllers();
+        processFoodListControllers();
+
+        // initialize sport list and process controllers
+        sport_list = (ListView)findViewById(R.id.sport_list);
+        processSportListControllers();
 
         // food list data base
         foodDAO = new FoodDAO(getApplicationContext());
-
         foods = foodDAO.getAll();
 
+        // initialize food adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
+
+        // initialize sport adapter
+        sports = new ArrayList<>();
+        sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+        sport_list.setAdapter(sportAdapter);
 
         // other activity's back to take photo from gallery or camera
         if (getIntent().getExtras() != null) {
@@ -234,7 +248,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void processControllers() {
+    // Food list controller: single click and double click
+    private void processFoodListControllers() {
         // 建立選單食物點擊監聽物件
         AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
             @Override
@@ -276,11 +291,72 @@ public class MainActivity extends AppCompatActivity {
         food_list.setOnItemLongClickListener(itemLongListener);
     }
 
+    // Sport list controller: single click and double click
+    private void processSportListControllers() {
+        // construct sport list item click listener
+        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Sport sport = sportAdapter.getItem(position);
+
+                if (selectedCount > 0) {
+                    processMenuFromSport(sport);
+                    sportAdapter.set(position, sport);
+                } else {
+                    Intent intent = new Intent(
+                            "com.example.nthucs.prototype.EDIT_SPORT");
+
+                    intent.putExtra("position", position);
+                    intent.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
+                    startActivityForResult(intent, EDIT_SPORT);
+                }
+            }
+        };
+
+        // register sport list item click listener
+        sport_list.setOnItemClickListener(itemListener);
+
+        // construct sport list item long click listener
+        AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                Sport sport = sportAdapter.getItem(position);
+
+                processMenuFromSport(sport);
+                sportAdapter.set(position, sport);
+                return true;
+            }
+        };
+
+        // register sport list item long click listener
+        sport_list.setOnItemLongClickListener(itemLongListener);
+    }
+
+    // Process main menu depends on selected food
     private void processMenu(Food food) {
         if (food != null) {
             food.setSelected(!food.isSelected());
 
             if (food.isSelected())
+                selectedCount++;
+            else
+                selectedCount--;
+        }
+
+        add_event.setVisible(selectedCount == 0);
+        search_event.setVisible(selectedCount==0);
+        revert_event.setVisible(selectedCount > 0);
+        delete_event.setVisible(selectedCount > 0);
+    }
+
+    // Process main menu depends on selected sport
+    private void processMenuFromSport(Sport sport) {
+        if (sport != null) {
+            sport.setSelected(!sport.isSelected());
+
+            if (sport.isSelected())
                 selectedCount++;
             else
                 selectedCount--;
