@@ -129,12 +129,15 @@ public class MainActivity extends AppCompatActivity {
         foodDAO = new FoodDAO(getApplicationContext());
         foods = foodDAO.getAll();
 
+        // sport list data base
+        sportDAO = new SportDAO(getApplicationContext());
+        sports = sportDAO.getAll();
+
         // initialize food adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
         food_list.setAdapter(foodAdapter);
 
         // initialize sport adapter
-        sports = new ArrayList<>();
         sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
         sport_list.setAdapter(sportAdapter);
 
@@ -153,6 +156,35 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
+
+            // Sport event first
+            if (requestCode == ADD_SPORT) {
+                // get sport data
+                Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
+
+                sport = sportDAO.insert(sport);
+
+                sports.add(sport);
+                sportAdapter.notifyDataSetChanged();
+
+                // Always select food list tab after return
+                selectTab(0);
+                return;
+            } else if (requestCode == EDIT_SPORT) {
+                // get sport data
+                Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
+
+                int position = data.getIntExtra("position", -1);
+
+                if (position != -1) {
+                    // update data base
+                    sportDAO.update(sport);
+
+                    sports.set(position, sport);
+                    sportAdapter.notifyDataSetChanged();
+                }
+                return;
+            }
 
             // Get food data
             Food food = (Food) data.getExtras().getSerializable("com.example.nthucs.prototype.FoodList.Food");
@@ -203,6 +235,7 @@ public class MainActivity extends AppCompatActivity {
         delete_event = menu.findItem(R.id.delete_event);
 
         processMenu(null);
+        processMenuFromSport(null);
 
         return true;
     }
@@ -407,8 +440,19 @@ public class MainActivity extends AppCompatActivity {
                         foodAdapter.set(i, food);
                     }
                 }
+
+                for (int i = 0 ; i < sportAdapter.getCount() ; i++) {
+                    Sport sport = sportAdapter.getItem(i);
+
+                    if (sport.isSelected()) {
+                        sport.setSelected(false);
+                        sportAdapter.set(i, sport);
+                    }
+                }
+
                 selectedCount = 0;
                 processMenu(null);
+                processMenuFromSport(null);
                 break;
             case R.id.delete_event:
                 if (selectedCount == 0) break;

@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
+import com.example.nthucs.prototype.SportList.SportDAO;
 
 public class MyDBHelper extends SQLiteOpenHelper {
 
@@ -46,6 +47,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // create profile table
         db.execSQL(MyProfileDAO.CREATE_TABLE);
+
+        // create sport table
+        db.execSQL(SportDAO.CREATE_TABLE);
     }
 
     @Override
@@ -58,6 +62,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // delete origin profile table
         db.execSQL("DROP TABLE IF EXISTS " + MyProfileDAO.TABLE_NAME);
+
+        // delete origin sport table
+        db.execSQL("DROP TABLE IF EXISTS " + SportDAO.TABLE_NAME);
 
         // 呼叫onCreate建立新版的表格
         onCreate(db);

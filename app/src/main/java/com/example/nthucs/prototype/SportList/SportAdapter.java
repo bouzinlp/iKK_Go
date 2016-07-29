@@ -54,7 +54,7 @@ public class SportAdapter extends ArrayAdapter<Sport> {
         // 設定單一顏色
         GradientDrawable background = (GradientDrawable)typeColor.getBackground();
         Color color = new Color();
-        background.setColor(color.parseColor("2E8B57"));
+        background.setColor(color.parseColor("#2E8B57"));
 
         // 設定是否已選擇
         selectedItem.setVisibility(sport.isSelected() ? View.VISIBLE : View.INVISIBLE);

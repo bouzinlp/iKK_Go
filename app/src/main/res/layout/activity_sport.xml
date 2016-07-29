@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1"
+    android:stretchColumns="1,2,3,4"
     tools:context=".Activity.SportActivity">
 
     <TableRow>
@@ -21,6 +21,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_span="4"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -44,6 +45,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_span="4"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -61,6 +63,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_span="4"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -73,9 +76,27 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/total_time_text"
-            android:hint="@string/enter_total_time"
+            android:id="@+id/hour_text"
             android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/hour"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/minute_text"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/min"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />

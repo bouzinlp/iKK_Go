@@ -19,7 +19,8 @@
     <string name="grams">grams</string>string>
     <string name="enter_grams">input grams</string>
     <string name="total_time">time</string>string>
-    <string name="enter_total_time">input total time</string>
+    <string name="hour">hr</string>string>
+    <string name="min">min</string>
 
     <string name="write_external_storage_denied">沒有寫入外部儲存設備授權</string>
     <string name="read_external_storage_denied">沒有讀取外部儲存設備授權</string>
