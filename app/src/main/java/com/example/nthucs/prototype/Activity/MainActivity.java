@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         // initialize food adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+        food_list.addFooterView(new View(this));
         food_list.setAdapter(foodAdapter);
 
         // initialize sport adapter
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
 
-            // Sport event first
+            // Sport add event first
             if (requestCode == ADD_SPORT) {
                 // get sport data
                 Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
@@ -170,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 // Always select food list tab after return
                 selectTab(0);
                 return;
+            // Sport edit event
             } else if (requestCode == EDIT_SPORT) {
                 // get sport data
                 Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
@@ -432,6 +434,7 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             case R.id.revert_event:
+                // revert food event
                 for (int i = 0 ; i < foodAdapter.getCount() ; i++) {
                     Food food = foodAdapter.getItem(i);
 
@@ -441,6 +444,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
 
+                // revert sport event
                 for (int i = 0 ; i < sportAdapter.getCount() ; i++) {
                     Sport sport = sportAdapter.getItem(i);
 
@@ -458,7 +462,7 @@ public class MainActivity extends AppCompatActivity {
                 if (selectedCount == 0) break;
 
                 AlertDialog.Builder d = new AlertDialog.Builder(this);
-                String message = getString(R.string.delete_food);
+                String message = getString(R.string.delete_event);
                 d.setTitle(R.string.delete).setMessage(String.format(message, selectedCount));
                 d.setPositiveButton(android.R.string.yes,
                         new DialogInterface.OnClickListener() {
@@ -466,6 +470,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 int index = foodAdapter.getCount() - 1;
 
+                                // remove selected food event
                                 while (index > -1) {
                                     Food food = foodAdapter.get(index);
 
@@ -476,6 +481,20 @@ public class MainActivity extends AppCompatActivity {
                                     index--;
                                 }
                                 foodAdapter.notifyDataSetChanged();
+
+                                int index_sport = sportAdapter.getCount() - 1;
+
+                                // remove selected sport event
+                                while (index_sport > -1) {
+                                    Sport sport = sportAdapter.get(index_sport);
+
+                                    if (sport.isSelected()) {
+                                        sportAdapter.remove(sport);
+                                        sportDAO.delete(sport.getId());
+                                    }
+                                    index_sport--;
+                                }
+                                sportAdapter.notifyDataSetChanged();
                             }
                         });
                 d.setNegativeButton(android.R.string.no, null);

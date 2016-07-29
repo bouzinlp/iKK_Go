@@ -4,6 +4,7 @@
     <string name="purpose">Image search or text input?</string>
     <string name="search_food">food name</string>
     <string name="delete_food">Are you sure to delete %1$d foods？</string>
+    <string name="delete_event">Are you sure to delete %1$d events？</string>
     <string name="delete">delete</string>
 
     <string name="food_title">food</string>

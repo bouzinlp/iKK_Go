@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.nthucs.prototype.R;
 
@@ -16,6 +17,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     // Back, Update button
     private Button backButton, updateButton;
+
+    // Edit text for target weight, weekly target
+    private EditText target_weight_text, weekly_target_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
