@@ -6,22 +6,46 @@
     android:stretchColumns="1"
     tools:context=".Activity.FoodActivity">
 
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:layout_span="3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lv_result"
+            android:layout_column="0" />
+    </TableRow>
+    
     <TableRow>
         <TextView
             android:text="@string/food_title"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#3293c4"
             android:padding="6sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
 
         <EditText
             android:id="@+id/title_text"
             android:hint="@string/enter_food_title"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#b1e0ff"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="說"
+            android:onClick="onClickVoice"
+            android:id="@+id/button"
+            android:layout_column="2" />
+
     </TableRow>
+
 
     <TableRow>
 
@@ -29,18 +53,20 @@
             android:text="@string/content"
             android:layout_height="70sp"
             android:layout_gravity="center_vertical"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#3293c4"
             android:gravity="center"
             android:padding="6sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
 
         <EditText
+            android:layout_span="2"
             android:id="@+id/content_text"
             android:hint="@string/enter_content"
             android:layout_gravity="top"
             android:layout_height="70sp"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#b1e0ff"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -49,15 +75,17 @@
     <TableRow>
         <TextView
             android:text="@string/calorie"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#3293c4"
             android:padding="6sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
 
         <EditText
+            android:layout_span="2"
             android:id="@+id/calorie_text"
             android:hint="@string/enter_calorie"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#b1e0ff"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -66,15 +94,17 @@
     <TableRow>
         <TextView
             android:text="@string/portions"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#3293c4"
             android:padding="6sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
 
         <EditText
+            android:layout_span="2"
             android:id="@+id/portions_text"
             android:hint="@string/enter_portions"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#b1e0ff"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -83,30 +113,39 @@
     <TableRow>
         <TextView
             android:text="@string/grams"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#3293c4"
             android:padding="6sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff" />
 
         <EditText
+            android:layout_span="2"
             android:id="@+id/grams_text"
             android:hint="@string/enter_grams"
-            android:background="@drawable/rectangle_drawable"
+            android:background="#b1e0ff"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
     <!-- 顯示圖片 -->
-    <ImageView
-        android:id="@+id/picture_food"
+    <TableRow
         android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:adjustViewBounds="false"
-        android:layout_margin="3sp"
-        android:background="@drawable/rectangle_drawable"
-        android:padding="6sp"
-        android:visibility="invisible" />
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_span="3"
+            android:id="@+id/picture_food"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:adjustViewBounds="false"
+            android:layout_margin="3sp"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:visibility="invisible" />
+
+    </TableRow>
 
     <TableLayout
         android:layout_width="match_parent"

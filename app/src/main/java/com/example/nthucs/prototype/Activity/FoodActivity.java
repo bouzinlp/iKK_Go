@@ -1,5 +1,4 @@
 package com.example.nthucs.prototype.Activity;
-
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
@@ -14,19 +13,24 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
-
 import java.io.File;
 import java.util.Date;
-
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import java.util.ArrayList;
 
 public class FoodActivity extends AppCompatActivity {
 
@@ -46,13 +50,22 @@ public class FoodActivity extends AppCompatActivity {
     //facebook share dialog
     private ShareDialog shareDialog;
 
+    //voice result
+    ListView lv;
+    static final int check = 111;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //voice result//
+        lv = (ListView) findViewById(R.id.lv_result);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         shareDialog = new ShareDialog(this);
+
+
 
         title_text = (EditText)findViewById(R.id.title_text);
         content_text = (EditText)findViewById(R.id.content_text);
@@ -120,6 +133,13 @@ public class FoodActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
         }
+        if (requestCode == check && resultCode == RESULT_OK) {
+            ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, results));
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     public void onSubmit(View view) {
@@ -167,6 +187,13 @@ public class FoodActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.food_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void onClickVoice(View view) {
+        Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak up, Please!");
+        startActivityForResult(i, check);
     }
 
     public void shareToFB(MenuItem menuItem){
