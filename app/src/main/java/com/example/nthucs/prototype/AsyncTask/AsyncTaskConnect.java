@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
-public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
+public class AsyncTaskConnect extends AsyncTask<String, Integer, String> {
 
     // Picture
     File picFile;
@@ -29,6 +29,8 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     // ProgressDialog
     private ProgressDialog uploadProgressDialog;
+    private final CharSequence dialogTitle = "Uploading";
+    private final CharSequence dialogMessage = "Wait to upload data ...";
 
     // Boolean value to identify the parent activity
     private boolean isFromCamera;
@@ -54,14 +56,29 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPreExecute() {
+
+        // from camera
+        if (isFromCamera == true) {
+            uploadProgressDialog = new ProgressDialog(cameraActivity);
+        // from gallery
+        } else {
+            uploadProgressDialog = new ProgressDialog(galleryActivity);
+        }
+
+        // set title, message & style
+        uploadProgressDialog.setTitle(dialogTitle);
+        uploadProgressDialog.setMessage(dialogMessage);
+        uploadProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+        // start from zero, end to max
+        uploadProgressDialog.setProgress(0);
+        uploadProgressDialog.setMax(100);
+
+        // show dialog when uploading
+        uploadProgressDialog.show();
+
         super.onPreExecute();
     }
-
-    /*@Override
-    protected void onProgressUpdate(Integer... progress) {
-
-        super.onProgressUpdate(progress);
-    }*/
 
     @Override
     protected String doInBackground(String... urls) {
@@ -89,6 +106,11 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
         finally {
 
         }
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... progress) {
+        super.onProgressUpdate(progress);
     }
 
     @Override
