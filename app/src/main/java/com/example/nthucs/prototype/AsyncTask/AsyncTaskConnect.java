@@ -1,8 +1,10 @@
 package com.example.nthucs.prototype.AsyncTask;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.example.nthucs.prototype.Activity.CameraActivity;
+import com.example.nthucs.prototype.Activity.GalleryActivity;
 import com.example.nthucs.prototype.Utility.HttpFileUpload;
 
 import java.io.File;
@@ -17,6 +19,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     // Parent class
     CameraActivity cameraActivity;
+    GalleryActivity galleryActivity;
 
     // URL upload
     private static final String SERVER_URL = "http://uploads.im/api?upload";
@@ -24,10 +27,42 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
     // Http response
     private String responseString;
 
+    // ProgressDialog
+    private ProgressDialog uploadProgressDialog;
+
+    // Boolean value to identify the parent activity
+    private boolean isFromCamera;
+
     public AsyncTaskConnect(File picFile, String picPath) {
         this.picFile = picFile;
         this.picPath = picPath;
     }
+
+    public AsyncTaskConnect(File picFile, String picPath, CameraActivity cameraActivity) {
+        this.picFile = picFile;
+        this.picPath = picPath;
+        this.cameraActivity = cameraActivity;
+        this.isFromCamera = true;
+    }
+
+    public AsyncTaskConnect(File picFile, String picPath, GalleryActivity galleryActivity) {
+        this.picFile = picFile;
+        this.picPath = picPath;
+        this.galleryActivity = galleryActivity;
+        this.isFromCamera = false;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
+
+    /*@Override
+    protected void onProgressUpdate(Integer... progress) {
+
+        super.onProgressUpdate(progress);
+    }*/
+
     @Override
     protected String doInBackground(String... urls) {
         try {
@@ -58,5 +93,6 @@ public class AsyncTaskConnect extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        super.onPostExecute(result);
     }
 }
