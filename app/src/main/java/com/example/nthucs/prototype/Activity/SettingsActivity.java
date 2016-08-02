@@ -31,7 +31,8 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String myWeightLossGoal = "My Weight Loss Goal";
     private static final String weightChart = "Weight Chart";
     private static final String calorieConsumption = "Calorie Consumption";
-    private String[] titleStr = new String[]{myProfile, myWeightLossGoal, weightChart, calorieConsumption};
+    private static final String myFavourites = "My Favourites";
+    private String[] titleStr = new String[]{myProfile, myWeightLossGoal, weightChart, calorieConsumption, myFavourites};
 
     // list view for including textView
     private ListView setting_list;
@@ -116,8 +117,22 @@ public class SettingsActivity extends AppCompatActivity {
                         finish();
                         break;
                     case weightChart:
+                        Intent intent_weight_chart = new Intent();
+                        intent_weight_chart.setClass(SettingsActivity.this, WeightChartActivity.class);
+                        startActivity(intent_weight_chart);
+                        finish();
                         break;
                     case calorieConsumption:
+                        Intent intent_calorie_consumption = new Intent();
+                        intent_calorie_consumption.setClass(SettingsActivity.this, CalorieConsumptionActivity.class);
+                        startActivity(intent_calorie_consumption);
+                        finish();
+                        break;
+                    case myFavourites:
+                        Intent intent_my_favourites = new Intent();
+                        intent_my_favourites.setClass(SettingsActivity.this, MyFavouritesActivity.class);
+                        startActivity(intent_my_favourites);
+                        finish();
                         break;
                 }
             }

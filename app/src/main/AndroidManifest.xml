@@ -94,6 +94,24 @@
             </intent-filter>>
         </activity>
 
+        <activity android:name=".Activity.WeightChartActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
+        <activity android:name=".Activity.CalorieConsumptionActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
+        <activity android:name=".Activity.MyFavouritesActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
         <activity android:name=".Activity.SportActivity">
             <intent-filter>
                 // add sport

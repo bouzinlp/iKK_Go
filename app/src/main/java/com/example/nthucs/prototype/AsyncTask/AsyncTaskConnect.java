@@ -110,11 +110,15 @@ public class AsyncTaskConnect extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
+
         super.onProgressUpdate(progress);
     }
 
     @Override
     protected void onPostExecute(String result) {
+        if (result.equals(responseString)) {
+            uploadProgressDialog.dismiss();
+        }
         super.onPostExecute(result);
     }
 }
