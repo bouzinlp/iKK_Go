@@ -18,10 +18,10 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
-import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodCal;
-import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.FileUtil;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -145,7 +145,7 @@ public class GalleryActivity extends AppCompatActivity {
 
             // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), GalleryActivity.this);
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
@@ -300,6 +300,4 @@ public class GalleryActivity extends AppCompatActivity {
         }
         return result;
     }
-
-    // find food title in food calorie data base
 }

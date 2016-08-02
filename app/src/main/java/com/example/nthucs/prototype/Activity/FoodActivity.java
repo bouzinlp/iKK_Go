@@ -12,21 +12,31 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
-
 import java.io.File;
 import java.util.Date;
-
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
+import java.util.ArrayList;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.view.Menu;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
+
 
 public class FoodActivity extends AppCompatActivity {
 
@@ -46,10 +56,34 @@ public class FoodActivity extends AppCompatActivity {
     //facebook share dialog
     private ShareDialog shareDialog;
 
+    //voice
+    protected static final int RESULT_SPEECH = 1;
+    private Button btnSpeak;
+    private TextView txtText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
+
+        //voice
+        txtText = (TextView) findViewById(R.id.txtText);
+        btnSpeak = (Button) findViewById(R.id.voice_btn);
+        btnSpeak.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent_voice = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                                            intent_voice.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                                            try {
+                                               startActivityForResult(intent_voice, RESULT_SPEECH);
+                                               txtText.setText("");
+                                            }
+                                            catch (ActivityNotFoundException a) {
+                                                Toast t = Toast.makeText(getApplicationContext(), "Opps! Your device doesn't support Speech to Text", Toast.LENGTH_SHORT);
+                                                t.show();
+                                            }
+                                        }
+        });
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         shareDialog = new ShareDialog(this);
@@ -120,6 +154,19 @@ public class FoodActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
         }
+
+        //voice
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RESULT_SPEECH: {
+               if (resultCode == RESULT_OK && null != data) {
+                    ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    txtText.setText(text.get(0));
+               }
+               break;
+            }
+        }
+
     }
 
     public void onSubmit(View view) {
@@ -168,6 +215,13 @@ public class FoodActivity extends AppCompatActivity {
         inflater.inflate(R.menu.food_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+    /*
+    @Override
+	    public boolean onCreateOptionsMenu(Menu menu) {
+	        getMenuInflater().inflate(R.menu.activity_main, menu);
+	        return true;
+	    }
+    */
 
     public void shareToFB(MenuItem menuItem){
         try {

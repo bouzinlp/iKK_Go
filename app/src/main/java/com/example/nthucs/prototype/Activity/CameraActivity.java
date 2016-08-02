@@ -19,19 +19,15 @@ import android.widget.Toast;
 
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
-import com.example.nthucs.prototype.FoodList.CalorieDAO;
-import com.example.nthucs.prototype.FoodList.Food;
-import com.example.nthucs.prototype.FoodList.FoodCal;
-import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.FileUtil;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class CameraActivity extends AppCompatActivity {
@@ -58,12 +54,6 @@ public class CameraActivity extends AppCompatActivity {
     // Food storage
     private Food food;
 
-    // food cal list, only from main activity
-    private List<FoodCal> foodCalList = new ArrayList<>();
-
-    // data base for storing calorie data
-    private CalorieDAO calorieDAO;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,15 +71,9 @@ public class CameraActivity extends AppCompatActivity {
         // new food
         food = new Food(resultText, fileName, true);
 
-        if (action.equals("com.example.nthucs.prototype.TAKE_PICT")) {
+        if (action.equals("com.example.nthucs.prototype.TAKE_PICT"))
             requestStoragePermission();
 
-            // calorie data base
-            calorieDAO = new CalorieDAO(getApplicationContext());
-
-            // get all data
-            foodCalList = calorieDAO.getAll();
-        }
     }
 
     @Override
@@ -161,7 +145,7 @@ public class CameraActivity extends AppCompatActivity {
 
             // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), CameraActivity.this);
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
@@ -275,6 +259,4 @@ public class CameraActivity extends AppCompatActivity {
         }
         return imageUrl;
     }
-
-    // find food title in food calorie data base
 }

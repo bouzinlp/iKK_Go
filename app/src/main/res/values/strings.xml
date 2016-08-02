@@ -45,10 +45,4 @@
     <string name="my_weekly_target">Choose weekly target</string>
     <string name="enter_weekly_target">0.5 ~ 1 kg</string>
 
-    <string name="weight_chart_title">Weight Chart</string>
-
-    <string name="calorie_consumption_title">Calorie Consumption</string>
-
-    <string name="my_favourites_title">My Favourites</string>
-
 </resources>

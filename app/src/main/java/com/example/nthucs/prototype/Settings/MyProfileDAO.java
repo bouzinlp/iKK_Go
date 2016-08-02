@@ -63,23 +63,6 @@ public class MyProfileDAO {
         return profile;
     }
 
-    public boolean update(Profile profile) {
-        ContentValues cv = new ContentValues();
-
-        cv.put(DATETIME_COLUMN, profile.getDatetime());
-        cv.put(LASTMODIFY_COLUMN, profile.getLastModify());
-        cv.put(BIRTHDAY_COLUMN, profile.getBirthDay());
-        cv.put(SEX_COLUMN, profile.getSex());
-        cv.put(HEIGHT_COLUMN, profile.getHeight());
-        cv.put(WEIGHT_COLUMN, profile.getWeight());
-        cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGaol());
-        cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
-
-        String where = KEY_ID + "=" + profile.getId();
-
-        return this.db.update(TABLE_NAME, cv, where, null) > 0;
-    }
-
     public List<Profile> getAll() {
         List<Profile> result = new ArrayList<>();
         Cursor cursor  = db.query(TABLE_NAME, null, null, null, null, null, null, null);
