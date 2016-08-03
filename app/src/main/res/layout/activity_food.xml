@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1"
+    android:stretchColumns="1,2,3"
     tools:context=".Activity.FoodActivity">
 
     <TableRow
@@ -34,7 +34,7 @@
     <TableRow>
         <TextView
             android:text="@string/food_title"
-            android:background="#3293c4"
+            android:background="@drawable/rectangle_drawable_deep_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
@@ -43,7 +43,7 @@
         <EditText
             android:id="@+id/title_text"
             android:hint="@string/enter_food_title"
-            android:background="#b1e0ff"
+            android:background="@drawable/rectangle_drawable_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -55,7 +55,7 @@
             android:text="@string/content"
             android:layout_height="70sp"
             android:layout_gravity="center_vertical"
-            android:background="#3293c4"
+            android:background="@drawable/rectangle_drawable_deep_blue"
             android:gravity="center"
             android:padding="6sp"
             android:layout_margin="3sp"
@@ -67,7 +67,7 @@
             android:hint="@string/enter_content"
             android:layout_gravity="top"
             android:layout_height="70sp"
-            android:background="#b1e0ff"
+            android:background="@drawable/rectangle_drawable_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -76,7 +76,7 @@
     <TableRow>
         <TextView
             android:text="@string/calorie"
-            android:background="#3293c4"
+            android:background="@drawable/rectangle_drawable_deep_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textColor="#ffffff"
@@ -85,7 +85,7 @@
         <EditText
             android:id="@+id/calorie_text"
             android:hint="@string/enter_calorie"
-            android:background="#b1e0ff"
+            android:background="@drawable/rectangle_drawable_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -94,7 +94,7 @@
     <TableRow>
         <TextView
             android:text="@string/portions"
-            android:background="#3293c4"
+            android:background="@drawable/rectangle_drawable_deep_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textColor="#ffffff"
@@ -103,7 +103,7 @@
         <EditText
             android:id="@+id/portions_text"
             android:hint="@string/enter_portions"
-            android:background="#b1e0ff"
+            android:background="@drawable/rectangle_drawable_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -112,7 +112,7 @@
     <TableRow>
         <TextView
             android:text="@string/grams"
-            android:background="#3293c4"
+            android:background="@drawable/rectangle_drawable_deep_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textColor="#ffffff"
@@ -121,7 +121,7 @@
         <EditText
             android:id="@+id/grams_text"
             android:hint="@string/enter_grams"
-            android:background="#b1e0ff"
+            android:background="@drawable/rectangle_drawable_blue"
             android:padding="6sp"
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -131,10 +131,10 @@
     <ImageView
         android:id="@+id/picture_food"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="210dp"
         android:adjustViewBounds="false"
         android:layout_margin="3sp"
-        android:background="#b1e0ff"
+        android:background="@drawable/rectangle_drawable_blue"
         android:padding="6sp"
         android:visibility="invisible" />
 

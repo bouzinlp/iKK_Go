@@ -275,4 +275,6 @@ public class CameraActivity extends AppCompatActivity {
         }
         return imageUrl;
     }
+
+    // find food title in food calorie data base
 }

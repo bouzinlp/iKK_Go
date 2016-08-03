@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.commonsware.cwac.merge.MergeAdapter;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodAdapter;
@@ -26,6 +27,7 @@ import com.example.nthucs.prototype.SportList.SportAdapter;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.ListUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -43,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private SportDAO sportDAO;
 
     // food and sport's list view
-    private ListView food_list, sport_list;
+    private ListView food_list, sport_list, event_list;
+
+    // use merge adapter
+    private MergeAdapter mergeAdapter;
 
     private FoodAdapter foodAdapter;
 
@@ -141,6 +146,14 @@ public class MainActivity extends AppCompatActivity {
         // initialize sport adapter
         sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
         sport_list.setAdapter(sportAdapter);
+
+        // temporary experiment
+        mergeAdapter = new MergeAdapter();
+        mergeAdapter.addAdapter(foodAdapter);
+        mergeAdapter.addAdapter(sportAdapter);
+
+        event_list = (ListView)findViewById(R.id.event_list);
+        event_list.setAdapter(mergeAdapter);
 
         // other activity's back to take photo from gallery or camera
         if (getIntent().getExtras() != null) {
@@ -281,6 +294,11 @@ public class MainActivity extends AppCompatActivity {
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
         }
+    }
+
+    // Event list controller: single click and double click
+    private  void processEventListControllers() {
+
     }
 
     // Food list controller: single click and double click

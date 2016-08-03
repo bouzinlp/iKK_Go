@@ -300,4 +300,6 @@ public class GalleryActivity extends AppCompatActivity {
         }
         return result;
     }
+
+    // find food title in food calorie data base
 }
