@@ -44,11 +44,13 @@ public class MainActivity extends AppCompatActivity {
     // data base for storing sport list
     private SportDAO sportDAO;
 
-    // food and sport's list view
-    private ListView food_list, sport_list, event_list;
+
+    //private ListView food_list, sport_list;
+    // combine food and sport to event list view
+    private ListView event_list;
 
     // use merge adapter
-    private MergeAdapter mergeAdapter;
+    private MergeAdapter eventAdapter;
 
     private FoodAdapter foodAdapter;
 
@@ -122,14 +124,6 @@ public class MainActivity extends AppCompatActivity {
         TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
 
-        // initialize food list and process controllers
-        food_list = (ListView)findViewById(R.id.food_list);
-        processFoodListControllers();
-
-        // initialize sport list and process controllers
-        sport_list = (ListView)findViewById(R.id.sport_list);
-        processSportListControllers();
-
         // food list data base
         foodDAO = new FoodDAO(getApplicationContext());
         foods = foodDAO.getAll();
@@ -138,22 +132,31 @@ public class MainActivity extends AppCompatActivity {
         sportDAO = new SportDAO(getApplicationContext());
         sports = sportDAO.getAll();
 
-        // initialize food adapter
+        // initialize food & sport adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
-        food_list.addFooterView(new View(this));
-        food_list.setAdapter(foodAdapter);
-
-        // initialize sport adapter
         sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
-        sport_list.setAdapter(sportAdapter);
 
-        // temporary experiment
-        mergeAdapter = new MergeAdapter();
-        mergeAdapter.addAdapter(foodAdapter);
-        mergeAdapter.addAdapter(sportAdapter);
+        // merge to event adapter
+        eventAdapter = new MergeAdapter();
+        eventAdapter.addAdapter(foodAdapter);
+        eventAdapter.addAdapter(sportAdapter);
 
+        // initialize event list, process controllers, and set merge adapter
         event_list = (ListView)findViewById(R.id.event_list);
-        event_list.setAdapter(mergeAdapter);
+        processEventListControllers();
+        event_list.setAdapter(eventAdapter);
+
+        // initialize food list and process controllers
+        //food_list = (ListView)findViewById(R.id.food_list);
+        //processFoodListControllers();
+
+        // initialize sport list and process controllers
+        //sport_list = (ListView)findViewById(R.id.sport_list);
+        //processSportListControllers();
+
+        //food_list.addFooterView(new View(this));
+        //food_list.setAdapter(foodAdapter);
+        //sport_list.setAdapter(sportAdapter);
 
         // other activity's back to take photo from gallery or camera
         if (getIntent().getExtras() != null) {
@@ -298,7 +301,72 @@ public class MainActivity extends AppCompatActivity {
 
     // Event list controller: single click and double click
     private  void processEventListControllers() {
+        // construct event list item click listener
+        // 建立選單食物點擊監聽物件
+        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                //
+                if (position < foodAdapter.getCount()) {
+                    Food food = foodAdapter.getItem(position);
 
+                    if (selectedCount > 0) {
+                        processMenu(food);
+                        foodAdapter.set(position, food);
+                    } else {
+                        Intent intent = new Intent(
+                                "com.example.nthucs.prototype.EDIT_FOOD");
+
+                        intent.putExtra("position", position);
+                        intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
+                        startActivityForResult(intent, EDIT_FOOD);
+                    }
+                } else {
+                    int sport_position = position - foodAdapter.getCount();
+                    Sport sport = sportAdapter.getItem(sport_position);
+
+                    if (selectedCount > 0) {
+                        processMenuFromSport(sport);
+                        sportAdapter.set(sport_position, sport);
+                    } else {
+                        Intent intent = new Intent(
+                                "com.example.nthucs.prototype.EDIT_SPORT");
+
+                        intent.putExtra("position", sport_position);
+                        intent.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
+                        startActivityForResult(intent, EDIT_SPORT);
+                    }
+                }
+            }
+        };
+
+        // register event list item click listener
+        event_list.setOnItemClickListener(itemListener);
+
+        // construct event list item long click listener
+        AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           int position, long id) {
+                if (position < foodAdapter.getCount()) {
+                    Food food = foodAdapter.getItem(position);
+
+                    processMenu(food);
+                    foodAdapter.set(position, food);
+                } else {
+                    int sport_position = position - foodAdapter.getCount();
+                    Sport sport = sportAdapter.getItem(sport_position);
+
+                    processMenuFromSport(sport);
+                    sportAdapter.set(sport_position, sport);
+                }
+                return true;
+            }
+        };
+
+        // register event list item long click listener
+        event_list.setOnItemLongClickListener(itemLongListener);
     }
 
     // Food list controller: single click and double click
@@ -325,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // 註冊選單食物點擊監聽物件
-        food_list.setOnItemClickListener(itemListener);
+        //food_list.setOnItemClickListener(itemListener);
 
         // 建立選單食物長按監聽物件
         AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
@@ -341,7 +409,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // 註冊選單食物長按監聽物件
-        food_list.setOnItemLongClickListener(itemLongListener);
+        //food_list.setOnItemLongClickListener(itemLongListener);
     }
 
     // Sport list controller: single click and double click
@@ -368,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // register sport list item click listener
-        sport_list.setOnItemClickListener(itemListener);
+        //sport_list.setOnItemClickListener(itemListener);
 
         // construct sport list item long click listener
         AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
@@ -384,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // register sport list item long click listener
-        sport_list.setOnItemLongClickListener(itemLongListener);
+        //sport_list.setOnItemLongClickListener(itemLongListener);
     }
 
     // Process main menu depends on selected food
