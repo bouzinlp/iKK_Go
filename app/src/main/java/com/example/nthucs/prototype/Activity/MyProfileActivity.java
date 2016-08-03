@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by user on 2016/7/23.
@@ -58,6 +57,9 @@ public class MyProfileActivity extends AppCompatActivity {
     // currently and temporary profile
     private Profile curProfile, tempProfile;
 
+    //BMI
+    private EditText BMI_text;
+    private float BMI;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -236,13 +238,24 @@ public class MyProfileActivity extends AppCompatActivity {
     private void processEditTextControllers() {
         height_text = (EditText)findViewById(R.id.height_edit_text);
         weight_text = (EditText)findViewById(R.id.weight_edit_text);
-
+        BMI_text =   (EditText)findViewById(R.id.BMI);
         // set text to edit text if current profile not empty
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             // set to edit text
             height_text.setText(Float.toString(curProfile.getHeight()));
             weight_text.setText(Float.toString(curProfile.getWeight()));
         }
+
+        BMI = calculate_BMI(height_text.getText().toString(), weight_text.getText().toString());
+    }
+
+    public float calculate_BMI(String s_height, String s_weight){
+        float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
+        float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
+        float bmi;
+        height = height / 100 ;                                 // 將公分的身高轉為公尺單位
+        bmi = weight / (height*height);
+        return bmi;
     }
 
     // process update button
@@ -279,6 +292,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
             // output test for birthday time in millis
             //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));
+
+            //calculate BMI
+            BMI_text.setText(Float.toString(BMI));
         }
     }
 }
