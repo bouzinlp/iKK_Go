@@ -146,11 +146,9 @@ public class MainActivity extends AppCompatActivity {
         processEventListControllers();
         event_list.setAdapter(eventAdapter);
 
-        // initialize food list and process controllers
         //food_list = (ListView)findViewById(R.id.food_list);
         //processFoodListControllers();
 
-        // initialize sport list and process controllers
         //sport_list = (ListView)findViewById(R.id.sport_list);
         //processSportListControllers();
 
@@ -307,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                //
+                // click position in food adapter
                 if (position < foodAdapter.getCount()) {
                     Food food = foodAdapter.getItem(position);
 
@@ -322,7 +320,9 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
                         startActivityForResult(intent, EDIT_FOOD);
                     }
+                // click position in sport adapter
                 } else {
+                    // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
                     Sport sport = sportAdapter.getItem(sport_position);
 
@@ -349,12 +349,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view,
                                            int position, long id) {
+                // long click position in food adapter
                 if (position < foodAdapter.getCount()) {
                     Food food = foodAdapter.getItem(position);
 
                     processMenu(food);
                     foodAdapter.set(position, food);
+                // long click position in sport adapter
                 } else {
+                    // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
                     Sport sport = sportAdapter.getItem(sport_position);
 

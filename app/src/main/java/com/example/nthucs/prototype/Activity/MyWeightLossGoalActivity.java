@@ -56,6 +56,8 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         // get the last profile data in the list
         if (myProfileDAO.isTableEmpty() == true) {
             curProfile = new Profile();
+            tempTargetWeight = 0.0f;
+            tempWeeklyTarget = 0.0f;
         } else {
             curProfile = profileList.get(profileList.size()-1);
 
