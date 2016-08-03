@@ -145,7 +145,7 @@ public class GalleryActivity extends AppCompatActivity {
 
             // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri));
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), GalleryActivity.this);
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
