@@ -85,6 +85,24 @@
 
         </TableRow>
 
+        <TableRow>
+            <TextView
+                android:text="@string/your_BMI"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/BMI"
+                android:hint="@string/wait_for_calculate"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
     </TableLayout>
 
     <Button
