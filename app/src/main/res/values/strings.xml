@@ -38,6 +38,8 @@
     <string name="weight">Enter your weight</string>
     <string name="enter_height">cm</string>
     <string name="enter_weight">kg</string>
+    <string name="your_BMI">Your BMI : </string>
+    <string name="wait_for_calculate">Wait</string>
     <string name="update_btn">Update</string>
 
     <string name="my_weight_loss_goal_title">My Weight Loss Goal</string>
