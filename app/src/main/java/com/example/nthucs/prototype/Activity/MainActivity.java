@@ -44,10 +44,9 @@ public class MainActivity extends AppCompatActivity {
     // data base for storing sport list
     private SportDAO sportDAO;
 
-
-    //private ListView food_list, sport_list;
     // combine food and sport to event list view
     private ListView event_list;
+    //private ListView food_list, sport_list;
 
     // use merge adapter
     private MergeAdapter eventAdapter;
