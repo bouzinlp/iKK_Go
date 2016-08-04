@@ -251,12 +251,15 @@ public class MyProfileActivity extends AppCompatActivity {
             // set specific position to spinner
             if (curProfile.getSex().equals("Male")) {
                 genderSpinner.setSelection(0);
+                sex_num = 1;
             } else if (curProfile.getSex().equals("Female")) {
                 genderSpinner.setSelection(1);
+                sex_num = 0;
             }
 
             // set to temporary storage
             chosen_sex = curProfile.getSex();
+
         }
     }
 
@@ -281,6 +284,7 @@ public class MyProfileActivity extends AppCompatActivity {
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
             BMI_text.setText(Float.toString(BMI));
+
 
             BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
             BMR_text.setText(Float.toString(BMR));
