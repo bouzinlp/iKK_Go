@@ -110,7 +110,7 @@ public class AsyncTaskConnect extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onProgressUpdate(Integer... progress) {
-
+        uploadProgressDialog.incrementProgressBy(5);
         super.onProgressUpdate(progress);
     }
 
