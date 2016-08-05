@@ -50,7 +50,71 @@
 
         </TableRow>
 
+        <TableRow>
+            <TextView
+                android:text="@string/your_BMR"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/BMR_mwl"
+                android:hint="@string/wait_for_calculate"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="@string/absorb_heat"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/absorb"
+                android:hint="@string/wait_for_calculate"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:text="@string/consume_heat"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/consume"
+                android:hint="@string/wait_for_calculate"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
     </TableLayout>
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+    <TableRow>
+        <TextView
+            android:text="@string/suggest"
+            android:padding="12sp"
+            android:layout_marginTop="250sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+    </TableLayout>
+
 
     <Button
         android:layout_width="wrap_content"
