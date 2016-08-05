@@ -47,6 +47,9 @@
     <string name="my_target_weight">Choose target weight</string>
     <string name="my_weekly_target">Choose weekly target</string>
     <string name="enter_weekly_target">0.5 ~ 1 kg</string>
+    <string name="suggest">People should absorb more heat than BMR </string>
+    <string name="absorb_heat">Health absorb heat: </string>
+    <string name="consume_heat">Health consume heat: </string>
 
     <string name="weight_chart_title">Weight Chart</string>
 
