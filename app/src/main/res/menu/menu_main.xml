@@ -34,7 +34,8 @@
         android:icon="@drawable/ic_search_white_48dp"
         android:title="SEARCH"
         app:showAsAction="always"
-        android:onClick="clickMenuItem" />
+        android:onClick="clickMenuItem"
+        android:actionViewClass="android.widget.SearchView" />
 
     <item
         android:id="@+id/add_event"

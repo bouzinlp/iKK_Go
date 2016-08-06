@@ -307,11 +307,11 @@ public class GalleryActivity extends AppCompatActivity {
 
     // find food title in food calorie data base
     private void compareFoodCalDB(String resultText) {
-        String[] splitedText = resultText.split("\\\\s+");
+        String[] splitText = resultText.split("\\\\s+");
 
-        for (int i = 0 ; i < splitedText.length ; i++) {
+        for (int i = 0 ; i < splitText.length ; i++) {
             for (int j = 0 ; j < foodCalList.size() ; j++) {
-                if (splitedText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName())) {
+                if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName())) {
                     System.out.println(foodCalList.get(j).getCalorie());
                 }
             }
