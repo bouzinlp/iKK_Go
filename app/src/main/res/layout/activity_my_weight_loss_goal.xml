@@ -102,19 +102,33 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
     </TableLayout>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="1">
-    <TableRow>
+        <TableRow>
         <TextView
             android:text="@string/suggest"
             android:padding="12sp"
             android:layout_marginTop="250sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+        </TableRow>
     </TableLayout>
 
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+        <TableRow>
+            <TextView
+                android:id="@+id/consume_suggest"
+                android:hint="@string/wait_for_suggest"
+                android:padding="12sp"
+                android:layout_marginTop="320sp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+    </TableLayout>
 
     <Button
         android:layout_width="wrap_content"
