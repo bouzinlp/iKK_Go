@@ -50,6 +50,8 @@
     <string name="suggest">People should absorb more heat than BMR </string>
     <string name="absorb_heat">Health absorb heat: </string>
     <string name="consume_heat">Health consume heat: </string>
+    <string name="wait_for_suggest">wait for suggest </string>
+
 
     <string name="weight_chart_title">Weight Chart</string>
 
