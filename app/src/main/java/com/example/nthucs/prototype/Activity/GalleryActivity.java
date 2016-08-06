@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -175,6 +176,9 @@ public class GalleryActivity extends AppCompatActivity {
             // Get the result text from the response string
             resultText = resultString;
 
+            // Compare Food Cal DAO to get calorie
+            compareFoodCalDB(resultText);
+
             // Set food's information(title and picture name)
             food.setTitle(resultText);
             food.setContent("blank content");
@@ -302,4 +306,15 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     // find food title in food calorie data base
+    private void compareFoodCalDB(String resultText) {
+        String[] splitedText = resultText.split("\\\\s+");
+
+        for (int i = 0 ; i < splitedText.length ; i++) {
+            for (int j = 0 ; j < foodCalList.size() ; j++) {
+                if (splitedText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName())) {
+                    System.out.println(foodCalList.get(j).getCalorie());
+                }
+            }
+        }
+    }
 }
