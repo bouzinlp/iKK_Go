@@ -52,6 +52,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     private TextView absorb_text , consume_text ;
     private int absorb_i;
     private float absorb ,consume;
+
+    //consume suggest
+    private TextView consume_suggest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +163,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     // process BMI text view
     private void processTextViewControllers() {
+        consume_suggest = (TextView)findViewById(R.id.consume_suggest);
         absorb_text = (TextView)findViewById(R.id.absorb);
         consume_text = (TextView)findViewById(R.id.consume);
         BMR_mwl = (TextView)findViewById(R.id.BMR_mwl);
@@ -201,6 +205,21 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             absorb = (absorb_i/100)*100;
         }
         consume = absorb+tempWeeklyTarget*1100;
+
+        if(tempWeeklyTarget==0.5){
+            consume_suggest.setText("建議每日快走2小時");
+        }else if(tempWeeklyTarget==0.6){
+            consume_suggest.setText("建議每日慢跑1.5小時");
+        }else if(tempWeeklyTarget==0.7){
+            consume_suggest.setText("建議每日慢跑2小時");
+        }else if(tempWeeklyTarget==0.8){
+            consume_suggest.setText("建議每日游泳1.5小時");
+        }else if(tempWeeklyTarget==0.9){
+            consume_suggest.setText("建議每日游泳2小時");
+        }else if(tempWeeklyTarget==1.0){
+            consume_suggest.setText("建議每日快跑2小時");
+        }
+
         absorb_text.setText(Float.toString(absorb));
         consume_text.setText(Float.toString(consume));
 
@@ -240,6 +259,11 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
             // update to my profile data base
             myProfileDAO.update(curProfile);
+
+            consume = absorb+(Float.parseFloat(weekly_target_text.getText().toString()))*1100;
+            absorb_text.setText(Float.toString(absorb));
+            consume_text.setText(Float.toString(consume));
+
         }
     }
 }
