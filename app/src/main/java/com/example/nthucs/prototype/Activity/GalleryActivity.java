@@ -307,14 +307,53 @@ public class GalleryActivity extends AppCompatActivity {
 
     // find food title in food calorie data base
     private void compareFoodCalDB(String resultText) {
-        String[] splitText = resultText.split("\\\\s+");
+
+        // if origin result text is null
+        if (resultText == null || resultText.equals(" ")) {
+            return;
+        }
+
+        // split result with space
+        String[] splitText = resultText.split("\\s+");
+
+        // whether the string is english
+        boolean isEnglishString = true;
+
+        // string for build chinese character
+        String chineseResultText = new String();
 
         for (int i = 0 ; i < splitText.length ; i++) {
-            for (int j = 0 ; j < foodCalList.size() ; j++) {
-                if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName())) {
-                    System.out.println(foodCalList.get(j).getCalorie());
+
+            // traversal split string
+            for (int j = 0 ; j < splitText[i].length() ; j++) {
+                if ((splitText[i].charAt(j) >= 65 && splitText[i].charAt(j) <= 90)
+                        || (splitText[i].charAt(j) >= 97 && splitText[i].charAt(j) <= 122)) {
+                    isEnglishString = true;
+                } else {
+                    isEnglishString = false;
+                    break;
+                }
+            }
+
+            if (isEnglishString == true) {
+                for (int j = 0 ; j < foodCalList.size() ; j++) {
+                    if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName().toLowerCase())) {
+                        System.out.println(foodCalList.get(j).getEnglishName());
+                    }
+                }
+            } else {
+                chineseResultText += splitText[i];
+            }
+        }
+
+        if (isEnglishString == false) {
+            for (int i = 0 ; i < foodCalList.size() ; i++) {
+                if (foodCalList.get(i).getChineseName().contains(chineseResultText)) {
+                    System.out.println(foodCalList.get(i).getChineseName());
                 }
             }
         }
+
+        System.out.println("chi: "+isEnglishString+" str: "+chineseResultText);
     }
 }
