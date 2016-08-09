@@ -338,6 +338,7 @@ public class GalleryActivity extends AppCompatActivity {
                 }
             }
 
+            // compare every split english string
             if (isEnglishString == true) {
                 for (int j = 0 ; j < foodCalList.size() ; j++) {
                     if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName().toLowerCase())
@@ -349,11 +350,13 @@ public class GalleryActivity extends AppCompatActivity {
                         //System.out.println(foodCalList.get(j).getEnglishName());
                     }
                 }
+            // merge chinese sub-string
             } else {
                 chineseResultText += splitText[i];
             }
         }
 
+        // compare merged chinese string with food cal
         if (isEnglishString == false) {
             for (int i = 0 ; i < foodCalList.size() ; i++) {
                 if (foodCalList.get(i).getChineseName().contains(chineseResultText)) {
