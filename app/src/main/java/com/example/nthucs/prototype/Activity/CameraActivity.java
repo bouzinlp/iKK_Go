@@ -192,15 +192,15 @@ public class CameraActivity extends AppCompatActivity {
             resultText = resultString;
 
             // Compare Food Cal DAO to get calorie
-            compareFoodCalDB(resultText);
+            String[] compare_result = compareFoodCalDB(resultText);
 
             // Set food's information(title and picture name)
-            food.setTitle(resultText);
+            food.setTitle(compare_result[0]);
             food.setContent("blank content");
             food.setFileName(fileName);
-            food.setCalorie(0);
-            food.setGrams(0);
-            food.setPortions(1);
+            food.setCalorie(Float.parseFloat(compare_result[1]));
+            food.setGrams(100.0f);
+            food.setPortions(1.0f);
             food.setTakeFromCamera(true);
             food.setDatetime(new Date().getTime());
 
@@ -280,11 +280,14 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     // find food title in food calorie data base
-    private void compareFoodCalDB(String resultText) {
+    private String[] compareFoodCalDB(String resultText) {
+
+        // return with string array
+        String[] compare_result = {"", Float.toString(0.0f)};
 
         // if origin result text is null
-        if (resultText == null || resultText.equals(" ")) {
-            return;
+        if (resultText == null || resultText.isEmpty() == true) {
+            return compare_result;
         }
 
         // split result with space
@@ -311,7 +314,12 @@ public class CameraActivity extends AppCompatActivity {
 
             if (isEnglishString == true) {
                 for (int j = 0 ; j < foodCalList.size() ; j++) {
-                    if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName().toLowerCase())) {
+                    if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName().toLowerCase())
+                            && foodCalList.get(j).getEnglishName().isEmpty() == false) {
+                        // temporary test
+                        compare_result[0] = foodCalList.get(j).getEnglishName();
+                        compare_result[1] = Float.toString(foodCalList.get(j).getCalorie());
+
                         //System.out.println(foodCalList.get(j).getEnglishName());
                     }
                 }
@@ -323,9 +331,22 @@ public class CameraActivity extends AppCompatActivity {
         if (isEnglishString == false) {
             for (int i = 0 ; i < foodCalList.size() ; i++) {
                 if (foodCalList.get(i).getChineseName().contains(chineseResultText)) {
+                    // temporary test
+                    compare_result[0] = foodCalList.get(i).getChineseName();
+                    compare_result[1] = Float.toString(foodCalList.get(i).getCalorie());
+
                     //System.out.println(foodCalList.get(i).getChineseName());
                 }
             }
         }
+
+        // if still not result, return original text
+        if (compare_result[0].isEmpty() == true) {
+            compare_result[0] = resultText;
+            compare_result[1] = Float.toString(0.0f);
+            System.out.println("test");
+        }
+
+        return compare_result;
     }
 }
