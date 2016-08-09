@@ -206,17 +206,17 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         }
         consume = absorb+tempWeeklyTarget*1100;
 
-        if(tempWeeklyTarget==0.5){
+        if((int)(tempWeeklyTarget*10)==5){
             consume_suggest.setText("建議每日快走2小時");
-        }else if(tempWeeklyTarget==0.6){
+        }else if((int)(tempWeeklyTarget*10)==6){
             consume_suggest.setText("建議每日慢跑1.5小時");
-        }else if(tempWeeklyTarget==0.7){
+        }else if((int)(tempWeeklyTarget*10)==7){
             consume_suggest.setText("建議每日慢跑2小時");
-        }else if(tempWeeklyTarget==0.8){
+        }else if((int)(tempWeeklyTarget*10)==8){
             consume_suggest.setText("建議每日游泳1.5小時");
-        }else if(tempWeeklyTarget==0.9){
+        }else if((int)(tempWeeklyTarget*10)==9){
             consume_suggest.setText("建議每日游泳2小時");
-        }else if(tempWeeklyTarget==1.0){
+        }else if((int)(tempWeeklyTarget*10)==10){
             consume_suggest.setText("建議每日快跑2小時");
         }
 

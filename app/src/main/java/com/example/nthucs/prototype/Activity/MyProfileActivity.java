@@ -279,15 +279,15 @@ public class MyProfileActivity extends AppCompatActivity {
     // process BMI text view
     private void processTextViewControllers() {
         BMI_text =   (TextView)findViewById(R.id.BMI);
-        BMR_text =   (TextView)findViewById(R.id.BMR);
+        //BMR_text =   (TextView)findViewById(R.id.BMR);
         // display BMI if current profile not empty
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
             BMI_text.setText(Float.toString(BMI));
 
 
-            BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-            BMR_text.setText(Float.toString(BMR));
+           // BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
+           // BMR_text.setText(Float.toString(BMR));
         }
     }
 
@@ -353,8 +353,8 @@ public class MyProfileActivity extends AppCompatActivity {
             BMI_text.setText(Float.toString(BMI));
 
             //calculate BMR
-            BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-            BMR_text.setText(Float.toString(BMR));
+            //BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
+            //BMR_text.setText(Float.toString(BMR));
         }
     }
 }
