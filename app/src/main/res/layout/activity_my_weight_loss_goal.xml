@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:stretchColumns="*"
     tools:context=".Activity.MyWeightLossGoalActivity">
 
     <TableLayout
@@ -67,11 +68,14 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
+
         <TableRow>
             <TextView
                 android:text="@string/absorb_heat"
                 android:padding="12sp"
-                android:layout_margin="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginRight="10sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -84,11 +88,25 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/suggest"
+                android:padding="10sp"
+                android:layout_marginTop="1sp"
+                android:layout_marginLeft="12sp"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
         <TableRow>
             <TextView
                 android:text="@string/consume_heat"
                 android:padding="12sp"
-                android:layout_margin="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginRight="10sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -101,9 +119,22 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
+
+        <TableRow>
+            <TextView
+                android:id="@+id/consume_suggest"
+                android:hint="@string/wait_for_suggest"
+                android:padding="10sp"
+                android:layout_marginTop="1sp"
+                android:layout_marginLeft="12sp"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
     </TableLayout>
 
-    <TableLayout
+    <!--<TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="1">
@@ -115,7 +146,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
     </TableLayout>
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -128,7 +158,7 @@
                 android:layout_marginTop="320sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
-    </TableLayout>
+    </TableLayout>-->
 
     <Button
         android:layout_width="wrap_content"

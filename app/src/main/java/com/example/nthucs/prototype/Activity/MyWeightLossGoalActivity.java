@@ -48,6 +48,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     private TextView BMR_text , BMR_mwl , height_text , weight_text;
     private  int sex_num , age_num;
     private float BMR;
+
     //consume & absorb
     private TextView absorb_text , consume_text ;
     private int absorb_i;
@@ -55,6 +56,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     //consume suggest
     private TextView consume_suggest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,6 +184,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         int now_year = now_calendar.get(Calendar.YEAR);                 //取出年
         int now_month = now_calendar.get(Calendar.MONTH) + 1;          //取出月，月份的編號是由0~11 故+1
         int now_day = now_calendar.get(Calendar.DAY_OF_MONTH);       //取出日
+
         if(birth_month>now_month){
             age_num = now_year-birth_year-1;
         }else if((birth_month==now_month)&&(birth_day>now_day)){
@@ -189,6 +192,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         }else{
             age_num = now_year-birth_year;
         }
+
         //sex
         if (curProfile.getSex().equals("Male")) {
             sex_num = 1;
@@ -199,6 +203,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         BMR = calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
         BMR_mwl.setText(Float.toString(BMR));
         absorb_i = (int)(BMR);
+
         if(BMR%100!=0){
             absorb = (absorb_i/100)*100+100;
         }else{
@@ -222,13 +227,13 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
         absorb_text.setText(Float.toString(absorb));
         consume_text.setText(Float.toString(consume));
-
     }
 
     private float calculate_BMR(String s_height, String s_weight, int sex, int age){
         float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
         float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
         float bmr;
+
         // 0 female  , 1 male
         if(sex == 0){
             bmr = (float)((9.6 * weight)+(1.8*height)-(4.7*age)+655);
@@ -263,7 +268,6 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             consume = absorb+(Float.parseFloat(weekly_target_text.getText().toString()))*1100;
             absorb_text.setText(Float.toString(absorb));
             consume_text.setText(Float.toString(consume));
-
         }
     }
 }

@@ -62,7 +62,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView BMI_text;
     private float BMI;
 
-    //BMR text view and value
+    // BMR text view and value
     private TextView BMR_text;
     private  int sex_num , age_num;
     private float BMR;
@@ -285,7 +285,6 @@ public class MyProfileActivity extends AppCompatActivity {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
             BMI_text.setText(Float.toString(BMI));
 
-
            // BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
            // BMR_text.setText(Float.toString(BMR));
         }
@@ -304,6 +303,7 @@ public class MyProfileActivity extends AppCompatActivity {
         float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
         float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
         float bmr;
+
         // 0 female  , 1 male
         if(sex == 0){
             bmr = (float)((9.6 * weight)+(1.8*height)-(4.7*age)+655);
