@@ -189,16 +189,16 @@ public class MyProfileActivity extends AppCompatActivity {
             birth_day = calendar.get(Calendar.DAY_OF_MONTH);
 
             //calculate age
-
             Calendar now_calendar = Calendar.getInstance();
             int now_year = now_calendar.get(Calendar.YEAR);                 //取出年
             int now_month = now_calendar.get(Calendar.MONTH) + 1;          //取出月，月份的編號是由0~11 故+1
             int now_day = now_calendar.get(Calendar.DAY_OF_MONTH);       //取出日
-            if(birth_month>now_month){
+
+            if (birth_month>now_month) {
                 age_num = now_year-birth_year-1;
-            }else if((birth_month==now_month)&&(birth_day>now_day)){
+            } else if ((birth_month==now_month)&&(birth_day>now_day)) {
                 age_num = now_year-birth_year-1;
-            }else{
+            } else {
                 age_num = now_year-birth_year;
             }
 
@@ -259,7 +259,6 @@ public class MyProfileActivity extends AppCompatActivity {
 
             // set to temporary storage
             chosen_sex = curProfile.getSex();
-
         }
     }
 
@@ -280,6 +279,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private void processTextViewControllers() {
         BMI_text =   (TextView)findViewById(R.id.BMI);
         //BMR_text =   (TextView)findViewById(R.id.BMR);
+
         // display BMI if current profile not empty
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
@@ -294,6 +294,7 @@ public class MyProfileActivity extends AppCompatActivity {
         float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
         float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
         float bmi;
+
         height = height / 100 ;                                 // 將公分的身高轉為公尺單位
         bmi = weight / (height*height);
         return bmi;
