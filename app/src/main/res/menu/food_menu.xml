@@ -4,7 +4,9 @@
 
     <item
         android:id="@+id/share_food"
+        android:icon="@drawable/ic_share_white_48dp"
         android:title="Share"
         app:showAsAction="ifRoom"
-        android:onClick="shareToFB"/>
+        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
+
 </menu>

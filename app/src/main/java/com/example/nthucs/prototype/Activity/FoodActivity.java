@@ -3,11 +3,15 @@ package com.example.nthucs.prototype.Activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +30,8 @@ import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -36,6 +42,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.ShareActionProvider;
 
 
 public class FoodActivity extends AppCompatActivity {
@@ -60,7 +67,7 @@ public class FoodActivity extends AppCompatActivity {
     protected static final int RESULT_SPEECH = 1;
     private Button btnSpeak;
     private TextView txtText;
-
+    private ShareActionProvider mShareActionProvider;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -213,6 +220,7 @@ public class FoodActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.food_menu, menu);
+        initShareIntent(menu);
         return super.onCreateOptionsMenu(menu);
     }
     /*
@@ -223,9 +231,8 @@ public class FoodActivity extends AppCompatActivity {
 	    }
     */
 
-    public void shareToFB(MenuItem menuItem){
+    private void shareToFB(){
         try {
-
             File file = configFileName("P", ".jpg");
             Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
             SharePhoto photo = new SharePhoto.Builder()
@@ -249,4 +256,36 @@ public class FoodActivity extends AppCompatActivity {
             System.out.println("EXCEPTION : "+e);
         }
     }
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    private void initShareIntent(Menu menu){
+
+        MenuItem item = menu.findItem(R.id.share_food);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        Intent shareIntent = new Intent();
+        shareIntent.setAction(Intent.ACTION_SEND);
+        shareIntent.setType("image/*");
+        File file = configFileName("P", ".jpg");
+        Uri uri = Uri.fromFile(file);
+        shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
+        mShareActionProvider.setShareIntent(shareIntent);
+        mShareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener(){
+
+            @Override
+            public boolean onShareTargetSelected(ShareActionProvider source, Intent intent) {
+                String shareTarget = intent.getComponent().getPackageName();
+                if(shareTarget.toLowerCase().startsWith("com.facebook.katana")){
+                    shareToFB();
+                }
+                return false;
+            }
+        });
+    }
+
 }
