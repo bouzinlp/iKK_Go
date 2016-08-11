@@ -44,4 +44,5 @@ dependencies {
     compile files('libs/opencsv-2.1-1.0.0.jar')
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.commonsware.cwac:merge:1.1.+'
+    compile 'com.nineoldandroids:library:2.4.0'
 }

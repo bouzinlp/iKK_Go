@@ -27,7 +27,6 @@ import com.example.nthucs.prototype.SportList.SportAdapter;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
-import com.example.nthucs.prototype.Utility.ListUtils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
