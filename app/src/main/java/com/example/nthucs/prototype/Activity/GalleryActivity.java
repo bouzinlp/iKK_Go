@@ -22,6 +22,7 @@ import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.Utility.CustomDialog;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
@@ -70,9 +71,6 @@ public class GalleryActivity extends AppCompatActivity {
 
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
-
-    // custom dialog
-    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,9 +390,10 @@ public class GalleryActivity extends AppCompatActivity {
     private void processDialogControllers() {
 
         // custom dialog
-        dialog = new Dialog(getApplicationContext());
-        dialog.setContentView(R.layout.custom_dialog);
+        final Dialog dialog = new Dialog(GalleryActivity.this);
+        dialog.setCancelable(false);
         dialog.setTitle("Choose the food");
+        dialog.setContentView(R.layout.custom_dialog);
 
         // set the custom dialog components
         Button dialogButton = (Button) dialog.findViewById(R.id.dialog_button);
