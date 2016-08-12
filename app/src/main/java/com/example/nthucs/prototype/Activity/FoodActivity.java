@@ -223,6 +223,7 @@ public class FoodActivity extends AppCompatActivity {
         initShareIntent(menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     /*
     @Override
 	    public boolean onCreateOptionsMenu(Menu menu) {

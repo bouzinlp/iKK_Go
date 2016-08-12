@@ -2,6 +2,7 @@ package com.example.nthucs.prototype.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -13,6 +14,7 @@ import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -68,6 +70,9 @@ public class GalleryActivity extends AppCompatActivity {
 
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
+
+    // custom dialog
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,6 +183,9 @@ public class GalleryActivity extends AppCompatActivity {
 
             // Compare Food Cal DAO to get calorie
             String[] compare_result = compareFoodCalDB(resultText);
+
+            // Process dialog with spinner wheel
+            //processDialogControllers();
 
             // Set food's information(title and picture name)
             food.setTitle(compare_result[0]);
@@ -378,5 +386,27 @@ public class GalleryActivity extends AppCompatActivity {
 
         //System.out.println("title: "+compare_result[0]+" calorie: "+compare_result[1]);
         return compare_result;
+    }
+
+    // dialog with spinner wheel to choose food name & calorie
+    private void processDialogControllers() {
+
+        // custom dialog
+        dialog = new Dialog(getApplicationContext());
+        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setTitle("Choose the food");
+
+        // set the custom dialog components
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialog_button);
+
+        dialogButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        // show dialog
+        dialog.show();
     }
 }
