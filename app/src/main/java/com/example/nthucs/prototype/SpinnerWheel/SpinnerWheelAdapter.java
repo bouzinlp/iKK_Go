@@ -27,7 +27,7 @@ public class SpinnerWheelAdapter extends AbstractWheelTextAdapter {
         super(context, resource, NO_RESOURCE);
 
         this.resource = resource;
-        setItemTextResource(resource);
+        setItemTextResource(R.id.spinner_wheel_item);
         this.compare_result = compare_result;
     }
 

@@ -26,6 +26,7 @@ import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.antistatic.spinnerwheel.AbstractWheel;
+import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelChangedListener;
 import com.example.nthucs.prototype.antistatic.spinnerwheel.adapters.NumericWheelAdapter;
 
 import org.json.JSONException;
@@ -414,12 +415,22 @@ public class GalleryActivity extends AppCompatActivity {
         dialog.setTitle("Choose the food");
         dialog.setContentView(R.layout.custom_dialog);
 
-        // set the custom dialog components
+        // process spinner wheel
         AbstractWheel dialogSpinner = (AbstractWheel) dialog.findViewById(R.id.spinner_wheel);
-        Button dialogButton = (Button) dialog.findViewById(R.id.dialog_button);
 
         dialogSpinner.setViewAdapter(new SpinnerWheelAdapter(GalleryActivity.this, R.layout.spinner_wheel_item, compare_string));
         dialogSpinner.setCyclic(true);
+
+        dialogSpinner.addChangingListener(new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+
+            }
+        });
+
+        dialogSpinner.setCurrentItem(1);
+
+        // process dialog button
+        Button dialogButton = (Button) dialog.findViewById(R.id.dialog_button);
 
         dialogButton.setOnClickListener(new View.OnClickListener() {
             @Override
