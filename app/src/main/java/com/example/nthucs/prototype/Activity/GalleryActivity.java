@@ -321,7 +321,8 @@ public class GalleryActivity extends AppCompatActivity {
         food.setCalorie(0.0f);
         food.setGrams(100.0f);
         food.setPortions(1.0f);
-        food.setTakeFromCamera(true);
+        food.setPicUriString(picUriString);
+        food.setTakeFromCamera(false);
         food.setDatetime(new Date().getTime());
 
         // back to main activity

@@ -43,6 +43,9 @@ public class CustomDialog {
     private AbstractWheel dialogSpinner;
     private SpinnerWheelAdapter spinnerWheelAdapter;
 
+    // Identify parent activity
+    private boolean parentIsGallery;
+
     public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
                         String fileName, String picUriString, Activity activity) {
         this.compare_result = compare_result;
@@ -53,6 +56,8 @@ public class CustomDialog {
         this.picUriString = picUriString;
 
         this.activity = activity;
+
+        this.parentIsGallery = true;
     }
 
     public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
@@ -65,6 +70,8 @@ public class CustomDialog {
         this.picUriString = new String();
 
         this.activity = activity;
+
+        this.parentIsGallery = false;
     }
 
     // Dialog with spinner wheel to choose food name & calorie
@@ -166,7 +173,12 @@ public class CustomDialog {
                 food.setGrams(100.0f);
                 food.setPortions(1.0f);
                 food.setPicUriString(picUriString);
-                food.setTakeFromCamera(false);
+                // distinguish parent activity
+                if (parentIsGallery == true) {
+                    food.setTakeFromCamera(false);
+                } else if (parentIsGallery == false) {
+                    food.setTakeFromCamera(true);
+                }
                 food.setDatetime(new Date().getTime());
 
                 // set result to main activity
