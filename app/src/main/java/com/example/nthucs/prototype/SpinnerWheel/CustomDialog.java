@@ -173,15 +173,17 @@ public class CustomDialog {
                 food.setGrams(100.0f);
                 food.setPortions(1.0f);
                 food.setPicUriString(picUriString);
+
                 // distinguish parent activity
                 if (parentIsGallery == true) {
                     food.setTakeFromCamera(false);
                 } else if (parentIsGallery == false) {
                     food.setTakeFromCamera(true);
                 }
+
                 food.setDatetime(new Date().getTime());
 
-                // set result to main activity
+                // Set result to main activity
                 Intent result = activity.getIntent();
                 result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
                 activity.setResult(Activity.RESULT_OK, result);
