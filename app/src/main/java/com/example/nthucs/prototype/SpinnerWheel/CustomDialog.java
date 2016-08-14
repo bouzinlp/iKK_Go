@@ -55,6 +55,18 @@ public class CustomDialog {
         this.activity = activity;
     }
 
+    public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
+                        String fileName, Activity activity) {
+        this.compare_result = compare_result;
+        this.food = food;
+        this.foodCalList = foodCalList;
+
+        this.fileName = fileName;
+        this.picUriString = new String();
+
+        this.activity = activity;
+    }
+
     // Dialog with spinner wheel to choose food name & calorie
     public void processDialogControllers() {
         // combine result string with chinese name & food calorie according to food calorie data base's index

@@ -21,6 +21,8 @@ import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.SpinnerWheel.CustomDialog;
+import com.example.nthucs.prototype.Utility.CompFoodDB;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
@@ -192,29 +194,25 @@ public class CameraActivity extends AppCompatActivity {
             resultText = resultString;
 
             // Compare Food Cal DAO to get calorie
-            String[] compare_result = compareFoodCalDB(resultText);
-
-            // Set food's information(title and picture name)
-            food.setTitle(compare_result[0]);
-            food.setContent("blank content");
-            food.setFileName(fileName);
-            food.setCalorie(Float.parseFloat(compare_result[1]));
-            food.setGrams(100.0f);
-            food.setPortions(1.0f);
-            food.setTakeFromCamera(true);
-            food.setDatetime(new Date().getTime());
-
-            // Test: appear result in the text view
-            // searchResult.setText(resultText);
+            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+            int[] compare_result = compFoodDB.compareFoodCalDB();
 
             // output test
             System.out.println("Suggested result: " + resultText);
 
-            Intent result = getIntent();
-            result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
-            setResult(Activity.RESULT_OK, result);
+            // if the compare result is empty
+            if (compare_result.length == 0) {
+                // Process normal food event
+                processFoodEvent();
+            } else {
+                // Process dialog with spinner wheel
+                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+                                                            fileName, CameraActivity.this);
+                customDialog.processDialogControllers();
+            }
+        } else if (view.getId() == R.id.cancel_item) {
+            finish();
         }
-        finish();
     }
 
     private void requestStoragePermission() {
@@ -279,77 +277,24 @@ public class CameraActivity extends AppCompatActivity {
         return imageUrl;
     }
 
-    // find food title in food calorie data base
-    private String[] compareFoodCalDB(String resultText) {
+    // Process normal food event if cannot match result from data base
+    private void processFoodEvent() {
 
-        // return with string array
-        String[] compare_result = {"", Float.toString(0.0f)};
+        // original set to food event
+        food.setTitle(resultText);
+        food.setContent("blank content");
+        food.setFileName(fileName);
+        food.setCalorie(0.0f);
+        food.setGrams(100.0f);
+        food.setPortions(1.0f);
+        food.setTakeFromCamera(true);
+        food.setDatetime(new Date().getTime());
 
-        // if origin result text is null
-        if (resultText == null || resultText.isEmpty() == true) {
-            return compare_result;
-        }
+        // back to main activity
+        Intent result = getIntent();
+        result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
+        setResult(Activity.RESULT_OK, result);
 
-        // split result with space
-        String[] splitText = resultText.split("\\s+");
-
-        // whether the string is english
-        boolean isEnglishString = true;
-
-        // string for build chinese character
-        String chineseResultText = new String();
-
-        for (int i = 0 ; i < splitText.length ; i++) {
-
-            // traversal split string
-            for (int j = 0 ; j < splitText[i].length() ; j++) {
-                if ((splitText[i].charAt(j) >= 65 && splitText[i].charAt(j) <= 90)
-                        || (splitText[i].charAt(j) >= 97 && splitText[i].charAt(j) <= 122)) {
-                    isEnglishString = true;
-                } else {
-                    isEnglishString = false;
-                    break;
-                }
-            }
-
-            // compare every split english string
-            if (isEnglishString == true) {
-                for (int j = 0 ; j < foodCalList.size() ; j++) {
-                    if (splitText[i].toLowerCase().contains(foodCalList.get(j).getEnglishName().toLowerCase())
-                            && foodCalList.get(j).getEnglishName().isEmpty() == false) {
-                        // temporary test
-                        compare_result[0] = foodCalList.get(j).getEnglishName();
-                        compare_result[1] = Float.toString(foodCalList.get(j).getCalorie());
-
-                        //System.out.println(foodCalList.get(j).getEnglishName());
-                    }
-                }
-            // merge chinese sub-string
-            } else {
-                chineseResultText += splitText[i];
-            }
-        }
-
-        // compare merged chinese string with food cal
-        if (isEnglishString == false) {
-            for (int i = 0 ; i < foodCalList.size() ; i++) {
-                if (foodCalList.get(i).getChineseName().contains(chineseResultText)) {
-                    // temporary test
-                    compare_result[0] = foodCalList.get(i).getChineseName();
-                    compare_result[1] = Float.toString(foodCalList.get(i).getCalorie());
-
-                    //System.out.println(foodCalList.get(i).getChineseName());
-                }
-            }
-        }
-
-        // if still not result, return original text
-        if (compare_result[0].isEmpty() == true) {
-            compare_result[0] = resultText;
-            compare_result[1] = Float.toString(0.0f);
-            System.out.println("test");
-        }
-
-        return compare_result;
+        finish();
     }
 }
