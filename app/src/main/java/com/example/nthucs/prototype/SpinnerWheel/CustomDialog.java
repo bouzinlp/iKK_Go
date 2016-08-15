@@ -57,6 +57,7 @@ public class CustomDialog {
 
         this.activity = activity;
 
+        // parent activity is gallery
         this.parentIsGallery = true;
     }
 
@@ -71,19 +72,17 @@ public class CustomDialog {
 
         this.activity = activity;
 
+        // parent activity is camera
         this.parentIsGallery = false;
     }
 
     // Dialog with spinner wheel to choose food name & calorie
     public void processDialogControllers() {
-        // combine result string with chinese name & food calorie according to food calorie data base's index
-        final String[] compare_string = new String[compare_result.length];
-        for (int i = 0 ; i < compare_result.length ; i++) {
-            compare_string[i] = foodCalList.get(compare_result[i]).getChineseName() + ": " +
-                    Float.toString(foodCalList.get(compare_result[i]).getCalorie());
-        }
 
-        // custom dialog
+        // combine result string with chinese name & food calorie according to food calorie data base's index
+        final String[] compare_string = mergeString();
+
+        // initialize custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
         dialog.setTitle("Choose the food");
@@ -99,6 +98,32 @@ public class CustomDialog {
         dialog.show();
     }
 
+    // Merge food's chinese name and calorie
+    private String[] mergeString() {
+        String[] compare_string = new String[compare_result.length];
+
+        for (int i = 0 ; i < compare_result.length ; i++) {
+            int spaceLength = 20 - foodCalList.get(compare_result[i]).getChineseName().length();
+
+            //System.out.println(foodCalList.get(compare_result[i]).getChineseName().length() + " "
+            //        + Float.toString(foodCalList.get(compare_result[i]).getCalorie()).length());
+
+            compare_string[i] = foodCalList.get(compare_result[i]).getChineseName();
+
+            System.out.println(compare_string[i].getBytes());
+
+            for (int j = 0 ; j < spaceLength ; j++) {
+                compare_string[i] += " ";
+            }
+
+            compare_string[i] += Float.toString(foodCalList.get(compare_result[i]).getCalorie());
+            //compare_string[i] = foodCalList.get(compare_result[i]).getChineseName() + ": " +
+            //        Float.toString(foodCalList.get(compare_result[i]).getCalorie());
+        }
+
+        return  compare_string;
+    }
+
     // Process spinner wheel controllers
     private void processSpinnerWheelControllers(Dialog dialog, String[] compare_string) {
 
@@ -109,6 +134,7 @@ public class CustomDialog {
         spinnerWheelAdapter = new SpinnerWheelAdapter(activity, R.layout.spinner_wheel_item, compare_string);
         dialogSpinner.setViewAdapter(spinnerWheelAdapter);
         dialogSpinner.setCyclic(false);
+        dialogSpinner.setVisibleItems(5);
 
         // register on wheel change listener
         OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
@@ -147,6 +173,8 @@ public class CustomDialog {
 
     // process button controllers() {
     private void processButtonControllers(final Dialog dialog, final String[] compare_string) {
+
+        // initialize button
         Button dialogButton = (Button) dialog.findViewById(R.id.dialog_button);
 
         // register & set on click listener

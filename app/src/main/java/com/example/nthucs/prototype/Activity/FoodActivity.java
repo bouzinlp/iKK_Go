@@ -2,6 +2,7 @@ package com.example.nthucs.prototype.Activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -24,6 +25,11 @@ import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 import java.io.File;
 import java.util.Date;
+
+import com.example.nthucs.prototype.antistatic.spinnerwheel.AbstractWheel;
+import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelChangedListener;
+import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelClickedListener;
+import com.example.nthucs.prototype.antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.SharePhoto;
@@ -47,7 +53,12 @@ import android.support.v7.widget.ShareActionProvider;
 
 public class FoodActivity extends AppCompatActivity {
 
-    private EditText title_text, content_text, calorie_text, portions_text, grams_text;
+    // dialog for choosing food within spinner wheel
+    private Button dialogTitleButton;
+
+    // text input
+    //private EditText title_text;
+    private EditText content_text, calorie_text, portions_text, grams_text;
 
     // food information
     private Food food;
@@ -68,6 +79,7 @@ public class FoodActivity extends AppCompatActivity {
     private Button btnSpeak;
     private TextView txtText;
     private ShareActionProvider mShareActionProvider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,25 +89,27 @@ public class FoodActivity extends AppCompatActivity {
         txtText = (TextView) findViewById(R.id.txtText);
         btnSpeak = (Button) findViewById(R.id.voice_btn);
         btnSpeak.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Intent intent_voice = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-                                            intent_voice.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-                                            try {
-                                               startActivityForResult(intent_voice, RESULT_SPEECH);
-                                               txtText.setText("");
-                                            }
-                                            catch (ActivityNotFoundException a) {
-                                                Toast t = Toast.makeText(getApplicationContext(), "Opps! Your device doesn't support Speech to Text", Toast.LENGTH_SHORT);
-                                                t.show();
-                                            }
-                                        }
+            @Override
+            public void onClick(View v) {
+                Intent intent_voice = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent_voice.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+                try {
+                    startActivityForResult(intent_voice, RESULT_SPEECH);
+                    txtText.setText("");
+                } catch (ActivityNotFoundException a) {
+                    Toast t = Toast.makeText(getApplicationContext(), "Opps! Your device doesn't support Speech to Text", Toast.LENGTH_SHORT);
+                    t.show();
+                }
+            }
         });
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         shareDialog = new ShareDialog(this);
 
-        title_text = (EditText)findViewById(R.id.title_text);
+        // process dialog button for title
+        processDialogButtonControllers();
+
+        //title_text = (EditText)findViewById(R.id.title_text);
         content_text = (EditText)findViewById(R.id.content_text);
         calorie_text = (EditText)findViewById(R.id.calorie_text);
         portions_text = (EditText)findViewById(R.id.portions_text);
@@ -109,7 +123,10 @@ public class FoodActivity extends AppCompatActivity {
         if (action.equals("com.example.nthucs.prototype.EDIT_FOOD")) {
             food = (Food)intent.getExtras().getSerializable(
                     "com.example.nthucs.prototype.FoodList.Food");
-            title_text.setText(food.getTitle());
+
+            dialogTitleButton.setText(food.getTitle());
+
+            //title_text.setText(food.getTitle());
             content_text.setText(food.getContent());
             calorie_text.setText(Float.toString(food.getCalorie()));
             portions_text.setText(Float.toString(food.getPortions()));
@@ -178,7 +195,8 @@ public class FoodActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.ok_item) {
-            String titleText = title_text.getText().toString();
+            String titleText = dialogTitleButton.getText().toString();
+            //title_text.getText().toString();
             String contentText = content_text.getText().toString();
             String calorieText = calorie_text.getText().toString();
             String portionsText = portions_text.getText().toString();
@@ -214,7 +232,6 @@ public class FoodActivity extends AppCompatActivity {
     public void clickFunction(View view) {
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -289,4 +306,98 @@ public class FoodActivity extends AppCompatActivity {
         });
     }
 
+    // process dialog button controllers
+    private void processDialogButtonControllers() {
+        // initialize dialog button
+        dialogTitleButton = (Button)findViewById(R.id.dialog_button);
+
+        // avoid all upper case
+        dialogTitleButton.setTransformationMethod(null);
+
+        // set button listener
+        dialogTitleButton.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processDialogControllers();
+            }
+        });
+    }
+
+    // process custom dialog
+    private void processDialogControllers() {
+
+        // initialize custom dialog
+        final Dialog dialog = new Dialog(FoodActivity.this);
+        dialog.setCancelable(false);
+        dialog.setTitle("Choose the food");
+        dialog.setContentView(R.layout.custom_dialog_for_food);
+
+        // test string
+        String category[] = new String[]{"1", "2", "3", "4", "5"};
+        String chineseName[][] = new String[][]{{"11","12","13"},{"21","22","23"},{"31","32","33"},{"41","42","43"},{"51","52","53"}};
+
+        // test
+        final int mActiveChineseName[] = new int[] {1, 1, 1, 1, 1};
+        final int mActiveCategory = 0;
+
+        // Scrolling flag
+        final boolean scrolling = false;
+
+        // initialize food category wheel spinner
+        AbstractWheel foodCategorySpinner = (AbstractWheel)dialog.findViewById(R.id.food_category_spinner);
+        ArrayWheelAdapter<String> foodCategoryAdapter = new ArrayWheelAdapter<String>(this, category);
+        foodCategoryAdapter.setTextSize(20);
+        foodCategorySpinner.setViewAdapter(foodCategoryAdapter);
+
+        // register on wheel change listener
+        /*OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
+            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
+                if (!scrolling) {
+                    mActiveChineseName[mActiveCategory] = newValue;
+                }
+            }
+        };*/
+
+        // set on wheel change listener
+        //foodCategorySpinner.addChangingListener(wheelListener);
+
+        // register on wheel click listener
+        /*OnWheelClickedListener clickListener = new OnWheelClickedListener() {
+            public void onItemClicked(AbstractWheel wheel, int itemIndex) {
+
+            }
+        };*/
+
+        // set on wheel click listener
+
+        // register on wheel scroll listener
+
+        // set on wheel scroll listener
+
+        // set current item
+        foodCategorySpinner.setCurrentItem(1);
+
+        // initialize food chinese name wheel spinner
+        final AbstractWheel foodChineseNameSpinner = (AbstractWheel)dialog.findViewById(R.id.food_chinese_name_spinner);
+        foodChineseNameSpinner.setVisibleItems(5);
+        ArrayWheelAdapter<String> foodChineseNameAdapter = new ArrayWheelAdapter<String>(this, chineseName[1]);
+        foodChineseNameAdapter.setTextSize(18);
+        foodChineseNameSpinner.setViewAdapter(foodChineseNameAdapter);
+
+        // initialize button
+        Button dialogOkButton = (Button) dialog.findViewById(R.id.dialog_ok_button);
+
+        // register & set on click listener
+        dialogOkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // dismiss dialog
+                dialog.dismiss();
+            }
+        });
+
+        // show dialog
+        dialog.show();
+    }
 }

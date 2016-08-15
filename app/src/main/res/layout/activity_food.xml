@@ -39,12 +39,22 @@
             android:layout_margin="3sp"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
+        <!--<EditText
             android:id="@+id/title_text"
             android:hint="@string/enter_food_title"
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />-->
+
+        <Button
+            android:id="@+id/dialog_button"
+            android:layout_width="wrap_content"
+            android:layout_height="35.5dp"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 

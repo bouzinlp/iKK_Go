@@ -43,7 +43,8 @@ public class CalendarActivity  extends AppCompatActivity {
     // element for the bottom of the tab content
     private ViewPager viewPager;
     private TabLayout tabLayout;
-    //foodlist
+
+    //food list
     private List<Food> foods ;
     private FoodDAO foodDAO;
 
