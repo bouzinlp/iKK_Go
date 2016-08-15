@@ -45,4 +45,5 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.commonsware.cwac:merge:1.1.+'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.google.android.gms:play-services-fitness:9.4.0'
 }
