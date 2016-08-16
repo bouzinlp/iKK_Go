@@ -22,11 +22,14 @@ import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import static java.text.DateFormat.getTimeInstance;
 
 
 /**
@@ -39,7 +42,8 @@ public class HomeActivity extends AppCompatActivity {
     public static GoogleApiClient mClient = null;
 
     int totalSteps = 0;
-    Float totalCals = (float)0;
+    Float totalCals = (float)0, totalDistance =(float) 0;
+    long activityTime=0;
 
 
     @Override
@@ -55,7 +59,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onResume(){
         super.onResume();
-
+        //init fitness value
+        totalSteps = 0;
+        totalCals = (float)0;
+        totalDistance =(float) 0;
+        activityTime=0;
     }
 
 
@@ -73,6 +81,7 @@ public class HomeActivity extends AppCompatActivity {
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
                 .addScope(new Scope(Scopes.FITNESS_BODY_READ_WRITE))
+                .addScope(new Scope(Scopes.FITNESS_LOCATION_READ_WRITE))
                 .addConnectionCallbacks(
                         new GoogleApiClient.ConnectionCallbacks() {
                             @Override
@@ -133,13 +142,11 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused)
         {
             super.onPostExecute(unused);
-            exerciseSteps.setText(Integer.toString(totalSteps));
-            exerciseCalories.setText((totalCals.toString()));
+            exerciseSteps.setText(Integer.toString(totalSteps) + "\n步");
+            exerciseCalories.setText(Math.round(totalCals)+"\n卡");
+            exerciseDistance.setText(Math.round(totalDistance)+"\n公尺");
+            exerciseTime.setText(String.valueOf(activityTime/60)+"\n分鐘");
         }
-
-
-
-
     }
 
     public static DataReadRequest queryFitnessData() {
@@ -168,9 +175,12 @@ public class HomeActivity extends AppCompatActivity {
                 .build();
 
         DataReadRequest readRequest = new DataReadRequest.Builder()
-                .aggregate(ESTIMATED_STEP_DELTAS, DataType.AGGREGATE_STEP_COUNT_DELTA)
-                .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
-                .bucketByTime(1, TimeUnit.DAYS)
+                //.aggregate(ESTIMATED_STEP_DELTAS, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                //.aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+                .read(ESTIMATED_STEP_DELTAS)
+                .read(DataType.TYPE_CALORIES_EXPENDED)
+                .read(DataType.TYPE_DISTANCE_DELTA)
+                //.bucketByTime(1, TimeUnit.DAYS)
                 .setTimeRange(startTime,System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .build();
         // [END build_read_data_request]
@@ -179,23 +189,31 @@ public class HomeActivity extends AppCompatActivity {
 
     public void printSpeData(DataReadResult dataReadResult){
 
-        //DataSet stepData = dataReadResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
-        for (Bucket bucket : dataReadResult.getBuckets()) {
-            DataSet stepData = bucket.getDataSet(DataType.TYPE_STEP_COUNT_DELTA);
-            DataSet calData = bucket.getDataSet(DataType.TYPE_CALORIES_EXPENDED);
-            for (DataPoint dp : stepData.getDataPoints()) {
-                for (Field field : dp.getDataType().getFields()) {
-                    int steps = dp.getValue(field).asInt();
-                    totalSteps += steps;
-                }
-            }
-            for (DataPoint dp : calData.getDataPoints()) {
-                for(Field field : dp.getDataType().getFields()) {
-                    Float cals = dp.getValue(field).asFloat();
-                    totalCals += cals;
-                }
+        if (dataReadResult.getDataSets().size() > 0) {
+            for (DataSet dataSet : dataReadResult.getDataSets()) {
+                dumpDataSet(dataSet);
             }
         }
 
     }
+
+
+    // [START parse_dataset]
+    private void dumpDataSet(DataSet dataSet) {
+        System.out.println(dataSet.getDataType().getName());
+        for (DataPoint dp : dataSet.getDataPoints()) {
+            for(Field field : dp.getDataType().getFields()) {
+                if (dataSet.getDataType().equals(DataType.TYPE_STEP_COUNT_DELTA)) {
+                    totalSteps += dp.getValue(field).asInt();
+                } else if (dataSet.getDataType().equals(DataType.TYPE_CALORIES_EXPENDED)) {
+                    totalCals += dp.getValue(field).asFloat();
+                } else if (dataSet.getDataType().equals(DataType.TYPE_DISTANCE_DELTA)) {
+                    totalDistance += dp.getValue(field).asFloat();
+                    long tmpTime = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
+                    activityTime += tmpTime;
+                }
+            }
+        }
+    }
+    // [END parse_dataset]
 }
