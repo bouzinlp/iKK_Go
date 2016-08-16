@@ -60,6 +60,7 @@
     <string name="my_favourites_title">My Favourites</string>
 
     <string name="dialog_button">Ok</string>
+    <string name="dialog_cancel_button">Cancel</string>
     <string name="choose_food">Choose the food</string>
 
 </resources>

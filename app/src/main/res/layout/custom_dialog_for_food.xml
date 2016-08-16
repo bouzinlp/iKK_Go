@@ -23,16 +23,39 @@
 
     </LinearLayout>
 
-    <Button
+    <LinearLayout
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:gravity="center"
-        android:id="@+id/dialog_ok_button"
-        android:text="@string/dialog_button"
-        android:textColor="@color/royal_blue"
-        android:textSize="20sp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@color/white"
-        android:layout_centerHorizontal="true" />
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="2sp"
+            android:layout_margin="6sp"
+            android:gravity="center"
+            android:id="@+id/dialog_ok_button"
+            android:text="@string/dialog_button"
+            android:textColor="@color/royal_blue"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/white"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="2sp"
+            android:layout_margin="6sp"
+            android:gravity="center"
+            android:id="@+id/dialog_cancel_button"
+            android:text="@string/dialog_cancel_button"
+            android:textColor="@color/royal_blue"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/white"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -181,7 +181,7 @@ public class CustomDialogForFood {
     // process button controllers
     private void processButtonControllers(final Dialog dialog) {
 
-        // initialize button
+        // initialize ok button
         Button dialogOkButton = (Button) dialog.findViewById(R.id.dialog_ok_button);
 
         // register & set on click listener
@@ -204,6 +204,18 @@ public class CustomDialogForFood {
                     }
                 }
 
+                // dismiss dialog
+                dialog.dismiss();
+            }
+        });
+
+        // initialize cancel button
+        Button dialogCancelButton = (Button) dialog.findViewById(R.id.dialog_cancel_button);
+
+        // register& set on click listener
+        dialogCancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 // dismiss dialog
                 dialog.dismiss();
             }
