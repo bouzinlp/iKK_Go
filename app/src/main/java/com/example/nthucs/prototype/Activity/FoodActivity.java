@@ -340,4 +340,14 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
     }
+
+    // get dialog title button public
+    public Button getDialogTitleButton() {
+        return this.dialogTitleButton;
+    }
+
+    // get calorie edit text public
+    public EditText getCalorieText() {
+        return this.calorie_text;
+    }
 }
