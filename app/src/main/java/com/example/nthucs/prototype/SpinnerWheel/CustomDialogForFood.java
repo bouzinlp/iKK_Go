@@ -30,6 +30,10 @@ public class CustomDialogForFood {
     // Scrolling flag
     private boolean scrolling = false;
 
+    // Global spinner and adapter
+    private AbstractWheel categorySpinner, chineseNameSpinner;
+    private ArrayWheelAdapter<String> categoryAdapter, chineseNameAdapter;
+
     // Food's category and chinese name
     String category[] = new String[]{"穀物類", "澱粉類", "堅果及種子類", "水果類", "蔬菜類", "藻類", "菇類", "豆類", "肉類", "魚貝類",
                                      "蛋類", "乳品類", "油脂類", "糖類", "嗜好性飲料類", "調味料及香辛料類", "糕餅點心類", "加工調理食品類"};
@@ -83,13 +87,13 @@ public class CustomDialogForFood {
     private void processCategorySpinnerControllers(Dialog dialog) {
 
         // initialize and set adapter to food category wheel spinner
-        final AbstractWheel categorySpinner = (AbstractWheel)dialog.findViewById(R.id.food_category_spinner);
-        ArrayWheelAdapter<String> categoryAdapter = new ArrayWheelAdapter<String>(activity, category);
+        categorySpinner = (AbstractWheel)dialog.findViewById(R.id.food_category_spinner);
+        categoryAdapter = new ArrayWheelAdapter<String>(activity, category);
         categoryAdapter.setTextSize(20);
         categorySpinner.setViewAdapter(categoryAdapter);
 
         // initialize food chinese name wheel spinner
-        final AbstractWheel chineseNameSpinner = (AbstractWheel)dialog.findViewById(R.id.food_chinese_name_spinner);
+        chineseNameSpinner = (AbstractWheel)dialog.findViewById(R.id.food_chinese_name_spinner);
         chineseNameSpinner.setVisibleItems(5);
 
         // register on wheel change listener
@@ -97,7 +101,7 @@ public class CustomDialogForFood {
             public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
                 if (!scrolling) {
                     // update food's chinese name with corresponding category
-                    updateChineseNameSpinner(chineseNameSpinner, chineseName, newValue);
+                    updateChineseNameSpinner(newValue);
                 }
             }
         };
@@ -136,7 +140,7 @@ public class CustomDialogForFood {
                 scrolling = false;
 
                 // update food's chinese name with corresponding category
-                updateChineseNameSpinner(chineseNameSpinner, chineseName, categorySpinner.getCurrentItem());
+                updateChineseNameSpinner(categorySpinner.getCurrentItem());
             }
         };
 
@@ -148,12 +152,12 @@ public class CustomDialogForFood {
     }
 
     // update chinese name spinner wheel
-    private void updateChineseNameSpinner(AbstractWheel chineseNameSpinner, String[][] chineseName, int index) {
+    private void updateChineseNameSpinner(int index) {
 
         mActiveCategory = index;
 
         // initialize and set adapter
-        ArrayWheelAdapter<String> chineseNameAdapter = new ArrayWheelAdapter<String>(activity, chineseName[index]);
+        chineseNameAdapter = new ArrayWheelAdapter<String>(activity, chineseName[index]);
         chineseNameAdapter.setTextSize(18);
         chineseNameSpinner.setViewAdapter(chineseNameAdapter);
 
@@ -171,6 +175,9 @@ public class CustomDialogForFood {
         dialogOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // test
+                System.out.println(chineseNameAdapter.getItemText(categorySpinner.getCurrentItem()));
 
                 // dismiss dialog
                 dialog.dismiss();
