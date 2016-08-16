@@ -20,6 +20,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import com.example.nthucs.prototype.FoodList.CalorieDAO;
+import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.SpinnerWheel.CustomDialogForFood;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
@@ -70,6 +74,12 @@ public class FoodActivity extends AppCompatActivity {
     // pass Uri's toString if take photo from library
     private String picUriString;
     private Uri picUri;
+
+    // data base for storing calorie data
+    private CalorieDAO calorieDAO;
+
+    // food cal list
+    private List<FoodCal> foodCalList = new ArrayList<>();
 
     //facebook share dialog
     private ShareDialog shareDialog;
@@ -135,6 +145,12 @@ public class FoodActivity extends AppCompatActivity {
         } else if (action.equals("com.example.nthucs.prototype.ADD_FOOD")) {
             food = new Food();
         }
+
+        // calorie data base
+        calorieDAO = new CalorieDAO(getApplicationContext());
+
+        // get all data
+        foodCalList = calorieDAO.getAll();
     }
 
     @Override
@@ -318,86 +334,10 @@ public class FoodActivity extends AppCompatActivity {
         dialogTitleButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                processDialogControllers();
+                // process custom dialog
+                CustomDialogForFood customDialogForFood = new CustomDialogForFood(foodCalList, FoodActivity.this);
+                customDialogForFood.processDialogControllers();
             }
         });
-    }
-
-    // process custom dialog
-    private void processDialogControllers() {
-
-        // initialize custom dialog
-        final Dialog dialog = new Dialog(FoodActivity.this);
-        dialog.setCancelable(false);
-        dialog.setTitle("Choose the food");
-        dialog.setContentView(R.layout.custom_dialog_for_food);
-
-        // test string
-        String category[] = new String[]{"1", "2", "3", "4", "5"};
-        String chineseName[][] = new String[][]{{"11","12","13"},{"21","22","23"},{"31","32","33"},{"41","42","43"},{"51","52","53"}};
-
-        // test
-        final int mActiveChineseName[] = new int[] {1, 1, 1, 1, 1};
-        final int mActiveCategory = 0;
-
-        // Scrolling flag
-        final boolean scrolling = false;
-
-        // initialize food category wheel spinner
-        AbstractWheel foodCategorySpinner = (AbstractWheel)dialog.findViewById(R.id.food_category_spinner);
-        ArrayWheelAdapter<String> foodCategoryAdapter = new ArrayWheelAdapter<String>(this, category);
-        foodCategoryAdapter.setTextSize(20);
-        foodCategorySpinner.setViewAdapter(foodCategoryAdapter);
-
-        // register on wheel change listener
-        /*OnWheelChangedListener wheelListener = new OnWheelChangedListener() {
-            public void onChanged(AbstractWheel wheel, int oldValue, int newValue) {
-                if (!scrolling) {
-                    mActiveChineseName[mActiveCategory] = newValue;
-                }
-            }
-        };*/
-
-        // set on wheel change listener
-        //foodCategorySpinner.addChangingListener(wheelListener);
-
-        // register on wheel click listener
-        /*OnWheelClickedListener clickListener = new OnWheelClickedListener() {
-            public void onItemClicked(AbstractWheel wheel, int itemIndex) {
-
-            }
-        };*/
-
-        // set on wheel click listener
-
-        // register on wheel scroll listener
-
-        // set on wheel scroll listener
-
-        // set current item
-        foodCategorySpinner.setCurrentItem(1);
-
-        // initialize food chinese name wheel spinner
-        final AbstractWheel foodChineseNameSpinner = (AbstractWheel)dialog.findViewById(R.id.food_chinese_name_spinner);
-        foodChineseNameSpinner.setVisibleItems(5);
-        ArrayWheelAdapter<String> foodChineseNameAdapter = new ArrayWheelAdapter<String>(this, chineseName[1]);
-        foodChineseNameAdapter.setTextSize(18);
-        foodChineseNameSpinner.setViewAdapter(foodChineseNameAdapter);
-
-        // initialize button
-        Button dialogOkButton = (Button) dialog.findViewById(R.id.dialog_ok_button);
-
-        // register & set on click listener
-        dialogOkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                // dismiss dialog
-                dialog.dismiss();
-            }
-        });
-
-        // show dialog
-        dialog.show();
     }
 }

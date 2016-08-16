@@ -171,7 +171,7 @@ public class CustomDialog {
         dialogSpinner.setCurrentItem(1);
     }
 
-    // process button controllers() {
+    // process button controllers
     private void processButtonControllers(final Dialog dialog, final String[] compare_string) {
 
         // initialize button
