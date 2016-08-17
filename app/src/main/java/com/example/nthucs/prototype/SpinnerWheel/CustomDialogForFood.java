@@ -48,6 +48,13 @@ public class CustomDialogForFood {
     private int mActiveCategory = 0;
     private int mActiveChineseName[] = new int[] {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
+    // Current food's chinese name(title) & calorie
+    private String curChineseName;
+    private int curCalorie;
+
+    // Current food's index in [category][chineseName]
+    private int curCategoryIdx, curCniNameIdx;
+
     public CustomDialogForFood(List<FoodCal> foodCalList, FoodActivity activity) {
 
         this.foodCalList = foodCalList;
@@ -55,6 +62,9 @@ public class CustomDialogForFood {
 
         int categoryCount = 0;
         int chineseNameCount[] = new int[18];
+
+        curChineseName = activity.getDialogTitleButton().getText().toString();
+        curCalorie = (int)Float.parseFloat(activity.getCalorieText().getText().toString());
 
         // initialize with different length
         for (int i = 0 ; i < 18 ; i++) {
@@ -73,6 +83,12 @@ public class CustomDialogForFood {
             if (i < foodCalList.size()-1 &&
                     foodCalList.get(i).getCategory().equals(foodCalList.get(i + 1).getCategory()) == false) {
                 categoryCount++;
+            }
+
+            // if match current chinese name, record index
+            if (foodCalList.get(i).getChineseName().equals(curChineseName)) {
+                curCategoryIdx = categoryCount;
+                curCniNameIdx = chineseNameCount[categoryCount];
             }
         }
     }
@@ -160,7 +176,7 @@ public class CustomDialogForFood {
         // set on wheel scroll listener
         categorySpinner.addScrollingListener(scrollListener);
 
-        // set current item
+        // set current item with current food's category
         categorySpinner.setCurrentItem(1);
     }
 
