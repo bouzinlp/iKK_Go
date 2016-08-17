@@ -63,8 +63,16 @@ public class CustomDialogForFood {
         int categoryCount = 0;
         int chineseNameCount[] = new int[18];
 
-        curChineseName = activity.getDialogTitleButton().getText().toString();
-        curCalorie = (int)Float.parseFloat(activity.getCalorieText().getText().toString());
+        // initialize current chinese name & calorie
+        if (activity.getDialogTitleButton().getText().toString().isEmpty() == false) {
+            curChineseName = activity.getDialogTitleButton().getText().toString();
+            curCalorie = (int) Float.parseFloat(activity.getCalorieText().getText().toString());
+        } else {
+            curChineseName = new String();
+            curCalorie = 0;
+            curCategoryIdx = 1;
+            curCniNameIdx = 0;
+        }
 
         // initialize with different length
         for (int i = 0 ; i < 18 ; i++) {
@@ -88,7 +96,7 @@ public class CustomDialogForFood {
             // if match current chinese name, record index
             if (foodCalList.get(i).getChineseName().equals(curChineseName)) {
                 curCategoryIdx = categoryCount;
-                curCniNameIdx = chineseNameCount[categoryCount];
+                curCniNameIdx = chineseNameCount[categoryCount]-1;
             }
         }
     }
@@ -176,8 +184,17 @@ public class CustomDialogForFood {
         // set on wheel scroll listener
         categorySpinner.addScrollingListener(scrollListener);
 
-        // set current item with current food's category
-        categorySpinner.setCurrentItem(1);
+        // set current item with current food's chinese name
+        mActiveChineseName[curCategoryIdx] = curCniNameIdx;
+
+        // avoid nero
+        if (curCategoryIdx > 0) {
+            // set current item with current food's category
+            categorySpinner.setCurrentItem(curCategoryIdx);
+        } else {
+            // temporary sol
+            categorySpinner.setCurrentItem(1);
+        }
     }
 
     // update chinese name spinner wheel
