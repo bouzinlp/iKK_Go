@@ -82,21 +82,23 @@ public class CustomDialogForFood {
 
         // assign to 2d string array: [category][chinese name]
         for (int i = 0 ; i < foodCalList.size() ; i++) {
+            // if match current chinese name, record index
+            if (foodCalList.get(i).getChineseName().equals(curChineseName)) {
+                curCategoryIdx = categoryCount;
+                curCniNameIdx = chineseNameCount[categoryCount];
+            }
+
+            // transform to 2d array [category][chineseName]
             if (foodCalList.get(i).getCategory().equals(category[categoryCount])) {
                 chineseName[categoryCount][chineseNameCount[categoryCount]] = foodCalList.get(i).getChineseName();
                 calorie[categoryCount][chineseNameCount[categoryCount]] = foodCalList.get(i).getCalorie();
                 chineseNameCount[categoryCount]++;
             }
 
+            // plus category count if category change
             if (i < foodCalList.size()-1 &&
                     foodCalList.get(i).getCategory().equals(foodCalList.get(i + 1).getCategory()) == false) {
                 categoryCount++;
-            }
-
-            // if match current chinese name, record index
-            if (foodCalList.get(i).getChineseName().equals(curChineseName)) {
-                curCategoryIdx = categoryCount;
-                curCniNameIdx = chineseNameCount[categoryCount]-1;
             }
         }
     }
