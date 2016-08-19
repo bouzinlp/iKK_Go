@@ -48,6 +48,9 @@ public class CalendarActivity  extends AppCompatActivity {
     private List<Food> foods ;
     private FoodDAO foodDAO;
 
+    //
+    private int nowfoodlist;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +68,8 @@ public class CalendarActivity  extends AppCompatActivity {
         selectTab(1);
         foodDAO = new FoodDAO(getApplicationContext());
         foods = foodDAO.getAll();
+
+        nowfoodlist=0;
 
         final ActionBar actionBar = getSupportActionBar();
         final List<String> mutableBookings = new ArrayList<>();
@@ -85,6 +90,7 @@ public class CalendarActivity  extends AppCompatActivity {
         compactCalendarView.setCurrentSelectedDayBackgroundColor(getResources().getColor(R.color.dark_red));
         compactCalendarView.setGreenBackgroundColor(getResources().getColor(R.color.green));
         compactCalendarView.setBlueBackgroundColor(getResources().getColor(R.color.colorPrimary));
+
 
         addEvents(compactCalendarView, Calendar.JANUARY);
         addEvents(compactCalendarView, Calendar.FEBRUARY);
@@ -181,7 +187,7 @@ public class CalendarActivity  extends AppCompatActivity {
 
         int yearclicked =currentCalender.get(Calendar.YEAR);
 
-        int i , j=0 ;
+        int i , j ;
         String time ;
         int monthday ;
         String name;
@@ -199,8 +205,8 @@ public class CalendarActivity  extends AppCompatActivity {
         }
 
         for( i=0; i<monthday ; i++){
+            j=nowfoodlist;
 
-            j=0;
             currentCalender.setTime(firstDayOfMonth);
 
             currentCalender.set(Calendar.MONTH, month);
@@ -209,37 +215,77 @@ public class CalendarActivity  extends AppCompatActivity {
             setToMidnight(currentCalender);
             long timeInMillis = currentCalender.getTimeInMillis();
             int monthclicked =currentCalender.get(Calendar.MONTH);
-            System.out.println(".....month:" + monthclicked);
+            //System.out.println(".....month:" + monthclicked);
             int day = currentCalender.get(Calendar.DATE);
-            System.out.println(".....day:" + day);
+            //System.out.println(".....day:" + day);
 
             int []getday = new int [3];
-            while(j<foods.size()){
+            if(j==0&&j<foods.size()) {
                 time = foods.get(j).getLocaleDatetime();
-                System.out.println("...............date time: "+time);
-                String[] token =time.split("-");
+                String[] token = time.split("-");
                 String[] a = token[2].split(" ");
                 getday[0] = Integer.valueOf(token[0]);
-                System.out.println(".....ok 0 ");
                 getday[1] = Integer.valueOf(token[1]);
-                System.out.println(".....ok 1 ");
                 getday[2] = Integer.valueOf(a[0]);
-                System.out.println(".....ok 2 ");
 
-                System.out.println("...............date time: "+token[0]+"...."+token[1]+"..."+a[0]);
-                System.out.println(yearclicked+"" +monthclicked +""+ day );
-                if(yearclicked==Integer.valueOf(token[0])&&monthclicked+1==Integer.valueOf(token[1])&&day==Integer.valueOf(a[0])){
-                    System.out.println("GGGGGGGGGGGGGGGGGGGGG" );
+                if (yearclicked == Integer.valueOf(token[0]) && monthclicked + 1 == Integer.valueOf(token[1]) && day == Integer.valueOf(a[0])) {
+                    nowfoodlist = j;
                     name = foods.get(j).getTitle();
-                    System.out.println(name );
                     calorie = foods.get(j).getCalorie();
-                    System.out.println(calorie );
-                    List<Event> events = getEvents( timeInMillis , name , calorie );
+                    List<Event> events = getEvents(timeInMillis, name, calorie);
                     compactCalendarView.addEvents(events);
-                }
-                j++;
-            }
+                    j++;
+                    while (j < foods.size()) {
+                        time = foods.get(j).getLocaleDatetime();
+                        token = time.split("-");
+                        a = token[2].split(" ");
+                        getday[0] = Integer.valueOf(token[0]);
+                        getday[1] = Integer.valueOf(token[1]);
+                        getday[2] = Integer.valueOf(a[0]);
 
+                        if (yearclicked == Integer.valueOf(token[0]) && monthclicked + 1 == Integer.valueOf(token[1]) && day == Integer.valueOf(a[0])) {
+                            nowfoodlist = j;
+                            name = foods.get(j).getTitle();
+                            calorie = foods.get(j).getCalorie();
+                            events = getEvents(timeInMillis, name, calorie);
+                            compactCalendarView.addEvents(events);
+                            j++;
+                        }else{
+                            break;
+                        }
+                    }
+                }
+            }
+            else{
+                while (j < foods.size()) {
+                    time = foods.get(j).getLocaleDatetime();
+                    // System.out.println("...............date time: "+time);
+                    String[] token = time.split("-");
+                    String[] a = token[2].split(" ");
+                    getday[0] = Integer.valueOf(token[0]);
+                    // System.out.println(".....ok 0 ");
+                    getday[1] = Integer.valueOf(token[1]);
+                    //System.out.println(".....ok 1 ");
+                    getday[2] = Integer.valueOf(a[0]);
+                    //System.out.println(".....ok 2 ");
+
+                    //System.out.println("...............date time: "+token[0]+"...."+token[1]+"..."+a[0]);
+                    //System.out.println(yearclicked+"" +monthclicked +""+ day );
+                    if (yearclicked == Integer.valueOf(token[0]) && monthclicked + 1 == Integer.valueOf(token[1]) && day == Integer.valueOf(a[0])) {
+                        nowfoodlist = j;
+                        //System.out.println("GGGGGGGGGGGGGGGGGGGGG" );
+                        name = foods.get(j).getTitle();
+                        //System.out.println(name );
+                        calorie = foods.get(j).getCalorie();
+                        //System.out.println(calorie );
+                        List<Event> events = getEvents(timeInMillis, name, calorie);
+                        compactCalendarView.addEvents(events);
+                        j++;
+                    }else{
+                        break;
+                    }
+                }
+            }
         }
 
     }
