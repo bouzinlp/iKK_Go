@@ -254,6 +254,14 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Always select tab 0
+        selectTab(0);
+    }
+
     // Open food calories
     private void openFoodCalCsv() throws IOException {
         // Build reader instance

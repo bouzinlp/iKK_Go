@@ -128,6 +128,14 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Always select tab 3
+        selectTab(3);
+    }
+
     // select specific tab
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
@@ -144,8 +152,8 @@ public class MessageActivity extends AppCompatActivity {
                         Log.d("Success", "Login");
                         //check whether user logged
                         accessToken = loginResult.getAccessToken();
-                        if(isLoggedIn()){
-                            if(Profile.getCurrentProfile()==null){
+                        if (isLoggedIn()) {
+                            if (Profile.getCurrentProfile() == null) {
                                 mProfileTracker = new ProfileTracker() {
                                     @Override
                                     protected void onCurrentProfileChanged(Profile profile, Profile profile2) {

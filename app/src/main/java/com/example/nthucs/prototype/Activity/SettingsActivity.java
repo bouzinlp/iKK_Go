@@ -88,6 +88,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Always select tab 4
+        selectTab(4);
+    }
+
     // select specific tab
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);

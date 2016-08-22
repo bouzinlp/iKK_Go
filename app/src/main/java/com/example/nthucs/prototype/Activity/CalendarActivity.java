@@ -350,6 +350,14 @@ public class CalendarActivity  extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Always select tab 1
+        selectTab(1);
+    }
+
     // select specific tab
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
