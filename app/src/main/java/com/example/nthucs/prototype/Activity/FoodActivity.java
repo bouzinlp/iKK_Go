@@ -212,7 +212,6 @@ public class FoodActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         if (view.getId() == R.id.ok_item) {
             String titleText = dialogTitleButton.getText().toString();
-            //title_text.getText().toString();
             String contentText = content_text.getText().toString();
             String calorieText = calorie_text.getText().toString();
             String portionsText = portions_text.getText().toString();
