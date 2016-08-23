@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:layout_centerInParent="true">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal">
+
+        <com.example.nthucs.prototype.antistatic.spinnerwheel.WheelVerticalView
+            android:id="@+id/sport_name_spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="2sp"
+            android:layout_margin="6sp"
+            android:gravity="center"
+            android:id="@+id/dialog_ok_button"
+            android:text="@string/dialog_button"
+            android:textColor="@color/royal_blue"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/white"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:padding="2sp"
+            android:layout_margin="6sp"
+            android:gravity="center"
+            android:id="@+id/dialog_cancel_button"
+            android:text="@string/dialog_cancel_button"
+            android:textColor="@color/royal_blue"
+            android:textSize="20sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@color/white"
+            android:layout_centerHorizontal="true" />
+
+    </LinearLayout>
+
+</LinearLayout>

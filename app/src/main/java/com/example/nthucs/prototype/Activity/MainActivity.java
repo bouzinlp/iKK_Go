@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
-        //Read CSV line by line
+        // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
             // temporary declarer
             FoodCal foodCal= new FoodCal();
