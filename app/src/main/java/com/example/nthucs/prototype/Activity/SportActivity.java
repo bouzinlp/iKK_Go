@@ -169,4 +169,10 @@ public class SportActivity extends AppCompatActivity {
             }
         });
     }
+
+    // get dialog title button public
+    public Button getDialogTitleButton() {
+        return this.dialogTitleButton;
+    }
+
 }
