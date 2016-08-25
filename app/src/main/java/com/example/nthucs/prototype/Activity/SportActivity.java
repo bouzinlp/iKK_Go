@@ -1,6 +1,7 @@
 package com.example.nthucs.prototype.Activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.MyProfileDAO;
+import com.example.nthucs.prototype.Settings.Profile;
 import com.example.nthucs.prototype.SpinnerWheel.CustomDialogForSport;
 import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportCal;
@@ -43,10 +46,33 @@ public class SportActivity extends AppCompatActivity {
     // list of sportCal
     private List<SportCal> sportCalList = new ArrayList<>();
 
+    // data base for profile
+    private MyProfileDAO myProfileDAO;
+
+    // list of profile & current weight
+    private List<Profile> profileList = new ArrayList<>();
+    private float currentWeight;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sport);
+
+        // initialize data base
+        myProfileDAO = new MyProfileDAO(getApplicationContext());
+
+        // get all profile data from data base
+        profileList = myProfileDAO.getAll();
+
+        // ask user to finish profile if table is empty
+        if (myProfileDAO.isTableEmpty() == true) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SportActivity.this);
+            builder.setTitle("Information").setMessage("Please fill profile first");
+            builder.setPositiveButton(android.R.string.yes, null);
+            builder.show();
+        } else {
+            currentWeight = profileList.get(profileList.size()-1).getWeight();
+        }
 
         // open sport csv
         try {
@@ -142,10 +168,11 @@ public class SportActivity extends AppCompatActivity {
             SportCal sportCal = new SportCal();
 
             sportCal.setSportName(allRows.get(i)[0]);
-            sportCal.setConsumeHalfHouWith40(Float.parseFloat(allRows.get(i)[1]));
-            sportCal.setConsumeHalfHouWith50(Float.parseFloat(allRows.get(i)[2]));
-            sportCal.setConsumeHalfHouWith60(Float.parseFloat(allRows.get(i)[3]));
-            sportCal.setConsumeHalfHouWith70(Float.parseFloat(allRows.get(i)[4]));
+            sportCal.setConsumeUnit(Float.parseFloat(allRows.get(i)[1]));
+            sportCal.setConsumeHalfHouWith40(Float.parseFloat(allRows.get(i)[2]));
+            sportCal.setConsumeHalfHouWith50(Float.parseFloat(allRows.get(i)[3]));
+            sportCal.setConsumeHalfHouWith60(Float.parseFloat(allRows.get(i)[4]));
+            sportCal.setConsumeHalfHouWith70(Float.parseFloat(allRows.get(i)[5]));
 
             sportCalList.add(sportCal);
         }
@@ -164,7 +191,7 @@ public class SportActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // process custom dialog
-                CustomDialogForSport customDialogForSport = new CustomDialogForSport(sportCalList, SportActivity.this);
+                CustomDialogForSport customDialogForSport = new CustomDialogForSport(sportCalList, SportActivity.this, currentWeight);
                 customDialogForSport.processDialogControllers();
             }
         });
@@ -175,4 +202,23 @@ public class SportActivity extends AppCompatActivity {
         return this.dialogTitleButton;
     }
 
+    // get calorie edit text public
+    public EditText getCalorieText() {
+        return this.calorie_text;
+    }
+
+    // get total time from hour & minute text
+    public long getCurrentTime() {
+        long currentTime;
+
+        // in add event
+        if (hour_text.getText().toString().isEmpty() == true && minute_text.getText().toString().isEmpty() == true) {
+            currentTime = 0;
+        } else {
+            currentTime = TimeUnit.HOURS.toMillis(Integer.parseInt(hour_text.getText().toString()))
+                    + TimeUnit.MINUTES.toMillis(Integer.parseInt(minute_text.getText().toString()));
+        }
+
+        return currentTime;
+    }
 }

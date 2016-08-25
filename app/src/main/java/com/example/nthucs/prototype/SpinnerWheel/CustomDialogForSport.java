@@ -27,6 +27,9 @@ public class CustomDialogForSport {
     // Parent activity
     private SportActivity activity;
 
+    // User's current weight
+    private float currentWeight;
+
     // Global spinner and adapter
     private AbstractWheel sportNameSpinner;
     private ArrayWheelAdapter<String> sportNameAdapter;
@@ -38,10 +41,11 @@ public class CustomDialogForSport {
     private String curSportName;
     private int curSportIdx;
 
-    public CustomDialogForSport(List<SportCal> sportCalList, SportActivity activity) {
+    public CustomDialogForSport(List<SportCal> sportCalList, SportActivity activity, float currentWeight) {
 
         this.sportCalList = sportCalList;
         this.activity = activity;
+        this.currentWeight = currentWeight;
 
         // initialize current sport name title
         if (activity.getDialogTitleButton().getText().toString().isEmpty() == false) {
@@ -142,6 +146,24 @@ public class CustomDialogForSport {
                 // set dialog title button's text
                 activity.getDialogTitleButton()
                         .setText(sportNameAdapter.getItemText(sportNameSpinner.getCurrentItem()));
+
+                // set calorie & time duration according user's weight
+                if (currentWeight >= 40 && currentWeight < 50) {
+                    activity.getCalorieText().setText(Float.toString(sportCalList
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith40()));
+                } else if (currentWeight >= 50 && currentWeight < 60) {
+                    activity.getCalorieText().setText(Float.toString(sportCalList
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith50()));
+                } else if (currentWeight >= 60 && currentWeight < 70) {
+                    activity.getCalorieText().setText(Float.toString(sportCalList
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith60()));
+                } else if (currentWeight >= 70) {
+                    activity.getCalorieText().setText(Float.toString(sportCalList
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith70()));
+                }
+
+                // test
+                System.out.println(activity.getCurrentTime());
 
                 // dismiss dialog
                 dialog.dismiss();

@@ -20,6 +20,9 @@ public class SportCal implements java.io.Serializable {
     public String getSportName() {return this.sportName;}
     public void setSportName(String sportName) {this.sportName = sportName;}
 
+    public float getConsumeUnit() {return this.consumeUnit;}
+    public void setConsumeUnit(float consumeUnit) {this.consumeUnit = consumeUnit;}
+
     public float getConsumeHalfHouWith40() {return this.consumeHalfHouWith40;}
     public void setConsumeHalfHouWith40(float consumeHalfHouWith40) {this.consumeHalfHouWith40 = consumeHalfHouWith40;}
 
