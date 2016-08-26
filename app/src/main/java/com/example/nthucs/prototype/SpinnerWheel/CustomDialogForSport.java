@@ -147,23 +147,25 @@ public class CustomDialogForSport {
                 activity.getDialogTitleButton()
                         .setText(sportNameAdapter.getItemText(sportNameSpinner.getCurrentItem()));
 
+                float timeMul = (float)((activity.getCurrentTime() / (1000 * 60)) / 30);
+
+                // if total time is zero
+                if (timeMul == 0) timeMul = 1;
+
                 // set calorie & time duration according user's weight
                 if (currentWeight >= 40 && currentWeight < 50) {
                     activity.getCalorieText().setText(Float.toString(sportCalList
-                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith40()));
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith40()*timeMul));
                 } else if (currentWeight >= 50 && currentWeight < 60) {
                     activity.getCalorieText().setText(Float.toString(sportCalList
-                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith50()));
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith50()*timeMul));
                 } else if (currentWeight >= 60 && currentWeight < 70) {
                     activity.getCalorieText().setText(Float.toString(sportCalList
-                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith60()));
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith60()*timeMul));
                 } else if (currentWeight >= 70) {
                     activity.getCalorieText().setText(Float.toString(sportCalList
-                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith70()));
+                            .get(sportNameSpinner.getCurrentItem()).getConsumeHalfHouWith70()*timeMul));
                 }
-
-                // test
-                System.out.println(activity.getCurrentTime());
 
                 // dismiss dialog
                 dialog.dismiss();
