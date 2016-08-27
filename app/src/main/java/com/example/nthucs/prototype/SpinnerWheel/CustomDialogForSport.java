@@ -149,8 +149,13 @@ public class CustomDialogForSport {
 
                 float timeMul = (float)((activity.getCurrentTime() / (1000 * 60)) / 30);
 
-                // if total time is zero
-                if (timeMul == 0) timeMul = 1;
+                // if total time is zero(add time), set time to half hour
+                if (timeMul == 0) {
+                    activity.getHourText().setText("0");
+                    activity.getMinuteText().setText("30");
+
+                    timeMul = 1;
+                }
 
                 // set calorie & time duration according user's weight
                 if (currentWeight >= 40 && currentWeight < 50) {

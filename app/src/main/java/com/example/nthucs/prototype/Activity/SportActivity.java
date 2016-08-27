@@ -5,6 +5,8 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -84,11 +86,8 @@ public class SportActivity extends AppCompatActivity {
         // process dialog button for title
         processDialogButtonControllers();
 
-        //title_text = (EditText)findViewById(R.id.title_text);
-        content_text = (EditText)findViewById(R.id.content_text);
-        calorie_text = (EditText)findViewById(R.id.calorie_text);
-        hour_text = (EditText)findViewById(R.id.hour_text);
-        minute_text = (EditText)findViewById(R.id.minute_text);
+        // process edit text controllers
+        processEditTextControllers();
 
         Intent intent = getIntent();
         String action = intent.getAction();
@@ -197,6 +196,15 @@ public class SportActivity extends AppCompatActivity {
         });
     }
 
+    // process edit text controllers
+    private void processEditTextControllers() {
+        content_text = (EditText)findViewById(R.id.content_text);
+        calorie_text = (EditText)findViewById(R.id.calorie_text);
+        hour_text = (EditText)findViewById(R.id.hour_text);
+        minute_text = (EditText)findViewById(R.id.minute_text);
+
+    }
+
     // get dialog title button public
     public Button getDialogTitleButton() {
         return this.dialogTitleButton;
@@ -205,6 +213,16 @@ public class SportActivity extends AppCompatActivity {
     // get calorie edit text public
     public EditText getCalorieText() {
         return this.calorie_text;
+    }
+
+    // get hour edit text public
+    public EditText getHourText() {
+        return this.hour_text;
+    }
+
+    // get minute edit text public
+    public EditText getMinuteText() {
+        return this.minute_text;
     }
 
     // get total time from hour & minute text

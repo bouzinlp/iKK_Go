@@ -239,6 +239,12 @@ public class CustomDialogForFood {
                     }
                 }
 
+                // set portions & grams if activity is add food
+                if (activity.isAddFood() == true) {
+                    activity.getPortionsText().setText("1.0");
+                    activity.getGramsText().setText("100.0");
+                }
+
                 // dismiss dialog
                 dialog.dismiss();
             }

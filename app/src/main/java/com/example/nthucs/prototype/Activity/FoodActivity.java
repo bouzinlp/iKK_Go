@@ -81,6 +81,9 @@ public class FoodActivity extends AppCompatActivity {
     // food cal list
     private List<FoodCal> foodCalList = new ArrayList<>();
 
+    // distinguish add or edit food
+    private boolean isAddFood;
+
     //facebook share dialog
     private ShareDialog shareDialog;
 
@@ -142,8 +145,12 @@ public class FoodActivity extends AppCompatActivity {
             portions_text.setText(Float.toString(food.getPortions()));
             grams_text.setText(Float.toString(food.getGrams()));
 
+            isAddFood = false;
+
         } else if (action.equals("com.example.nthucs.prototype.ADD_FOOD")) {
             food = new Food();
+
+            isAddFood = true;
         }
 
         // calorie data base
@@ -348,5 +355,20 @@ public class FoodActivity extends AppCompatActivity {
     // get calorie edit text public
     public EditText getCalorieText() {
         return this.calorie_text;
+    }
+
+    // get portions edit text public
+    public EditText getPortionsText() {
+        return this.portions_text;
+    }
+
+    // get grams edit text public
+    public EditText getGramsText() {
+        return this.grams_text;
+    }
+
+    // get boolean value for custom dialog
+    public boolean isAddFood() {
+        return this.isAddFood;
     }
 }
