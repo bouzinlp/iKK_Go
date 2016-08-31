@@ -54,6 +54,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_weight="1"
             android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
@@ -78,6 +79,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -95,6 +97,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -112,6 +115,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
@@ -129,6 +133,7 @@
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:layout_weight="1"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
