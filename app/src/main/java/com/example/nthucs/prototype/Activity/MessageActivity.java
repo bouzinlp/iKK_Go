@@ -35,6 +35,7 @@ import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +51,7 @@ import java.util.Arrays;
  */
 public class MessageActivity extends AppCompatActivity {
 
+    private LoginButton loginButton;
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
     private Menu menu;
@@ -67,31 +69,33 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println("ONCRETE");
         setTitle("Message");
-        setContentView(R.layout.activity_message);
-
-        Toast.makeText(getApplicationContext(), "Login to show messages", Toast.LENGTH_SHORT).show();
         FacebookSdk.sdkInitialize(getApplicationContext());
-        initFBManager();
+        setContentView(R.layout.activity_message_login);
+        System.out.println("CHECK LOGGED "+isLoggedIn());
+        if(isLoggedIn()){
+            doLoggedThings();
+        }
+        else{
+            initFBManager();
+            Toast.makeText(getApplicationContext(), "Login to show messages", Toast.LENGTH_SHORT).show();
+            System.out.println("CHECK LOGGED2 "+isLoggedIn());
+            // initialize tabLayout and viewPager
+            viewPager = (ViewPager)findViewById(R.id.viewPager);
+            tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+            initializeTabLayout();
 
-        //arrayOfCommit = new ArrayList<Commit>();
-        // Create the adapter to convert the array to views
-        //MessageAdapter adapter = new MessageAdapter(this, arrayOfCommit);
-        // Attach the adapter to a ListView
-        listView = (ListView) findViewById(R.id.messageList);
-        //listView.setAdapter(adapter);
+            // call function to active tabs listener
+            TabsController tabsController = new TabsController(3, MessageActivity.this, tabLayout, viewPager);
+            tabsController.processTabLayout();
+
+            selectTab(3);
+        }
 
 
-        // initialize tabLayout and viewPager
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        initializeTabLayout();
+        System.out.println("CHECK LOGGED3 "+isLoggedIn());
 
-        // call function to active tabs listener
-        TabsController tabsController = new TabsController(3, MessageActivity.this, tabLayout, viewPager);
-        tabsController.processTabLayout();
-
-        selectTab(3);
     }
 
 
@@ -144,29 +148,16 @@ public class MessageActivity extends AppCompatActivity {
 
     //init facebook manager
     private void initFBManager(){
+        loginButton = (LoginButton)findViewById(R.id.login_button);
+        loginButton.setReadPermissions("public_profile", "user_friends","user_posts");
         mCallbackManager = CallbackManager.Factory.create();
-        LoginManager.getInstance().registerCallback(mCallbackManager,
+        loginButton.registerCallback(mCallbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Log.d("Success", "Login");
-                        //check whether user logged
                         accessToken = loginResult.getAccessToken();
-                        if (isLoggedIn()) {
-                            if (Profile.getCurrentProfile() == null) {
-                                mProfileTracker = new ProfileTracker() {
-                                    @Override
-                                    protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                                        // profile2 is the new profile
-                                        mProfileTracker.stopTracking();
-                                        updateMenuTitles(profile2.getName());
-                                    }
-                                };
-                            }
-
-                            updateMenuTitles(Profile.getCurrentProfile().getName());
-                            queryGraphAPI();
-                        }
+                        doLoggedThings();
                     }
 
                     @Override
@@ -181,13 +172,47 @@ public class MessageActivity extends AppCompatActivity {
                 });
     }
 
-    public void FBLogin(MenuItem menuItem){
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends","user_posts"));
-    }
 
     private boolean isLoggedIn() {
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         return accessToken != null;
+    }
+
+    private void doLoggedThings(){
+
+        setContentView(R.layout.activity_message);
+        // Attach the adapter to a ListView
+        listView = (ListView) findViewById(R.id.messageList);
+
+        //check whether user logged
+        if (isLoggedIn()) {
+            if (Profile.getCurrentProfile() == null) {
+                mProfileTracker = new ProfileTracker() {
+                    @Override
+                    protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                        // profile2 is the new profile
+                        mProfileTracker.stopTracking();
+                        updateMenuTitles(profile2.getName());
+                    }
+                };
+            }
+            else{
+                updateMenuTitles(Profile.getCurrentProfile().getName());
+            }
+
+            queryGraphAPI();
+
+        }
+        // initialize tabLayout and viewPager
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        initializeTabLayout();
+        // call function to active tabs listener
+        TabsController tabsController = new TabsController(3, MessageActivity.this, tabLayout, viewPager);
+        tabsController.processTabLayout();
+
+        selectTab(3);
+
     }
 
     private void updateMenuTitles(String name) {
@@ -197,14 +222,16 @@ public class MessageActivity extends AppCompatActivity {
 
     private void queryGraphAPI(){
         GraphRequest request = GraphRequest.newGraphPathRequest(
-                accessToken,
+                AccessToken.getCurrentAccessToken(),
                 "/me/feed",
                 new GraphRequest.Callback() {
                     @Override
                     public void onCompleted(GraphResponse response) {
                         // Insert your code here
+                        System.out.println("oncomplete");
+                        System.out.println("accessToken "+accessToken);
                         arrayOfCommit = new ArrayList<>();
-                        System.out.println(response.getJSONObject());
+                        System.out.println("reponse"+response.getJSONObject());
                         arrayOfCommit = handleJSON(response.getJSONObject());
                         // Create the adapter to convert the array to views
                         MessageAdapter adapter = new MessageAdapter(getApplicationContext(), arrayOfCommit);
