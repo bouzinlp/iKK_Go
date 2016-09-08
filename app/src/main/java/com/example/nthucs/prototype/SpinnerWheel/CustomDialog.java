@@ -103,14 +103,14 @@ public class CustomDialog {
         String[] compare_string = new String[compare_result.length];
 
         for (int i = 0 ; i < compare_result.length ; i++) {
-            int spaceLength = 20 - foodCalList.get(compare_result[i]).getChineseName().length();
+            int spaceLength = 40 - foodCalList.get(compare_result[i]).getChineseName().getBytes().length;
 
             //System.out.println(foodCalList.get(compare_result[i]).getChineseName().length() + " "
             //        + Float.toString(foodCalList.get(compare_result[i]).getCalorie()).length());
 
             compare_string[i] = foodCalList.get(compare_result[i]).getChineseName();
 
-            System.out.println(compare_string[i].getBytes());
+            //System.out.println(foodCalList.get(compare_result[i]).getChineseName().getBytes().length+" "+spaceLength);
 
             for (int j = 0 ; j < spaceLength ; j++) {
                 compare_string[i] += " ";
