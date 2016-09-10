@@ -59,7 +59,7 @@ public class MessageActivity extends AppCompatActivity {
     public ArrayList<Commit> arrayOfCommit;
     public ListView listView;
 
-    String httpUrl,postID;
+    String httpUrl,postID,userName;
     static Bitmap img;
 
     // element for the bottom of the tab content
@@ -69,7 +69,6 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println("ONCRETE");
         setTitle("Message");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_message_login);
@@ -93,14 +92,12 @@ public class MessageActivity extends AppCompatActivity {
             selectTab(3);
         }
 
-
-        System.out.println("CHECK LOGGED3 "+isLoggedIn());
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        System.out.println(" onCreateOptionsMenu");
         this.menu = menu;
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.message_menu, menu);
@@ -135,7 +132,7 @@ public class MessageActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+        System.out.println(" onResume");
         // Always select tab 3
         selectTab(3);
     }
@@ -192,12 +189,12 @@ public class MessageActivity extends AppCompatActivity {
                     protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
                         // profile2 is the new profile
                         mProfileTracker.stopTracking();
-                        updateMenuTitles(profile2.getName());
+                        userName = profile2.getName();
                     }
                 };
             }
             else{
-                updateMenuTitles(Profile.getCurrentProfile().getName());
+                userName = Profile.getCurrentProfile().getName();
             }
 
             queryGraphAPI();
@@ -216,6 +213,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void updateMenuTitles(String name) {
+
         MenuItem loginMenuItem = menu.findItem(R.id.login);
         loginMenuItem.setTitle(name);
     }
@@ -230,6 +228,7 @@ public class MessageActivity extends AppCompatActivity {
                         // Insert your code here
                         System.out.println("oncomplete");
                         System.out.println("accessToken "+accessToken);
+                        updateMenuTitles(userName);
                         arrayOfCommit = new ArrayList<>();
                         System.out.println("reponse"+response.getJSONObject());
                         arrayOfCommit = handleJSON(response.getJSONObject());

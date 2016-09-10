@@ -3,6 +3,8 @@ package com.example.nthucs.prototype.Activity;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -10,6 +12,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -27,6 +30,7 @@ import com.example.nthucs.prototype.Utility.CompFoodDB;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Utility.RealPathUtil;
 import com.example.nthucs.prototype.antistatic.spinnerwheel.AbstractWheel;
 import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelChangedListener;
 import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelClickedListener;
@@ -62,6 +66,7 @@ public class GalleryActivity extends AppCompatActivity {
     private Uri picUri;
     private String imageUrl;
     private String picUriString;
+    private String realPath;
 
     // Search by word
     private String resultText;
@@ -155,7 +160,9 @@ public class GalleryActivity extends AppCompatActivity {
 
             // Use Async Task
             try{
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), GalleryActivity.this);
+                System.out.println("REAL PATH = "+realPath);
+                System.out.println("FILE = "+picFile);
+                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, realPath, GalleryActivity.this);
                 responseString =  asyncTaskConnect.execute().get();
             } catch (InterruptedException e) {
                 System.out.println("Interrupted exception");
@@ -163,6 +170,7 @@ public class GalleryActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
+            System.out.println("response = "+responseString);
             // Parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
 
@@ -240,26 +248,34 @@ public class GalleryActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        // SDK < API11
+        if (Build.VERSION.SDK_INT < 11)
+            realPath = RealPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+            // SDK >= 11 && SDK < 19
+        else if (Build.VERSION.SDK_INT < 19)
+            realPath = RealPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+            // SDK > 19 (Android 4.4)
+        else
+            realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
 
         // the address of the image on the SD card
         Uri uri = data.getData();
 
         // test for different storage
-        //System.out.println(uri);
-        //System.out.println(getRealPathFromURI(uri));
+        //System.out.println("img uri = "+uri);
+        //System.out.println("img path = "+getRealPathFromURI(uri));
 
         // uri is from external media
         if (uri.getPath().toLowerCase().contains("external")) {
             // fix bug with invalid extension from passing true picUri
-            String realPath = getRealPathFromURI(uri);
             picUri = Uri.parse(realPath);
             picFile = new File(realPath);
             fileName = FileUtil.getUniqueFileName();
         // uri is from real path, like: sdcard
         } else {
-            picUri = uri;
-            picFile = new File(uri.getPath());
-            fileName = picFile.getName().substring(1, 15);
+            picUri = Uri.fromFile(new File(realPath));
+            picFile = new File(realPath);
+            fileName = picFile.getName();
         }
 
         // assign variable: picUri.toString
@@ -295,21 +311,6 @@ public class GalleryActivity extends AppCompatActivity {
         return imageUrl;
     }
 
-    // if uri is media external format, get the real path from this uri
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        // Source is Dropbox or other similar local file path
-        if (cursor == null) {
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
-    }
 
     // Process normal food event if cannot match result from data base
     private void processFoodEvent() {

@@ -161,6 +161,10 @@ public class CameraActivity extends AppCompatActivity {
             // Use Async Task to open httpUrlConnection for upload picture
             String responseString = new String();
 
+            System.out.println("picfile = "+picFile);
+            System.out.println("1354345464 = "+getImagePath(picUri));
+
+
             // Use Async Task
             try{
                 AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), CameraActivity.this);
