@@ -28,11 +28,13 @@ public class SettingsActivity extends AppCompatActivity {
 
     // settings' title
     private static final String myProfile = "My Profile";
+    private static final String myCurrentExercise = "My Current Exercise";
     private static final String myWeightLossGoal = "My Weight Loss Goal";
+    private static final String displayAsMetricImperial = "Display as metric/imperial";
     private static final String weightChart = "Weight Chart";
     private static final String calorieConsumption = "Calorie Consumption";
     private static final String myFavourites = "My Favourites";
-    private String[] titleStr = new String[]{myProfile, myWeightLossGoal, weightChart, calorieConsumption, myFavourites};
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites};
 
     // list view for including textView
     private ListView setting_list;
@@ -118,10 +120,22 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent_profile);
                         finish();
                         break;
+                    case myCurrentExercise:
+                        Intent intent_current_exercise = new Intent();
+                        intent_current_exercise.setClass(SettingsActivity.this, MyCurrentExerciseActivity.class);
+                        startActivity(intent_current_exercise);
+                        finish();
+                        break;
                     case myWeightLossGoal:
                         Intent intent_weight_loss = new Intent();
                         intent_weight_loss.setClass(SettingsActivity.this, MyWeightLossGoalActivity.class);
                         startActivity(intent_weight_loss);
+                        finish();
+                        break;
+                    case displayAsMetricImperial:
+                        Intent intent_display = new Intent();
+                        intent_display.setClass(SettingsActivity.this, DisplayAsMetricImperialActivity.class);
+                        startActivity(intent_display);
                         finish();
                         break;
                     case weightChart:

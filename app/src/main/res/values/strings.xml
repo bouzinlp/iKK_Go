@@ -43,6 +43,8 @@
     <string name="wait_for_calculate">Wait</string>
     <string name="update_btn">Update</string>
 
+    <string name="my_current_exercise_title">Exercise Settings</string>
+
     <string name="my_weight_loss_goal_title">My Weight Loss Goal</string>
     <string name="my_target_weight">Choose target weight</string>
     <string name="my_weekly_target">Choose weekly target</string>
@@ -52,6 +54,7 @@
     <string name="consume_heat">Health consume heat: </string>
     <string name="wait_for_suggest">wait for suggest </string>
 
+    <string name="display_as_metric_imperial_title">Display Settings</string>
 
     <string name="weight_chart_title">Weight Chart</string>
 

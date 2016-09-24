@@ -88,7 +88,19 @@
             </intent-filter>>
         </activity>
 
+        <activity android:name=".Activity.MyCurrentExerciseActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
         <activity android:name=".Activity.MyWeightLossGoalActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>>
+        </activity>
+
+        <activity android:name=".Activity.DisplayAsMetricImperialActivity">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>>
