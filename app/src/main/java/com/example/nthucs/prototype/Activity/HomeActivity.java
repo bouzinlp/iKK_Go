@@ -1,7 +1,10 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -64,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
         totalCals = (float)0;
         totalDistance =(float) 0;
         activityTime=0;
+
     }
 
 

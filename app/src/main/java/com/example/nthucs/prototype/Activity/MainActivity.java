@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.commonsware.cwac.merge.MergeAdapter;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
@@ -36,6 +38,8 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 
 public class MainActivity extends AppCompatActivity {
+    //to check if it's the first execution
+    SharedPreferences prefs = null;
 
     // data base for storing food list
     private FoodDAO foodDAO;
@@ -91,6 +95,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //first run settings
+        System.out.print("==============HOME FIRST RUN TEST=============");
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        if (isFirstRun) {
+            //show start activity
+            startActivity(new Intent(MainActivity.this, MyProfileActivity.class));
+            Toast.makeText(MainActivity.this, "First Run", Toast.LENGTH_LONG).show();
+        }
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
+
+        //reset the content view
         setContentView(R.layout.activity_main);
 
         // calorie data base
@@ -257,7 +273,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         // Always select tab 0
         selectTab(0);
     }

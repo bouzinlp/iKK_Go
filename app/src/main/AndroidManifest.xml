@@ -23,7 +23,7 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity android:name=".Activity.MainActivity" >
             <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
@@ -84,7 +84,8 @@
 
         <activity android:name=".Activity.MyProfileActivity">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>>
         </activity>
 
