@@ -8,9 +8,115 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stretchColumns="1">
+        android:stretchColumns="1, 2, 3">
 
+        <TableRow>
+            <TextView
+                android:text="@string/sectionOne"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:background="@color/default_button"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerA_1"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerB_1"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerC_1"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerD_1"
+                android:paddingLeft="12sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/sectionTwo"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:background="@color/default_button"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerA_2"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerB_2"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerC_2"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerD_2"
+                android:paddingLeft="12sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
 
     </TableLayout>
 

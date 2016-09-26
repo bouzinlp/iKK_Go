@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
 
@@ -16,6 +17,9 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
 
     // Back button
     private Button backButton;
+
+    // Answer text view
+    private TextView sectionOne;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +32,9 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
 
         // process back button
         processBackControllers();
+
+        // process text view
+        processSectionControllers();
     }
 
     @Override
@@ -57,5 +64,10 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             }
         });
+    }
+
+    // process section text view
+    private void processSectionControllers() {
+
     }
 }
