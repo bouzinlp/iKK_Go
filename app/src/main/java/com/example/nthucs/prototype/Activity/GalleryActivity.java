@@ -170,7 +170,7 @@ public class GalleryActivity extends AppCompatActivity {
                 System.out.println("Execution exception");
             }
 
-            System.out.println("response = "+responseString);
+            //System.out.println("response = "+responseString);
             // Parse response string
             imageUrl = getParseString(responseString, "data", "img_url");
 
