@@ -42,6 +42,13 @@
     <string name="your_BMR">Your BMR : </string>
     <string name="wait_for_calculate">Wait</string>
     <string name="update_btn">Update</string>
+    <string name="select_day">Choose the day</string>
+    <string name="select_time">Choose the time</string>
+    <string name="spressure">Systolic Pressure</string>
+    <string name="dpressure">Diastolic Pressure</string>
+    <string name="pulse"> Pulse </string>
+    <string name="water"> Water (cc)</string>
+    <string name="temperature"> Temperature(C)</string>
 
     <string name="my_current_exercise_title">Exercise Settings</string>
     <string name="sectionOne">How physically active are you during your work/day time? (even work at home, sick leave or studying for instance at University)</string>
@@ -55,6 +62,9 @@
     <string name="answerC_2">c. Moderate (e.g. regular activities most days such as vigorous walking, cycling or sport for 30 minutes or longer)</string>
     <string name="answerD_2">d. Very active (e.g. more than an hour of daily strenuous activities such as sport or cycling)</string>
 
+    <string name="my_temperature_record_title">My Temperature record </string>
+    <string name="drink_water_diary_title">Drink water diary</string>
+    <string name="my_blood_pressure_title">My blood pressure</string>
     <string name="my_weight_loss_goal_title">My Weight Loss Goal</string>
     <string name="my_target_weight">Choose target weight</string>
     <string name="my_weekly_target">Choose weekly target</string>
