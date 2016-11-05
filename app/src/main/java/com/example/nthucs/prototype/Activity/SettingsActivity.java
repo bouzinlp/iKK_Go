@@ -28,13 +28,17 @@ public class SettingsActivity extends AppCompatActivity {
 
     // settings' title
     private static final String myProfile = "My Profile";
-    private static final String myCurrentExercise = "My Current Exercise";
+    private static final String myCurrentExercise = "My Current Exercise";//運動紀錄
     private static final String myWeightLossGoal = "My Weight Loss Goal";
     private static final String displayAsMetricImperial = "Display as metric/imperial";
     private static final String weightChart = "Weight Chart";
     private static final String calorieConsumption = "Calorie Consumption";
     private static final String myFavourites = "My Favourites";
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites};
+    private static final String myBloodPressure = "My Blood Pressure";
+    private static final String drinkWaterDiary = "Drink Water Diary";
+    private static final String myTemperatureRecord = "My Temperature Record";
+    // , drinkWaterDiary , myTemperatureRecord
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , myBloodPressure , drinkWaterDiary, myTemperatureRecord};
 
     // list view for including textView
     private ListView setting_list;
@@ -156,6 +160,25 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent_my_favourites);
                         finish();
                         break;
+                    case myBloodPressure:
+                        Intent intent_my_blood_pressure = new Intent();
+                        intent_my_blood_pressure.setClass(SettingsActivity.this , MyBloodPressure.class);
+                        startActivity(intent_my_blood_pressure);
+                        finish();
+                        break;
+                    case drinkWaterDiary:
+                        Intent intent_drink_water_diary = new Intent();
+                        intent_drink_water_diary.setClass(SettingsActivity.this , DrinkWaterDiary.class);
+                        startActivity(intent_drink_water_diary);
+                        finish();
+                        break;
+                    case myTemperatureRecord:
+                        Intent intent_my_temperature_record = new Intent();
+                        intent_my_temperature_record.setClass(SettingsActivity.this , MyTemperatureRecord.class);
+                        startActivity(intent_my_temperature_record);
+                        finish();
+                        break;
+
                 }
             }
         };
