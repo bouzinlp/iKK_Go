@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nthucs.prototype.Activity.MyTemperatureRecord">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1">
+
+        <TableRow>
+            <TextView
+                android:text="@string/select_day"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/select_day_button"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!--android:background="@drawable/button_drawable"-->
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/select_time"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:id="@+id/select_time_button"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <!--android:background="@drawable/button_drawable"-->
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/temperature"
+                android:padding="12dp"
+                android:layout_margin="10dp"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/temperature_text"
+                android:background="@drawable/profile_drawable"
+                android:gravity="right"
+                android:padding="7dp"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+    </TableLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSubmit"
+        android:padding="6dp"
+        android:layout_margin="2dp"
+        android:id="@+id/update_button"
+        android:text="@string/update_btn"
+        android:textColor="@color/royal_blue"
+        android:textSize="20sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@color/white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
