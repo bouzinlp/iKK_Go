@@ -71,10 +71,9 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTitle("Message");
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_message_login);
+        setContentView(R.layout.activity_message);
         doLoggedThings();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

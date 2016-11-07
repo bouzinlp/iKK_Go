@@ -1,4 +1,6 @@
 package com.example.nthucs.prototype.Activity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,30 +12,46 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.ProfileTracker;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 /**
  * Created by user on 2016/11/6.
  */
 
-public class LoginActivity extends AppCompatActivity{
+public class LoginActivity extends Activity {
 
-
+    public static String facebookUserID;
     private LoginButton loginButton;
     private CallbackManager mCallbackManager;
+    private ProfileTracker mProfileTracker;
     private AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.v("mhealth","CREATE");
         FacebookSdk.sdkInitialize(getApplicationContext());
-        initFBManager();
         setContentView(R.layout.activity_login);
-
+        if(AccessToken.getCurrentAccessToken()!=null) {
+            Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent_main);
+        }
+        initFBManager();
+        Log.v("mhealth","init");
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 
 
     //init facebook manager
@@ -45,17 +63,38 @@ public class LoginActivity extends AppCompatActivity{
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Log.d("Success", "Login");
+                        Log.v("mhealth", "Login");
                         accessToken = loginResult.getAccessToken();
+                        if(Profile.getCurrentProfile() == null) {
+                            mProfileTracker = new ProfileTracker() {
+                                @Override
+                                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                                    // profile2 is the new profile
+                                    facebookUserID = profile2.getId();
+                                    System.out.println("profile2 id = "+facebookUserID);
+                                    mProfileTracker.stopTracking();
+                                }
+                            };
+                        }
+                        else {
+                            facebookUserID = Profile.getCurrentProfile().getId();
+                            System.out.println("profile id = "+facebookUserID);
+                        }
+                        Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent_main);
+
                     }
                     @Override
                     public void onCancel() {
+                        Log.v("mhealth", "oncancel");
                         Toast.makeText(getApplicationContext(), "Login Cancel", Toast.LENGTH_LONG).show();
                     }
                     @Override
                     public void onError(FacebookException exception) {
+                        Log.v("mhealth", "onerror");
                         Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
     }
+
 }
