@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -99,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
         //first run settings
         System.out.print("==============HOME FIRST RUN TEST=============");
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
+        System.out.println("first run"+isFirstRun);
         if (isFirstRun) {
             //show start activity
             startActivity(new Intent(MainActivity.this, MyProfileActivity.class));

@@ -72,26 +72,7 @@ public class MessageActivity extends AppCompatActivity {
         setTitle("Message");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_message_login);
-        System.out.println("CHECK LOGGED "+isLoggedIn());
-        if(isLoggedIn()){
-            doLoggedThings();
-        }
-        else{
-            initFBManager();
-            Toast.makeText(getApplicationContext(), "Login to show messages", Toast.LENGTH_SHORT).show();
-            System.out.println("CHECK LOGGED2 "+isLoggedIn());
-            // initialize tabLayout and viewPager
-            viewPager = (ViewPager)findViewById(R.id.viewPager);
-            tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-            initializeTabLayout();
-
-            // call function to active tabs listener
-            TabsController tabsController = new TabsController(3, MessageActivity.this, tabLayout, viewPager);
-            tabsController.processTabLayout();
-
-            selectTab(3);
-        }
-
+        doLoggedThings();
     }
 
 
@@ -143,37 +124,6 @@ public class MessageActivity extends AppCompatActivity {
         tab.select();
     }
 
-    //init facebook manager
-    private void initFBManager(){
-        loginButton = (LoginButton)findViewById(R.id.login_button);
-        loginButton.setReadPermissions("public_profile", "user_friends","user_posts");
-        mCallbackManager = CallbackManager.Factory.create();
-        loginButton.registerCallback(mCallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.d("Success", "Login");
-                        accessToken = loginResult.getAccessToken();
-                        doLoggedThings();
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(getApplicationContext(), "Login Cancel", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
-
-
-    private boolean isLoggedIn() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        return accessToken != null;
-    }
 
     private void doLoggedThings(){
 
@@ -182,24 +132,22 @@ public class MessageActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.messageList);
 
         //check whether user logged
-        if (isLoggedIn()) {
-            if (Profile.getCurrentProfile() == null) {
-                mProfileTracker = new ProfileTracker() {
-                    @Override
-                    protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
-                        // profile2 is the new profile
-                        mProfileTracker.stopTracking();
-                        userName = profile2.getName();
-                    }
-                };
-            }
-            else{
-                userName = Profile.getCurrentProfile().getName();
-            }
-
-            queryGraphAPI();
-
+        if (Profile.getCurrentProfile() == null) {
+            mProfileTracker = new ProfileTracker() {
+                @Override
+                protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
+                    // profile2 is the new profile
+                    mProfileTracker.stopTracking();
+                    userName = profile2.getName();
+                }
+            };
         }
+        else{
+            userName = Profile.getCurrentProfile().getName();
+        }
+        queryGraphAPI();
+
+
         // initialize tabLayout and viewPager
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
