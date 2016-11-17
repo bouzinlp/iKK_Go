@@ -1,21 +1,37 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.SettingAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.MyDBHelper;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -50,12 +66,23 @@ public class SettingsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    //DB Class to perform DB related operations
+    MyDBHelper mDB;
+    //Progress Dialog Object
+    ProgressDialog prgDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Settings");
         setContentView(R.layout.activity_settings);
-
+        //constuct db object
+        mDB = new MyDBHelper(this.getApplicationContext(),"food.db",null,MyDBHelper.VERSION);
+        //Initialize Progress Dialog properties
+        prgDialog = new ProgressDialog(this);
+        prgDialog.setMessage("Synching SQLite Data with Remote MySQL DB. Please wait...");
+        prgDialog.setCancelable(false);
         // initialize tabLayout and viewPager
         viewPager = (ViewPager)findViewById(R.id.viewPager);
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
@@ -100,6 +127,13 @@ public class SettingsActivity extends AppCompatActivity {
 
         // Always select tab 4
         selectTab(4);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.setting_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     // select specific tab
@@ -185,5 +219,62 @@ public class SettingsActivity extends AppCompatActivity {
 
         // register settings list click listener
         setting_list.setOnItemClickListener(itemListener);
+    }
+
+
+    public void syncSQLiteMySQLDB(MenuItem item){
+        //Create AsycHttpClient object
+        AsyncHttpClient client = new AsyncHttpClient();
+        RequestParams params = new RequestParams();
+        ArrayList<HashMap<String, String>> userList =  mDB.getAllUsers();
+        if(userList.size()!=0){
+            if(mDB.dbSyncCount() != 0){
+                prgDialog.show();
+                params.put("usersJSON", mDB.composeJSONfromSQLite());
+                client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
+                        prgDialog.hide();
+                        try {
+                            String str = new String(bytes,"UTF-8");
+                            System.out.println(str);
+                            Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+
+
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                        prgDialog.hide();
+                        if(status == 404){
+                            Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                        }
+                        else if(status == 500){
+                            try {
+                                String str = new String(bytes,"UTF-8");
+                                System.out.println("500 "+str);
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                            Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "Status ="+status, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet]", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "SQLite and Remote MySQL DBs are in Sync!", Toast.LENGTH_LONG).show();
+            }
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "No data in SQLite DB, please do enter User name to perform Sync action", Toast.LENGTH_LONG).show();
+        }
+
     }
 }

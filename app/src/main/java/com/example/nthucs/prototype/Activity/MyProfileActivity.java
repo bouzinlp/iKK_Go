@@ -337,7 +337,9 @@ public class MyProfileActivity extends AppCompatActivity {
 
             // set time in millis
             tempProfile.setBirthDay(calendar.getTimeInMillis());
-
+            //set user id
+            System.out.println(LoginActivity.facebookUserID);
+            tempProfile.setId(Long.parseLong(LoginActivity.facebookUserID));
             // set gender, height, weight
             tempProfile.setSex(chosen_sex);
             tempProfile.setHeight(Float.parseFloat(height_text.getText().toString()));

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.nthucs.prototype.Utility.MyDBHelper;
 
@@ -46,7 +47,7 @@ public class MyProfileDAO {
 
     public Profile insert(Profile profile) {
         ContentValues cv = new ContentValues();
-
+        cv.put(KEY_ID,profile.getId());
         cv.put(DATETIME_COLUMN, profile.getDatetime());
         cv.put(LASTMODIFY_COLUMN, profile.getLastModify());
         cv.put(BIRTHDAY_COLUMN, profile.getBirthDay());
@@ -56,9 +57,6 @@ public class MyProfileDAO {
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGaol());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
 
-        long id = this.db.insert(TABLE_NAME, null, cv);
-
-        profile.setId(id);
 
         return profile;
     }

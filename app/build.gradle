@@ -49,4 +49,7 @@ dependencies {
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.google.android.gms:play-services-fitness:9.4.0'
     compile 'com.jjoe64:graphview:4.2.0'
+    compile 'com.google.code.gson:gson:2.2.4'
+    compile files('libs/android-async-http-1.4.9.jar')
+    compile 'com.loopj.android:android-async-http:1.4.9'
 }

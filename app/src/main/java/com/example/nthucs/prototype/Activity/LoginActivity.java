@@ -40,6 +40,7 @@ public class LoginActivity extends Activity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         if(AccessToken.getCurrentAccessToken()!=null) {
+            facebookUserID = Profile.getCurrentProfile().getId();
             Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent_main);
         }
