@@ -27,7 +27,7 @@ import org.json.JSONObject;
 
 public class LoginActivity extends Activity {
 
-    public static String facebookUserID;
+    public static String facebookUserID,facebookName;
     private LoginButton loginButton;
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
@@ -72,6 +72,7 @@ public class LoginActivity extends Activity {
                                 protected void onCurrentProfileChanged(Profile profile, Profile profile2) {
                                     // profile2 is the new profile
                                     facebookUserID = profile2.getId();
+                                    facebookName = profile2.getName();
                                     System.out.println("profile2 id = "+facebookUserID);
                                     mProfileTracker.stopTracking();
                                 }
@@ -79,6 +80,7 @@ public class LoginActivity extends Activity {
                         }
                         else {
                             facebookUserID = Profile.getCurrentProfile().getId();
+                            facebookName = Profile.getCurrentProfile().getName();
                             System.out.println("profile id = "+facebookUserID);
                         }
                         Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);

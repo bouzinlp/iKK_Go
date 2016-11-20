@@ -19,6 +19,7 @@ import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.SettingAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.DBFunctions;
 import com.example.nthucs.prototype.Utility.MyDBHelper;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -67,7 +68,7 @@ public class SettingsActivity extends AppCompatActivity {
     private TabLayout tabLayout;
 
     //DB Class to perform DB related operations
-    MyDBHelper mDB;
+    DBFunctions dbFunctions;
     //Progress Dialog Object
     ProgressDialog prgDialog;
 
@@ -78,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
         setTitle("Settings");
         setContentView(R.layout.activity_settings);
         //constuct db object
-        mDB = new MyDBHelper(this.getApplicationContext(),"food.db",null,MyDBHelper.VERSION);
+        dbFunctions = new DBFunctions(this.getApplicationContext());
         //Initialize Progress Dialog properties
         prgDialog = new ProgressDialog(this);
         prgDialog.setMessage("Synching SQLite Data with Remote MySQL DB. Please wait...");
@@ -226,11 +227,11 @@ public class SettingsActivity extends AppCompatActivity {
         //Create AsycHttpClient object
         AsyncHttpClient client = new AsyncHttpClient();
         RequestParams params = new RequestParams();
-        ArrayList<HashMap<String, String>> userList =  mDB.getAllUsers();
+        ArrayList<HashMap<String, String>> userList = dbFunctions.getAllUsers();
         if(userList.size()!=0){
-            if(mDB.dbSyncCount() != 0){
+            if(dbFunctions.dbSyncCount() != 0){
                 prgDialog.show();
-                params.put("usersJSON", mDB.composeJSONfromSQLite());
+                params.put("usersJSON", dbFunctions.composeJSONfromSQLite());
                 client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {

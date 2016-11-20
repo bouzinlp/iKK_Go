@@ -57,6 +57,8 @@ public class MyProfileDAO {
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGaol());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
 
+        db.insert(TABLE_NAME, null, cv);
+
 
         return profile;
     }
