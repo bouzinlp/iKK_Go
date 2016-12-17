@@ -344,8 +344,9 @@ public class MyProfileActivity extends AppCompatActivity {
             tempProfile.setHeight(Float.parseFloat(height_text.getText().toString()));
             tempProfile.setWeight(Float.parseFloat(weight_text.getText().toString()));
 
-            // store to my profile data base
-            myProfileDAO.insert(tempProfile);
+            // store to my profile data base use update
+            myProfileDAO.update(tempProfile);
+            //myProfileDAO.insert(tempProfile);
 
             // output test for birthday time in millis
             //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));

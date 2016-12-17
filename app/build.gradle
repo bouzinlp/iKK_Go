@@ -38,8 +38,8 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:design:25.1.0'
     compile 'org.jsoup:jsoup:1.9.2'
     compile files('libs/opencsv-2.1-1.0.0.jar')
     compile files('libs/cloudinary-android-1.2.2.jar')

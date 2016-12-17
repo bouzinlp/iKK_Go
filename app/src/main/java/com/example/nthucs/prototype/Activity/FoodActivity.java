@@ -166,7 +166,7 @@ public class FoodActivity extends AppCompatActivity {
 
         fileName = food.getFileName();
 
-        System.out.println("date time: "+food.getLocaleDatetime());
+        System.out.println("date time: " + food.getLocaleDatetime());
 
         if (food.getFileName() != null && food.getFileName().length() > 0) {
             // camera can access this statement
@@ -224,11 +224,26 @@ public class FoodActivity extends AppCompatActivity {
             String portionsText = portions_text.getText().toString();
             String gramsText = grams_text.getText().toString();
 
+            // related calorie, portion and grams
+            float finalCalorie = Float.parseFloat(calorieText);
+            float originPortions = food.getPortions();
+            float originGrams = food.getGrams();
+            float modifyPortions = Float.parseFloat(portionsText);
+            float modifyGrams = Float.parseFloat(gramsText);
+            if (originGrams != modifyGrams) {
+                modifyPortions = modifyGrams / 100;
+                finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+            } else if (originPortions != modifyPortions) {
+                modifyGrams = modifyPortions * 100;
+                finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+            }
+
+            // set to food, back to main activity will be updated
             food.setTitle(titleText);
             food.setContent(contentText);
-            food.setCalorie(Float.parseFloat(calorieText));
-            food.setPortions(Float.parseFloat(portionsText));
-            food.setGrams(Float.parseFloat(gramsText));
+            food.setCalorie(finalCalorie);
+            food.setPortions(modifyPortions);
+            food.setGrams(modifyGrams);
 
             // if add food with photo, then also record establish time
             if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
