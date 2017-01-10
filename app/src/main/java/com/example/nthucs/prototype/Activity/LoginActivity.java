@@ -41,8 +41,11 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         if(AccessToken.getCurrentAccessToken()!=null) {
             facebookUserID = Profile.getCurrentProfile().getId();
-            Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);
+            facebookName = Profile.getCurrentProfile().getName();
+            Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent_main);
+            finish();
+
         }
         initFBManager();
         Log.v("mhealth","init");
@@ -83,7 +86,7 @@ public class LoginActivity extends Activity {
                             facebookName = Profile.getCurrentProfile().getName();
                             System.out.println("profile id = "+facebookUserID);
                         }
-                        Intent intent_main = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
                         startActivity(intent_main);
 
                     }

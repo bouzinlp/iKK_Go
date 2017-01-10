@@ -1,16 +1,24 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.TabsBar.TabsController;
+import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -32,6 +40,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import static java.security.AccessController.getContext;
 import static java.text.DateFormat.getTimeInstance;
 
 
@@ -43,18 +52,32 @@ public class HomeActivity extends AppCompatActivity {
     public static final String TAG = "Prototype";
     private TextView exerciseTime,exerciseSteps,exerciseCalories,exerciseDistance;
     public static GoogleApiClient mClient = null;
-
+    private ProgressDialog pd;
     int totalSteps = 0;
     Float totalCals = (float)0, totalDistance =(float) 0;
     long activityTime=0;
 
+    // element for the bottom of the tab content
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         initLayout();
+        // initialize tabLayout and viewPager
+        viewPager = (ViewPager)findViewById(R.id.viewPager);
+
+        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        initializeTabLayout();
+        // call function to active tabs listener
+        TabsController tabsController = new TabsController(3, HomeActivity.this, tabLayout, viewPager);
+        tabsController.processTabLayout();
+        pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
         buildFitnessClient();
+
+
 
     }
 
@@ -113,6 +136,7 @@ public class HomeActivity extends AppCompatActivity {
                     public void onConnectionFailed(ConnectionResult result) {
                         Log.i(TAG, "Google Play services connection failed. Cause: " +
                                 result.toString());
+                        Toast.makeText(getApplicationContext(), "Google Play services connection failed. Cause:"+result.toString(), Toast.LENGTH_LONG).show();
 
                     }
                 })
@@ -150,6 +174,7 @@ public class HomeActivity extends AppCompatActivity {
             exerciseCalories.setText(Math.round(totalCals)+"\n卡");
             exerciseDistance.setText(Math.round(totalDistance)+"\n公尺");
             exerciseTime.setText(String.valueOf(activityTime/60)+"\n分鐘");
+            pd.dismiss();
         }
     }
 
@@ -220,4 +245,24 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
     // [END parse_dataset]
+
+    // Initialize tab layout
+    private void initializeTabLayout() {
+        ViewPagerAdapter pagerAdapter =
+                new ViewPagerAdapter(getSupportFragmentManager(), this);
+
+        viewPager.setAdapter(pagerAdapter);
+        tabLayout.setupWithViewPager(viewPager);
+        //disable tab indicator color
+        tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(getApplicationContext(),android.R.color.transparent));
+        // set custom icon for every tab
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (tab != null) {
+                tab.setCustomView(pagerAdapter.getTabView(i));
+            }
+        }
+    }
+
+
 }

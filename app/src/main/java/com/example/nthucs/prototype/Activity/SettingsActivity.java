@@ -231,7 +231,9 @@ public class SettingsActivity extends AppCompatActivity {
         if(userList.size()!=0){
             if(dbFunctions.dbSyncCount() != 0){
                 prgDialog.show();
-                params.put("usersJSON", dbFunctions.composeJSONfromSQLite());
+                params.put("usersJSON", dbFunctions.composeUserfromSQLite());
+                params.put("foodJSON", dbFunctions.composeFoodfromSQLite());
+                client.setTimeout(10000);
                 client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {

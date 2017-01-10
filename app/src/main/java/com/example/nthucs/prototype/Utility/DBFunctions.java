@@ -51,7 +51,7 @@ public class DBFunctions {
      * Compose JSON out of SQLite records
      * @return
      */
-    public String composeJSONfromSQLite(){
+    public String composeUserfromSQLite(){
         ArrayList<HashMap<String, String>> wordList;
         wordList = new ArrayList<HashMap<String, String>>();
         String selectQuery = "SELECT  * FROM myProfile";
@@ -66,6 +66,31 @@ public class DBFunctions {
                 map.put("userWeight", cursor.getString(6));
                 map.put("userSex", cursor.getString(4));
                 map.put("userBorn", getDate(cursor.getLong(3),"yyyy-MM-dd"));
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+        return gson.toJson(wordList);
+    }
+    /**
+     * Compose JSON  from FoodDAO out of SQLite records
+     * @return
+     */
+    public String composeFoodfromSQLite(){
+        ArrayList<HashMap<String, String>> wordList;
+        wordList = new ArrayList<HashMap<String, String>>();
+        String selectQuery = "SELECT  * FROM food";
+        SQLiteDatabase database = db.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("foodId", cursor.getString(0));
+                map.put("foodName", cursor.getString(5));
+                map.put("foodCalories", cursor.getString(1));
+                map.put("foodTime", getDateTime(cursor.getLong(9)));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }
@@ -93,10 +118,17 @@ public class DBFunctions {
     {
         // Create a DateFormatter object for displaying date in specified format.
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-
         // Create a calendar object that will convert the date and time value in milliseconds to date.
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milliSeconds);
         return formatter.format(calendar.getTime());
     }
+
+    public String getDateTime(long unixTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        //轉換字串
+        String time=sdf.format(unixTime);
+        return time;
+    }
+
 }

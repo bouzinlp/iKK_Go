@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.nthucs.prototype.Activity.LoginActivity;
 import com.example.nthucs.prototype.Utility.MyDBHelper;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class FoodDAO {
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
-                    KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_ID + " INTEGER NOT NULL, " +/*INTEGER PRIMARY KEY AUTOINCREMENT*/
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
                     PORTIONS_COLUMN + " TEXT NOT NULL, " +
                     GRAMS_COLUMN + " TEXT NOT NULL, " +
@@ -47,6 +49,7 @@ public class FoodDAO {
     public Food insert(Food food) {
         ContentValues cv = new ContentValues();
 
+        cv.put(KEY_ID, LoginActivity.facebookUserID);
         cv.put(CALORIE_COLUMN, food.getCalorie());
         cv.put(PORTIONS_COLUMN, food.getPortions());
         cv.put(GRAMS_COLUMN, food.getGrams());
@@ -57,9 +60,12 @@ public class FoodDAO {
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
         cv.put(DATETIME_COLUMN, food.getDatetime());
 
+        System.out.println("FOOD NAMe = "+food.getTitle());
+        System.out.println("FOOD TIME = "+food.getDatetime());
+
         long id = this.db.insert(TABLE_NAME, null, cv);
 
-        food.setId(id);
+        //food.setId(id);
 
         return food;
     }
