@@ -47,10 +47,12 @@ public class SportDAO {
         cv.put(CALORIE_COLUMN, sport.getCalorie());
         cv.put(DATETIME_COLUMN, sport.getDatetime());
         cv.put(TOTALTIME_COLUMN, sport.getTotalTime());
+        cv.put(KEY_ID,sport.getId());
 
-        long id = this.db.insert(TABLE_NAME, null, cv);
+        this.db.insert(TABLE_NAME, null, cv);
+        /*long id = this.db.insert(TABLE_NAME, null, cv);
 
-        sport.setId(id);
+        sport.setId(id);*/
 
         return sport;
     }
