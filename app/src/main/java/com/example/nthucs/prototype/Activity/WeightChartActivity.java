@@ -8,10 +8,15 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.MyProfileDAO;
+import com.example.nthucs.prototype.Settings.Profile;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by user on 2016/8/2.
@@ -21,10 +26,33 @@ public class WeightChartActivity extends AppCompatActivity {
     // Back button
     private Button backButton;
 
+    // data base for profile
+    private MyProfileDAO myProfileDAO;
+
+    // list of profile
+    private List<Profile> profileList = new ArrayList<>();
+
+    // data points for weight
+    private DataPoint[] weightsData;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weight_chart);
+
+        // initialize data base
+        myProfileDAO = new MyProfileDAO(getApplicationContext());
+
+        // get all profile data from data base
+        profileList = myProfileDAO.getAll();
+
+        // initialize data point array
+        weightsData = new DataPoint[profileList.size()];
+
+        // from array list to data point
+        for (int i = 0 ; i < profileList.size() ; i++) {
+            weightsData[i] = new DataPoint(i, profileList.get(i).getWeight());
+        }
 
         // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
@@ -69,14 +97,17 @@ public class WeightChartActivity extends AppCompatActivity {
     // example data for drawing weight chart
     private void drawExampleWeightChart() {
         GraphView graphView = (GraphView) findViewById(R.id.graph);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
-                new DataPoint(0, 0), new DataPoint(1, 68.5), new DataPoint(2, 68), new DataPoint(3, 67.8), new DataPoint(4, 67),
-                new DataPoint(5, 67.5), new DataPoint(6, 67.8), new DataPoint(7, 67.3), new DataPoint(8, 67), new DataPoint(9, 66.5),
-                new DataPoint(10, 66), new DataPoint(11, 65.5), new DataPoint(12, 66), new DataPoint(13, 65.4), new DataPoint(14, 65),
-                new DataPoint(15, 65.1), new DataPoint(16, 65.2), new DataPoint(17, 64.8), new DataPoint(18, 64), new DataPoint(19, 64.2),
-                new DataPoint(20, 64), new DataPoint(21, 63.6), new DataPoint(22, 63.4), new DataPoint(23, 63), new DataPoint(24, 62.7),
-                new DataPoint(25, 62.6), new DataPoint(26, 62.5), new DataPoint(27, 62.5), new DataPoint(28, 62.4), new DataPoint(29, 62.3),
-        });
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(weightsData);
+
+        // set manual Y bounds
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMinY(0);
+        graphView.getViewport().setMaxY(150);
+
+        // set manual X bounds
+        graphView.getViewport().setYAxisBoundsManual(true);
+        graphView.getViewport().setMinX(0);
+        graphView.getViewport().setMaxX(profileList.size()-1);
 
         // activate horizontal zooming and scrolling
         //graphView.getViewport().setScalable(true);

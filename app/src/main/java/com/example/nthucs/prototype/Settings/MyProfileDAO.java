@@ -48,7 +48,8 @@ public class MyProfileDAO {
 
     public Profile insert(Profile profile) {
         ContentValues cv = new ContentValues();
-        cv.put(KEY_ID,profile.getId());
+        //cv.put(KEY_ID, profile.getId());
+        // temporary modified
         cv.put(DATETIME_COLUMN, profile.getDatetime());
         cv.put(LASTMODIFY_COLUMN, profile.getLastModify());
         cv.put(BIRTHDAY_COLUMN, profile.getBirthDay());
@@ -58,8 +59,9 @@ public class MyProfileDAO {
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGaol());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
 
-        db.insert(TABLE_NAME, null, cv);
+        long id = db.insert(TABLE_NAME, null, cv);
 
+        profile.setId(id);
 
         return profile;
     }
