@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="24" />
+        android:targetSdkVersion="23" />
 
     <!-- 需要攝錄鏡頭設備 -->
     <uses-feature android:name="android.hardware.camera" />

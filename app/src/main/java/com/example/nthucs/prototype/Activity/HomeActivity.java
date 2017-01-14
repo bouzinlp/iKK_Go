@@ -19,11 +19,13 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.FitnessActivity;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.fitness.Fitness;
+import com.google.android.gms.fitness.FitnessActivities;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
@@ -34,6 +36,7 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -61,6 +64,11 @@ public class HomeActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    //object to record FitnessActivity
+    private FitnessActivity fa;
+
+    public ArrayList<FitnessActivity> fitnessProperties = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,9 +84,6 @@ public class HomeActivity extends AppCompatActivity {
         tabsController.processTabLayout();
         pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
         buildFitnessClient();
-
-
-
     }
 
 
@@ -90,6 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         totalCals = (float)0;
         totalDistance =(float) 0;
         activityTime=0;
+        fitnessProperties.clear();
 
     }
 
@@ -125,8 +131,10 @@ public class HomeActivity extends AppCompatActivity {
                                 // you'll be able to determine the reason and react to it here.
                                 if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_NETWORK_LOST) {
                                     Log.i(TAG, "Connection lost.  Cause: Network Lost.");
+                                    pd.dismiss();
                                 } else if (i == GoogleApiClient.ConnectionCallbacks.CAUSE_SERVICE_DISCONNECTED) {
                                     Log.i(TAG, "Connection lost.  Reason: Service Disconnected");
+                                    pd.dismiss();
                                 }
                             }
                         }
@@ -137,7 +145,7 @@ public class HomeActivity extends AppCompatActivity {
                         Log.i(TAG, "Google Play services connection failed. Cause: " +
                                 result.toString());
                         Toast.makeText(getApplicationContext(), "Google Play services connection failed. Cause:"+result.toString(), Toast.LENGTH_LONG).show();
-
+                        pd.dismiss();
                     }
                 })
                 .build();
@@ -170,11 +178,20 @@ public class HomeActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused)
         {
             super.onPostExecute(unused);
-            exerciseSteps.setText(Integer.toString(totalSteps) + "\n步");
-            exerciseCalories.setText(Math.round(totalCals)+"\n卡");
-            exerciseDistance.setText(Math.round(totalDistance)+"\n公尺");
-            exerciseTime.setText(String.valueOf(activityTime/60)+"\n分鐘");
+            exerciseSteps.setText(getString(R.string.homeTextView,totalSteps,"\n步"));
+            exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),"\n卡"));
+            exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),"\n公尺"));
+            exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,"\n分"));
             pd.dismiss();
+
+            System.out.println("SIZE = "+fitnessProperties.size());
+            for(int i=0;i<fitnessProperties.size();++i){
+                System.out.println(fitnessProperties.get(i).activityName);
+                System.out.println(fitnessProperties.get(i).activityTime);
+                System.out.println(fitnessProperties.get(i).activityExpenditure);
+                System.out.println(fitnessProperties.get(i).activityTimeStamp);
+                System.out.println("-----------------------------------------------------");
+            }
         }
     }
 
@@ -207,6 +224,7 @@ public class HomeActivity extends AppCompatActivity {
                 //.aggregate(ESTIMATED_STEP_DELTAS, DataType.AGGREGATE_STEP_COUNT_DELTA)
                 //.aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
                 .read(ESTIMATED_STEP_DELTAS)
+                .read(DataType.TYPE_ACTIVITY_SEGMENT)
                 .read(DataType.TYPE_CALORIES_EXPENDED)
                 .read(DataType.TYPE_DISTANCE_DELTA)
                 //.bucketByTime(1, TimeUnit.DAYS)
@@ -229,20 +247,40 @@ public class HomeActivity extends AppCompatActivity {
 
     // [START parse_dataset]
     private void dumpDataSet(DataSet dataSet) {
+
         System.out.println(dataSet.getDataType().getName());
+        System.out.println(dataSet.getDataType().getFields());
+        int index = 0;
         for (DataPoint dp : dataSet.getDataPoints()) {
             for(Field field : dp.getDataType().getFields()) {
                 if (dataSet.getDataType().equals(DataType.TYPE_STEP_COUNT_DELTA)) {
                     totalSteps += dp.getValue(field).asInt();
                 } else if (dataSet.getDataType().equals(DataType.TYPE_CALORIES_EXPENDED)) {
+                    //System.out.println("CALORIESTIMESTAMP = "+dp.getTimestamp(TimeUnit.SECONDS));
+                    long tmp = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
                     totalCals += dp.getValue(field).asFloat();
+                    if(index<fitnessProperties.size()) {
+                        if (fitnessProperties.get(index).activityTimeStamp == dp.getTimestamp(TimeUnit.SECONDS)) {
+                            fitnessProperties.get(index).setActivityExpenditure(dp.getValue(field).asFloat());
+                            ++index;
+                        }
+                    }
                 } else if (dataSet.getDataType().equals(DataType.TYPE_DISTANCE_DELTA)) {
                     totalDistance += dp.getValue(field).asFloat();
-                    long tmpTime = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
-                    activityTime += tmpTime;
+                } else{
+                    String activityName = FitnessActivities.getName(Integer.parseInt(dp.getValue(field).toString()));
+                    System.out.println(activityName);
+                    if(!(activityName.equals("still")||activityName.equals("in_vehicle"))) {
+                        long tmpTime = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
+                        FitnessActivity tmpFA = new FitnessActivity(activityName,tmpTime,dp.getTimestamp(TimeUnit.SECONDS));
+                        fitnessProperties.add(tmpFA);
+                        activityTime += tmpTime;
+                    }
                 }
             }
+
         }
+
     }
     // [END parse_dataset]
 
