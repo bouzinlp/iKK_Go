@@ -17,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.SportList.Sport;
+import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import com.example.nthucs.prototype.Utility.FitnessActivity;
@@ -66,7 +68,7 @@ public class HomeActivity extends AppCompatActivity {
 
     //object to record FitnessActivity
     private FitnessActivity fa;
-
+    SportDAO SD;
     public ArrayList<FitnessActivity> fitnessProperties = new ArrayList<>();
 
     @Override
@@ -83,6 +85,8 @@ public class HomeActivity extends AppCompatActivity {
         TabsController tabsController = new TabsController(3, HomeActivity.this, tabLayout, viewPager);
         tabsController.processTabLayout();
         pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
+        SD = new SportDAO(getApplicationContext());
+        //selectTab(1);
         buildFitnessClient();
     }
 
@@ -96,7 +100,6 @@ public class HomeActivity extends AppCompatActivity {
         totalDistance =(float) 0;
         activityTime=0;
         fitnessProperties.clear();
-
     }
 
 
@@ -192,6 +195,8 @@ public class HomeActivity extends AppCompatActivity {
                 System.out.println(fitnessProperties.get(i).activityTimeStamp);
                 System.out.println("-----------------------------------------------------");
             }
+        updateSport();
+
         }
     }
 
@@ -300,6 +305,36 @@ public class HomeActivity extends AppCompatActivity {
                 tab.setCustomView(pagerAdapter.getTabView(i));
             }
         }
+    }
+
+    private void updateSport(){
+
+        for(int i=0;i<fitnessProperties.size();++i){
+            Sport sp = new Sport();
+            sp.setId(fitnessProperties.get(i).activityTimeStamp);
+            sp.setTitle(fitnessProperties.get(i).activityName);
+            sp.setCalorie(fitnessProperties.get(i).activityExpenditure);
+            sp.setTotalTime(TimeUnit.SECONDS.toMillis(fitnessProperties.get(i).activityTime));
+            sp.setDatetime(new Date().getTime());
+            if(!checkIsExist(fitnessProperties.get(i).activityTimeStamp))
+                SD.insert(sp);
+        }
+    }
+    //true means id exist, false means id not exist
+    private boolean checkIsExist(long id){
+        List<Sport> result = SD.getAll();
+        for(int j=0;j<result.size();++j){
+            if(result.get(j).getId()==id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // select specific tab
+    private void selectTab(int index) {
+        TabLayout.Tab tab = tabLayout.getTabAt(index);
+        tab.select();
     }
 
 
