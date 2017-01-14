@@ -86,4 +86,7 @@
     <string name="dialog_cancel_button">Cancel</string>
     <string name="choose_food">Choose the food</string>
 
+    <string name="homeTextView">%1$d%2$s</string>
+
+
 </resources>
