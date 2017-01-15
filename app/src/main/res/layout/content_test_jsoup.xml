@@ -35,7 +35,7 @@
             <TextView
                 android:id="@+id/heat_select"
                 android:background="@drawable/profile_drawable"
-                android:gravity="right"
+                android:gravity="left"
                 android:padding="7dp"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
