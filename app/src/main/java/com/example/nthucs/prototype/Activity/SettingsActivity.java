@@ -54,8 +54,9 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String myBloodPressure = "My Blood Pressure";
     private static final String drinkWaterDiary = "Drink Water Diary";
     private static final String myTemperatureRecord = "My Temperature Record";
-    // , drinkWaterDiary , myTemperatureRecord
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , myBloodPressure , drinkWaterDiary, myTemperatureRecord};
+    private static final String testJsoup = "Test Jsoup";
+	// , drinkWaterDiary , myTemperatureRecord
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , myBloodPressure , drinkWaterDiary, myTemperatureRecord ,testJsoup};
 
     // list view for including textView
     private ListView setting_list;
@@ -211,6 +212,12 @@ public class SettingsActivity extends AppCompatActivity {
                         Intent intent_my_temperature_record = new Intent();
                         intent_my_temperature_record.setClass(SettingsActivity.this , MyTemperatureRecord.class);
                         startActivity(intent_my_temperature_record);
+                        finish();
+                        break;
+					case testJsoup:
+                        Intent intent_test_jsoup = new Intent();
+                        intent_test_jsoup.setClass(SettingsActivity.this , TestJsoup.class);
+                        startActivity(intent_test_jsoup);
                         finish();
                         break;
 
