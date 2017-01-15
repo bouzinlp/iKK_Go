@@ -230,6 +230,7 @@ public class FoodActivity extends AppCompatActivity {
             float originGrams = food.getGrams();
             float modifyPortions = Float.parseFloat(portionsText);
             float modifyGrams = Float.parseFloat(gramsText);
+            if (originPortions == 0) originPortions = 1;
             if (originGrams != modifyGrams) {
                 modifyPortions = modifyGrams / 100;
                 finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);

@@ -26,7 +26,7 @@ public class SportDAO {
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
-                    KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_ID + " INTEGER NOT NULL, " +
                     TITLE_COLUMN + " TEXT NOT NULL, " +
                     CONTENT_COLUMN + " TEXT NOT NULL, "+
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
