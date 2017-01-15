@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal" >
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:gravity="left|center_vertical"
+        android:id="@+id/back_button"
+        android:textSize="16sp"
+        android:textColor="#ffffff"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/test_jsoup_title"
+        android:layout_toStartOf="@+id/test_jsoup_title" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="TEST"
+        android:textColor="#ffffff"
+        android:id="@+id/test_jsoup_title"
+        android:textSize="21sp" />
+
+</RelativeLayout>
