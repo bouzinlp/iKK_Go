@@ -9,7 +9,7 @@ import java.util.Locale;
 public class Profile implements java.io.Serializable {
 
     private long id;
-
+    private long userID;
     // profile's establish time
     private long datetime;
 
@@ -47,7 +47,8 @@ public class Profile implements java.io.Serializable {
 
     public long getId() {return this.id;}
     public void setId(long id) {this.id = id;}
-
+    public void setUserFBID(long userFBID){this.userID = userFBID;}
+    public long getUserID(){return this.userID;}
     public long getDatetime() {return datetime;}
     public String getLocaleDatetime() {return String.format(Locale.getDefault(), "%tF  %<tR", new Date(datetime));}
     public void setDatetime(long datetime) {this.datetime = datetime;}
@@ -67,8 +68,8 @@ public class Profile implements java.io.Serializable {
     public float getWeight() {return weight;}
     public void setWeight(float weight) {this.weight = weight;}
 
-    public float getWeightLossGaol() {return weightLossGaol;}
-    public void setWeightLossGaol(float weightLossGaol) {this.weightLossGaol = weightLossGaol;}
+    public float getWeightLossGoal() {return weightLossGaol;}
+    public void setWeightLossGoal(float weightLossGaol) {this.weightLossGaol = weightLossGaol;}
 
     public float getWeeklyLossWeight() {return weeklyLossWeight;}
     public void setWeeklyLossWeight(float weeklyLossWeight) {this.weeklyLossWeight = weeklyLossWeight;}

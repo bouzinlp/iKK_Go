@@ -76,14 +76,14 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         } else {
             curProfile = profileList.get(profileList.size()-1);
 
-            tempTargetWeight = curProfile.getWeightLossGaol();
+            tempTargetWeight = curProfile.getWeightLossGoal();
             tempWeeklyTarget = curProfile.getWeeklyLossWeight();
 
             // find non-zero target weight value
             if (tempTargetWeight == 0) {
                 for (int i = 0 ; i < profileList.size() ; i++) {
-                    if (profileList.get(i).getWeightLossGaol() != 0) {
-                        tempTargetWeight = profileList.get(i).getWeightLossGaol();
+                    if (profileList.get(i).getWeightLossGoal() != 0) {
+                        tempTargetWeight = profileList.get(i).getWeightLossGoal();
                     }
                 }
             }
@@ -151,9 +151,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         weekly_target_text = (EditText)findViewById(R.id.weekly_target_edit_text);
 
         // set text to edit text if current profile not empty
-        if (curProfile.getWeightLossGaol() != 0 && curProfile.getWeeklyLossWeight() != 0) {
+        if (curProfile.getWeightLossGoal() != 0 && curProfile.getWeeklyLossWeight() != 0) {
             // set to edit text
-            target_weight_text.setText(Float.toString(curProfile.getWeightLossGaol()));
+            target_weight_text.setText(Float.toString(curProfile.getWeightLossGoal()));
             weekly_target_text.setText(Float.toString(curProfile.getWeeklyLossWeight()));
             // set text to edit text if temporary float not-zero
         } else if (tempTargetWeight != 0 && tempWeeklyTarget != 0) {
@@ -256,7 +256,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
             // set target weight and weekly target
-            curProfile.setWeightLossGaol(Float.parseFloat(target_weight_text.getText().toString()));
+            curProfile.setWeightLossGoal(Float.parseFloat(target_weight_text.getText().toString()));
             curProfile.setWeeklyLossWeight(Float.parseFloat(weekly_target_text.getText().toString()));
 
             // set last modify time

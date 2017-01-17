@@ -42,6 +42,7 @@ public class LoginActivity extends Activity {
         if(AccessToken.getCurrentAccessToken()!=null) {
             facebookUserID = Profile.getCurrentProfile().getId();
             facebookName = Profile.getCurrentProfile().getName();
+            System.out.println("profile id = "+facebookUserID);
             Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
             startActivity(intent_main);
             finish();
@@ -78,6 +79,8 @@ public class LoginActivity extends Activity {
                                     facebookName = profile2.getName();
                                     System.out.println("profile2 id = "+facebookUserID);
                                     mProfileTracker.stopTracking();
+                                    Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent_main);
                                 }
                             };
                         }
@@ -85,9 +88,10 @@ public class LoginActivity extends Activity {
                             facebookUserID = Profile.getCurrentProfile().getId();
                             facebookName = Profile.getCurrentProfile().getName();
                             System.out.println("profile id = "+facebookUserID);
+                            Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
+                            startActivity(intent_main);
                         }
-                        Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
-                        startActivity(intent_main);
+
 
                     }
                     @Override

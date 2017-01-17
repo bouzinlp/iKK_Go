@@ -42,6 +42,7 @@ public class TestJsoup extends AppCompatActivity {
     // currently and temporary profile
     private Profile curProfile, tempProfile;
 
+    JsoupUse JsoupUse = new JsoupUse();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

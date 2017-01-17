@@ -83,6 +83,7 @@ public class MyProfileActivity extends AppCompatActivity {
             curProfile = new Profile();
         } else {
             curProfile = profileList.get(profileList.size()-1);
+
         }
 
         // set new profile for updated
@@ -338,17 +339,18 @@ public class MyProfileActivity extends AppCompatActivity {
             // set time in millis
             tempProfile.setBirthDay(calendar.getTimeInMillis());
             //set user id
-            tempProfile.setId(Long.parseLong(LoginActivity.facebookUserID));
+            tempProfile.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
             // set gender, height, weight
             tempProfile.setSex(chosen_sex);
             tempProfile.setHeight(Float.parseFloat(height_text.getText().toString()));
             tempProfile.setWeight(Float.parseFloat(weight_text.getText().toString()));
-
             // store to my profile data base use update & insert
-            if (myProfileDAO.isTableEmpty() == true)
+            if (myProfileDAO.isTableEmpty() == true){
                 myProfileDAO.insert(tempProfile);
-            else
+            }
+            else{
                 myProfileDAO.insert(tempProfile);
+            }
 
             // output test for birthday time in millis
             //System.out.println("birth-in-date " + String.format(Locale.getDefault(), "%tF  %<tR", new Date(calendar.getTimeInMillis())));

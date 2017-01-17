@@ -52,20 +52,19 @@ public class DBFunctions {
      * @return
      */
     public String composeUserfromSQLite(){
-        ArrayList<HashMap<String, String>> wordList;
-        wordList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> wordList = new ArrayList<>();
         String selectQuery = "SELECT  * FROM myProfile";
         SQLiteDatabase database = db.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("userId", cursor.getString(0));
+                map.put("userId", cursor.getString(1));
                 map.put("userName", LoginActivity.facebookName);
-                map.put("userHeight", cursor.getString(5));
-                map.put("userWeight", cursor.getString(6));
-                map.put("userSex", cursor.getString(4));
-                map.put("userBorn", getDate(cursor.getLong(3),"yyyy-MM-dd"));
+                map.put("userHeight", cursor.getString(6));
+                map.put("userWeight", cursor.getString(7));
+                map.put("userSex", cursor.getString(5));
+                map.put("userBorn", getDate(cursor.getLong(4),"yyyy-MM-dd"));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }
@@ -79,8 +78,7 @@ public class DBFunctions {
      * @return
      */
     public String composeFoodfromSQLite(){
-        ArrayList<HashMap<String, String>> wordList;
-        wordList = new ArrayList<HashMap<String, String>>();
+        ArrayList<HashMap<String, String>> wordList= new ArrayList<>();
         String selectQuery = "SELECT  * FROM food";
         SQLiteDatabase database = db.getWritableDatabase();
         Cursor cursor = database.rawQuery(selectQuery, null);

@@ -78,7 +78,6 @@ public class HomeActivity extends AppCompatActivity {
         initLayout();
         // initialize tabLayout and viewPager
         viewPager = (ViewPager)findViewById(R.id.viewPager);
-
         tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         initializeTabLayout();
         // call function to active tabs listener
