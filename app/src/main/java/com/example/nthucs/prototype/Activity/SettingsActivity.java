@@ -240,6 +240,7 @@ public class SettingsActivity extends AppCompatActivity {
                 prgDialog.show();
                 params.put("usersJSON", dbFunctions.composeUserfromSQLite());
                 params.put("foodJSON", dbFunctions.composeFoodfromSQLite());
+                params.put("sportJSON",dbFunctions.composeSportfromSQLite());
                 client.setTimeout(10000);
                 client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
                     @Override

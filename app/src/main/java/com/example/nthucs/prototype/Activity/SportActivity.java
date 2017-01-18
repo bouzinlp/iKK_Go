@@ -133,12 +133,12 @@ public class SportActivity extends AppCompatActivity {
 
             long totalTime = TimeUnit.HOURS.toMillis(Integer.parseInt(hourText))
                                 + TimeUnit.MINUTES.toMillis(Integer.parseInt(minuteText));
-
+            sport.setId(System.currentTimeMillis());
+            sport.setUserID(Long.parseLong(LoginActivity.facebookUserID));
             sport.setTitle(titleText);
             sport.setContent(contentText);
             sport.setCalorie(Float.parseFloat(calorieText));
             sport.setTotalTime(totalTime);
-
             // add sport event first time
             if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_SPORT")) {
                 sport.setDatetime(new Date().getTime());

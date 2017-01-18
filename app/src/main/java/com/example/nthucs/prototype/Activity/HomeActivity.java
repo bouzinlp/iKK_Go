@@ -186,15 +186,7 @@ public class HomeActivity extends AppCompatActivity {
             exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,"\n分"));
             pd.dismiss();
 
-            System.out.println("SIZE = "+fitnessProperties.size());
-            for(int i=0;i<fitnessProperties.size();++i){
-                System.out.println(fitnessProperties.get(i).activityName);
-                System.out.println(fitnessProperties.get(i).activityTime);
-                System.out.println(fitnessProperties.get(i).activityExpenditure);
-                System.out.println(fitnessProperties.get(i).activityTimeStamp);
-                System.out.println("-----------------------------------------------------");
-            }
-        updateSport();
+            updateSport();
 
         }
     }
@@ -264,7 +256,7 @@ public class HomeActivity extends AppCompatActivity {
                     long tmp = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
                     totalCals += dp.getValue(field).asFloat();
                     if(index<fitnessProperties.size()) {
-                        if (fitnessProperties.get(index).activityTimeStamp == dp.getTimestamp(TimeUnit.SECONDS)) {
+                        if (fitnessProperties.get(index).activityTimeStamp == dp.getTimestamp(TimeUnit.MILLISECONDS)) {
                             fitnessProperties.get(index).setActivityExpenditure(dp.getValue(field).asFloat());
                             ++index;
                         }
@@ -276,7 +268,7 @@ public class HomeActivity extends AppCompatActivity {
                     System.out.println(activityName);
                     if(!(activityName.equals("still")||activityName.equals("in_vehicle"))) {
                         long tmpTime = dp.getEndTime(TimeUnit.SECONDS) - dp.getStartTime(TimeUnit.SECONDS);
-                        FitnessActivity tmpFA = new FitnessActivity(activityName,tmpTime,dp.getTimestamp(TimeUnit.SECONDS));
+                        FitnessActivity tmpFA = new FitnessActivity(activityName,tmpTime,dp.getTimestamp(TimeUnit.MILLISECONDS));
                         fitnessProperties.add(tmpFA);
                         activityTime += tmpTime;
                     }
@@ -309,14 +301,16 @@ public class HomeActivity extends AppCompatActivity {
     private void updateSport(){
 
         for(int i=0;i<fitnessProperties.size();++i){
-            Sport sp = new Sport();
-            sp.setId(fitnessProperties.get(i).activityTimeStamp);
-            sp.setTitle(fitnessProperties.get(i).activityName);
-            sp.setCalorie(fitnessProperties.get(i).activityExpenditure);
-            sp.setTotalTime(TimeUnit.SECONDS.toMillis(fitnessProperties.get(i).activityTime));
-            sp.setDatetime(new Date().getTime());
-            if(!checkIsExist(fitnessProperties.get(i).activityTimeStamp))
+            if(!checkIsExist(fitnessProperties.get(i).activityTimeStamp)) {
+                Sport sp = new Sport();
+                sp.setId(fitnessProperties.get(i).activityTimeStamp);
+                sp.setUserID(Long.parseLong(LoginActivity.facebookUserID));
+                sp.setTitle(fitnessProperties.get(i).activityName);
+                sp.setCalorie(fitnessProperties.get(i).activityExpenditure);
+                sp.setTotalTime(TimeUnit.SECONDS.toMillis(fitnessProperties.get(i).activityTime));
+                sp.setDatetime(new Date().getTime());
                 SD.insert(sp);
+            }
         }
     }
     //true means id exist, false means id not exist

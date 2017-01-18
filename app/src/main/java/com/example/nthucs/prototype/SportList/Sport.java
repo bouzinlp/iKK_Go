@@ -10,6 +10,8 @@ public class Sport implements java.io.Serializable {
 
     private long id;
 
+    private long userID;
+
     // sport's name
     private String title;
 
@@ -35,6 +37,9 @@ public class Sport implements java.io.Serializable {
 
     public long getId() {return this.id;}
     public void setId(long id) {this.id = id;}
+
+    public long getUserID(){return this.userID;}
+    public void setUserID(long userID){this.userID = userID;}
 
     public String getTitle() {return title;}
     public void setTitle(String title) {this.title = title;}

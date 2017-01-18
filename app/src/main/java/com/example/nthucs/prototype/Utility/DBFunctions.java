@@ -98,6 +98,28 @@ public class DBFunctions {
         return gson.toJson(wordList);
     }
 
+    public String composeSportfromSQLite(){
+        ArrayList<HashMap<String, String>> wordList= new ArrayList<>();
+        String selectQuery = "SELECT  * FROM sport";
+        SQLiteDatabase database = db.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("sportId", cursor.getString(0));
+                map.put("sportUserId",cursor.getString(1));
+                map.put("sportName", cursor.getString(2));
+                map.put("sportExpenditure", cursor.getString(4));
+                map.put("sportTotalTime", String.valueOf(cursor.getLong(6)/(1000*60)));
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+        return gson.toJson(wordList);
+    }
+
     /**
      * Get SQLite records that are yet to be Synced
      * @return

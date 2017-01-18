@@ -52,12 +52,11 @@ public class MyProfileDAO {
         ContentValues cv = new ContentValues();
         //cv.put(KEY_ID, profile.getId());
         // temporary modified
-
+        cv.put(USER_ID,profile.getUserID());
         cv.put(DATETIME_COLUMN, profile.getDatetime());
         cv.put(LASTMODIFY_COLUMN, profile.getLastModify());
         cv.put(BIRTHDAY_COLUMN, profile.getBirthDay());
         cv.put(SEX_COLUMN, profile.getSex());
-        cv.put(USER_ID,profile.getUserID());
         cv.put(HEIGHT_COLUMN, profile.getHeight());
         cv.put(WEIGHT_COLUMN, profile.getWeight());
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGoal());

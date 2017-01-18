@@ -18,6 +18,7 @@ public class SportDAO {
     public static final String TABLE_NAME = "sport";
 
     public static final String KEY_ID = "_id";
+    public static final String USER_ID = "userID";
     public static final String TITLE_COLUMN = "title";
     public static final String CONTENT_COLUMN = "content";
     public static final String CALORIE_COLUMN = "calorie";
@@ -27,6 +28,7 @@ public class SportDAO {
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
                     KEY_ID + " INTEGER NOT NULL, " +
+                    USER_ID + " INTEGER NOT NULL, " +
                     TITLE_COLUMN + " TEXT NOT NULL, " +
                     CONTENT_COLUMN + " TEXT NOT NULL, "+
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
@@ -41,13 +43,14 @@ public class SportDAO {
 
     public Sport insert(Sport sport) {
         ContentValues cv = new ContentValues();
-
+        cv.put(KEY_ID,sport.getId());
+        cv.put(USER_ID,sport.getUserID());
         cv.put(TITLE_COLUMN, sport.getTitle());
         cv.put(CONTENT_COLUMN, sport.getContent());
         cv.put(CALORIE_COLUMN, sport.getCalorie());
         cv.put(DATETIME_COLUMN, sport.getDatetime());
         cv.put(TOTALTIME_COLUMN, sport.getTotalTime());
-        cv.put(KEY_ID,sport.getId());
+
 
         this.db.insert(TABLE_NAME, null, cv);
         /*long id = this.db.insert(TABLE_NAME, null, cv);
@@ -105,11 +108,12 @@ public class SportDAO {
         Sport result = new Sport();
 
         result.setId(cursor.getLong(0));
-        result.setTitle(cursor.getString(1));
-        result.setContent(cursor.getString(2));
-        result.setCalorie(cursor.getFloat(3));
-        result.setDatetime(cursor.getLong(4));
-        result.setTotalTime(cursor.getLong(5));
+        result.setUserID(cursor.getLong(1));
+        result.setTitle(cursor.getString(2));
+        result.setContent(cursor.getString(3));
+        result.setCalorie(cursor.getFloat(4));
+        result.setDatetime(cursor.getLong(5));
+        result.setTotalTime(cursor.getLong(6));
 
         return result;
     }
