@@ -27,7 +27,6 @@ public class MyProfileDAO {
     public static final String WEIGHT_COLUMN = "weight";
     public static final String WEIGHTLOSSGOAL_COLUMN = "weightLossGoal";
     public static final String WEEKLYLOSSWEIGHT_COLUMN = "weeklyLossWeight";
-    public static final String DRINKINGWATER_COLUMN = "drinlingWater";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
