@@ -29,6 +29,7 @@ public class MyTemperatureRecord extends AppCompatActivity {
 
     // Temporary storage before update
     private int select_hour , select_min;
+    private int select_day , select_year , select_month;
 
     // Edit text
     private EditText my_Temperature_Record_text;
@@ -42,8 +43,9 @@ public class MyTemperatureRecord extends AppCompatActivity {
     // currently and temporary profile
     private Profile curProfile, tempProfile;
 
-    //
-    private int select_day , select_year , select_month;
+    // temperature
+    private float temperature;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

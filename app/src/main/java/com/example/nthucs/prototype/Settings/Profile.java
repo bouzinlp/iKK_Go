@@ -49,8 +49,10 @@ public class Profile implements java.io.Serializable {
 
     public long getId() {return this.id;}
     public void setId(long id) {this.id = id;}
+
     public void setUserFBID(long userFBID){this.userID = userFBID;}
     public long getUserID(){return this.userID;}
+
     public long getDatetime() {return datetime;}
     public String getLocaleDatetime() {return String.format(Locale.getDefault(), "%tF  %<tR", new Date(datetime));}
     public void setDatetime(long datetime) {this.datetime = datetime;}

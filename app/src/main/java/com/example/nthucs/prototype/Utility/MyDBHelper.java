@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.nthucs.prototype.Activity.LoginActivity;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
+import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.google.gson.Gson;
@@ -26,7 +27,11 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "food.db";
 
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
+<<<<<<< HEAD
     public static final int VERSION = 22;
+=======
+    public static final int VERSION = 20;
+>>>>>>> origin/master
 
     // 資料庫物件，固定的欄位變數
     private static SQLiteDatabase database;
@@ -60,6 +65,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // create sport table
         db.execSQL(SportDAO.CREATE_TABLE);
+
+        // create health table
+        db.execSQL(HealthDAO.CREATE_TABLE);
     }
 
     @Override
@@ -75,6 +83,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // delete origin sport table
         db.execSQL("DROP TABLE IF EXISTS " + SportDAO.TABLE_NAME);
+
+        // delete origin health table
+        db.execSQL("DROP TABLE IF EXISTS " + HealthDAO.TABLE_NAME);
 
         // 呼叫onCreate建立新版的表格
         onCreate(db);
