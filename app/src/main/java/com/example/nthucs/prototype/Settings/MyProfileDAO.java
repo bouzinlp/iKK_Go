@@ -27,6 +27,7 @@ public class MyProfileDAO {
     public static final String WEIGHT_COLUMN = "weight";
     public static final String WEIGHTLOSSGOAL_COLUMN = "weightLossGoal";
     public static final String WEEKLYLOSSWEIGHT_COLUMN = "weeklyLossWeight";
+    public static final String ADDEDTIME_COLUMN = "addedTime";
     public static final String DRINKINGWATER_COLUMN = "drinlingWater";
 
     public static final String CREATE_TABLE =
@@ -40,7 +41,8 @@ public class MyProfileDAO {
                     HEIGHT_COLUMN + " TEXT NOT NULL, " +
                     WEIGHT_COLUMN + " TEXT NOT NULL, " +
                     WEIGHTLOSSGOAL_COLUMN + " TEXT, " +
-                    WEEKLYLOSSWEIGHT_COLUMN + " TEXT)";
+                    WEEKLYLOSSWEIGHT_COLUMN + " TEXT, " +
+                    ADDEDTIME_COLUMN + " INTEGER NOT NULL)";
 
     private SQLiteDatabase db;
 
@@ -61,6 +63,7 @@ public class MyProfileDAO {
         cv.put(WEIGHT_COLUMN, profile.getWeight());
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGoal());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
+        cv.put(ADDEDTIME_COLUMN,System.currentTimeMillis());
 
         long id = db.insert(TABLE_NAME, null, cv);
 
@@ -108,6 +111,7 @@ public class MyProfileDAO {
         result.setWeight(cursor.getFloat(7));
         result.setWeightLossGoal(cursor.getFloat(8));
         result.setWeeklyLossWeight(cursor.getFloat(9));
+        result.setAddedTime(cursor.getLong(10));
 
         return result;
     }

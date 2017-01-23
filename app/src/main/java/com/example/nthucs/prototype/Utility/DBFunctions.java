@@ -65,6 +65,7 @@ public class DBFunctions {
                 map.put("userWeight", cursor.getString(7));
                 map.put("userSex", cursor.getString(5));
                 map.put("userBorn", getDate(cursor.getLong(4),"yyyy-MM-dd"));
+                map.put("userAddedTime",cursor.getString(10));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }

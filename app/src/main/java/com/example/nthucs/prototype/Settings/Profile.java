@@ -34,6 +34,8 @@ public class Profile implements java.io.Serializable {
     // weekly loss weight target
     private float weeklyLossWeight;
 
+    private long addedTime;
+
     public Profile() {
         this.datetime = 0;
         this.lastModify = 0;
@@ -73,4 +75,7 @@ public class Profile implements java.io.Serializable {
 
     public float getWeeklyLossWeight() {return weeklyLossWeight;}
     public void setWeeklyLossWeight(float weeklyLossWeight) {this.weeklyLossWeight = weeklyLossWeight;}
+
+    public long getAddedTime(){return addedTime;}
+    public void setAddedTime(long addedTime){this.addedTime = addedTime;}
 }
