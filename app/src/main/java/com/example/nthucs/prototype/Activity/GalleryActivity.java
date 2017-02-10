@@ -2,21 +2,17 @@ package com.example.nthucs.prototype.Activity;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -25,24 +21,25 @@ import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.SpinnerWheel.CustomDialog;
-import com.example.nthucs.prototype.SpinnerWheel.SpinnerWheelAdapter;
 import com.example.nthucs.prototype.Utility.CompFoodDB;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Utility.RealPathUtil;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.AbstractWheel;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelChangedListener;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelClickedListener;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelScrollListener;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.adapters.NumericWheelAdapter;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -82,6 +79,10 @@ public class GalleryActivity extends AppCompatActivity {
 
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
+
+    RequestParams params = new RequestParams();
+    String encodedString,recordedDate;
+    Bitmap bitmaptoUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +214,9 @@ public class GalleryActivity extends AppCompatActivity {
         } else if (view.getId() == R.id.cancel_item) {
             finish();
         }
+
+        new encodeImagetoString().execute();
+
     }
 
     private void requestStoragePermission() {
@@ -244,6 +248,7 @@ public class GalleryActivity extends AppCompatActivity {
         if (data != null) {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
+                bitmaptoUpload = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(), data.getData());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -280,7 +285,6 @@ public class GalleryActivity extends AppCompatActivity {
 
         // assign variable: picUri.toString
         picUriString = picUri.toString();
-
         // set bitmap to imageView
         picture.setImageBitmap(bitmap);
         picture.setVisibility(View.VISIBLE);
@@ -330,7 +334,88 @@ public class GalleryActivity extends AppCompatActivity {
         Intent result = getIntent();
         result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
         setResult(Activity.RESULT_OK, result);
-
         finish();
     }
+
+    private class encodeImagetoString extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            // Must compress the Image to reduce image size to make upload easy
+            bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byte_arr = stream.toByteArray();
+            // Encode Image to String
+            encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+            recordedDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            // Put converted Image string into Async Http Post param
+            params.put("image", encodedString);
+            params.put("filename",recordedDate+"_"+fileName);
+            params.put("userFBId",LoginActivity.facebookUserID);
+            // Trigger Image upload
+            triggerImageUpload();
+
+        }
+    }
+
+    public void triggerImageUpload() {
+        makeHTTPCall();
+    }
+
+    // Make Http call to upload Image to Php server
+    public void makeHTTPCall() {
+        AsyncHttpClient client = new AsyncHttpClient();
+        // Don't forget to change the IP address to your LAN address. Port no as well.
+        client.post("http://140.114.88.136:80/mhealth/upload_image.php",
+                params, new AsyncHttpResponseHandler() {
+                    // When the response returned by REST has Http
+                    // response code '200'
+
+                    public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
+
+                        try {
+                            String str = new String(bytes,"UTF-8");
+                            System.out.println(str);
+                        } catch (UnsupportedEncodingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    // When the response returned by REST has Http
+                    // response code other than '200' such as '404',
+                    // '500' or '403' etc
+                    public void onFailure(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                        // Hide Progress Dialog
+                        // When Http response code is '404'
+                        if (status == 404) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Requested resource not found",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code is '500'
+                        else if (status == 500) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Something went wrong at server end",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        // When Http response code other than 404, 500
+                        else {
+                            Toast.makeText(
+                                    getApplicationContext(),
+                                    "Error Occured n Most Common Error: n1. Device not connected to Internetn2. Web App is not deployed in App servern3. App server is not runningn HTTP Status code : "
+                                            + status, Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                });
+    }
+
+
 }

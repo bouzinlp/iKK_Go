@@ -170,7 +170,7 @@ public class FoodActivity extends AppCompatActivity {
 
         if (food.getFileName() != null && food.getFileName().length() > 0) {
             // camera can access this statement
-            if (food.isTakeFromCamera() == true) {
+            if (food.isTakeFromCamera()) {
                 // photo taken from camera display with config way
                 File file = configFileName("P", ".jpg");
                 if (file.exists()) {
