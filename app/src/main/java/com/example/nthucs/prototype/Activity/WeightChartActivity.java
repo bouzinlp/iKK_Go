@@ -12,11 +12,14 @@ import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.Settings.Profile;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by user on 2016/8/2.
@@ -35,6 +38,9 @@ public class WeightChartActivity extends AppCompatActivity {
     // data points for weight
     private DataPoint[] weightsData;
 
+    // date label's number in axis X
+    private int mNumLabels = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,7 +57,11 @@ public class WeightChartActivity extends AppCompatActivity {
 
         // from array list to data point
         for (int i = 0 ; i < profileList.size() ; i++) {
-            weightsData[i] = new DataPoint(i, profileList.get(i).getWeight());
+            // convert miles second to date time
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(profileList.get(i).getDatetime());
+            Date date  = calendar.getTime();
+            weightsData[i] = new DataPoint(date, profileList.get(i).getWeight());
         }
 
         // custom view in action bar
@@ -106,8 +116,11 @@ public class WeightChartActivity extends AppCompatActivity {
 
         // set manual X bounds
         graphView.getViewport().setYAxisBoundsManual(true);
-        graphView.getViewport().setMinX(0);
-        graphView.getViewport().setMaxX(profileList.size()-1);
+        graphView.getViewport().setMinX(weightsData[0].getX());
+        graphView.getViewport().setMaxX(weightsData[profileList.size()-1].getX());
+
+        // as we use dates as labels, the human rounding to nice readable numbers is not necessary
+        graphView.getGridLabelRenderer().setHumanRounding(false);
 
         // activate horizontal zooming and scrolling
         //graphView.getViewport().setScalable(true);
@@ -118,7 +131,12 @@ public class WeightChartActivity extends AppCompatActivity {
         // activate vertical scrolling
         //graphView.getViewport().setScrollableY(true);
 
-        graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+        // set date label formatter in X axis
+        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graphView.getContext()));
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(mNumLabels);
+
+        // set kg label formatter in Y axis, but conflict with X, so comment temporarily
+        /*graphView.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
             @Override
             public String formatLabel(double value, boolean isValueY) {
                 if (isValueY) {
@@ -129,7 +147,7 @@ public class WeightChartActivity extends AppCompatActivity {
                     return super.formatLabel(value, isValueY) + " kg";
                 }
             }
-        });
+        });*/
 
         graphView.addSeries(series);
     }
