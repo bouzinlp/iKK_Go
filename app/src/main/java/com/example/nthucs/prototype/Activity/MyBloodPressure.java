@@ -28,6 +28,10 @@ public class MyBloodPressure extends AppCompatActivity {
     // Calendar
     private Calendar calendar;
 
+    // Temporary storage before update
+    private int select_hour , select_min;
+    private int select_day , select_year , select_month;
+
     // Edit text
     private EditText systolicBloodPressure_text, diastolicBloodPressure_text , pulse_text;
 
@@ -39,12 +43,6 @@ public class MyBloodPressure extends AppCompatActivity {
 
     // currently and temporary profile
     private Health curHealth, tempHealth;
-
-    // Year, month, day
-    private int select_day , select_year , select_month;
-
-    // Hour, min
-    private int select_hour , select_min;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +77,7 @@ public class MyBloodPressure extends AppCompatActivity {
         // process day button
         processSelectDayControllers();
 
-        // process time controller
+        // process hour & min time controller
         processSelectTimerControllers();
 
         // process update button
@@ -207,6 +205,19 @@ public class MyBloodPressure extends AppCompatActivity {
             }
         });
 
+        // set text with date time to the button if not empty
+        if (curHealth.getDatetime() != 0) {
+            // set time in millis to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(curHealth.getDatetime());
+
+            // set to temporary storage
+            select_hour = calendar.get(Calendar.HOUR_OF_DAY);
+            select_min = calendar.get(Calendar.MINUTE);
+
+            // set text to button
+            selectTimerButton.setText(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+        }
     }
 
     private void processEditTextControllers() {
@@ -240,7 +251,7 @@ public class MyBloodPressure extends AppCompatActivity {
             calendar.set(Calendar.YEAR, select_year);
             calendar.set(Calendar.MONTH, select_month - 1);
             calendar.set(Calendar.DAY_OF_MONTH, select_day);
-            calendar.set(Calendar.HOUR, select_hour);
+            calendar.set(Calendar.HOUR_OF_DAY, select_hour);
             calendar.set(Calendar.MINUTE, select_min);
 
             // set the chosen date time and last modify time
@@ -258,8 +269,7 @@ public class MyBloodPressure extends AppCompatActivity {
             // store to health data base use update & insert
             if (healthDAO.isTableEmpty() == true){
                 healthDAO.insert(tempHealth);
-            }
-            else{
+            } else{
                 healthDAO.insert(tempHealth);
             }
 

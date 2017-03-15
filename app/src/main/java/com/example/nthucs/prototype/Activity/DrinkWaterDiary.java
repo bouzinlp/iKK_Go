@@ -13,11 +13,12 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 
 import com.example.nthucs.prototype.R;
-import com.example.nthucs.prototype.Settings.MyProfileDAO;
-import com.example.nthucs.prototype.Settings.Profile;
+import com.example.nthucs.prototype.Settings.Health;
+import com.example.nthucs.prototype.Settings.HealthDAO;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class DrinkWaterDiary extends AppCompatActivity {
@@ -35,38 +36,50 @@ public class DrinkWaterDiary extends AppCompatActivity {
     private EditText waterDrinked_text;
 
     // data base for profile
-    private MyProfileDAO myProfileDAO;
+    private HealthDAO healthDAO;
 
     // list of profile
-    private List<Profile> profileList = new ArrayList<>();
+    private List<Health> healthList = new ArrayList<>();
 
     // currently and temporary profile
-    private Profile curProfile, tempProfile;
+    private Health curHealth, tempHealth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_water_diary);
-        myProfileDAO = new MyProfileDAO(getApplicationContext());
+        // initialize data base
+        healthDAO = new HealthDAO(getApplicationContext());
 
-        // get all profile data from data base
-        profileList = myProfileDAO.getAll();
+        // get all health data from data base
+        healthList = healthDAO.getAll();
 
-        // get the last profile data in the list
-        curProfile = new Profile();
+        // get the last health data in the list
+        if (healthDAO.isTableEmpty() == true) {
+            curHealth = new Health();
+        } else {
+            curHealth = healthList.get(healthList.size()-1);
+        }
+
+        // set new health profile for updated
+        tempHealth = new Health();
+
         // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.drink_water_diary_menu);
 
         // process back button
         processBackControllers();
+
         // process day button
         processSelectDayControllers();
-        //
+
+        // process hour & min time controller
         processSelectTimerControllers();
 
         // process update button
         processUpdateButtonControllers();
+
         // process height and weight edit text
         processEditTextControllers();
     }
@@ -135,9 +148,20 @@ public class DrinkWaterDiary extends AppCompatActivity {
             }
         });
 
-        // set text with birthday to the button if not empty
+        // set text with date time to the button if not empty
+        if (curHealth.getDatetime() != 0) {
+            // set time in millis to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(curHealth.getDatetime());
 
+            // set to temporary storage
+            select_year = calendar.get(Calendar.YEAR);
+            select_month = calendar.get(Calendar.MONTH)+1;
+            select_day = calendar.get(Calendar.DAY_OF_MONTH);
 
+            // set text to button
+            selectDayButton.setText(calendar.get(Calendar.MONTH)+1+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
+        }
     }
 
     private void processSelectTimerControllers() {
@@ -167,28 +191,42 @@ public class DrinkWaterDiary extends AppCompatActivity {
         selectTimerButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
+                Calendar mCurrentTime = Calendar.getInstance();
+                int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mCurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(DrinkWaterDiary.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        selectTimerButton.setText( selectedHour + ":" + selectedMinute);
-                    }
-                }, hour, minute,true);
+                if (select_hour == 0 && select_min == 0) {
+                    mTimePicker = new TimePickerDialog(DrinkWaterDiary.this, timeSetListener, hour, minute, true);
+                } else {
+                    mTimePicker = new TimePickerDialog(DrinkWaterDiary.this, timeSetListener, select_hour, select_min, true);
+                }
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
             }
         });
 
+        // set text with date time to the button if not empty
+        if (curHealth.getDatetime() != 0) {
+            // set time in millis to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(curHealth.getDatetime());
+
+            // set to temporary storage
+            select_hour = calendar.get(Calendar.HOUR_OF_DAY);
+            select_min = calendar.get(Calendar.MINUTE);
+
+            // set text to button
+            selectTimerButton.setText(calendar.get(Calendar.HOUR_OF_DAY) + ":" + calendar.get(Calendar.MINUTE));
+        }
+
     }
     private void processEditTextControllers() {
         waterDrinked_text = (EditText)findViewById(R.id.water_text);
-        // set text to edit text if current profile not empty
-        if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
-            // set to edit text
 
+        // set text to edit text if current profile not empty
+        if (curHealth.getDrunkWater() != 0) {
+            // set to edit text
+            waterDrinked_text.setText(Integer.toString(curHealth.getDrunkWater()));
         }
     }
     // process update button
@@ -203,7 +241,30 @@ public class DrinkWaterDiary extends AppCompatActivity {
     public void onSubmit(View view) {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            // convert integer time to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, select_year);
+            calendar.set(Calendar.MONTH, select_month - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, select_day);
+            calendar.set(Calendar.HOUR_OF_DAY, select_hour);
+            calendar.set(Calendar.MINUTE, select_min);
 
+            // set the chosen date time and last modify time
+            tempHealth.setDatetime(calendar.getTimeInMillis());
+            tempHealth.setLastModify(new Date().getTime());
+
+            // set user id
+            tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
+
+            // set drink water
+            tempHealth.setDrunkWater(Integer.parseInt(waterDrinked_text.getText().toString()));
+
+            // store to health data base use update & insert
+            if (healthDAO.isTableEmpty() == true){
+                healthDAO.insert(tempHealth);
+            } else{
+                healthDAO.insert(tempHealth);
+            }
         }
     }
 }
