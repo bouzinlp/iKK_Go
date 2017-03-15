@@ -189,7 +189,7 @@ public class MyProfileActivity extends AppCompatActivity {
             birth_month = calendar.get(Calendar.MONTH)+1;
             birth_day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            //calculate age
+            // calculate age
             Calendar now_calendar = Calendar.getInstance();
             int now_year = now_calendar.get(Calendar.YEAR);                 //取出年
             int now_month = now_calendar.get(Calendar.MONTH) + 1;          //取出月，月份的編號是由0~11 故+1

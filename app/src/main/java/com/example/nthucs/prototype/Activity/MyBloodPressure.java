@@ -7,19 +7,18 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import com.example.nthucs.prototype.R;
-import com.example.nthucs.prototype.Settings.MyProfileDAO;
-import com.example.nthucs.prototype.Settings.Profile;
+import com.example.nthucs.prototype.Settings.Health;
+import com.example.nthucs.prototype.Settings.HealthDAO;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MyBloodPressure extends AppCompatActivity {
@@ -28,45 +27,46 @@ public class MyBloodPressure extends AppCompatActivity {
 
     // Calendar
     private Calendar calendar;
-    private int hour ,min;
-    //spinner
-    private Spinner hourSpinner;
-    private Spinner minSpinner;
-
-    // list adapter
-    private ArrayAdapter hourAdapter , minAdapter;
-
-    // Temporary storage before update
-    private int select_hour , select_min;
 
     // Edit text
     private EditText systolicBloodPressure_text, diastolicBloodPressure_text , pulse_text;
 
     // data base for profile
-    private MyProfileDAO myProfileDAO;
+    private HealthDAO healthDAO;
 
     // list of profile
-    private List<Profile> profileList = new ArrayList<>();
+    private List<Health> healthList = new ArrayList<>();
 
     // currently and temporary profile
-    private Profile curProfile, tempProfile;
+    private Health curHealth, tempHealth;
 
-    //
+    // Year, month, day
     private int select_day , select_year , select_month;
+
+    // Hour, min
+    private int select_hour , select_min;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_blood_pressure);
+        // initialize data base
+        healthDAO = new HealthDAO(getApplicationContext());
 
-        myProfileDAO = new MyProfileDAO(getApplicationContext());
+        // get all health data from data base
+        healthList = healthDAO.getAll();
 
-        // get all profile data from data base
-        profileList = myProfileDAO.getAll();
+        // get the last health data in the list
+        if (healthDAO.isTableEmpty() == true) {
+            curHealth = new Health();
+        } else {
+            curHealth = healthList.get(healthList.size()-1);
+        }
 
-        // get the last profile data in the list
-        curProfile = new Profile();
+        // set new health profile for updated
+        tempHealth = new Health();
 
-
+        // custom view in action bar
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.my_blood_pressure_menu);
 
@@ -78,7 +78,8 @@ public class MyBloodPressure extends AppCompatActivity {
 
         // process day button
         processSelectDayControllers();
-        //
+
+        // process time controller
         processSelectTimerControllers();
 
         // process update button
@@ -150,11 +151,11 @@ public class MyBloodPressure extends AppCompatActivity {
             }
         });
 
-        // set text with birthday to the button if not empty
-        if (curProfile.getBirthDay() != 0) {
+        // set text with date time to the button if not empty
+        if (curHealth.getDatetime() != 0) {
             // set time in millis to calendar
             Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(curProfile.getBirthDay());
+            calendar.setTimeInMillis(curHealth.getDatetime());
 
             // set to temporary storage
             select_year = calendar.get(Calendar.YEAR);
@@ -176,7 +177,6 @@ public class MyBloodPressure extends AppCompatActivity {
         // initialize calendar
         calendar = Calendar.getInstance();
 
-
         // set date picker listener
         final TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -193,28 +193,34 @@ public class MyBloodPressure extends AppCompatActivity {
         selectTimerButton.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
+                Calendar mCurrentTime = Calendar.getInstance();
+                int hour = mCurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mCurrentTime.get(Calendar.MINUTE);
                 TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(MyBloodPressure.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        selectTimerButton.setText( selectedHour + ":" + selectedMinute);
-                    }
-                }, hour, minute,true);
+                if (select_hour == 0 && select_min == 0) {
+                    mTimePicker = new TimePickerDialog(MyBloodPressure.this, timeSetListener, hour, minute, true);
+                } else {
+                    mTimePicker = new TimePickerDialog(MyBloodPressure.this, timeSetListener, select_hour, select_min, true);
+                }
                 mTimePicker.setTitle("Select Time");
                 mTimePicker.show();
             }
         });
 
     }
+
     private void processEditTextControllers() {
         systolicBloodPressure_text = (EditText)findViewById(R.id.spressure_edit_text);
         diastolicBloodPressure_text = (EditText)findViewById(R.id.dpressure_edit_text);
         pulse_text = (EditText)findViewById(R.id.pulse_edit_text);
 
-
+        // set text to edit text if current health profile not empty
+        if (curHealth.getSystolicBloodPressure() != 0 && curHealth.getDiastolicBloodPressure() != 0 && curHealth.getPulse() != 0) {
+            // set to edit text
+            systolicBloodPressure_text.setText(Float.toString(curHealth.getSystolicBloodPressure()));
+            diastolicBloodPressure_text.setText(Float.toString(curHealth.getDiastolicBloodPressure()));
+            pulse_text.setText(Float.toString(curHealth.getPulse()));
+        }
     }
 
     // process update button
@@ -229,7 +235,36 @@ public class MyBloodPressure extends AppCompatActivity {
     public void onSubmit(View view) {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            // convert integer time to calendar
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, select_year);
+            calendar.set(Calendar.MONTH, select_month - 1);
+            calendar.set(Calendar.DAY_OF_MONTH, select_day);
+            calendar.set(Calendar.HOUR, select_hour);
+            calendar.set(Calendar.MINUTE, select_min);
 
+            // set the chosen date time and last modify time
+            tempHealth.setDatetime(calendar.getTimeInMillis());
+            tempHealth.setLastModify(new Date().getTime());
+
+            // set user id
+            tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
+
+            // set systolic pressure, diastolic pressure, and pulse
+            tempHealth.setSystolicBloodPressure(Float.parseFloat(systolicBloodPressure_text.getText().toString()));
+            tempHealth.setDiastolicBloodPressure(Float.parseFloat(diastolicBloodPressure_text.getText().toString()));
+            tempHealth.setPulse(Float.parseFloat(pulse_text.getText().toString()));
+
+            // store to health data base use update & insert
+            if (healthDAO.isTableEmpty() == true){
+                healthDAO.insert(tempHealth);
+            }
+            else{
+                healthDAO.insert(tempHealth);
+            }
+
+            // output test
+            //System.out.println(select_year+"-"+select_month+"-"+select_day+"-"+select_hour+"-"+select_min);
         }
     }
 }
