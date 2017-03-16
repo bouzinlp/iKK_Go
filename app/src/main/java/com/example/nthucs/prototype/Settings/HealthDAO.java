@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.nthucs.prototype.Activity.LoginActivity;
 import com.example.nthucs.prototype.Utility.MyDBHelper;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class HealthDAO {
     public Health insert(Health health) {
         ContentValues cv = new ContentValues();
 
-        cv.put(USER_ID, health.getUserID());
+        cv.put(USER_ID, LoginActivity.facebookUserID);
         cv.put(DATETIME_COLUMN, health.getDatetime());
         cv.put(LASTMODIFY_COLUMN, health.getLastModify());
         cv.put(TEMPERATURE_COLUMN, health.getTemperature());

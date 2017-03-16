@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -81,7 +82,7 @@ public class GalleryActivity extends AppCompatActivity {
     private CalorieDAO calorieDAO;
 
     RequestParams params = new RequestParams();
-    String encodedString,recordedDate;
+    String encodedString;
     Bitmap bitmaptoUpload;
 
     @Override
@@ -208,15 +209,12 @@ public class GalleryActivity extends AppCompatActivity {
             } else {
                 // Process dialog with spinner wheel
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                                                            fileName, picUriString, GalleryActivity.this);
+                                                            fileName, picUriString, GalleryActivity.this,encodedString);
                 customDialog.processDialogControllers();
             }
         } else if (view.getId() == R.id.cancel_item) {
             finish();
         }
-
-        new encodeImagetoString().execute();
-
     }
 
     private void requestStoragePermission() {
@@ -262,7 +260,8 @@ public class GalleryActivity extends AppCompatActivity {
             // SDK > 19 (Android 4.4)
         else
             realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
-
+        //set encodedString by compress bitmap
+        encodedString = encodeImagetoString();
         // the address of the image on the SD card
         Uri uri = data.getData();
 
@@ -324,6 +323,7 @@ public class GalleryActivity extends AppCompatActivity {
         food.setContent("blank content");
         food.setFileName(fileName);
         food.setCalorie(0.0f);
+        food.setEncodedString(encodedString);
         food.setGrams(100.0f);
         food.setPortions(1.0f);
         food.setPicUriString(picUriString);
@@ -337,85 +337,13 @@ public class GalleryActivity extends AppCompatActivity {
         finish();
     }
 
-    private class encodeImagetoString extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            // Must compress the Image to reduce image size to make upload easy
-            bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] byte_arr = stream.toByteArray();
-            // Encode Image to String
-            encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
-            recordedDate = new SimpleDateFormat("yyyyMMdd").format(new Date());
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            // Put converted Image string into Async Http Post param
-            params.put("image", encodedString);
-            params.put("filename",recordedDate+"_"+fileName);
-            params.put("userFBId",LoginActivity.facebookUserID);
-            // Trigger Image upload
-            triggerImageUpload();
-
-        }
+    private String encodeImagetoString(){
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Must compress the Image to reduce image size to make upload easy
+        bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byte_arr = stream.toByteArray();
+        // Encode Image to String
+        encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+        return encodedString;
     }
-
-    public void triggerImageUpload() {
-        makeHTTPCall();
-    }
-
-    // Make Http call to upload Image to Php server
-    public void makeHTTPCall() {
-        AsyncHttpClient client = new AsyncHttpClient();
-        // Don't forget to change the IP address to your LAN address. Port no as well.
-        client.post("http://140.114.88.136:80/mhealth/upload_image.php",
-                params, new AsyncHttpResponseHandler() {
-                    // When the response returned by REST has Http
-                    // response code '200'
-
-                    public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
-
-                        try {
-                            String str = new String(bytes,"UTF-8");
-                            System.out.println(str);
-                        } catch (UnsupportedEncodingException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    // When the response returned by REST has Http
-                    // response code other than '200' such as '404',
-                    // '500' or '403' etc
-                    public void onFailure(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
-                        // Hide Progress Dialog
-                        // When Http response code is '404'
-                        if (status == 404) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Requested resource not found",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code is '500'
-                        else if (status == 500) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Something went wrong at server end",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                        // When Http response code other than 404, 500
-                        else {
-                            Toast.makeText(
-                                    getApplicationContext(),
-                                    "Error Occured n Most Common Error: n1. Device not connected to Internetn2. Web App is not deployed in App servern3. App server is not runningn HTTP Status code : "
-                                            + status, Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                });
-    }
-
-
 }

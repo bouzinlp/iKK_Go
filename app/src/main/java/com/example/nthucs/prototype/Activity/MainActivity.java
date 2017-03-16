@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
 
         //reset the content view
         setContentView(R.layout.activity_main);
-
         // calorie data base
         calorieDAO = new CalorieDAO(getApplicationContext());
 

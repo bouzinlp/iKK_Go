@@ -46,8 +46,11 @@ public class CustomDialog {
     // Identify parent activity
     private boolean parentIsGallery;
 
+    //image encodedString
+    private String encodedString;
+
     public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
-                        String fileName, String picUriString, Activity activity) {
+                        String fileName, String picUriString, Activity activity,String encodedString) {
         this.compare_result = compare_result;
         this.food = food;
         this.foodCalList = foodCalList;
@@ -59,6 +62,8 @@ public class CustomDialog {
 
         // parent activity is gallery
         this.parentIsGallery = true;
+
+        this.encodedString =encodedString;
     }
 
     public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
@@ -192,12 +197,12 @@ public class CustomDialog {
                         selectedIdx = compare_result[i];
                     }
                 }
-
                 // Set food's information(title and picture name)
                 food.setTitle(foodCalList.get(selectedIdx).getChineseName());
                 food.setContent("blank content");
                 food.setFileName(fileName);
                 food.setCalorie(foodCalList.get(selectedIdx).getCalorie());
+                food.setEncodedString(encodedString);
                 food.setGrams(100.0f);
                 food.setPortions(1.0f);
                 food.setPicUriString(picUriString);
@@ -210,7 +215,7 @@ public class CustomDialog {
                 }
 
                 food.setDatetime(new Date().getTime());
-
+                System.out.println("GETTIME = "+new Date().getTime());
                 // Set result to main activity
                 Intent result = activity.getIntent();
                 result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);

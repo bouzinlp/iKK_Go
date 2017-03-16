@@ -17,7 +17,9 @@ public class FoodDAO {
     public static final String TABLE_NAME = "food";
 
     public static final String KEY_ID = "_id";
+    public static final String USER_ID = "userId";
     public static final String CALORIE_COLUMN = "calorie";
+    public static final String ENCODED_STRING = "encodedString";
     public static final String PORTIONS_COLUMN = "portions";
     public static final String GRAMS_COLUMN = "grams";
     public static final String TITLE_COLUMN = "title";
@@ -29,8 +31,10 @@ public class FoodDAO {
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
-                    KEY_ID + " INTEGER NOT NULL, " +/*INTEGER PRIMARY KEY AUTOINCREMENT*/
+                    KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                    USER_ID + " TEXT NOT NULL, "+
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
+                    ENCODED_STRING + " TEXT NOT NULL, "+
                     PORTIONS_COLUMN + " TEXT NOT NULL, " +
                     GRAMS_COLUMN + " TEXT NOT NULL, " +
                     FILENAME_COLUMN + " TEXT, " +
@@ -49,8 +53,9 @@ public class FoodDAO {
     public Food insert(Food food) {
         ContentValues cv = new ContentValues();
 
-        cv.put(KEY_ID, LoginActivity.facebookUserID);
+        cv.put(USER_ID, LoginActivity.facebookUserID);
         cv.put(CALORIE_COLUMN, food.getCalorie());
+        cv.put(ENCODED_STRING,food.getEncodedString());
         cv.put(PORTIONS_COLUMN, food.getPortions());
         cv.put(GRAMS_COLUMN, food.getGrams());
         cv.put(FILENAME_COLUMN, food.getFileName());
@@ -60,12 +65,9 @@ public class FoodDAO {
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
         cv.put(DATETIME_COLUMN, food.getDatetime());
 
-        System.out.println("FOOD NAMe = "+food.getTitle());
-        System.out.println("FOOD TIME = "+food.getDatetime());
-
         long id = this.db.insert(TABLE_NAME, null, cv);
 
-        //food.setId(id);
+        food.setId(id);
 
         return food;
     }
@@ -74,6 +76,7 @@ public class FoodDAO {
         ContentValues cv = new ContentValues();
 
         cv.put(CALORIE_COLUMN, food.getCalorie());
+        cv.put(ENCODED_STRING,food.getEncodedString());
         cv.put(PORTIONS_COLUMN, food.getPortions());
         cv.put(GRAMS_COLUMN, food.getGrams());
         cv.put(FILENAME_COLUMN, food.getFileName());
@@ -122,15 +125,16 @@ public class FoodDAO {
         Food result = new Food();
 
         result.setId(cursor.getLong(0));
-        result.setCalorie(cursor.getFloat(1));
-        result.setPortions(cursor.getFloat(2));
-        result.setGrams(cursor.getFloat(3));
-        result.setFileName(cursor.getString(4));
-        result.setTitle(cursor.getString(5));
-        result.setContent(cursor.getString(6));
-        result.setPicUriString(cursor.getString(7));
-        result.setTakeFromCamera(cursor.getInt(8) > 0);
-        result.setDatetime(cursor.getLong(9));
+        result.setCalorie(cursor.getFloat(2));
+        result.setEncodedString(cursor.getString(3));
+        result.setPortions(cursor.getFloat(5));
+        result.setGrams(cursor.getFloat(6));
+        result.setFileName(cursor.getString(6));
+        result.setTitle(cursor.getString(7));
+        result.setContent(cursor.getString(8));
+        result.setPicUriString(cursor.getString(9));
+        result.setTakeFromCamera(cursor.getInt(10) > 0);
+        result.setDatetime(cursor.getLong(11));
 
         return result;
     }

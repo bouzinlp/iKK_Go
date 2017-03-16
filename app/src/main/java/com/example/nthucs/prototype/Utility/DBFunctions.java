@@ -86,10 +86,11 @@ public class DBFunctions {
         if (cursor.moveToFirst()) {
             do {
                 HashMap<String, String> map = new HashMap<>();
-                map.put("foodId", cursor.getString(0));
-                map.put("foodName", cursor.getString(5));
-                map.put("foodCalories", cursor.getString(1));
-                map.put("foodTime", getDateTime(cursor.getLong(9)));
+                map.put("foodUserId", cursor.getString(1));
+                map.put("foodName", cursor.getString(7));
+                map.put("foodCalories", cursor.getString(2));
+                map.put("foodTime", getDateTime(cursor.getLong(11)));
+                map.put("foodImage",cursor.getString(3));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }
@@ -112,6 +113,30 @@ public class DBFunctions {
                 map.put("sportName", cursor.getString(2));
                 map.put("sportExpenditure", cursor.getString(4));
                 map.put("sportTotalTime", String.valueOf(cursor.getLong(6)/(1000*60)));
+                wordList.add(map);
+            } while (cursor.moveToNext());
+        }
+        database.close();
+        Gson gson = new GsonBuilder().create();
+        //Use GSON to serialize Array List to JSON
+        return gson.toJson(wordList);
+    }
+
+    public String composeHealthfromSQLite(){
+        ArrayList<HashMap<String, String>> wordList= new ArrayList<>();
+        String selectQuery = "SELECT  * FROM health";
+        SQLiteDatabase database = db.getWritableDatabase();
+        Cursor cursor = database.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                HashMap<String, String> map = new HashMap<>();
+                map.put("healthUserId",cursor.getString(1));
+                map.put("systolic", cursor.getString(6));
+                map.put("diastolic", cursor.getString(7));
+                map.put("pulse", cursor.getString(8));
+                map.put("drunkwater", cursor.getString(5));
+                map.put("tempurature", cursor.getString(4));
+                map.put("healthRecordedDate", cursor.getString(2));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }

@@ -34,6 +34,8 @@ public class Food implements java.io.Serializable {
     // food list's establish time
     private long datetime;
 
+    private String encodedString;
+
     public Food() {
         this.title = new String();
         this.content = new String();
@@ -106,5 +108,8 @@ public class Food implements java.io.Serializable {
     public void setDatetime(long datetime) {
         this.datetime = datetime;
     }
+
+    public void setEncodedString(String s){this.encodedString = s;}
+    public String getEncodedString(){return encodedString;}
 }
 

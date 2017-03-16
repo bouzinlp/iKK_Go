@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.Health;
+import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Settings.SettingAdapter;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
@@ -241,6 +243,8 @@ public class SettingsActivity extends AppCompatActivity {
                 params.put("usersJSON", dbFunctions.composeUserfromSQLite());
                 params.put("foodJSON", dbFunctions.composeFoodfromSQLite());
                 params.put("sportJSON",dbFunctions.composeSportfromSQLite());
+                params.put("healthJSON",dbFunctions.composeHealthfromSQLite());
+                System.out.println("AAAAAAAAAAA = "+dbFunctions.composeHealthfromSQLite());
                 client.setTimeout(10000);
                 client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
                     @Override
