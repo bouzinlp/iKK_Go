@@ -5,10 +5,15 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
+
+import java.util.ArrayList;
 
 /**
  * Created by user on 2016/9/24.
@@ -18,8 +23,15 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
     // Back button
     private Button backButton;
 
-    // Answer text view
-    private TextView sectionOne;
+    // Answer spinner
+    private Spinner sectionOneSpinner;
+    private Spinner sectionTwoSpinner;
+
+    // answer list adapter
+    private ArrayAdapter ansListAdapter;
+
+    // store answer
+    private String ansOne, ansTwo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +45,7 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
         // process back button
         processBackControllers();
 
-        // process text view
+        // process answer spinner
         processSectionControllers();
     }
 
@@ -66,8 +78,65 @@ public class MyCurrentExerciseActivity extends AppCompatActivity {
         });
     }
 
-    // process section text view
+    // process answer spinner
     private void processSectionControllers() {
+        // initialize spinner
+        sectionOneSpinner = (Spinner)findViewById(R.id.sectionOneSpinner);
+        sectionTwoSpinner = (Spinner)findViewById(R.id.sectionTwoSpinner);
+
+        // initialize adapter
+        ansListAdapter = new ArrayAdapter(MyCurrentExerciseActivity.this, R.layout.spinner_layout, new String[]{"a", "b", "c", "d"});
+
+        // set adapter to spinner
+        sectionOneSpinner.setAdapter(ansListAdapter);
+        sectionTwoSpinner.setAdapter(ansListAdapter);
+
+        // set adapter view's item selected listener
+        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
+                if (adapterView.getId() == R.id.sectionOneSpinner) {
+                    switch (adapterView.getSelectedItemPosition()) {
+                        case 0:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 1:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 2:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 3:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                    }
+                } else if (adapterView.getId() == R.id.sectionTwoSpinner) {
+                    switch (adapterView.getSelectedItemPosition()) {
+                        case 0:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 1:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 2:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                        case 3:
+                            ansOne = adapterView.getSelectedItem().toString();
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView arg0) {}
+        };
+
+        // register to spinner listener
+        sectionOneSpinner.setOnItemSelectedListener(spinnerListener);
+        sectionTwoSpinner.setOnItemSelectedListener(spinnerListener);
+
+        // set text with answer if current profile not empty
 
     }
 }

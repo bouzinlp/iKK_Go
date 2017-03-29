@@ -223,7 +223,7 @@ public class MyProfileActivity extends AppCompatActivity {
         genderSpinner.setAdapter(genderListAdapter);
 
         // set adapter view's item selected listener
-        AdapterView.OnItemSelectedListener spinnerlistener = new AdapterView.OnItemSelectedListener() {
+        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
                 if (adapterView.getId() == R.id.sex_spinner) {
@@ -245,7 +245,7 @@ public class MyProfileActivity extends AppCompatActivity {
         };
 
         // register to spinner listener
-        genderSpinner.setOnItemSelectedListener(spinnerlistener);
+        genderSpinner.setOnItemSelectedListener(spinnerListener);
 
         // set text with sex if current profile not empty
         if (curProfile.getSex().equals("null") == false) {

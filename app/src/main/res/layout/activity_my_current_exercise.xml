@@ -12,7 +12,7 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stretchColumns="1, 2, 3">
+        android:stretchColumns="0, 1">
 
         <TableRow>
             <TextView
@@ -20,7 +20,8 @@
                 android:padding="12sp"
                 android:layout_margin="10sp"
                 android:layout_weight="1"
-                android:background="@color/default_button"
+                android:layout_span="2"
+                android:background="@drawable/profile_drawable"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -34,6 +35,16 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <Spinner
+                android:padding="12sp"
+                android:layout_marginLeft="30sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginBottom="10sp"
+                android:layout_weight="1"
+                android:id="@+id/sectionOneSpinner"
+                android:background="@drawable/profile_drawable"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </TableRow>
 
         <TableRow>
@@ -43,6 +54,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -54,6 +66,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -64,6 +77,7 @@
                 android:paddingLeft="12sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -74,7 +88,8 @@
                 android:padding="12sp"
                 android:layout_margin="10sp"
                 android:layout_weight="1"
-                android:background="@color/default_button"
+                android:layout_span="2"
+                android:background="@drawable/profile_drawable"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -88,6 +103,16 @@
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
+            <Spinner
+                android:padding="12sp"
+                android:layout_marginLeft="30sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginBottom="10sp"
+                android:layout_weight="1"
+                android:id="@+id/sectionTwoSpinner"
+                android:background="@drawable/profile_drawable"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
         </TableRow>
 
         <TableRow>
@@ -97,6 +122,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -108,6 +134,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -118,6 +145,7 @@
                 android:paddingLeft="12sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:layout_span="2"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
