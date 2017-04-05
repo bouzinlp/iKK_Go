@@ -48,8 +48,8 @@ public class CustomDialogForSport {
         this.currentWeight = currentWeight;
 
         // initialize current sport name title
-        if (activity.getDialogTitleButton().getText().toString().isEmpty() == false) {
-            curSportName = activity.getDialogTitleButton().getText().toString();
+        if (activity.getDialogTitleEditText().getText().toString().isEmpty() == false) {
+            curSportName = activity.getDialogTitleEditText().getText().toString();
         } else {
             curSportName = new String();
         }
@@ -138,13 +138,14 @@ public class CustomDialogForSport {
         // initialize ok button
         Button dialogOkButton = (Button) dialog.findViewById(R.id.dialog_ok_button);
 
+
         // register & set on click listener
         dialogOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // set dialog title button's text
-                activity.getDialogTitleButton()
+                activity.getDialogTitleEditText()
                         .setText(sportNameAdapter.getItemText(sportNameSpinner.getCurrentItem()));
 
                 float timeMul = (float)((activity.getCurrentTime() / (1000 * 60)) / 30);
