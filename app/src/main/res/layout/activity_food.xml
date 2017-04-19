@@ -1,175 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:stretchColumns="1,2,3"
     tools:context=".Activity.FoodActivity">
 
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="說"
-            android:onClick="onClickVoice"
-            android:id="@+id/voice_btn"
-            android:layout_column="0" />
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:text="voice result"
-            android:background="#3293c4"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#ffffff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_column="1"
-            android:id="@+id/txtText" />
-    </TableRow>
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:stretchColumns="1,2,3">
 
-    <TableRow>
-        <TextView
-            android:text="@string/food_title"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <!--<EditText
-            android:id="@+id/title_text"
-            android:hint="@string/enter_food_title"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />-->
+                <Button
+                    android:id="@+id/voice_btn"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:onClick="onClickVoice"
+                    android:text="說" />
 
-        <Button
-            android:id="@+id/dialog_button"
-            android:layout_width="wrap_content"
-            android:layout_height="35.5dp"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:textColor="@color/black"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+                <TextView
+                    android:id="@+id/txtText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_margin="3sp"
+                    android:background="#3293c4"
+                    android:padding="6sp"
+                    android:text="voice result"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="#ffffff" />
+            </TableRow>
 
-    <TableRow>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:text="@string/content"
-            android:layout_height="70sp"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/rectangle_drawable"
-            android:gravity="center"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:layout_margin="3sp"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:text="@string/food_title"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
-            android:id="@+id/content_text"
-            android:hint="@string/enter_content"
-            android:layout_gravity="top"
-            android:layout_height="70sp"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+                <!--<EditText
+                    android:id="@+id/title_text"
+                    android:hint="@string/enter_food_title"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:layout_margin="3sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />-->
 
-    <TableRow>
-        <TextView
-            android:text="@string/calorie"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+                <Button
+                    android:id="@+id/dialog_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35.5dp"
+                    android:layout_margin="3sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/black" />
+            </TableRow>
 
-        <EditText
-            android:id="@+id/calorie_text"
-            android:hint="@string/enter_calorie"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+            <TableRow>
 
-    <TableRow>
-        <TextView
-            android:text="@string/portions"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+                <TextView
+                    android:layout_height="70sp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="3sp"
+                    android:background="@drawable/rectangle_drawable"
+                    android:gravity="center"
+                    android:padding="6sp"
+                    android:text="@string/content"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <EditText
-            android:id="@+id/portions_text"
-            android:hint="@string/enter_portions"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+                <EditText
+                    android:id="@+id/content_text"
+                    android:layout_height="70sp"
+                    android:layout_gravity="top"
+                    android:layout_margin="3sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_drawable"
+                    android:hint="@string/enter_content"
+                    android:padding="6sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
 
-    <TableRow>
-        <TextView
-            android:text="@string/grams"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            <TableRow>
 
-        <EditText
-            android:id="@+id/grams_text"
-            android:hint="@string/enter_grams"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
+                <TextView
+                    android:layout_margin="3sp"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:text="@string/calorie"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <!-- 顯示圖片 -->
-    <ImageView
-        android:id="@+id/picture_food"
-        android:layout_width="match_parent"
-        android:layout_height="210dp"
-        android:adjustViewBounds="false"
-        android:layout_margin="3sp"
-        android:background="@drawable/rectangle_drawable"
-        android:padding="6sp"
-        android:visibility="invisible" />
+                <EditText
+                    android:id="@+id/calorie_text"
+                    android:layout_margin="3sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_drawable"
+                    android:hint="@string/enter_calorie"
+                    android:padding="6sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="*">
+            <TableRow>
 
-        <TableRow>
-            <Button
-                android:id="@+id/ok_item"
-                android:text="@android:string/ok"
-                android:onClick="onSubmit"
-                android:padding="6sp"
+                <TextView
+                    android:layout_margin="3sp"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:text="@string/portions"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/portions_text"
+                    android:layout_margin="3sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_drawable"
+                    android:hint="@string/enter_portions"
+                    android:padding="6sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_margin="3sp"
+                    android:background="@drawable/rectangle_drawable"
+                    android:padding="6sp"
+                    android:text="@string/grams"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/grams_text"
+                    android:layout_margin="3sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangle_drawable"
+                    android:hint="@string/enter_grams"
+                    android:padding="6sp"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <!-- 顯示圖片 -->
+            <ImageView
+                android:id="@+id/picture_food"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
                 android:layout_margin="3sp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <Button
-                android:id="@+id/cancel_item"
-                android:text="@android:string/cancel"
-                android:onClick="onSubmit"
+                android:adjustViewBounds="false"
+                android:background="@drawable/rectangle_drawable"
                 android:padding="6sp"
-                android:layout_margin="3sp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-    </TableLayout>
+                android:visibility="invisible" />
 
-</TableLayout>
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="*">
+
+                <TableRow>
+
+                    <Button
+                        android:id="@+id/ok_item"
+                        android:layout_margin="3sp"
+                        android:onClick="onSubmit"
+                        android:padding="6sp"
+                        android:text="@android:string/ok"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <Button
+                        android:id="@+id/cancel_item"
+                        android:layout_margin="3sp"
+                        android:onClick="onSubmit"
+                        android:padding="6sp"
+                        android:text="@android:string/cancel"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </TableRow>
+
+            </TableLayout>
+
+        </TableLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

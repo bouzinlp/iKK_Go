@@ -45,7 +45,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     private Float tempTargetWeight, tempWeeklyTarget;
 
     //BMR
-    private TextView BMR_text , BMR_mwl , height_text , weight_text;
+    private TextView BMR_text , BMR_mwl;
     private  int sex_num , age_num;
     private float BMR;
 
