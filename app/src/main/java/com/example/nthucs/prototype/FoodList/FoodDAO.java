@@ -34,7 +34,7 @@ public class FoodDAO {
                     KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     USER_ID + " TEXT NOT NULL, "+
                     CALORIE_COLUMN + " TEXT NOT NULL, " +
-                    ENCODED_STRING + " TEXT NOT NULL, "+
+                    ENCODED_STRING + " TEXT, "+
                     PORTIONS_COLUMN + " TEXT NOT NULL, " +
                     GRAMS_COLUMN + " TEXT NOT NULL, " +
                     FILENAME_COLUMN + " TEXT, " +
