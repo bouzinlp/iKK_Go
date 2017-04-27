@@ -26,6 +26,7 @@ public class HealthDAO {
     public static final String SYSTOLICBLOOD_COLUMN = "systolicBloodPressure";
     public static final String DIASTOLICBLOOD_COLUMN = "diastolicBloodPressure";
     public static final String PULSE_COLUMN = "pulse";
+    public static final String ACTIVITYFACTOR_COLUMN = "activityFactor";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -37,7 +38,8 @@ public class HealthDAO {
                     DRUNKWATER_COLUMN + " INTEGER, " +
                     SYSTOLICBLOOD_COLUMN + " TEXT, " +
                     DIASTOLICBLOOD_COLUMN + " TEXT, " +
-                    PULSE_COLUMN + " TEXT)";
+                    PULSE_COLUMN + " TEXT, " +
+                    ACTIVITYFACTOR_COLUMN + " TEXT)";
 
     private SQLiteDatabase db;
 
@@ -56,6 +58,7 @@ public class HealthDAO {
         cv.put(SYSTOLICBLOOD_COLUMN, health.getSystolicBloodPressure());
         cv.put(DIASTOLICBLOOD_COLUMN, health.getDiastolicBloodPressure());
         cv.put(PULSE_COLUMN, health.getPulse());
+        cv.put(ACTIVITYFACTOR_COLUMN, health.getActivityFactor());
 
         long id = db.insert(TABLE_NAME, null, cv);
 
@@ -74,6 +77,7 @@ public class HealthDAO {
         cv.put(SYSTOLICBLOOD_COLUMN, health.getSystolicBloodPressure());
         cv.put(DIASTOLICBLOOD_COLUMN, health.getDiastolicBloodPressure());
         cv.put(PULSE_COLUMN, health.getPulse());
+        cv.put(ACTIVITYFACTOR_COLUMN, health.getActivityFactor());
 
         String where = KEY_ID + "=" + health.getId();
 
@@ -102,6 +106,7 @@ public class HealthDAO {
         result.setSystolicBloodPressure(cursor.getFloat(6));
         result.setDiastolicBloodPressure(cursor.getFloat(7));
         result.setPulse(cursor.getFloat(8));
+        result.setActivityFactor(cursor.getFloat(9));
 
         return  result;
     }

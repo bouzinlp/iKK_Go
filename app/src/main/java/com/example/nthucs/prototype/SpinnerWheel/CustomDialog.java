@@ -3,8 +3,12 @@ package com.example.nthucs.prototype.SpinnerWheel;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.view.Display;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodCal;
@@ -90,7 +94,7 @@ public class CustomDialog {
         // initialize custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
-        dialog.setTitle("Choose the food");
+        dialog.setTitle(R.string.choose_food);
         dialog.setContentView(R.layout.custom_dialog);
 
         // process spinner wheel controllers
@@ -101,6 +105,9 @@ public class CustomDialog {
 
         // show dialog
         dialog.show();
+
+        // resize window
+        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, 1000);
     }
 
     // Merge food's chinese name and calorie

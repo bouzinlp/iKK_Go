@@ -10,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.Health;
+import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.Settings.Profile;
 
@@ -32,20 +34,23 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     // Year, month, day
     private int birth_year, birth_month, birth_day;
 
-    // data base for profile
+    // data base for profile, health
     private MyProfileDAO myProfileDAO;
+    private HealthDAO healthDAO;
 
-    // list of profile
+    // list of profile, health
     private List<Profile> profileList = new ArrayList<>();
+    private List<Health> healthList = new ArrayList<>();
 
-    // currently profile
+    // currently profile, health
     private Profile curProfile;
+    private Health curHealth;
 
     // temporary target weight and weekly target
     private Float tempTargetWeight, tempWeeklyTarget;
 
     //BMR
-    private TextView BMR_text , BMR_mwl , height_text , weight_text;
+    private TextView BMR_text , BMR_mwl;
     private  int sex_num , age_num;
     private float BMR;
 
@@ -61,7 +66,6 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_weight_loss_goal);
-
         // initialize data base
         myProfileDAO = new MyProfileDAO(getApplicationContext());
 
@@ -75,7 +79,6 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             tempWeeklyTarget = 0.0f;
         } else {
             curProfile = profileList.get(profileList.size()-1);
-
             tempTargetWeight = curProfile.getWeightLossGoal();
             tempWeeklyTarget = curProfile.getWeeklyLossWeight();
 
@@ -96,6 +99,19 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+
+        // initialize data base
+        healthDAO = new HealthDAO(getApplicationContext());
+
+        // get all health data from data base
+        healthList = healthDAO.getAll();
+
+        // get the last health data in the list
+        if (healthDAO.isTableEmpty() == true) {
+            curHealth = new Health();
+        } else {
+            curHealth = healthList.get(healthList.size() - 1);
         }
 
         // custom view in action bar
@@ -233,14 +249,18 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
         float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
         float bmr;
+        float AR;
+
+        if (curHealth.getActivityFactor() == 0.0f) AR = 1.0f;
+        else AR = curHealth.getActivityFactor();
 
         // 0 female  , 1 male
-        if(sex == 0){
+        if (sex == 0) {
             bmr = (float)((9.6 * weight)+(1.8*height)-(4.7*age)+655);
         } else {
             bmr = (float)((13.7 * weight)+(5*height)-(6.8*age)+66);
         }
-        return bmr;
+        return bmr*AR;
     }
 
     // process update button

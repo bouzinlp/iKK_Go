@@ -16,6 +16,87 @@
 
         <TableRow>
             <TextView
+                android:text="@string/sectionZero"
+                android:padding="12sp"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:background="@drawable/profile_drawable"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerA_0"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Spinner
+                android:padding="12sp"
+                android:layout_marginLeft="30sp"
+                android:layout_marginRight="10sp"
+                android:layout_marginBottom="10sp"
+                android:layout_weight="1"
+                android:id="@+id/sectionZeroSpinner"
+                android:background="@drawable/profile_drawable"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerB_0"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerC_0"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerD_0"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
+                android:text="@string/answerE_0"
+                android:paddingLeft="12sp"
+                android:paddingBottom="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_weight="1"
+                android:layout_span="2"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <TextView
                 android:text="@string/sectionOne"
                 android:padding="12sp"
                 android:layout_margin="10sp"
