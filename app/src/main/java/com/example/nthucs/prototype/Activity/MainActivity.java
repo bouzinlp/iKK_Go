@@ -93,6 +93,8 @@ public class MainActivity extends AppCompatActivity {
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
 
+    public static boolean metricFlag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
