@@ -105,9 +105,6 @@ public class CustomDialog {
 
         // show dialog
         dialog.show();
-
-        // resize window
-        //dialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, 1000);
     }
 
     // Merge food's chinese name and calorie

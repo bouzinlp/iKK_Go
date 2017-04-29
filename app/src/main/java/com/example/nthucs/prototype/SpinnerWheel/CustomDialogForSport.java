@@ -2,6 +2,7 @@ package com.example.nthucs.prototype.SpinnerWheel;
 
 import android.app.Dialog;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.nthucs.prototype.Activity.SportActivity;
@@ -72,7 +73,7 @@ public class CustomDialogForSport {
         // initialize custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
-        dialog.setTitle("Choose the sport");
+        dialog.setTitle(R.string.choose_sport);
         dialog.setContentView(R.layout.custom_dialog_for_sport);
 
         // process sport name spinner wheel controllers
@@ -83,6 +84,15 @@ public class CustomDialogForSport {
 
         // show dialog
         dialog.show();
+
+        // set width to match parent
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        // set attribute
+        dialog.getWindow().setAttributes(lp);
     }
 
     // process sport name spinner wheel controllers

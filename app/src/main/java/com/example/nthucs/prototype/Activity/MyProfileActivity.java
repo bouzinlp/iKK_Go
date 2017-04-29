@@ -70,15 +70,12 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView BMI_text;
     private float BMI;
 
-    // BMR text view and value
-    private TextView BMR_text;
-    private  int sex_num , age_num;
-    private float BMR;
     //height & weight 's linear layout
     private SharedPreferences sharedPreferences;
     LinearLayout heightContent;
     LinearLayout weightContent;
     LinearLayout.LayoutParams layoutParams;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -211,20 +208,6 @@ public class MyProfileActivity extends AppCompatActivity {
             birth_month = calendar.get(Calendar.MONTH)+1;
             birth_day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            // calculate age
-            Calendar now_calendar = Calendar.getInstance();
-            int now_year = now_calendar.get(Calendar.YEAR);                 //取出年
-            int now_month = now_calendar.get(Calendar.MONTH) + 1;          //取出月，月份的編號是由0~11 故+1
-            int now_day = now_calendar.get(Calendar.DAY_OF_MONTH);       //取出日
-
-            if (birth_month>now_month) {
-                age_num = now_year-birth_year-1;
-            } else if ((birth_month==now_month)&&(birth_day>now_day)) {
-                age_num = now_year-birth_year-1;
-            } else {
-                age_num = now_year-birth_year;
-            }
-
             // set text to button
             birthDayButton.setText(calendar.get(Calendar.MONTH)+1+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
         }
@@ -252,11 +235,9 @@ public class MyProfileActivity extends AppCompatActivity {
                     switch (adapterView.getSelectedItemPosition()) {
                         case 0:
                             chosen_sex = adapterView.getSelectedItem().toString();
-                            sex_num = 1;
                             break;
                         case 1:
                             chosen_sex = adapterView.getSelectedItem().toString();
-                            sex_num = 0;
                             break;
                     }
                 }
@@ -274,10 +255,8 @@ public class MyProfileActivity extends AppCompatActivity {
             // set specific position to spinner
             if (curProfile.getSex().equals("Male")) {
                 genderSpinner.setSelection(0);
-                sex_num = 1;
             } else if (curProfile.getSex().equals("Female")) {
                 genderSpinner.setSelection(1);
-                sex_num = 0;
             }
 
             // set to temporary storage
@@ -306,9 +285,6 @@ public class MyProfileActivity extends AppCompatActivity {
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
             BMI_text.setText(Float.toString(BMI));
-
-           // BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-           // BMR_text.setText(Float.toString(BMR));
         }
     }
 
@@ -320,20 +296,6 @@ public class MyProfileActivity extends AppCompatActivity {
         height = height / 100 ;                                 // 將公分的身高轉為公尺單位
         bmi = weight / (height*height);
         return bmi;
-    }
-
-    private float calculate_BMR(String s_height, String s_weight, int sex, int age){
-        float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
-        float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
-        float bmr;
-
-        // 0 female  , 1 male
-        if(sex == 0){
-            bmr = (float)((9.6 * weight)+(1.8*height)-(4.7*age)+655);
-        } else {
-            bmr = (float)((13.7 * weight)+(5*height)-(6.8*age)+66);
-        }
-        return bmr;
     }
 
     // process update button
@@ -379,10 +341,6 @@ public class MyProfileActivity extends AppCompatActivity {
             // calculate BMI
             BMI = calculate_BMI(height_text.getText().toString(), weight_text.getText().toString());
             BMI_text.setText(Float.toString(BMI));
-
-            //calculate BMR
-            //BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-            //BMR_text.setText(Float.toString(BMR));
         }
     }
 

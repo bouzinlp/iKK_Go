@@ -3,6 +3,7 @@ package com.example.nthucs.prototype.SpinnerWheel;
 import android.app.Activity;
 import android.app.Dialog;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.nthucs.prototype.Activity.FoodActivity;
@@ -109,7 +110,7 @@ public class CustomDialogForFood {
         // initialize custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
-        dialog.setTitle("Choose the food");
+        dialog.setTitle(R.string.choose_food);
         dialog.setContentView(R.layout.custom_dialog_for_food);
 
         // process category spinner wheel controllers
@@ -120,6 +121,15 @@ public class CustomDialogForFood {
 
         // show dialog
         dialog.show();
+
+        // set width to match parent
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        // set attribute
+        dialog.getWindow().setAttributes(lp);
     }
 
     // process category spinner wheel controllers

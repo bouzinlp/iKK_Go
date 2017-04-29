@@ -91,6 +91,7 @@
     <string name="dialog_button">Ok</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="choose_food">Choose the food</string>
+    <string name="choose_sport">Choose the sport</string>
 
     <string name="homeTextView">%1$d%2$s</string>
 
