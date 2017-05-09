@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:background="@color/colorPrimary"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp">
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/Facebook_profile_picture"
+            android:layout_height="80dp"
+            android:layout_width="80dp"/>
+        <ImageView
+            android:id="@+id/circular"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/subtracted_circle"
+            android:contentDescription="@null" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/Facebook_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:textColor="#fff"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+
+
+
+</LinearLayout>

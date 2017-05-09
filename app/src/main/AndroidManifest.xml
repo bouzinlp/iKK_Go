@@ -38,7 +38,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.nthucs.prototype.Activity.MainActivity" >
+        <activity android:name="com.example.nthucs.prototype.Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -70,7 +72,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.CalendarActivity" >
+        <activity android:name="com.example.nthucs.prototype.Activity.CalendarActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 // calendar view
                 <action android:name="com.example.nthucs.prototype.CALENDAR" />
@@ -84,7 +87,8 @@
             android:authorities="com.facebook.app.FacebookContentProvider1095415993853029"
             android:exported="true" />
 
-        <activity android:name="com.example.nthucs.prototype.Activity.SettingsActivity" >
+        <activity android:name="com.example.nthucs.prototype.Activity.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 // settings view
                 <action android:name="com.example.nthucs.prototype.SETTINGS" />
@@ -94,7 +98,12 @@
             >
         </activity>
         >
-        <activity android:name="com.example.nthucs.prototype.Activity.MessageActivity" />
+        <activity android:name="com.example.nthucs.prototype.Activity.MessageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name="com.example.nthucs.prototype.Activity.MailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name="com.example.nthucs.prototype.Activity.ChatRoomActivity" />
         <activity android:name="com.example.nthucs.prototype.Activity.MyProfileActivity" >
             <intent-filter>
@@ -140,7 +149,8 @@
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.MyBloodPressure" >
+        <activity android:name="com.example.nthucs.prototype.Activity.MyBloodPressure"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -175,7 +185,8 @@
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.HomeActivity" >
+        <activity android:name="com.example.nthucs.prototype.Activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!--
             <intent-filter>

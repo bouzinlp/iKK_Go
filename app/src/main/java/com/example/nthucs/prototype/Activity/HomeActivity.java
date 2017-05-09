@@ -1,18 +1,28 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +32,7 @@ import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import com.example.nthucs.prototype.Utility.FitnessActivity;
+import com.facebook.login.widget.ProfilePictureView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -52,13 +63,22 @@ import static java.text.DateFormat.getTimeInstance;
 /**
  * Created by selab on 2016/8/15.
  */
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity
+            implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final String TAG = "Prototype";
     private TextView exerciseTime,exerciseSteps,exerciseCalories,exerciseDistance;
     public static GoogleApiClient mClient = null;
     private ProgressDialog pd;
     int totalSteps = 0;
+    int BACK = 0;
+    private Activity activity = HomeActivity.this;
+    private int activityIndex = 0;
+    private static final int HOME_ACTIVITY = 0;
+    private static final int SCAN_FOOD = 2;
+    private static final int TAKE_PHOTO = 3;
+    private static final String FROM_CAMERA = "scan_food";
+    private static final String FROM_GALLERY = "take_photo";
     Float totalCals = (float)0, totalDistance =(float) 0;
     long activityTime=0;
 
@@ -74,19 +94,41 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setTitle("Home");
+        setContentView(R.layout.activity_home_nav);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Bundle bundle = getIntent().getExtras();
+        BACK = bundle.getInt("BACK");
+
         initLayout();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView facebookUsername = (TextView) headerView.findViewById(R.id.Facebook_name);
+        facebookUsername.setText("Hello, "+LoginActivity.facebookName);
+        ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
+        profilePictureView.setProfileId(LoginActivity.facebookUserID);
         // initialize tabLayout and viewPager
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        initializeTabLayout();
+        //viewPager = (ViewPager)findViewById(R.id.viewPager);
+        //tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        //initializeTabLayout();
         // call function to active tabs listener
-        TabsController tabsController = new TabsController(3, HomeActivity.this, tabLayout, viewPager);
-        tabsController.processTabLayout();
-        pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
+        //TabsController tabsController = new TabsController(3, HomeActivity.this, tabLayout, viewPager);
+        //tabsController.processTabLayout();
+        if (BACK == 0) pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
         SD = new SportDAO(getApplicationContext());
         //selectTab(1);
-        buildFitnessClient();
+        if (BACK == 0) buildFitnessClient();
     }
 
 
@@ -330,5 +372,115 @@ public class HomeActivity extends AppCompatActivity {
         tab.select();
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
+        if (id == R.id.home) {
+            Intent intent_home = new Intent();
+            intent_home.setClass(HomeActivity.this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("BACK", 1);
+            intent_home.putExtras(bundle);
+            startActivity(intent_home);
+            finish();
+        }
+        else if (id == R.id.food_list) {
+            // Handle the camera action
+            Intent intent_main = new Intent();
+            intent_main.setClass(HomeActivity.this, MainActivity.class);
+            startActivity(intent_main);
+            finish();
+            //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.calendar) {
+            Intent intent_calendar = new Intent();
+            intent_calendar.setClass(HomeActivity.this, CalendarActivity.class);
+            startActivity(intent_calendar);
+            finish();
+            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.Import) {
+            selectImage();
+            //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(HomeActivity.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(HomeActivity.this, SettingsActivity.class);
+            startActivity(intent_setting);
+            finish();
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(HomeActivity.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(HomeActivity.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void selectImage(){
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    if (activityIndex == HOME_ACTIVITY) {
+                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    } else {
+                        // back to home activity
+                        Intent result = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("BACK", 1);
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.putExtras(bundle);
+                        result.setClass(activity, HomeActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Choose from Gallery")) {
+                    if (activityIndex == HOME_ACTIVITY) {
+                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    } else {
+                        // back to home activity
+                        Intent result = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("BACK", 1);
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.putExtras(bundle);
+                        result.setClass(activity, HomeActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("BACK", 1);
+                    intent.putExtras(bundle);
+                    intent.setClass(HomeActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
+    }
 }

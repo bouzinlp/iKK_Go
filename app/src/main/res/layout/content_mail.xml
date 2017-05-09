@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_mail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.nthucs.prototype.Activity.MailActivity"
+    android:background="@drawable/background_color"
+    tools:showIn="@layout/app_bar_mail">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="50dp">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mailtext"
+            android:gravity="start"
+            android:layout_margin="10dp"
+            android:background="#fff"/>
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onSubmit"
+        android:padding="6dp"
+        android:layout_margin="2dp"
+        android:id="@+id/send_button"
+        android:text="Send"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"/>
+
+    <!--FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout-->
+    <!--TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Navigation Drawer Practice"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"/-->
+</RelativeLayout>

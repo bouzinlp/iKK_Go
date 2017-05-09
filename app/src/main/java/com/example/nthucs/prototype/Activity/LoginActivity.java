@@ -1,9 +1,11 @@
 package com.example.nthucs.prototype.Activity;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
@@ -32,6 +34,7 @@ public class LoginActivity extends Activity {
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
     private AccessToken accessToken;
+    private TextView title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +47,17 @@ public class LoginActivity extends Activity {
             facebookName = Profile.getCurrentProfile().getName();
             System.out.println("profile id = "+facebookUserID);
             Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("BACK", 0);
+            intent_main.putExtras(bundle);
             startActivity(intent_main);
             finish();
 
         }
         initFBManager();
         Log.v("mhealth","init");
+        title = (TextView) findViewById(R.id.APPTitle);
+        title.setTypeface(Typeface.createFromAsset(getAssets(),"Righteous-Regular.ttf"));
     }
 
     @Override

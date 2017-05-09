@@ -1,27 +1,39 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
 import com.example.nthucs.prototype.Settings.HealthDAO;
+import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MyBloodPressure extends AppCompatActivity {
+public class MyBloodPressure extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
     // Back, Update button
     private Button backButton,  selectDayButton ,selectTimerButton , updateButton;
 
@@ -44,10 +56,38 @@ public class MyBloodPressure extends AppCompatActivity {
     // currently and temporary profile
     private Health curHealth, tempHealth;
 
+    private Activity activity = MyBloodPressure.this;
+    private int activityIndex = 5;
+    private static final int BLOODPRESSURE_ACTIVITY = 5;
+    private static final int SCAN_FOOD = 2;
+    private static final int TAKE_PHOTO = 3;
+    private static final String FROM_CAMERA = "scan_food";
+    private static final String FROM_GALLERY = "take_photo";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_blood_pressure);
+        setTitle("Blood pressure");
+        setContentView(R.layout.activity_my_blood_pressure_nav);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView facebookUsername = (TextView) headerView.findViewById(R.id.Facebook_name);
+        facebookUsername.setText("Hello, "+LoginActivity.facebookName);
+        ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
+        profilePictureView.setProfileId(LoginActivity.facebookUserID);
+
         // initialize data base
         healthDAO = new HealthDAO(getApplicationContext());
 
@@ -65,11 +105,11 @@ public class MyBloodPressure extends AppCompatActivity {
         tempHealth = new Health();
 
         // custom view in action bar
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.my_blood_pressure_menu);
+        //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        //getSupportActionBar().setCustomView(R.layout.my_blood_pressure_menu);
 
         // process back button
-        processBackControllers();
+        //processBackControllers();
 
         // process target edit text
         processEditTextControllers();
@@ -276,5 +316,107 @@ public class MyBloodPressure extends AppCompatActivity {
             // output test
             //System.out.println(select_year+"-"+select_month+"-"+select_day+"-"+select_hour+"-"+select_min);
         }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            Intent intent_home = new Intent();
+            intent_home.setClass(MyBloodPressure.this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("BACK", 1);
+            intent_home.putExtras(bundle);
+            startActivity(intent_home);
+            finish();
+        }
+        else if (id == R.id.food_list) {
+            Intent intent_main = new Intent();
+            intent_main.setClass(MyBloodPressure.this, MainActivity.class);
+            startActivity(intent_main);
+            finish();
+            //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.calendar) {
+            Intent intent_calendar = new Intent();
+            intent_calendar.setClass(MyBloodPressure.this, CalendarActivity.class);
+            startActivity(intent_calendar);
+            finish();
+            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.Import) {
+            selectImage();
+            //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(MyBloodPressure.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(MyBloodPressure.this, SettingsActivity.class);
+            startActivity(intent_setting);
+            finish();
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(MyBloodPressure.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void selectImage(){
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    if (activityIndex == BLOODPRESSURE_ACTIVITY) {
+                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.setClass(activity, MyBloodPressure.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Choose from Gallery")) {
+                    if (activityIndex == BLOODPRESSURE_ACTIVITY) {
+                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.setClass(activity, MyBloodPressure.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.setClass(MyBloodPressure.this, MyBloodPressure.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
     }
 }

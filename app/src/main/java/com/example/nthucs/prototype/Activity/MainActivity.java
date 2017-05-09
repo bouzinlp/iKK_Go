@@ -6,9 +6,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.commonsware.cwac.merge.MergeAdapter;
@@ -30,6 +36,7 @@ import com.example.nthucs.prototype.SportList.SportAdapter;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.facebook.login.widget.ProfilePictureView;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -38,9 +45,13 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
     //to check if it's the first execution
     SharedPreferences prefs = null;
+    private Activity activity = MainActivity.this;
+    private int activityIndex = 1;
+    private static final int MAIN_ACTIVITY = 1;
 
     // data base for storing food list
     private FoodDAO foodDAO;
@@ -108,7 +119,25 @@ public class MainActivity extends AppCompatActivity {
         getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun", false).commit();
 
         //reset the content view
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_nav);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView facebookUsername = (TextView) headerView.findViewById(R.id.Facebook_name);
+        facebookUsername.setText("Hello, "+LoginActivity.facebookName);
+        ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
+        profilePictureView.setProfileId(LoginActivity.facebookUserID);
         // calorie data base
         calorieDAO = new CalorieDAO(getApplicationContext());
 
@@ -130,13 +159,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // initialize tabLayout and viewPager
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        initializeTabLayout();
+        //viewPager = (ViewPager)findViewById(R.id.viewPager);
+        //tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        //initializeTabLayout();
 
         // call function to active tabs listener
-        TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
-        tabsController.processTabLayout();
+        //TabsController tabsController = new TabsController(0, MainActivity.this, tabLayout, viewPager);
+        //tabsController.processTabLayout();
 
         // food list data base
         foodDAO = new FoodDAO(getApplicationContext());
@@ -197,7 +226,11 @@ public class MainActivity extends AppCompatActivity {
                 sportAdapter.notifyDataSetChanged();
 
                 // Always select food list tab after return
-                selectTab(0);
+                //selectTab(0);
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
                 return;
             // Sport edit event
             } else if (requestCode == EDIT_SPORT) {
@@ -250,7 +283,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Always select food list tab after return
-            selectTab(0);
+            //selectTab(0);
+            Intent intent = new Intent();
+            intent.setClass(MainActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -274,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Always select tab 0
-        selectTab(0);
+        //selectTab(0);
     }
 
     // Open food calories
@@ -618,5 +655,108 @@ public class MainActivity extends AppCompatActivity {
     private void selectTab(int index) {
         TabLayout.Tab tab = tabLayout.getTabAt(index);
         tab.select();
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            Intent intent_home = new Intent();
+            intent_home.setClass(MainActivity.this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("BACK", 1);
+            intent_home.putExtras(bundle);
+            startActivity(intent_home);
+            finish();
+        }
+        else if (id == R.id.food_list) {
+            // Handle the camera action
+            Intent intent_main = new Intent();
+            intent_main.setClass(MainActivity.this, MainActivity.class);
+            startActivity(intent_main);
+            finish();
+            //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.calendar) {
+            Intent intent_calendar = new Intent();
+            intent_calendar.setClass(MainActivity.this, CalendarActivity.class);
+            startActivity(intent_calendar);
+            finish();
+            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.Import) {
+            selectImage();
+            //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(MainActivity.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(MainActivity.this, SettingsActivity.class);
+            startActivity(intent_setting);
+            finish();
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(MainActivity.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(MainActivity.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void selectImage(){
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    if (activityIndex == MAIN_ACTIVITY) {
+                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Choose from Gallery")) {
+                    if (activityIndex == MAIN_ACTIVITY) {
+                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.setClass(MainActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
     }
 }

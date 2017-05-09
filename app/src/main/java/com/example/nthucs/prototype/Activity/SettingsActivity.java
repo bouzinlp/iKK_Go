@@ -1,18 +1,28 @@
 package com.example.nthucs.prototype.Activity;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
@@ -23,6 +33,7 @@ import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
 import com.example.nthucs.prototype.Utility.DBFunctions;
 import com.example.nthucs.prototype.Utility.MyDBHelper;
+import com.facebook.login.widget.ProfilePictureView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -40,10 +51,18 @@ import java.util.List;
 /**
  * Created by user on 2016/7/16.
  */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     // list view adapter for setting list
     private SettingAdapter settingAdapter;
+    private Activity activity = SettingsActivity.this;
+    private int activityIndex = 4;
+    private static final int SETTING_ACTIVITY = 4;
+    private static final int SCAN_FOOD = 2;
+    private static final int TAKE_PHOTO = 3;
+    private static final String FROM_CAMERA = "scan_food";
+    private static final String FROM_GALLERY = "take_photo";
 
     // settings' title
     private static final String myProfile = "My Profile";
@@ -53,18 +72,19 @@ public class SettingsActivity extends AppCompatActivity {
     private static final String weightChart = "Weight Chart";
     private static final String calorieConsumption = "Calorie Consumption";
     private static final String myFavourites = "My Favourites";
-    private static final String myBloodPressure = "My Blood Pressure";
+    //private static final String myBloodPressure = "My Blood Pressure";
     private static final String drinkWaterDiary = "Drink Water Diary";
     private static final String myTemperatureRecord = "My Temperature Record";
     private static final String testJsoup = "Test Jsoup";
 	// , drinkWaterDiary , myTemperatureRecord
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , myBloodPressure , drinkWaterDiary, myTemperatureRecord ,testJsoup};
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , drinkWaterDiary, myTemperatureRecord ,testJsoup};
 
     // list view for including textView
     private ListView setting_list;
 
     // string list for every setting item's title
     private List<String> setting_title;
+    private ArrayAdapter<String> adapter;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -80,7 +100,10 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Settings");
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_settings_nav);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         //constuct db object
         dbFunctions = new DBFunctions(this.getApplicationContext());
         //Initialize Progress Dialog properties
@@ -88,24 +111,46 @@ public class SettingsActivity extends AppCompatActivity {
         prgDialog.setMessage("Synching SQLite Data with Remote MySQL DB. Please wait...");
         prgDialog.setCancelable(false);
         // initialize tabLayout and viewPager
-        viewPager = (ViewPager)findViewById(R.id.viewPager);
-        tabLayout = (TabLayout)findViewById(R.id.tabLayout);
-        initializeTabLayout();
+        //viewPager = (ViewPager)findViewById(R.id.viewPager);
+        //tabLayout = (TabLayout)findViewById(R.id.tabLayout);
+        //initializeTabLayout();
 
         // call function to active tabs listener
-        TabsController tabsController = new TabsController(4, SettingsActivity.this, tabLayout, viewPager);
-        tabsController.processTabLayout();
+        //TabsController tabsController = new TabsController(4, SettingsActivity.this, tabLayout, viewPager);
+        //tabsController.processTabLayout();
 
         // initialize setting list and process controllers
         setting_list = (ListView)findViewById(R.id.setting_list);
         processControllers();
 
         // initialize and set adapter, pass title with string
-        setting_title = new ArrayList<>(Arrays.asList(titleStr));
-        settingAdapter = new SettingAdapter(this, R.layout.single_setting, setting_title);
-        setting_list.setAdapter(settingAdapter);
+        //setting_title = new ArrayList<>(Arrays.asList(titleStr));
+        //settingAdapter = new SettingAdapter(this, R.layout.single_setting, setting_title);
+        //setting_list.setAdapter(settingAdapter);
 
-        selectTab(4);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView facebookUsername = (TextView) headerView.findViewById(R.id.Facebook_name);
+        facebookUsername.setText("Hello, "+LoginActivity.facebookName);
+        ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
+        profilePictureView.setProfileId(LoginActivity.facebookUserID);
+
+
+        setting_list = (ListView) findViewById(R.id.setting_list);
+        setting_title = new ArrayList<>(Arrays.asList(titleStr));
+        adapter = new ArrayAdapter<>(this, R.layout.custom_list_view, setting_title);
+        setting_list.setAdapter(adapter);
+
+        //selectTab(4);
     }
 
     // Initialize tab layout
@@ -130,7 +175,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onResume();
 
         // Always select tab 4
-        selectTab(4);
+        //selectTab(4);
     }
 
     @Override
@@ -153,7 +198,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                String title = settingAdapter.getItem(position);
+                String title = adapter.getItem(position);
                 switch (title) {
                     // go to my profile activity
                     case myProfile:
@@ -198,12 +243,12 @@ public class SettingsActivity extends AppCompatActivity {
                         startActivity(intent_my_favourites);
                         finish();
                         break;
-                    case myBloodPressure:
-                        Intent intent_my_blood_pressure = new Intent();
-                        intent_my_blood_pressure.setClass(SettingsActivity.this , MyBloodPressure.class);
-                        startActivity(intent_my_blood_pressure);
-                        finish();
-                        break;
+//                    case myBloodPressure:
+//                        Intent intent_my_blood_pressure = new Intent();
+//                        intent_my_blood_pressure.setClass(SettingsActivity.this , MyBloodPressure.class);
+//                        startActivity(intent_my_blood_pressure);
+//                        finish();
+//                        break;
                     case drinkWaterDiary:
                         Intent intent_drink_water_diary = new Intent();
                         intent_drink_water_diary.setClass(SettingsActivity.this , DrinkWaterDiary.class);
@@ -291,5 +336,107 @@ public class SettingsActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No data in SQLite DB, please do enter User name to perform Sync action", Toast.LENGTH_LONG).show();
         }
 
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.home) {
+            Intent intent_home = new Intent();
+            intent_home.setClass(SettingsActivity.this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("BACK", 1);
+            intent_home.putExtras(bundle);
+            startActivity(intent_home);
+            finish();
+        }
+        else if (id == R.id.food_list) {
+            Intent intent_main = new Intent();
+            intent_main.setClass(SettingsActivity.this, MainActivity.class);
+            startActivity(intent_main);
+            finish();
+            //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.calendar) {
+            Intent intent_calendar = new Intent();
+            intent_calendar.setClass(SettingsActivity.this, CalendarActivity.class);
+            startActivity(intent_calendar);
+            finish();
+            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.Import) {
+            selectImage();
+            //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(SettingsActivity.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(SettingsActivity.this, SettingsActivity.class);
+            startActivity(intent_setting);
+            finish();
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(SettingsActivity.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(SettingsActivity.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void selectImage(){
+        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Select Image");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                if (items[index].equals("Take with Camera")) {
+                    if (activityIndex == SETTING_ACTIVITY) {
+                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.setClass(activity, SettingsActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Choose from Gallery")) {
+                    if (activityIndex == SETTING_ACTIVITY) {
+                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
+                    } else {
+                        // back to setting activity
+                        Intent result = new Intent();
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.setClass(activity, SettingsActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    }
+                } else if (items[index].equals("Cancel")) {
+                    dialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.setClass(SettingsActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.show();
     }
 }

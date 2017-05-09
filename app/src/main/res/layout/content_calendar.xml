@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.nthucs.prototype.Activity.CalendarActivity"
+    android:background="@drawable/background_color"
+    tools:showIn="@layout/app_bar_calendar">
+
+    <Button
+        android:layout_alignParentLeft="true"
+        android:id="@+id/prev_button"
+        android:text="Previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_alignParentRight="true"
+        android:id="@+id/next_button"
+        android:text="Next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <com.example.nthucs.prototype.Calendar.CompactCalendarView
+        android:layout_below="@+id/prev_button"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/compactcalendar_view"
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        app:compactCalendarTargetHeight="250dp"
+        app:compactCalendarTextSize="12sp"
+        app:compactCalendarBackgroundColor="#ffe95451"
+        app:compactCalendarTextColor="#fff"
+        app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+        app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:id="@+id/calendar_control_buttons"
+        android:layout_below="@+id/compactcalendar_view"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:layout_below="@+id/compactcalendar_view"
+            android:text="Test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/test_button" />
+
+        <Button
+            android:id="@+id/slide_calendar"
+            android:text="Slide animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <Button
+            android:id="@+id/show_with_animation_calendar"
+            android:text="Show animation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/bookings_listview"
+        android:layout_below="@+id/calendar_control_buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+    </ListView>
+
+    <!--FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout-->
+</RelativeLayout>
