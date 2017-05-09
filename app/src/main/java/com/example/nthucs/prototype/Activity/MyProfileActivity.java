@@ -1,18 +1,25 @@
 package com.example.nthucs.prototype.Activity;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
@@ -63,10 +70,11 @@ public class MyProfileActivity extends AppCompatActivity {
     private TextView BMI_text;
     private float BMI;
 
-    // BMR text view and value
-    private TextView BMR_text;
-    private  int sex_num , age_num;
-    private float BMR;
+    //height & weight 's linear layout
+    private SharedPreferences sharedPreferences;
+    LinearLayout heightContent;
+    LinearLayout weightContent;
+    LinearLayout.LayoutParams layoutParams;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +82,12 @@ public class MyProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_my_profile);
         // initialize data base
         myProfileDAO = new MyProfileDAO(getApplicationContext());
-
+        //linear layout properties
+        heightContent = (LinearLayout)findViewById(R.id.height_linearlayout);
+        weightContent = (LinearLayout)findViewById(R.id.weight_linearlayout);
+        layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0,convertDpToPixel(10,getApplicationContext()),0,convertDpToPixel(10,getApplicationContext()));
         // get all profile data from data base
         profileList = myProfileDAO.getAll();
 
@@ -83,7 +96,6 @@ public class MyProfileActivity extends AppCompatActivity {
             curProfile = new Profile();
         } else {
             curProfile = profileList.get(profileList.size()-1);
-
         }
 
         // set new profile for updated
@@ -110,6 +122,13 @@ public class MyProfileActivity extends AppCompatActivity {
 
         // process update button
         processUpdateButtonControllers();
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int radioId = sharedPreferences.getInt("checkedIndex",0);
+        if(radioId == 2131558549)
+            setEditInMetric();
+        else if(radioId == 2131558550)
+            setEditInImperial();
     }
 
     @Override
@@ -189,20 +208,6 @@ public class MyProfileActivity extends AppCompatActivity {
             birth_month = calendar.get(Calendar.MONTH)+1;
             birth_day = calendar.get(Calendar.DAY_OF_MONTH);
 
-            // calculate age
-            Calendar now_calendar = Calendar.getInstance();
-            int now_year = now_calendar.get(Calendar.YEAR);                 //取出年
-            int now_month = now_calendar.get(Calendar.MONTH) + 1;          //取出月，月份的編號是由0~11 故+1
-            int now_day = now_calendar.get(Calendar.DAY_OF_MONTH);       //取出日
-
-            if (birth_month>now_month) {
-                age_num = now_year-birth_year-1;
-            } else if ((birth_month==now_month)&&(birth_day>now_day)) {
-                age_num = now_year-birth_year-1;
-            } else {
-                age_num = now_year-birth_year;
-            }
-
             // set text to button
             birthDayButton.setText(calendar.get(Calendar.MONTH)+1+" "+calendar.get(Calendar.DAY_OF_MONTH)+", "+calendar.get(Calendar.YEAR));
         }
@@ -223,18 +228,16 @@ public class MyProfileActivity extends AppCompatActivity {
         genderSpinner.setAdapter(genderListAdapter);
 
         // set adapter view's item selected listener
-        AdapterView.OnItemSelectedListener spinnerlistener = new AdapterView.OnItemSelectedListener() {
+        AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView adapterView, View view, int position, long id) {
                 if (adapterView.getId() == R.id.sex_spinner) {
                     switch (adapterView.getSelectedItemPosition()) {
                         case 0:
                             chosen_sex = adapterView.getSelectedItem().toString();
-                            sex_num = 1;
                             break;
                         case 1:
                             chosen_sex = adapterView.getSelectedItem().toString();
-                            sex_num = 0;
                             break;
                     }
                 }
@@ -245,17 +248,15 @@ public class MyProfileActivity extends AppCompatActivity {
         };
 
         // register to spinner listener
-        genderSpinner.setOnItemSelectedListener(spinnerlistener);
+        genderSpinner.setOnItemSelectedListener(spinnerListener);
 
         // set text with sex if current profile not empty
         if (curProfile.getSex().equals("null") == false) {
             // set specific position to spinner
             if (curProfile.getSex().equals("Male")) {
                 genderSpinner.setSelection(0);
-                sex_num = 1;
             } else if (curProfile.getSex().equals("Female")) {
                 genderSpinner.setSelection(1);
-                sex_num = 0;
             }
 
             // set to temporary storage
@@ -267,7 +268,6 @@ public class MyProfileActivity extends AppCompatActivity {
     private void processEditTextControllers() {
         height_text = (EditText)findViewById(R.id.height_edit_text);
         weight_text = (EditText)findViewById(R.id.weight_edit_text);
-
         // set text to edit text if current profile not empty
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             // set to edit text
@@ -285,9 +285,6 @@ public class MyProfileActivity extends AppCompatActivity {
         if (curProfile.getHeight() != 0 && curProfile.getWeight() != 0) {
             BMI = calculate_BMI(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()));
             BMI_text.setText(Float.toString(BMI));
-
-           // BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-           // BMR_text.setText(Float.toString(BMR));
         }
     }
 
@@ -299,20 +296,6 @@ public class MyProfileActivity extends AppCompatActivity {
         height = height / 100 ;                                 // 將公分的身高轉為公尺單位
         bmi = weight / (height*height);
         return bmi;
-    }
-
-    private float calculate_BMR(String s_height, String s_weight, int sex, int age){
-        float height = Float.valueOf(s_height);       // 計算的時候，型別要一致才不會導致計算錯誤
-        float weight = Float.valueOf(s_weight);      // 雖然某些計算值可以為 int 例如體重，但如果體重 weight 你給 int 型別會導致計算上的錯誤
-        float bmr;
-
-        // 0 female  , 1 male
-        if(sex == 0){
-            bmr = (float)((9.6 * weight)+(1.8*height)-(4.7*age)+655);
-        } else {
-            bmr = (float)((13.7 * weight)+(5*height)-(6.8*age)+66);
-        }
-        return bmr;
     }
 
     // process update button
@@ -358,10 +341,46 @@ public class MyProfileActivity extends AppCompatActivity {
             // calculate BMI
             BMI = calculate_BMI(height_text.getText().toString(), weight_text.getText().toString());
             BMI_text.setText(Float.toString(BMI));
-
-            //calculate BMR
-            //BMR =calculate_BMR(Float.toString(curProfile.getHeight()), Float.toString(curProfile.getWeight()), sex_num , age_num);
-            //BMR_text.setText(Float.toString(BMR));
         }
+    }
+
+    private void setEditInImperial(){
+        EditText eIn = new EditText(this);
+        TextView ft = new TextView(this);
+        TextView inch = new TextView(this);
+        TextView lb = new TextView(this);
+        eIn.setBackgroundResource(R.drawable.profile_drawable);
+        int height2Ft = (int)(Float.parseFloat(height_text.getText().toString())/30.48);
+        float height2Inch = (Float.parseFloat(height_text.getText().toString())%30.48f)/2.54f;
+        height2Inch = Math.round(height2Inch*10)/10f;
+        float kg2lb = Float.parseFloat(weight_text.getText().toString())*2.2f;
+        kg2lb = Math.round(kg2lb*10)/10f;
+        height_text.setText(String.valueOf(height2Ft));
+        weight_text.setText(String.valueOf(String.valueOf(kg2lb)));
+        eIn.setText(String.valueOf(height2Inch));
+        ft.setText("ft");
+        inch.setText("inch");
+        lb.setText("lb");
+        heightContent.addView(ft,layoutParams);
+        heightContent.addView(eIn,layoutParams);
+        heightContent.addView(inch,layoutParams);
+        weightContent.addView(lb,layoutParams);
+    }
+    private void setEditInMetric(){
+        TextView cm = new TextView(this);
+        TextView kg = new TextView(this);
+        cm.setText("cm");
+        kg.setText("kg");
+        heightContent.addView(cm,layoutParams);
+        weightContent.addView(kg,layoutParams);
+
+    }
+    private static int convertDpToPixel(int dp, Context context){
+        float px = dp * getDensity(context);
+        return (int)px;
+    }
+    private static float getDensity(Context context){
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return metrics.density;
     }
 }

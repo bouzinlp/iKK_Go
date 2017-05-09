@@ -24,10 +24,14 @@ public class Profile implements java.io.Serializable {
 
     // how tall
     private float height;
-
+    //feet
+    private float feet;
+    //inch
+    private float inch;
     // how weight
     private float weight;
-
+    //pound
+    private float pound;
     // current weight loss goal
     private float weightLossGaol;
 
@@ -69,8 +73,17 @@ public class Profile implements java.io.Serializable {
     public float getHeight() {return height;}
     public void setHeight(float height) {this.height = height;}
 
+    public float getFeet() {return feet;}
+    public void setFeet(float feet) {this.feet = feet;}
+
+    public float getInch() {return inch;}
+    public void setInch(float inch) {this.inch = inch;}
+
     public float getWeight() {return weight;}
     public void setWeight(float weight) {this.weight = weight;}
+
+    public float getPound() {return pound;}
+    public void setPound(float pound) {this.pound = pound;}
 
     public float getWeightLossGoal() {return weightLossGaol;}
     public void setWeightLossGoal(float weightLossGaol) {this.weightLossGaol = weightLossGaol;}

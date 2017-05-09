@@ -98,11 +98,19 @@ public class MyBloodPressure extends AppCompatActivity
         if (healthDAO.isTableEmpty() == true) {
             curHealth = new Health();
         } else {
-            curHealth = healthList.get(healthList.size()-1);
+            int cnt = 0;
+            for (int i = 0 ; i < healthList.size() ; i++) {
+                if (healthList.get(i).getDiastolicBloodPressure() != 0
+                        || healthList.get(i).getSystolicBloodPressure() != 0 || healthList.get(i).getPulse() != 0) {
+                    curHealth = healthList.get(i);
+                    cnt = 1;
+                }
+            }
+            if (cnt == 0) curHealth = new Health();
         }
 
         // set new health profile for updated
-        tempHealth = new Health();
+        tempHealth = curHealth;
 
         // custom view in action bar
         //getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);

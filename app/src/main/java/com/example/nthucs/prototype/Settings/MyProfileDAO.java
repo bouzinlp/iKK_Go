@@ -29,7 +29,9 @@ public class MyProfileDAO {
     public static final String WEEKLYLOSSWEIGHT_COLUMN = "weeklyLossWeight";
 
     public static final String ADDEDTIME_COLUMN = "addedTime";
-
+    public static final String FEET_COLUMN = "feet";
+    public static final String INCH_COLUMN = "inch";
+    public static final String POUND_COLUMN = "pound";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -39,11 +41,14 @@ public class MyProfileDAO {
                     LASTMODIFY_COLUMN + " INTEGER NOT NULL, " +
                     BIRTHDAY_COLUMN + " INTEGER NOT NULL, " +
                     SEX_COLUMN + " TEXT NOT NULL, " +
-                    HEIGHT_COLUMN + " TEXT NOT NULL, " +
-                    WEIGHT_COLUMN + " TEXT NOT NULL, " +
+                    HEIGHT_COLUMN + " TEXT NOT NULL, " +//metric
+                    WEIGHT_COLUMN + " TEXT NOT NULL, " +//metric
                     WEIGHTLOSSGOAL_COLUMN + " TEXT, " +
                     WEEKLYLOSSWEIGHT_COLUMN + " TEXT, " +
-                    ADDEDTIME_COLUMN + " INTEGER NOT NULL)";
+                    ADDEDTIME_COLUMN + " INTEGER NOT NULL, " +
+                    FEET_COLUMN + " TEXT NOT NULL, " +
+                    INCH_COLUMN + " TEXT NOT NULL, " +
+                    POUND_COLUMN + " TEXT NOT NULL)";
 
     private SQLiteDatabase db;
 
@@ -65,6 +70,9 @@ public class MyProfileDAO {
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGoal());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
         cv.put(ADDEDTIME_COLUMN,System.currentTimeMillis());
+        cv.put(FEET_COLUMN,profile.getFeet());
+        cv.put(INCH_COLUMN,profile.getInch());
+        cv.put(POUND_COLUMN,profile.getPound());
 
         long id = db.insert(TABLE_NAME, null, cv);
 
@@ -83,6 +91,9 @@ public class MyProfileDAO {
         cv.put(WEIGHT_COLUMN, profile.getWeight());
         cv.put(WEIGHTLOSSGOAL_COLUMN, profile.getWeightLossGoal());
         cv.put(WEEKLYLOSSWEIGHT_COLUMN, profile.getWeeklyLossWeight());
+        cv.put(FEET_COLUMN,profile.getFeet());
+        cv.put(INCH_COLUMN,profile.getInch());
+        cv.put(POUND_COLUMN,profile.getPound());
 
         String where = KEY_ID + "=" + profile.getId();
 
@@ -113,6 +124,9 @@ public class MyProfileDAO {
         result.setWeightLossGoal(cursor.getFloat(8));
         result.setWeeklyLossWeight(cursor.getFloat(9));
         result.setAddedTime(cursor.getLong(10));
+        result.setFeet((cursor.getFloat(11)));
+        result.setInch((cursor.getFloat(12)));
+        result.setPound((cursor.getFloat(13)));
 
         return result;
     }

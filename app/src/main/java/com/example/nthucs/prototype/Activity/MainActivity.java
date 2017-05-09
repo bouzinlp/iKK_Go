@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
 
+    public static boolean metricFlag = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -188,16 +190,6 @@ public class MainActivity extends AppCompatActivity
         event_list = (ListView)findViewById(R.id.event_list);
         processEventListControllers();
         event_list.setAdapter(eventAdapter);
-
-        //food_list = (ListView)findViewById(R.id.food_list);
-        //processFoodListControllers();
-
-        //sport_list = (ListView)findViewById(R.id.sport_list);
-        //processSportListControllers();
-
-        //food_list.addFooterView(new View(this));
-        //food_list.setAdapter(foodAdapter);
-        //sport_list.setAdapter(sportAdapter);
 
         // other activity's back to take photo from gallery or camera
         if (getIntent().getExtras() != null) {
@@ -428,92 +420,6 @@ public class MainActivity extends AppCompatActivity
 
         // register event list item long click listener
         event_list.setOnItemLongClickListener(itemLongListener);
-    }
-
-    // Food list controller: single click and double click
-    private void processFoodListControllers() {
-        // 建立選單食物點擊監聽物件
-        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Food food = foodAdapter.getItem(position);
-
-                if (selectedCount > 0) {
-                    processMenu(food);
-                    foodAdapter.set(position, food);
-                } else {
-                    Intent intent = new Intent(
-                            "com.example.nthucs.prototype.EDIT_FOOD");
-
-                    intent.putExtra("position", position);
-                    intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
-                    startActivityForResult(intent, EDIT_FOOD);
-                }
-            }
-        };
-
-        // 註冊選單食物點擊監聽物件
-        //food_list.setOnItemClickListener(itemListener);
-
-        // 建立選單食物長按監聽物件
-        AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                Food food = foodAdapter.getItem(position);
-
-                processMenu(food);
-                foodAdapter.set(position, food);
-                return true;
-            }
-        };
-
-        // 註冊選單食物長按監聽物件
-        //food_list.setOnItemLongClickListener(itemLongListener);
-    }
-
-    // Sport list controller: single click and double click
-    private void processSportListControllers() {
-        // construct sport list item click listener
-        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Sport sport = sportAdapter.getItem(position);
-
-                if (selectedCount > 0) {
-                    processMenuFromSport(sport);
-                    sportAdapter.set(position, sport);
-                } else {
-                    Intent intent = new Intent(
-                            "com.example.nthucs.prototype.EDIT_SPORT");
-
-                    intent.putExtra("position", position);
-                    intent.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
-                    startActivityForResult(intent, EDIT_SPORT);
-                }
-            }
-        };
-
-        // register sport list item click listener
-        //sport_list.setOnItemClickListener(itemListener);
-
-        // construct sport list item long click listener
-        AdapterView.OnItemLongClickListener itemLongListener = new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                           int position, long id) {
-                Sport sport = sportAdapter.getItem(position);
-
-                processMenuFromSport(sport);
-                sportAdapter.set(position, sport);
-                return true;
-            }
-        };
-
-        // register sport list item long click listener
-        //sport_list.setOnItemLongClickListener(itemLongListener);
     }
 
     // Process main menu depends on selected food

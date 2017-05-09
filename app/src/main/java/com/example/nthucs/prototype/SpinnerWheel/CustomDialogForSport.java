@@ -2,6 +2,7 @@ package com.example.nthucs.prototype.SpinnerWheel;
 
 import android.app.Dialog;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.nthucs.prototype.Activity.SportActivity;
@@ -48,8 +49,8 @@ public class CustomDialogForSport {
         this.currentWeight = currentWeight;
 
         // initialize current sport name title
-        if (activity.getDialogTitleButton().getText().toString().isEmpty() == false) {
-            curSportName = activity.getDialogTitleButton().getText().toString();
+        if (activity.getDialogTitleEditText().getText().toString().isEmpty() == false) {
+            curSportName = activity.getDialogTitleEditText().getText().toString();
         } else {
             curSportName = new String();
         }
@@ -72,7 +73,7 @@ public class CustomDialogForSport {
         // initialize custom dialog
         final Dialog dialog = new Dialog(activity);
         dialog.setCancelable(false);
-        dialog.setTitle("Choose the sport");
+        dialog.setTitle(R.string.choose_sport);
         dialog.setContentView(R.layout.custom_dialog_for_sport);
 
         // process sport name spinner wheel controllers
@@ -83,6 +84,15 @@ public class CustomDialogForSport {
 
         // show dialog
         dialog.show();
+
+        // set width to match parent
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.copyFrom(dialog.getWindow().getAttributes());
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        // set attribute
+        dialog.getWindow().setAttributes(lp);
     }
 
     // process sport name spinner wheel controllers
@@ -138,13 +148,14 @@ public class CustomDialogForSport {
         // initialize ok button
         Button dialogOkButton = (Button) dialog.findViewById(R.id.dialog_ok_button);
 
+
         // register & set on click listener
         dialogOkButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 // set dialog title button's text
-                activity.getDialogTitleButton()
+                activity.getDialogTitleEditText()
                         .setText(sportNameAdapter.getItemText(sportNameSpinner.getCurrentItem()));
 
                 float timeMul = (float)((activity.getCurrentTime() / (1000 * 60)) / 30);

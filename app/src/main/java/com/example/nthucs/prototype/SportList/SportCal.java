@@ -8,7 +8,7 @@ public class SportCal implements java.io.Serializable {
     private long id;
 
     private String sportName;
-
+    private String classification,activityEN,group;
     private float consumeUnit, consumeHalfHouWith40, consumeHalfHouWith50, consumeHalfHouWith60, consumeHalfHouWith70;
 
     public SportCal() {
@@ -34,4 +34,13 @@ public class SportCal implements java.io.Serializable {
 
     public float getConsumeHalfHouWith70() {return this.consumeHalfHouWith70;}
     public void setConsumeHalfHouWith70(float consumeHalfHouWith70) {this.consumeHalfHouWith70 = consumeHalfHouWith70;}
+
+    public String getClassification(){return this.classification;}
+    public void setClassification(String classification){this.classification = classification;}
+
+    public String getActivityEN(){return this.activityEN;}
+    public void setActivityEN(String activityEN){this.activityEN = activityEN;}
+
+    public String getgroup(){return this.group;}
+    public void setGroup(String group){this.group = group;}
 }

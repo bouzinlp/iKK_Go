@@ -464,7 +464,12 @@ public abstract class AbstractWheel extends View {
             int h = b - t;
             doItemsLayout();
             if (mLayoutWidth != w || mLayoutHeight != h) {
-                recreateAssets(getMeasuredWidth(), getMeasuredHeight());
+                System.out.println("HEIGHT = "+getMeasuredHeight());
+                System.out.println("width = "+getMeasuredWidth());
+                if(getMeasuredHeight()==0)
+                    recreateAssets(getMeasuredWidth(), 20);
+                else
+                    recreateAssets(getMeasuredWidth(), getMeasuredHeight());
             }
             mLayoutWidth = w;
             mLayoutHeight = h;

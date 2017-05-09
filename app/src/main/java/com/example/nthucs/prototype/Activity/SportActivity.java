@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +34,7 @@ import au.com.bytecode.opencsv.CSVReader;
 public class SportActivity extends AppCompatActivity {
 
     // dialog for choosing sport within spinner wheel
-    private Button dialogTitleButton;
+    private EditText dialogTitleEditText;
 
     // text input
     //private EditText title_text;
@@ -54,6 +55,9 @@ public class SportActivity extends AppCompatActivity {
     // list of profile & current weight
     private List<Profile> profileList = new ArrayList<>();
     private float currentWeight;
+
+    private ArrayList<String[]> allRows;
+    private String beforeInput = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +100,7 @@ public class SportActivity extends AppCompatActivity {
             sport = (Sport)intent.getExtras().getSerializable(
                     "com.example.nthucs.prototype.SportList.Sport");
 
-            dialogTitleButton.setText(sport.getTitle());
+            dialogTitleEditText.setText(sport.getTitle());
 
             //title_text.setText(sport.getTitle());
             content_text.setText(sport.getContent());
@@ -125,7 +129,7 @@ public class SportActivity extends AppCompatActivity {
 
     public void onSubmit(View view) {
         if (view.getId() == R.id.ok_item) {
-            String titleText = dialogTitleButton.getText().toString();
+            String titleText = dialogTitleEditText.getText().toString();
             String contentText = content_text.getText().toString();
             String calorieText = calorie_text.getText().toString();
             String hourText = hour_text.getText().toString();
@@ -150,29 +154,63 @@ public class SportActivity extends AppCompatActivity {
             Intent result = getIntent();
             result.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
             setResult(Activity.RESULT_OK, result);
+            finish();
         }
-        finish();
+        else if(view.getId() == R.id.go_search){
+            sportCalList.clear();
+            try{
+                // Read CSV line by line
+                for (int index = 1; index < allRows.size() ; index++) {
+                    if(allRows.get(index)[0].contains(dialogTitleEditText.getText().toString()) ||
+                            allRows.get(index)[6].contains(dialogTitleEditText.getText().toString())){
+                        SportCal sportCal = new SportCal();
+                        sportCal.setSportName(allRows.get(index)[0]);
+                        sportCal.setConsumeHalfHouWith40(Float.parseFloat(allRows.get(index)[1]));
+                        sportCal.setConsumeHalfHouWith50(Float.parseFloat(allRows.get(index)[2]));
+                        sportCal.setConsumeHalfHouWith60(Float.parseFloat(allRows.get(index)[3]));
+                        sportCal.setConsumeHalfHouWith70(Float.parseFloat(allRows.get(index)[4]));
+                        sportCal.setClassification((allRows.get(index)[5]));
+                        sportCal.setActivityEN((allRows.get(index)[6]));
+                        sportCal.setGroup((allRows.get(index)[7]));
+                        sportCal.setConsumeUnit(Float.parseFloat(allRows.get(index)[8]));
+                        sportCalList.add(sportCal);
+                    }
+                }
+            }catch (Exception e){
+                System.out.println(e);
+            }
+            if(sportCalList.size()!=0){
+                CustomDialogForSport customDialogForSport = new CustomDialogForSport(sportCalList, SportActivity.this, currentWeight);
+                customDialogForSport.processDialogControllers();
+            }
+        }
+        else if(view.getId()==R.id.cancel_item)
+            finish();
+        //
     }
 
     // open sport calories csv
     private void openSportCalCsv() throws IOException {
+        String next[] = {};
+        List<String[]> list = new ArrayList<>();
+
         // Build reader instance
         sportCalReader = new CSVReader(new InputStreamReader(getAssets().open("sports_cal.csv")));
 
         // Read all rows at once
-        ArrayList<String[]> allRows= (ArrayList)sportCalReader.readAll();
-
+        allRows= (ArrayList)sportCalReader.readAll();
         // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
             SportCal sportCal = new SportCal();
-
             sportCal.setSportName(allRows.get(i)[0]);
-            sportCal.setConsumeUnit(Float.parseFloat(allRows.get(i)[1]));
-            sportCal.setConsumeHalfHouWith40(Float.parseFloat(allRows.get(i)[2]));
-            sportCal.setConsumeHalfHouWith50(Float.parseFloat(allRows.get(i)[3]));
-            sportCal.setConsumeHalfHouWith60(Float.parseFloat(allRows.get(i)[4]));
-            sportCal.setConsumeHalfHouWith70(Float.parseFloat(allRows.get(i)[5]));
-
+            sportCal.setConsumeHalfHouWith40(Float.parseFloat(allRows.get(i)[1]));
+            sportCal.setConsumeHalfHouWith50(Float.parseFloat(allRows.get(i)[2]));
+            sportCal.setConsumeHalfHouWith60(Float.parseFloat(allRows.get(i)[3]));
+            sportCal.setConsumeHalfHouWith70(Float.parseFloat(allRows.get(i)[4]));
+            sportCal.setClassification((allRows.get(i)[5]));
+            sportCal.setActivityEN((allRows.get(i)[6]));
+            sportCal.setGroup((allRows.get(i)[7]));
+            sportCal.setConsumeUnit(Float.parseFloat(allRows.get(i)[8]));
             sportCalList.add(sportCal);
         }
     }
@@ -180,20 +218,11 @@ public class SportActivity extends AppCompatActivity {
     // process dialog button controllers
     private void processDialogButtonControllers() {
         // initialize dialog button
-        dialogTitleButton = (Button)findViewById(R.id.dialog_button);
-
+        dialogTitleEditText = (EditText)findViewById(R.id.dialog_edittext);
+        // initialize go button
+        Button goSearchButton = (Button) findViewById(R.id.go_search);
         // avoid all upper case
-        dialogTitleButton.setTransformationMethod(null);
-
-        // set button listener
-        dialogTitleButton.setOnClickListener(new Button.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // process custom dialog
-                CustomDialogForSport customDialogForSport = new CustomDialogForSport(sportCalList, SportActivity.this, currentWeight);
-                customDialogForSport.processDialogControllers();
-            }
-        });
+        dialogTitleEditText.setTransformationMethod(null);
     }
 
     // process edit text controllers
@@ -205,9 +234,9 @@ public class SportActivity extends AppCompatActivity {
 
     }
 
-    // get dialog title button public
-    public Button getDialogTitleButton() {
-        return this.dialogTitleButton;
+    // get dialog title EditText public
+    public EditText getDialogTitleEditText() {
+        return this.dialogTitleEditText;
     }
 
     // get calorie edit text public

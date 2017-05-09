@@ -6,7 +6,9 @@
     android:stretchColumns="1,2,3,4"
     tools:context=".Activity.SportActivity">
 
-    <TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
             android:text="@string/sport_title"
@@ -24,8 +26,8 @@
             android:layout_span="4"
             android:textAppearance="?android:attr/textAppearanceMedium" />-->
 
-        <Button
-            android:id="@+id/dialog_button"
+        <EditText
+            android:id="@+id/dialog_edittext"
             android:layout_width="wrap_content"
             android:layout_height="35.5dp"
             android:background="@drawable/rectangle_drawable"
@@ -35,6 +37,15 @@
             android:layout_span="4"
             android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Button
+            android:id="@+id/go_search"
+            android:text="go"
+            android:onClick="onSubmit"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+
     </TableRow>
 
     <TableRow>

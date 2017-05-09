@@ -22,6 +22,7 @@ public class Health implements java.io.Serializable {
     private float systolicBloodPressure;
     private float diastolicBloodPressure;
     private float pulse;
+    private float activityFactor;
 
     public Health() {
         this.datetime = 0;
@@ -60,4 +61,7 @@ public class Health implements java.io.Serializable {
 
     public float getPulse() {return this.pulse;}
     public void setPulse(float pulse) {this.pulse = pulse;}
+
+    public float getActivityFactor() {return  this.activityFactor;}
+    public void setActivityFactor(float activityFactor) {this.activityFactor = activityFactor;}
 }

@@ -5,7 +5,7 @@
     android:orientation="horizontal" >
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="Back"
@@ -24,5 +24,6 @@
         android:textColor="#ffffff"
         android:id="@+id/my_favourites_title"
         android:textSize="21sp" />
+
 
 </RelativeLayout>

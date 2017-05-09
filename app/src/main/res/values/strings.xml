@@ -51,6 +51,12 @@
     <string name="temperature"> Temperature(C)</string>
 
     <string name="my_current_exercise_title">Exercise Settings</string>
+    <string name="sectionZero">How often do you work out in a week?</string>
+    <string name="answerA_0">a. Sedentary</string>
+    <string name="answerB_0">b. Lightly Active (e.g. 1 ~ 3 per week)</string>
+    <string name="answerC_0">c. Moderately Active (e.g. 3 ~ 5 per week)</string>
+    <string name="answerD_0">d. Very Active (e.g. 6 ~ 7 per week)</string>
+    <string name="answerE_0">d. Extremely Active (e.g. every day)</string>
     <string name="sectionOne">How physically active are you during your work/day time? (even work at home, sick leave or studying for instance at University)</string>
     <string name="answerA_1">a. mostly sitting</string>
     <string name="answerB_1">b. seated work but some requirement to move around (e.g. office work with light activities)</string>
@@ -85,6 +91,7 @@
     <string name="dialog_button">Ok</string>
     <string name="dialog_cancel_button">Cancel</string>
     <string name="choose_food">Choose the food</string>
+    <string name="choose_sport">Choose the sport</string>
 
     <string name="homeTextView">%1$d%2$s</string>
 

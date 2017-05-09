@@ -47,22 +47,30 @@
 
         </TableRow>
 
-        <TableRow>
+        <TableRow
+            android:id="@+id/rowHeight">
             <TextView
                 android:text="@string/height"
                 android:padding="12dp"
                 android:layout_margin="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/height_edit_text"
-                android:hint="@string/enter_height"
-                android:background="@drawable/profile_drawable"
-                android:gravity="right"
-                android:padding="7dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/height_linearlayout">
+                <EditText
+                    android:layout_height="match_parent"
+                    android:layout_width="80dp"
+                    android:id="@+id/height_edit_text"
+                    android:hint="@string/enter_height"
+                    android:background="@drawable/profile_drawable"
+                    android:gravity="right"
+                    android:paddingTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+            </LinearLayout>
 
         </TableRow>
 
@@ -72,16 +80,23 @@
                 android:padding="12dp"
                 android:layout_margin="10dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:id="@+id/weight_edit_text"
-                android:hint="@string/enter_weight"
-                android:background="@drawable/profile_drawable"
-                android:gravity="right"
-                android:padding="7dp"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:id="@+id/weight_linearlayout">
+                <EditText
+                    android:layout_height="match_parent"
+                    android:layout_width="80dp"
+                    android:id="@+id/weight_edit_text"
+                    android:hint="@string/enter_height"
+                    android:background="@drawable/profile_drawable"
+                    android:gravity="right"
+                    android:paddingTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+            </LinearLayout>
 
         </TableRow>
 
