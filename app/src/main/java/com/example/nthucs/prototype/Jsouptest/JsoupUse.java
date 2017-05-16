@@ -33,11 +33,11 @@ public class JsoupUse {
             }
         }
 
-        System.out.println(url);
+        //System.out.println(url);
         //http://www.myfitnesspal.com/zh-TW/food/search?authenticity_token=aykb4Sm9nI5Xl1ccrJf4FryP2jDOjgKBCSJURkMwkhE%3D&page=1&search= &utf8=%E2%9C%93
         Document doc1 = Jsoup.connect(url).get();
         String title = doc1.title();
-        System.out.println(title);
+        //System.out.println(title);
         /*
         File input = new File("/tmp/input.html");
         Document doc = Jsoup.parse(input, "UTF-8", "http://www.myfitnesspal.com/zh-TW/food/search?authenticity_token=Gj3Y5YIi9n5FC%2BT0Vo8l%2FVhcWXYFWWssam67OO2Gp%2BI%3D&search=egg&utf8=%E2%9C%93");
@@ -95,9 +95,9 @@ public class JsoupUse {
         /* 切割字串 */
         String putback = getname;
         String[] array = putback.split("@");
-        for (int i = 0; i < array.length; i++) {
+        /*for (int i = 0; i < array.length; i++) {
             System.out.println("array[" + i + "] = " + array[i]);
-        }
+        }*/
         //String[] name = array[0].split(" ");
         return array;
     }
