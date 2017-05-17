@@ -1,13 +1,15 @@
 package com.example.nthucs.prototype.Activity;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
@@ -17,48 +19,41 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
-import com.example.nthucs.prototype.SpinnerWheel.CustomDialogForFood;
+import com.example.nthucs.prototype.Jsouptest.JsoupUse;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 
-import com.example.nthucs.prototype.antistatic.spinnerwheel.AbstractWheel;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelChangedListener;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.OnWheelClickedListener;
-import com.example.nthucs.prototype.antistatic.spinnerwheel.adapters.ArrayWheelAdapter;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Intent;
-import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.view.Menu;
-import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.v7.widget.ShareActionProvider;
 
 
 public class FoodActivity extends AppCompatActivity {
 
-    // dialog for choosing food within spinner wheel
-    private Button dialogTitleButton;
+
+    private EditText dialogTitleEditText;
 
     // text input
     //private EditText title_text;
@@ -92,7 +87,9 @@ public class FoodActivity extends AppCompatActivity {
     private Button btnSpeak;
     private TextView txtText;
     private ShareActionProvider mShareActionProvider;
-
+    private String[] info;
+    String inputText;
+    public ProgressDialog searchDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,10 +116,7 @@ public class FoodActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
         shareDialog = new ShareDialog(this);
 
-        // process dialog button for title
-        processDialogButtonControllers();
-
-        //title_text = (EditText)findViewById(R.id.title_text);
+        dialogTitleEditText = (EditText)findViewById(R.id.food_edittext);
         content_text = (EditText)findViewById(R.id.content_text);
         calorie_text = (EditText)findViewById(R.id.calorie_text);
         portions_text = (EditText)findViewById(R.id.portions_text);
@@ -137,7 +131,7 @@ public class FoodActivity extends AppCompatActivity {
             food = (Food)intent.getExtras().getSerializable(
                     "com.example.nthucs.prototype.FoodList.Food");
 
-            dialogTitleButton.setText(food.getTitle());
+            dialogTitleEditText.setText(food.getTitle());
 
             //title_text.setText(food.getTitle());
             content_text.setText(food.getContent());
@@ -217,58 +211,61 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     public void onSubmit(View view) {
-        if (view.getId() == R.id.ok_item) {
-            String titleText = dialogTitleButton.getText().toString();
-            String contentText = content_text.getText().toString();
-            String calorieText = calorie_text.getText().toString();
-            String portionsText = portions_text.getText().toString();
-            String gramsText = grams_text.getText().toString();
+        switch(view.getId()){
+            case R.id.ok_item:
+                String titleText = dialogTitleEditText.getText().toString();
+                String contentText = content_text.getText().toString();
+                String calorieText = calorie_text.getText().toString();
+                String portionsText = portions_text.getText().toString();
+                String gramsText = grams_text.getText().toString();
 
-            // related calorie, portion and grams
-            float finalCalorie = Float.parseFloat(calorieText);
-            float originPortions = food.getPortions();
-            float originGrams = food.getGrams();
-            float modifyPortions = Float.parseFloat(portionsText);
-            float modifyGrams = Float.parseFloat(gramsText);
-            if (originPortions == 0) originPortions = 1;
-            if (originGrams != modifyGrams) {
-                modifyPortions = modifyGrams / 100;
-                finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
-            } else if (originPortions != modifyPortions) {
-                modifyGrams = modifyPortions * 100;
-                finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
-            }
+                // related calorie, portion and grams
+                float finalCalorie = Float.parseFloat(calorieText);
+                float originPortions = food.getPortions();
+                float originGrams = food.getGrams();
+                float modifyPortions = Float.parseFloat(portionsText);
+                float modifyGrams = Float.parseFloat(gramsText);
+                if (originPortions == 0) originPortions = 1;
+                if (originGrams != modifyGrams) {
+                    modifyPortions = modifyGrams / 100;
+                    finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+                } else if (originPortions != modifyPortions) {
+                    modifyGrams = modifyPortions * 100;
+                    finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+                }
 
-            // set to food, back to main activity will be updated
-            food.setTitle(titleText);
-            food.setContent(contentText);
-            food.setCalorie(finalCalorie);
-            food.setPortions(modifyPortions);
-            food.setGrams(modifyGrams);
+                // set to food, back to main activity will be updated
+                food.setTitle(titleText);
+                food.setContent(contentText);
+                food.setCalorie(finalCalorie);
+                food.setPortions(modifyPortions);
+                food.setGrams(modifyGrams);
 
-            // if add food with photo, then also record establish time
-            if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
-                food.setDatetime(new Date().getTime());
-            }
+                // if add food with photo, then also record establish time
+                if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
+                    food.setDatetime(new Date().getTime());
+                }
 
-            Intent result = getIntent();
-            result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
-            setResult(Activity.RESULT_OK, result);
+                Intent result = getIntent();
+                result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
+                setResult(Activity.RESULT_OK, result);
+                finish();
+                break;
+            case R.id.go_searchFood:
+                searchDialog = ProgressDialog.show(this,"搜尋中","請稍後...");
+                inputText = dialogTitleEditText.getText().toString();
+                new searchFood().execute();
         }
-        finish();
+
+
     }
 
     private File configFileName(String prefix, String extension) {
         if (fileName == null) {
             fileName = FileUtil.getUniqueFileName();
         }
-
         return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
                 prefix + fileName + extension);
-    }
-
-    public void clickFunction(View view) {
-
     }
 
     @Override
@@ -297,8 +294,6 @@ public class FoodActivity extends AppCompatActivity {
             SharePhotoContent content = new SharePhotoContent.Builder()
                     .addPhoto(photo)
                     .build();
-
-
             if(shareDialog.canShow(SharePhotoContent.class)){
                 shareDialog.show(content);
                 System.out.println("SET");
@@ -306,17 +301,9 @@ public class FoodActivity extends AppCompatActivity {
             else{
                 System.out.println("U CANT");
             }
-
         }
         catch (Exception e){
             System.out.println("EXCEPTION : "+e);
-        }
-    }
-
-    // Call to update the share intent
-    private void setShareIntent(Intent shareIntent) {
-        if (mShareActionProvider != null) {
-            mShareActionProvider.setShareIntent(shareIntent);
         }
     }
 
@@ -345,13 +332,12 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     // process dialog button controllers
-    private void processDialogButtonControllers() {
+    /*private void processDialogButtonControllers() {
         // initialize dialog button
         dialogTitleButton = (Button)findViewById(R.id.dialog_button);
 
         // avoid all upper case
         dialogTitleButton.setTransformationMethod(null);
-
         // set button listener
         dialogTitleButton.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -361,12 +347,12 @@ public class FoodActivity extends AppCompatActivity {
                 customDialogForFood.processDialogControllers();
             }
         });
-    }
+    }*/
 
     // get dialog title button public
-    public Button getDialogTitleButton() {
+    /*public Button getDialogTitleButton() {
         return this.dialogTitleButton;
-    }
+    }*/
 
     // get calorie edit text public
     public EditText getCalorieText() {
@@ -386,5 +372,94 @@ public class FoodActivity extends AppCompatActivity {
     // get boolean value for custom dialog
     public boolean isAddFood() {
         return this.isAddFood;
+    }
+
+    private class searchFood extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                String catchString = JsoupUse.getMyFitnessPalDateBase(inputText ,1);
+                info = JsoupUse.splitEveryInfor(catchString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused)
+        {
+            super.onPostExecute(unused);
+            searchDialog.dismiss();
+            selectfood(info);
+        }
+    }
+
+    private void  selectfood(String[] foodarray   ) {
+        /*final String[] items =foodarray;
+        String temparray;
+
+        for(int i = 0 ; i<items.length-1;i++){
+            temparray = items[i+1];
+            items[i] = temparray;
+        }*/
+        ArrayList<String> items = new ArrayList<>();
+        for(int i=0;i<foodarray.length;++i){
+            if(foodarray[i].contains("Generic"))
+                items.add(foodarray[i]);
+        }
+        for(int i=1;i<foodarray.length;++i){
+            if(!foodarray[i].contains("Generic"))
+                items.add(foodarray[i]);
+        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
+        builder.setTitle("Select food");
+        builder.setItems(items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int index) {
+                String nowtext= info[index];
+                handleInfoStr(nowtext);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        final ListView listview = alertDialog.getListView();
+        listview.setDivider(new ColorDrawable(Color.GRAY));
+        listview.setDividerHeight(2);
+
+        /*listview.post(new Runnable() {
+            @Override
+            public void run() {
+                if(listview.getCount()!=0){
+                    for(int i=0;i<listview.getCount();++i) {
+                        if (listview.getItemAtPosition(i).toString().contains("Generic")) {
+                            System.out.println("count = "+listview.getCount());
+                            System.out.println(i+"   "+listview.getItemAtPosition(i).toString());
+                            getViewByPosition(i,listview).setBackgroundColor(Color.CYAN);
+                        }
+                    }
+                }
+            }
+        });*/
+        alertDialog.show();
+    }
+
+    private void handleInfoStr(String nowText){
+        String[] split = nowText.split(",");
+        dialogTitleEditText.setText(split[0].split(" ")[0]);
+        calorie_text.setText(nowText.split(":")[2].split(",")[0]);
+        portions_text.setText("1.0");
+        grams_text.setText("100");
+    }
+
+    private View getViewByPosition(int pos,ListView listView) {
+        final int firstListItemPosition = listView.getFirstVisiblePosition();
+        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
+            if (pos < firstListItemPosition || pos > lastListItemPosition ) {
+                return  listView.getAdapter().getView(pos, null, listView);
+            } else {
+                final int childIndex = pos - firstListItemPosition;
+                return  listView.getChildAt(childIndex);
+            }
     }
 }

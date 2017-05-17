@@ -56,7 +56,7 @@ public class CustomDialogForFood {
     // Current food's index in [category][chineseName]
     private int curCategoryIdx, curCniNameIdx;
 
-    public CustomDialogForFood(List<FoodCal> foodCalList, FoodActivity activity) {
+    /*public CustomDialogForFood(List<FoodCal> foodCalList, FoodActivity activity) {
 
         this.foodCalList = foodCalList;
         this.activity = activity;
@@ -271,5 +271,5 @@ public class CustomDialogForFood {
                 dialog.dismiss();
             }
         });
-    }
+    }*/
 }

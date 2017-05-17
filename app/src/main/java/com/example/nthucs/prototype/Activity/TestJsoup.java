@@ -123,7 +123,6 @@ public class TestJsoup extends AppCompatActivity {
     private void processUpdateButtonControllers() {
 
         updateButton = (Button) findViewById(R.id.update_button);
-
         // avoid all upper case
         updateButton.setTransformationMethod(null);
     }
@@ -143,12 +142,7 @@ public class TestJsoup extends AppCompatActivity {
             foodname_text = (EditText) findViewById(R.id.Write_Food_Name);
             food_name_text = foodname_text.getText().toString();
             //foodname = food_name_text;
-            //System.out.println("111111111111111111111111");
-            //System.out.println(food_name_text);
-            //System.out.println("0000000000000000000000000");
             heatarray = JsoupUse.getMyFitnessPalDateBase(food_name_text ,pagenum);
-            //heat_text.setText("food_name_text");
-
             inforarray = JsoupUse.splitEveryInfor(heatarray);
 
             selectfood(inforarray);
@@ -158,17 +152,10 @@ public class TestJsoup extends AppCompatActivity {
             foodname_text = (EditText) findViewById(R.id.Write_Food_Name);
             food_name_text = foodname_text.getText().toString();
             //foodname = food_name_text;
-            //System.out.println("111111111111111111111111");
-            //System.out.println(food_name_text);
-            //System.out.println("0000000000000000000000000");
             heatarray = JsoupUse.getMyFitnessPalDateBase(food_name_text ,pagenum);
-            //heat_text.setText("food_name_text");
-
             inforarray = JsoupUse.splitEveryInfor(heatarray);
-
             selectfood(inforarray);
         }
-
     }
 
     private void  selectfood(String[] foodarray   ) {
