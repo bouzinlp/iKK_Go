@@ -55,7 +55,6 @@ public class CameraActivity extends AppCompatActivity {
 
     // Search by word
     private String resultText;
-    private TextView searchResult;
 
     // Food storage
     private Food food;
@@ -77,9 +76,6 @@ public class CameraActivity extends AppCompatActivity {
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
 
-        // text view for input
-        searchResult = (TextView) findViewById(R.id.result);
-
         // new food
         food = new Food(resultText, fileName, true);
 
@@ -91,7 +87,6 @@ public class CameraActivity extends AppCompatActivity {
             // get all data
             foodCalList = calorieDAO.getAll();
         }
-
     }
 
     @Override
@@ -161,9 +156,8 @@ public class CameraActivity extends AppCompatActivity {
             // Use Async Task to open httpUrlConnection for upload picture
             String responseString = new String();
 
-            System.out.println("picfile = "+picFile);
-            System.out.println("1354345464 = "+getImagePath(picUri));
-
+            System.out.println("Pic File = "+picFile);
+            System.out.println("Image Path = "+getImagePath(picUri));
 
             // Use Async Task
             try{

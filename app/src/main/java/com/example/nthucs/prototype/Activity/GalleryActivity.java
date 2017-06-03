@@ -340,7 +340,7 @@ public class GalleryActivity extends AppCompatActivity {
     private String encodeImagetoString(){
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Must compress the Image to reduce image size to make upload easy
-        bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byte_arr = stream.toByteArray();
         // Encode Image to String
         encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
