@@ -314,7 +314,6 @@ public class GalleryActivity extends AppCompatActivity {
         return imageUrl;
     }
 
-
     // Process normal food event if cannot match result from data base
     private void processFoodEvent() {
 
