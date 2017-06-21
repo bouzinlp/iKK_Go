@@ -203,7 +203,7 @@ public class GalleryActivity extends AppCompatActivity {
             System.out.println("Suggested result: " + resultText);
 
             // if the compare result is empty
-            if (compare_result.length == 0) {
+            if (compare_result == null || compare_result.length == 0) {
                 // Process normal food event
                 processFoodEvent();
             } else {
