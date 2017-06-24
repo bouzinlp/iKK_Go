@@ -97,4 +97,11 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="default_home_values">0</string>
+    <string name="home_icon_description">icon</string>
+    <string name="exercise_minute">min</string>
+    <string name="exercise_steps">steps</string>
+    <string name="exercise_calorie">kcal</string>
+    <string name="exercise_distance">m</string>
 </resources>

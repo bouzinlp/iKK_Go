@@ -24,6 +24,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_home"/>
+    <include layout="@layout/content_home_new"/>
 
 </android.support.design.widget.CoordinatorLayout>

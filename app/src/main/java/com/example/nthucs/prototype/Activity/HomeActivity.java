@@ -6,6 +6,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -118,6 +120,8 @@ public class HomeActivity extends AppCompatActivity
         facebookUsername.setText("Hello, "+LoginActivity.facebookName);
         ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
+
+
         // initialize tabLayout and viewPager
         //viewPager = (ViewPager)findViewById(R.id.viewPager);
         //tabLayout = (TabLayout)findViewById(R.id.tabLayout);
