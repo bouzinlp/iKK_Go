@@ -20,7 +20,7 @@
             android:background="@color/colorPrimary"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:fitsSystemWindows="true" />
+             />
 
     </android.support.design.widget.AppBarLayout>
 
