@@ -255,6 +255,10 @@ public class FoodActivity extends AppCompatActivity {
                 searchDialog = ProgressDialog.show(this,"搜尋中","請稍後...");
                 inputText = dialogTitleEditText.getText().toString();
                 new searchFood().execute();
+                break;
+            case R.id.cancel_item:
+                finish();
+                break;
         }
 
 
