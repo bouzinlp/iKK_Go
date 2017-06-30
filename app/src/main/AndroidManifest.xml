@@ -81,6 +81,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.nthucs.prototype.Activity.NewCalendarActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                // calendar view
+                <action android:name="com.example.nthucs.prototype.CALENDAR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         >
         <provider
             android:name="com.facebook.FacebookContentProvider"

@@ -377,6 +377,11 @@ public class MyBloodPressure extends AppCompatActivity
             intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
             startActivity(intent_mail);
             finish();
+        } else if (id == R.id.new_calendar){
+            Intent intent_new_calendar = new Intent();
+            intent_new_calendar.setClass(MyBloodPressure.this, NewCalendarActivity.class);
+            startActivity(intent_new_calendar);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

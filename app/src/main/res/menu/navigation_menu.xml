@@ -35,6 +35,11 @@
             android:id="@+id/mail"
             android:icon="@drawable/ic_mail_48"
             android:title="Contact us"/>
+
+        <item
+            android:id="@+id/new_calendar"
+            android:icon="@drawable/ic_perm_contact_calendar_white_48dp"
+            android:title="New Calendar"/>
     </group>
 
 </menu>

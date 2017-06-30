@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,41 +11,36 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CalendarView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.facebook.FacebookSdk;
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.Date;
+
 /**
- * Created by Kelvin on 2017/5/4.
+ * Created by Kelvin on 2017/6/27.
  */
 
-public class MailActivity extends AppCompatActivity
-            implements NavigationView.OnNavigationItemSelectedListener{
-    private Activity activity = MailActivity.this;
-    private EditText body;
-    private Button button;
-    private int activityIndex = 6;
-    private static final int MAIL_ACTIVITY = 6;
+public class NewCalendarActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener{
+    private Activity activity = NewCalendarActivity.this;
+    private int activityIndex = 7;
+    private static final int NEW_CALENDAR_ACTIVITY = 7;
     private static final int SCAN_FOOD = 2;
     private static final int TAKE_PHOTO = 3;
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
-
+    private TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Contact Us");
         FacebookSdk.sdkInitialize(getApplicationContext());
-        setContentView(R.layout.activity_mail_nav);
+        setContentView(R.layout.activity_calendar_new);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,33 +60,27 @@ public class MailActivity extends AppCompatActivity
         ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
 
-        button = (Button) findViewById(R.id.send_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                body = (EditText) findViewById(R.id.mailtext);
-                String input = body.getText().toString();
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
-                intent.setType("message/rfc822");
-                //intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"kelvin91734@gmail.com"});
-                intent.putExtra(Intent.EXTRA_SUBJECT, "mHealth test");
-                intent.putExtra(Intent.EXTRA_TEXT, input);
-                intent.setData(Uri.parse("mailto:kelvin91734@gmail.com"));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        final CalendarView calendarView = (CalendarView) findViewById(R.id.calendar1);
+        textView = (TextView) findViewById(R.id.date);
 
-                try{
-                    startActivity(intent);
-                } catch (android.content.ActivityNotFoundException ex){
-                    Toast.makeText(MailActivity.this, "No email clients installed.", Toast.LENGTH_SHORT).show();
-                }
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy/M/dd");
+        String today = sdf.format(new Date(calendarView.getDate()));
+        textView.setText(today);
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                String date = year + "/" + (month+1) + "/" + dayOfMonth;
+                textView.setText(date);
+                Intent intent = new Intent(NewCalendarActivity.this, MainActivity.class);
+                intent.putExtra("date", date);
+                intent.putExtra("year", year);
+                intent.putExtra("month", month+1);
+                intent.putExtra("day", dayOfMonth);
+                startActivity(intent);
             }
         });
-    }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        System.out.println(" onResume");
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -103,7 +91,7 @@ public class MailActivity extends AppCompatActivity
 
         if (id == R.id.home) {
             Intent intent_home = new Intent();
-            intent_home.setClass(MailActivity.this, HomeActivity.class);
+            intent_home.setClass(NewCalendarActivity.this, HomeActivity.class);
             Bundle bundle = new Bundle();
             bundle.putInt("BACK", 1);
             intent_home.putExtras(bundle);
@@ -113,13 +101,13 @@ public class MailActivity extends AppCompatActivity
         else if (id == R.id.food_list) {
             // Handle the camera action
             Intent intent_main = new Intent();
-            intent_main.setClass(MailActivity.this, MainActivity.class);
+            intent_main.setClass(NewCalendarActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.calendar) {
             Intent intent_calendar = new Intent();
-            intent_calendar.setClass(MailActivity.this, CalendarActivity.class);
+            intent_calendar.setClass(NewCalendarActivity.this, CalendarActivity.class);
             startActivity(intent_calendar);
             finish();
             //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
@@ -128,28 +116,28 @@ public class MailActivity extends AppCompatActivity
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.message) {
             Intent intent_message = new Intent();
-            intent_message.setClass(MailActivity.this, MessageActivity.class);
+            intent_message.setClass(NewCalendarActivity.this, MessageActivity.class);
             startActivity(intent_message);
             finish();
             //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.setting_list) {
             Intent intent_setting = new Intent();
-            intent_setting.setClass(MailActivity.this, SettingsActivity.class);
+            intent_setting.setClass(NewCalendarActivity.this, SettingsActivity.class);
             startActivity(intent_setting);
             finish();
         } else if (id == R.id.blood_pressure){
             Intent intent_blood_pressure = new Intent();
-            intent_blood_pressure.setClass(MailActivity.this, MyBloodPressure.class);
+            intent_blood_pressure.setClass(NewCalendarActivity.this, MyBloodPressure.class);
             startActivity(intent_blood_pressure);
             finish();
         } else if (id == R.id.mail){
             Intent intent_mail = new Intent();
-            intent_mail.setClass(MailActivity.this, MailActivity.class);
+            intent_mail.setClass(NewCalendarActivity.this, MailActivity.class);
             startActivity(intent_mail);
             finish();
         } else if (id == R.id.new_calendar){
             Intent intent_new_calendar = new Intent();
-            intent_new_calendar.setClass(MailActivity.this, NewCalendarActivity.class);
+            intent_new_calendar.setClass(NewCalendarActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
         }
@@ -167,35 +155,44 @@ public class MailActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int index) {
                 if (items[index].equals("Take with Camera")) {
-                    if (activityIndex == MAIL_ACTIVITY) {
+                    if (activityIndex == NEW_CALENDAR_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
-                        // back to mail activity
+                        // back to home activity
                         Intent result = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("BACK", 1);
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
-                        result.setClass(activity, MailActivity.class);
+                        result.putExtras(bundle);
+                        result.setClass(activity, NewCalendarActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
                 } else if (items[index].equals("Choose from Gallery")) {
-                    if (activityIndex == MAIL_ACTIVITY) {
+                    if (activityIndex == NEW_CALENDAR_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
-                        // back to mail activity
+                        // back to home activity
                         Intent result = new Intent();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("BACK", 1);
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
-                        result.setClass(activity, MailActivity.class);
+                        result.putExtras(bundle);
+                        result.setClass(activity, NewCalendarActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
                 } else if (items[index].equals("Cancel")) {
                     dialog.dismiss();
                     Intent intent = new Intent();
-                    intent.setClass(MailActivity.this, MailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("BACK", 1);
+                    intent.putExtras(bundle);
+                    intent.setClass(NewCalendarActivity.this, NewCalendarActivity.class);
                     startActivity(intent);
                 }
             }
