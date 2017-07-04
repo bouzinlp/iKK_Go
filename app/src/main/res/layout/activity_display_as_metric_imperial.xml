@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_color"
     tools:context=".Activity.DisplayAsMetricImperialActivity">
 
     <LinearLayout
@@ -11,12 +12,14 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp">
+        android:layout_margin="18dp"
+        >
         <TextView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
+            android:textColor="@color/black"
             android:text="Choose unit for metric/imperial"
-            android:textSize="21sp">
+            android:textSize="25sp">
 
         </TextView>
         <RadioGroup
@@ -30,12 +33,16 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/unit2metric"
                 android:checked="true"
+                android:textSize="20sp"
+                android:textColor="@color/black"
                 android:layout_weight="1" />
             <RadioButton
                 android:text="Imperial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/unit2imperial"
+                android:textSize="20sp"
+                android:textColor="@color/black"
                 android:layout_weight="1" />
         </RadioGroup>
     </LinearLayout>

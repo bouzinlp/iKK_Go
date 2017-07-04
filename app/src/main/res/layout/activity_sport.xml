@@ -4,18 +4,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="1,2,3,4"
+    android:background="@drawable/background_color"
     tools:context=".Activity.SportActivity">
 
     <TableRow
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingTop="10dp">
 
         <TextView
             android:text="@string/sport_title"
             android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
+            android:padding="10sp"
             android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textView" />
 
         <!--<EditText
             android:id="@+id/title_text"
@@ -29,7 +33,7 @@
         <EditText
             android:id="@+id/dialog_edittext"
             android:layout_width="wrap_content"
-            android:layout_height="35.5dp"
+            android:layout_height="40dp"
             android:background="@drawable/rectangle_drawable"
             android:padding="6sp"
             android:layout_margin="3sp"
@@ -43,12 +47,85 @@
             android:onClick="onSubmit"
             android:padding="6sp"
             android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:background="@drawable/bar_color"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
     </TableRow>
 
-    <TableRow>
+
+
+    <TableRow
+        android:paddingTop="10dp">
+        <TextView
+            android:text="@string/calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/calorie_text"
+            android:hint="@string/enter_calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_span="4"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:paddingTop="10dp">
+
+        <TextView
+            android:text="@string/total_time"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:id="@+id/hour_text"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/hour"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/minute_text"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/min"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:paddingTop="10dp">
 
         <TextView
             android:text="@string/content"
@@ -56,8 +133,9 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/rectangle_drawable"
             android:gravity="center"
-            android:padding="6sp"
+            android:padding="10sp"
             android:layout_margin="3sp"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
@@ -66,70 +144,18 @@
             android:layout_gravity="top"
             android:layout_height="70sp"
             android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
+            android:padding="10sp"
             android:layout_margin="3sp"
             android:layout_weight="1"
             android:layout_span="4"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
-
-    <TableRow>
-        <TextView
-            android:text="@string/calorie"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/calorie_text"
-            android:hint="@string/enter_calorie"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:layout_weight="1"
-            android:layout_span="4"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </TableRow>
-
-    <TableRow>
-        <TextView
-            android:text="@string/total_time"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/hour_text"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:text="@string/hour"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/minute_text"
-            android:background="@drawable/rectangle_drawable"
-            android:padding="6sp"
-            android:layout_margin="3sp"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:text="@string/min"
-            android:padding="6sp"
-            android:layout_margin="3sp"
+            android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium" />
     </TableRow>
 
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="260dp"
         android:stretchColumns="*">
 
         <TableRow>
@@ -139,6 +165,8 @@
                 android:onClick="onSubmit"
                 android:padding="6sp"
                 android:layout_margin="3sp"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Button
@@ -147,6 +175,8 @@
                 android:onClick="onSubmit"
                 android:padding="6sp"
                 android:layout_margin="3sp"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 

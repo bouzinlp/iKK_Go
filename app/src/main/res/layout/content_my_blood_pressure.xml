@@ -32,6 +32,9 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:id="@+id/select_day_button"
+                android:text="Date"
+                android:background="@drawable/bar_color"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <!--android:background="@drawable/button_drawable"-->
 
@@ -53,6 +56,9 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:id="@+id/select_time_button"
+                android:text="Time"
+                android:background="@drawable/bar_color"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <!--android:background="@drawable/button_drawable"-->
 
@@ -69,7 +75,8 @@
 
             <EditText
                 android:id="@+id/spressure_edit_text"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:gravity="right"
                 android:padding="7dp"
                 android:layout_margin="10dp"
@@ -89,7 +96,8 @@
 
             <EditText
                 android:id="@+id/dpressure_edit_text"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:gravity="right"
                 android:padding="7dp"
                 android:layout_margin="10dp"
@@ -109,7 +117,8 @@
 
             <EditText
                 android:id="@+id/pulse_edit_text"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:gravity="right"
                 android:padding="7dp"
                 android:layout_margin="10dp"
@@ -127,10 +136,10 @@
         android:layout_margin="2dp"
         android:id="@+id/update_button"
         android:text="@string/update_btn"
-        android:textColor="#ffffff"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/bar_color"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

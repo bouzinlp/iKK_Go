@@ -2,7 +2,8 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_color">
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -11,26 +12,30 @@
         tools:context=".Activity.FoodActivity">
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingTop="10dp">
             <Button
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="說"
+                android:layout_margin="3dp"
+                android:background="@drawable/bar_color"
                 android:onClick="onClickVoice"
                 android:id="@+id/voice_btn"
                 android:layout_column="0" />
 
             <TextView
                 android:text="voice result"
-                android:background="#3293c4"
-                android:padding="6sp"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="10sp"
                 android:layout_margin="3sp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="#ffffff"
+                android:textColor="@color/black"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_column="1"
+                android:layout_weight="1"
                 android:id="@+id/txtText" />
         </TableRow>
 
@@ -42,6 +47,7 @@
                 android:background="@drawable/rectangle_drawable"
                 android:padding="6sp"
                 android:layout_margin="3sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
@@ -68,9 +74,91 @@
                 android:text="search"
                 android:onClick="onSubmit"
                 android:padding="6sp"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:layout_margin="3sp"
                 android:textAppearance="?android:attr/textAppearanceMedium">
             </Button>
+        </TableRow>
+
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/calorie"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/calorie_text"
+                android:hint="@string/enter_calorie"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/portions"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/portions_text"
+                android:hint="@string/enter_portions"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/grams"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/grams_text"
+                android:hint="@string/enter_grams"
+                android:background="@drawable/rectangle_drawable"
+                android:padding="6sp"
+                android:layout_margin="3sp"
+                android:layout_weight="1"
+                android:textColor="@color/black"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
         <TableRow
@@ -85,6 +173,7 @@
                 android:gravity="center"
                 android:padding="6sp"
                 android:layout_margin="3sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
@@ -97,78 +186,7 @@
                 android:padding="6sp"
                 android:layout_margin="3sp"
                 android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/calorie"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/calorie_text"
-                android:hint="@string/enter_calorie"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/portions"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/portions_text"
-                android:hint="@string/enter_portions"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:layout_weight="1"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/grams"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/grams_text"
-                android:hint="@string/enter_grams"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:layout_weight="1"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
@@ -197,6 +215,8 @@
                     android:onClick="onSubmit"
                     android:padding="6sp"
                     android:layout_margin="3sp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/bar_color"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <Button
@@ -207,6 +227,8 @@
                     android:onClick="onSubmit"
                     android:padding="6sp"
                     android:layout_margin="3sp"
+                    android:textColor="@color/black"
+                    android:background="@drawable/bar_color"
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </TableRow>
         </TableLayout>

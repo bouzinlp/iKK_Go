@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="*"
+    android:background="@drawable/background_color"
     tools:context=".Activity.MyWeightLossGoalActivity">
 
     <TableLayout
@@ -17,12 +18,14 @@
                 android:text="@string/my_target_weight"
                 android:padding="12sp"
                 android:layout_margin="10sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/target_weight_edit_text"
                 android:hint="@string/enter_weight"
-                android:background="@drawable/profile_drawable"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
                 android:layout_margin="10sp"
@@ -37,12 +40,14 @@
                 android:text="@string/my_weekly_target"
                 android:padding="12sp"
                 android:layout_margin="10sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <EditText
                 android:id="@+id/weekly_target_edit_text"
                 android:hint="@string/enter_weekly_target"
-                android:background="@drawable/profile_drawable"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
                 android:layout_margin="10sp"
@@ -56,12 +61,14 @@
                 android:text="@string/your_BMR"
                 android:padding="12sp"
                 android:layout_margin="10sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/BMR_mwl"
                 android:hint="@string/wait_for_calculate"
-                android:background="@drawable/profile_drawable"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
                 android:layout_margin="10sp"
@@ -76,12 +83,14 @@
                 android:layout_marginLeft="10sp"
                 android:layout_marginTop="10sp"
                 android:layout_marginRight="10sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/absorb"
                 android:hint="@string/wait_for_calculate"
-                android:background="@drawable/profile_drawable"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
                 android:layout_margin="10sp"
@@ -96,6 +105,7 @@
                 android:layout_marginTop="1sp"
                 android:layout_marginLeft="12sp"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -107,12 +117,14 @@
                 android:layout_marginLeft="10sp"
                 android:layout_marginTop="10sp"
                 android:layout_marginRight="10sp"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
                 android:id="@+id/consume"
                 android:hint="@string/wait_for_calculate"
-                android:background="@drawable/profile_drawable"
+                android:textColor="@color/black"
+                android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
                 android:layout_margin="10sp"
@@ -128,6 +140,7 @@
                 android:layout_marginTop="1sp"
                 android:layout_marginLeft="12sp"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -168,10 +181,10 @@
         android:layout_margin="2sp"
         android:id="@+id/update_button"
         android:text="@string/update_btn"
-        android:textColor="@color/royal_blue"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@color/white"
+        android:background="@drawable/bar_color"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

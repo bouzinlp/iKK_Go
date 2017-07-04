@@ -32,10 +32,10 @@
         android:layout_margin="2dp"
         android:id="@+id/send_button"
         android:text="Send"
-        android:textColor="#ffffff"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/bar_color"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

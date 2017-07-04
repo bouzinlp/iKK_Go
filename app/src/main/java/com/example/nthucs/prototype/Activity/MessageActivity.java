@@ -335,13 +335,15 @@ public class MessageActivity extends AppCompatActivity
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.calendar) {
-            Intent intent_calendar = new Intent();
-            intent_calendar.setClass(MessageActivity.this, CalendarActivity.class);
-            startActivity(intent_calendar);
-            finish();
+        }
+//        else if (id == R.id.calendar) {
+//            Intent intent_calendar = new Intent();
+//            intent_calendar.setClass(MessageActivity.this, CalendarActivity.class);
+//            startActivity(intent_calendar);
+//            finish();
             //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.Import) {
+        //}
+        else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.message) {

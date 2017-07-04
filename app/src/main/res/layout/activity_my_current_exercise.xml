@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_color"
     tools:context=".Activity.MyCurrentExerciseActivity">
 
     <ScrollView
@@ -21,7 +22,8 @@
                 android:layout_margin="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -33,6 +35,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -42,7 +45,8 @@
                 android:layout_marginBottom="10sp"
                 android:layout_weight="1"
                 android:id="@+id/sectionZeroSpinner"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -55,6 +59,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -67,6 +72,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -79,6 +85,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -91,6 +98,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -102,7 +110,8 @@
                 android:layout_margin="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -114,6 +123,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -123,7 +133,8 @@
                 android:layout_marginBottom="10sp"
                 android:layout_weight="1"
                 android:id="@+id/sectionOneSpinner"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -136,6 +147,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -148,6 +160,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -159,6 +172,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -170,7 +184,8 @@
                 android:layout_margin="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -182,6 +197,7 @@
                 android:paddingBottom="10sp"
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <Spinner
@@ -191,7 +207,8 @@
                 android:layout_marginBottom="10sp"
                 android:layout_weight="1"
                 android:id="@+id/sectionTwoSpinner"
-                android:background="@drawable/profile_drawable"
+                android:background="@drawable/rectangle_drawable"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -204,6 +221,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -216,6 +234,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
@@ -227,6 +246,7 @@
                 android:layout_marginLeft="10sp"
                 android:layout_weight="1"
                 android:layout_span="2"
+                android:textColor="@color/black"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>

@@ -390,21 +390,21 @@ public class HomeActivity extends AppCompatActivity
             intent_home.putExtras(bundle);
             startActivity(intent_home);
             finish();
-        }
-        else if (id == R.id.food_list) {
+        } else if (id == R.id.food_list) {
             // Handle the camera action
             Intent intent_main = new Intent();
             intent_main.setClass(HomeActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.calendar) {
-            Intent intent_calendar = new Intent();
-            intent_calendar.setClass(HomeActivity.this, CalendarActivity.class);
-            startActivity(intent_calendar);
-            finish();
-            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.Import) {
+        } //else if (id == R.id.calendar) {
+//            Intent intent_calendar = new Intent();
+//            intent_calendar.setClass(HomeActivity.this, CalendarActivity.class);
+//            startActivity(intent_calendar);
+//            finish();
+        //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
+//        }
+        else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.message) {
