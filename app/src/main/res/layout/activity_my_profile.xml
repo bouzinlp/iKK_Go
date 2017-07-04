@@ -97,7 +97,7 @@
                     android:layout_height="match_parent"
                     android:layout_width="80dp"
                     android:id="@+id/weight_edit_text"
-                    android:hint="cm"
+                    android:hint="kg"
                     android:textColor="@color/black"
                     android:background="@drawable/rectangle_drawable"
                     android:gravity="right"

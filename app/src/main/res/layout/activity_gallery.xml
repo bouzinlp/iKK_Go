@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="1"
+    android:background="@drawable/background_color"
     tools:context=".Activity.GalleryActivity">
 
     <!-- 顯示圖片 -->
@@ -26,6 +27,8 @@
             <Button
                 android:id="@+id/search_item"
                 android:text="@string/search_picture"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:onClick="onSubmit"
                 android:padding="6sp"
                 android:layout_margin="2sp"
@@ -36,6 +39,8 @@
                 android:text="@android:string/cancel"
                 android:onClick="onSubmit"
                 android:padding="6sp"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
