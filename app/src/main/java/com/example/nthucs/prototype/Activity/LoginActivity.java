@@ -40,7 +40,6 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.v("mhealth","CREATE");
-        FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_login);
         if(AccessToken.getCurrentAccessToken()!=null) {
             facebookUserID = Profile.getCurrentProfile().getId();
@@ -88,6 +87,9 @@ public class LoginActivity extends Activity {
                                     System.out.println("profile2 id = "+facebookUserID);
                                     mProfileTracker.stopTracking();
                                     Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("BACK", 0);
+                                    intent_main.putExtras(bundle);
                                     startActivity(intent_main);
                                 }
                             };
@@ -97,6 +99,9 @@ public class LoginActivity extends Activity {
                             facebookName = Profile.getCurrentProfile().getName();
                             System.out.println("profile id = "+facebookUserID);
                             Intent intent_main = new Intent(getApplicationContext(), HomeActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt("BACK", 0);
+                            intent_main.putExtras(bundle);
                             startActivity(intent_main);
                         }
 

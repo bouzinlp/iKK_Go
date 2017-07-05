@@ -401,13 +401,7 @@ public class FoodActivity extends AppCompatActivity {
     }
 
     private void  selectfood(String[] foodarray   ) {
-        /*final String[] items =foodarray;
-        String temparray;
 
-        for(int i = 0 ; i<items.length-1;i++){
-            temparray = items[i+1];
-            items[i] = temparray;
-        }*/
         ArrayList<String> items = new ArrayList<>();
         for(int i=0;i<foodarray.length;++i){
             if(foodarray[i].contains("Generic"))
@@ -416,6 +410,10 @@ public class FoodActivity extends AppCompatActivity {
         for(int i=1;i<foodarray.length;++i){
             if(!foodarray[i].contains("Generic"))
                 items.add(foodarray[i]);
+        }
+        for(int i=0;i<foodarray.length;++i){
+            if(foodarray[i].contains(","))
+                System.out.println(foodarray[i]);
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
         builder.setTitle("Select food");
@@ -430,21 +428,6 @@ public class FoodActivity extends AppCompatActivity {
         final ListView listview = alertDialog.getListView();
         listview.setDivider(new ColorDrawable(Color.GRAY));
         listview.setDividerHeight(2);
-
-        /*listview.post(new Runnable() {
-            @Override
-            public void run() {
-                if(listview.getCount()!=0){
-                    for(int i=0;i<listview.getCount();++i) {
-                        if (listview.getItemAtPosition(i).toString().contains("Generic")) {
-                            System.out.println("count = "+listview.getCount());
-                            System.out.println(i+"   "+listview.getItemAtPosition(i).toString());
-                            getViewByPosition(i,listview).setBackgroundColor(Color.CYAN);
-                        }
-                    }
-                }
-            }
-        });*/
         alertDialog.show();
     }
 
@@ -456,14 +439,4 @@ public class FoodActivity extends AppCompatActivity {
         grams_text.setText("100");
     }
 
-    private View getViewByPosition(int pos,ListView listView) {
-        final int firstListItemPosition = listView.getFirstVisiblePosition();
-        final int lastListItemPosition = firstListItemPosition + listView.getChildCount() - 1;
-            if (pos < firstListItemPosition || pos > lastListItemPosition ) {
-                return  listView.getAdapter().getView(pos, null, listView);
-            } else {
-                final int childIndex = pos - firstListItemPosition;
-                return  listView.getChildAt(childIndex);
-            }
-    }
 }
