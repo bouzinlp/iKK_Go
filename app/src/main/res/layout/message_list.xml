@@ -7,7 +7,6 @@
         android:layout_height="60dp"
         android:layout_width="60dp"
         android:layout_margin="5dp"
-
         android:id="@+id/imgCommitPerson"
         android:layout_gravity="center"/>
     <LinearLayout
