@@ -26,7 +26,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bar_color"
-                android:text="Birthday"
+                android:text="@string/select_day"
                 android:textColor="@color/black"
                 android:id="@+id/birth_day_button"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -97,7 +97,7 @@
                     android:layout_height="match_parent"
                     android:layout_width="80dp"
                     android:id="@+id/weight_edit_text"
-                    android:hint="kg"
+                    android:hint="@string/enter_weight"
                     android:textColor="@color/black"
                     android:background="@drawable/rectangle_drawable"
                     android:gravity="right"

@@ -5,36 +5,36 @@
         <item
             android:id="@+id/home"
             android:icon="@drawable/ic_home_48"
-            android:title="Home" />
+            android:title="主頁" />
         <item
             android:id="@+id/food_list"
             android:icon="@drawable/ic_list_white_48dp"
-            android:title="Food and Sport" />
+            android:title="飲食和運動" />
         <item
             android:id="@+id/new_calendar"
             android:icon="@drawable/ic_perm_contact_calendar_white_48dp"
-            android:title="Calendar"/>
+            android:title="月曆"/>
         <item
             android:id="@+id/Import"
             android:icon="@drawable/ic_photo_camera_white_48dp"
-            android:title="Import food" />
+            android:title="食物辨識" />
         <item
             android:id="@+id/message"
             android:icon="@drawable/ic_message_white_48dp"
-            android:title="Message" />
+            android:title="訊息" />
         <item
             android:id="@+id/setting_list"
             android:icon="@drawable/ic_settings_white_48dp"
-            android:title="Settings"/>
+            android:title="設定"/>
         <item
             android:id="@+id/blood_pressure"
             android:icon="@drawable/ic_blood_pressure_48"
-            android:title="My blood Pressure"/>
+            android:title="血壓紀錄"/>
 
         <item
             android:id="@+id/mail"
             android:icon="@drawable/ic_mail_48"
-            android:title="Contact us"/>
+            android:title="線上客服"/>
     </group>
 
 </menu>

@@ -8,7 +8,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.nthucs.prototype.Activity.HomeActivity"
     android:background="@drawable/background_color"
-    tools:showIn="@layout/app_bar_home">
+    >
 
     <LinearLayout
         android:orientation="vertical"

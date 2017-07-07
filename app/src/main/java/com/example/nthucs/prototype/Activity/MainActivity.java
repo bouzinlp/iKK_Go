@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTitle("飲食和運動");
         //first run settings
         System.out.print("==============HOME FIRST RUN TEST=============");
         Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE).getBoolean("isFirstRun", true);
@@ -462,21 +463,21 @@ public class MainActivity extends AppCompatActivity
         switch (foodId) {
             case R.id.add_event:
                 // string in dialog
-                final CharSequence[] items = { "New Food", "New Sport", "Cancel" };
+                final CharSequence[] items = { "食物", "運動", "取消" };
 
                 // use alert dialog to select add new food or sport event
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Add Event");
+                builder.setTitle("新增事件");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int index) {
-                        if (items[index].equals("New Food")) {
+                        if (items[index].equals("食物")) {
                             Intent intent_food = new Intent("com.example.nthucs.prototype.ADD_FOOD");
                             startActivityForResult(intent_food, ADD_FOOD);
-                        } else if (items[index].equals("New Sport")) {
+                        } else if (items[index].equals("運動")) {
                             Intent intent_sport = new Intent("com.example.nthucs.prototype.ADD_SPORT");
                             startActivityForResult(intent_sport, ADD_SPORT);
-                        } else if (items[index].equals("Cancel")) {
+                        } else if (items[index].equals("取消")) {
                             dialog.dismiss();
                         }
                     }
@@ -630,13 +631,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void selectImage(){
-        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { "照相", "從相簿中選取", "取消" };
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Select Image");
+        builder.setTitle("新增食物");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("Take with Camera")) {
+                if (items[index].equals("照相")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
@@ -649,7 +650,7 @@ public class MainActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Choose from Gallery")) {
+                } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
@@ -662,11 +663,11 @@ public class MainActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Cancel")) {
+                } else if (items[index].equals("取消")) {
                     dialog.dismiss();
-                    Intent intent = new Intent();
-                    intent.setClass(MainActivity.this, MainActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent();
+//                    intent.setClass(MainActivity.this, MainActivity.class);
+//                    startActivity(intent);
                 }
             }
         });

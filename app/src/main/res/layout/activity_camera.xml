@@ -33,7 +33,7 @@
 
             <Button
                 android:id="@+id/cancel_item"
-                android:text="@android:string/cancel"
+                android:text="@string/cancel_button"
                 android:onClick="onSubmit"
                 android:padding="6sp"
                 android:layout_margin="2sp"

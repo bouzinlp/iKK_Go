@@ -96,7 +96,7 @@ public class HomeActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Home");
+        setTitle("主頁");
         setContentView(R.layout.activity_home_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -441,13 +441,13 @@ public class HomeActivity extends AppCompatActivity
     }
 
     private void selectImage(){
-        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { "照相", "從相簿中選取", "取消" };
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Select Image");
+        builder.setTitle("新增食物");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("Take with Camera")) {
+                if (items[index].equals("照相")) {
                     if (activityIndex == HOME_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
@@ -463,7 +463,7 @@ public class HomeActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Choose from Gallery")) {
+                } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == HOME_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
@@ -479,14 +479,14 @@ public class HomeActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Cancel")) {
+                } else if (items[index].equals("取消")) {
                     dialog.dismiss();
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("BACK", 1);
-                    intent.putExtras(bundle);
-                    intent.setClass(HomeActivity.this, HomeActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putInt("BACK", 1);
+//                    intent.putExtras(bundle);
+//                    intent.setClass(HomeActivity.this, HomeActivity.class);
+//                    startActivity(intent);
                 }
             }
         });

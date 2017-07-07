@@ -65,19 +65,16 @@ public class SettingsActivity extends AppCompatActivity
     private static final String FROM_GALLERY = "take_photo";
 
     // settings' title
-    private static final String myProfile = "My Profile";
-    private static final String myCurrentExercise = "My Current Exercise";//運動紀錄
-    private static final String myWeightLossGoal = "My Weight Loss Goal";
-    private static final String displayAsMetricImperial = "Display as metric/imperial";
-    private static final String weightChart = "Weight Chart";
-    private static final String calorieConsumption = "Calorie Consumption";
-    private static final String myFavourites = "My Favourites";
-    //private static final String myBloodPressure = "My Blood Pressure";
-    private static final String drinkWaterDiary = "Drink Water Diary";
-    private static final String myTemperatureRecord = "My Temperature Record";
-    private static final String testJsoup = "Test Jsoup";
+    private static final String myProfile = "個人資料";
+    private static final String myCurrentExercise = "運動情形";//運動紀錄
+    private static final String myWeightLossGoal = "減重目標";
+    private static final String displayAsMetricImperial = "單位設定";
+    private static final String weightChart = "體重圖表";
+    private static final String calorieConsumption = "熱量消耗";
+    private static final String drinkWaterDiary = "飲水日誌";
+    private static final String myTemperatureRecord = "體溫紀錄";
 	// , drinkWaterDiary , myTemperatureRecord
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, myFavourites , drinkWaterDiary, myTemperatureRecord ,testJsoup};
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, drinkWaterDiary, myTemperatureRecord};
 
     // list view for including textView
     private ListView setting_list;
@@ -99,7 +96,7 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Settings");
+        setTitle("設定");
         setContentView(R.layout.activity_settings_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -237,18 +234,6 @@ public class SettingsActivity extends AppCompatActivity
                         startActivity(intent_calorie_consumption);
                         finish();
                         break;
-                    case myFavourites:
-                        Intent intent_my_favourites = new Intent();
-                        intent_my_favourites.setClass(SettingsActivity.this, MyFavouritesActivity.class);
-                        startActivity(intent_my_favourites);
-                        finish();
-                        break;
-//                    case myBloodPressure:
-//                        Intent intent_my_blood_pressure = new Intent();
-//                        intent_my_blood_pressure.setClass(SettingsActivity.this , MyBloodPressure.class);
-//                        startActivity(intent_my_blood_pressure);
-//                        finish();
-//                        break;
                     case drinkWaterDiary:
                         Intent intent_drink_water_diary = new Intent();
                         intent_drink_water_diary.setClass(SettingsActivity.this , DrinkWaterDiary.class);
@@ -261,13 +246,6 @@ public class SettingsActivity extends AppCompatActivity
                         startActivity(intent_my_temperature_record);
                         finish();
                         break;
-					case testJsoup:
-                        Intent intent_test_jsoup = new Intent();
-                        intent_test_jsoup.setClass(SettingsActivity.this , TestJsoup.class);
-                        startActivity(intent_test_jsoup);
-                        finish();
-                        break;
-
                 }
             }
         };
@@ -404,13 +382,13 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     private void selectImage(){
-        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { "照相", "從相簿中選取", "取消" };
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Select Image");
+        builder.setTitle("新增食物");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("Take with Camera")) {
+                if (items[index].equals("照相")) {
                     if (activityIndex == SETTING_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
@@ -423,7 +401,7 @@ public class SettingsActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Choose from Gallery")) {
+                } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == SETTING_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
@@ -436,11 +414,11 @@ public class SettingsActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Cancel")) {
+                } else if (items[index].equals("取消")) {
                     dialog.dismiss();
-                    Intent intent = new Intent();
-                    intent.setClass(SettingsActivity.this, SettingsActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent();
+//                    intent.setClass(SettingsActivity.this, SettingsActivity.class);
+//                    startActivity(intent);
                 }
             }
         });

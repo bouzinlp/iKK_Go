@@ -13,7 +13,7 @@
 
         <TableRow>
             <TextView
-                android:text="@string/select_day"
+                android:text="@string/date_button"
                 android:padding="12dp"
                 android:layout_margin="10dp"
                 android:textColor="@color/black"
@@ -26,7 +26,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bar_color"
-                android:text="Date"
+                android:text="@string/select_day"
                 android:textColor="@color/black"
                 android:id="@+id/select_day_button"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -36,7 +36,7 @@
 
         <TableRow>
             <TextView
-                android:text="@string/select_time"
+                android:text="@string/time_button"
                 android:padding="12dp"
                 android:layout_margin="10dp"
                 android:textColor="@color/black"
@@ -49,7 +49,7 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:background="@drawable/bar_color"
-                android:text="Time"
+                android:text="@string/select_time"
                 android:textColor="@color/black"
                 android:id="@+id/select_time_button"
                 android:textAppearance="?android:attr/textAppearanceMedium" />

@@ -7,7 +7,7 @@
     <Button
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="@string/back_button"
         android:gravity="left|center_vertical"
         android:id="@+id/back_button"
         android:textSize="16sp"

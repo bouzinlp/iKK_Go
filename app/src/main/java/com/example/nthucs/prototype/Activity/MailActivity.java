@@ -44,7 +44,7 @@ public class MailActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTitle("Contact Us");
+        setTitle("線上客服");
         FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_mail_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -162,13 +162,13 @@ public class MailActivity extends AppCompatActivity
     }
 
     private void selectImage(){
-        final CharSequence[] items = { "Take with Camera", "Choose from Gallery", "Cancel" };
+        final CharSequence[] items = { "照相", "從相簿中選取", "取消" };
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("Select Image");
+        builder.setTitle("新增食物");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("Take with Camera")) {
+                if (items[index].equals("照相")) {
                     if (activityIndex == MAIL_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
@@ -181,7 +181,7 @@ public class MailActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Choose from Gallery")) {
+                } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == MAIL_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
@@ -194,11 +194,11 @@ public class MailActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("Cancel")) {
+                } else if (items[index].equals("取消")) {
                     dialog.dismiss();
-                    Intent intent = new Intent();
-                    intent.setClass(MailActivity.this, MailActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent();
+//                    intent.setClass(MailActivity.this, MailActivity.class);
+//                    startActivity(intent);
                 }
             }
         });
