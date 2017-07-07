@@ -219,7 +219,7 @@ public class MyProfileActivity extends AppCompatActivity {
         genderSpinner = (Spinner)findViewById(R.id.sex_spinner);
 
         // initialize adapter
-        genderListAdapter = new ArrayAdapter(MyProfileActivity.this, R.layout.spinner_layout, new String[]{"Male", "Female"});
+        genderListAdapter = new ArrayAdapter(MyProfileActivity.this, R.layout.spinner_layout, new String[]{"男", "女"});
 
         // set adapter's drop down view
         genderListAdapter.setDropDownViewResource(R.layout.spinner_dropdown);
