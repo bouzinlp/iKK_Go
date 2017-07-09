@@ -623,6 +623,11 @@ public class MainActivity extends AppCompatActivity
             intent_new_calendar.setClass(MainActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
+        } else if (id == R.id.chat) {
+            Intent intent_chat_bot = new Intent();
+            intent_chat_bot.setClass(MainActivity.this, ChatBotActivity.class);
+            startActivity(intent_chat_bot);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
