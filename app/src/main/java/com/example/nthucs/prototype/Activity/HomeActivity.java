@@ -66,7 +66,7 @@ import static java.text.DateFormat.getTimeInstance;
  * Created by selab on 2016/8/15.
  */
 public class HomeActivity extends AppCompatActivity
-            implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final String TAG = "Prototype";
     private TextView exerciseTime,exerciseSteps,exerciseCalories,exerciseDistance;
@@ -433,10 +433,10 @@ public class HomeActivity extends AppCompatActivity
             intent_new_calendar.setClass(HomeActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        } else if (id == R.id.chat) {
-            Intent intent_chat_bot = new Intent();
-            intent_chat_bot.setClass(HomeActivity.this, ChatBotActivity.class);
-            startActivity(intent_chat_bot);
+        } else if (id == R.id.chat){
+            Intent intent_chat = new Intent();
+            intent_chat.setClass(HomeActivity.this, ChatBotActivity.class);
+            startActivity(intent_chat);
             finish();
         }
 
