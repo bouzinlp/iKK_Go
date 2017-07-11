@@ -226,10 +226,10 @@ public class HomeActivity extends AppCompatActivity
         protected void onPostExecute(Void unused)
         {
             super.onPostExecute(unused);
-            exerciseSteps.setText(getString(R.string.homeTextView,totalSteps,"\n步"));
-            exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),"\n卡"));
-            exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),"\n公尺"));
-            exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,"\n分"));
+            exerciseSteps.setText(getString(R.string.homeTextView,totalSteps,""));
+            exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),""));
+            exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),""));
+            exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,""));
             pd.dismiss();
 
             updateSport();
