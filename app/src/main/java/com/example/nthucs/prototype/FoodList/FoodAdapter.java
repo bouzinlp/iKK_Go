@@ -50,12 +50,12 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         TextView titleView = (TextView) foodView.findViewById(R.id.title_text);
 
         // 設定單一顏色
-        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
-        Color color = new Color();
-        background.setColor(color.parseColor("#3F51B5"));
+//        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
+//        Color color = new Color();
+//        background.setColor(color.parseColor("#3F51B5"));
 
         // 設定是否已選擇
-        selectedItem.setVisibility(food.isSelected() ? View.VISIBLE : View.INVISIBLE);
+        //selectedItem.setVisibility(food.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
         // 設定標題
         titleView.setText(food.getTitle());
