@@ -267,9 +267,9 @@ public class SettingsActivity extends AppCompatActivity
                 params.put("foodJSON", dbFunctions.composeFoodfromSQLite());
                 params.put("sportJSON",dbFunctions.composeSportfromSQLite());
                 params.put("healthJSON",dbFunctions.composeHealthfromSQLite());
-                System.out.println("AAAAAAAAAAA = "+dbFunctions.composeHealthfromSQLite());
+                System.out.println("AAAAAAAAAAA = "+dbFunctions.composeFoodfromSQLite());
                 client.setTimeout(10000);
-                client.post("http://140.114.88.136:80/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
+                client.post("http://140.114.88.144/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
                         prgDialog.hide();

@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nthucs.prototype"
     android:versionCode="1"
-    android:versionName="1.0">
+    android:versionName="1.0" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -20,32 +20,35 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
     <application
-        android:name=".Activity.createKey"
+        android:name="com.example.nthucs.prototype.Activity.createKey"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".Activity.LoginActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.LoginActivity" >
+
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.MainActivity"
+
+        <activity android:name="com.example.nthucs.prototype.Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.FoodActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.FoodActivity" >
             <intent-filter>
                 // add food
                 <action android:name="com.example.nthucs.prototype.ADD_FOOD" />
@@ -55,7 +58,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.CameraActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.CameraActivity" >
             <intent-filter>
                 // take picture
                 <action android:name="com.example.nthucs.prototype.TAKE_PICT" />
@@ -63,7 +66,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.GalleryActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.GalleryActivity" >
             <intent-filter>
                 // take photo from gallery
                 <action android:name="com.example.nthucs.prototype.TAKE_PHOTO" />
@@ -71,8 +74,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.CalendarActivity"
+        <activity android:name="com.example.nthucs.prototype.Activity.CalendarActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 // calendar view
@@ -81,8 +83,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.NewCalendarActivity"
+        <activity android:name="com.example.nthucs.prototype.Activity.NewCalendarActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 // calendar view
@@ -97,8 +98,7 @@
             android:authorities="com.facebook.app.FacebookContentProvider1095415993853029"
             android:exported="true" />
 
-        <activity
-            android:name=".Activity.SettingsActivity"
+        <activity android:name="com.example.nthucs.prototype.Activity.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 // settings view
@@ -109,85 +109,83 @@
             >
         </activity>
         >
-        <activity
-            android:name=".Activity.MessageActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
-            android:name=".Activity.MailActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".Activity.ChatRoomActivity" />
-        <activity android:name=".Activity.MyProfileActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.MessageActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name="com.example.nthucs.prototype.Activity.MailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name="com.example.nthucs.prototype.Activity.ChatRoomActivity" />
+        <activity android:name="com.example.nthucs.prototype.Activity.MyProfileActivity" >
             <intent-filter>
-
-                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
 
                 <action android:name="android.intent.action.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.MyCurrentExerciseActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.MyCurrentExerciseActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.MyWeightLossGoalActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.MyWeightLossGoalActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.DisplayAsMetricImperialActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.DisplayAsMetricImperialActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.WeightChartActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.WeightChartActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.CalorieConsumptionActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.CalorieConsumptionActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.MyFavouritesActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.MyFavouritesActivity" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity
-            android:name=".Activity.MyBloodPressure"
+        <activity android:name="com.example.nthucs.prototype.Activity.MyBloodPressure"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.DrinkWaterDiary">
+        <activity android:name="com.example.nthucs.prototype.Activity.DrinkWaterDiary" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.MyTemperatureRecord">
+        <activity android:name="com.example.nthucs.prototype.Activity.MyTemperatureRecord" >
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.TestJsoup">
+        <activity android:name="com.example.nthucs.prototype.Activity.TestJsoup">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name=".Activity.SportActivity">
+        <activity android:name="com.example.nthucs.prototype.Activity.SportActivity" >
             <intent-filter>
                 // add sport
                 <action android:name="com.example.nthucs.prototype.ADD_SPORT" />
@@ -198,8 +196,7 @@
             </intent-filter>
             >
         </activity>
-        <activity
-            android:name=".Activity.HomeActivity"
+        <activity android:name="com.example.nthucs.prototype.Activity.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!--
@@ -216,7 +213,8 @@
             android:theme="@style/com_facebook_activity_theme" />
         <activity
             android:name="com.facebook.CustomTabActivity"
-            android:exported="true"></activity>
+            android:exported="true" >
+        </activity>
         <activity android:name="com.facebook.CustomTabMainActivity" />
         <activity
             android:name="com.google.android.gms.common.api.GoogleApiActivity"
@@ -226,11 +224,13 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="d8374694cf0a3addb84233ea4443b20e673d62d2" />
 
-        <activity android:name=".Activity.ChatBotActivity"></activity>
+            <activity android:name=".Activity.ChatBotActivity"
+                android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

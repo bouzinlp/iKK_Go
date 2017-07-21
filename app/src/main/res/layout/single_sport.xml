@@ -9,15 +9,15 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_margin="3sp"
-        android:background="@drawable/item_drawable" >
+        android:background="@drawable/sport_drawable" >
 
         <ImageView
             android:id="@+id/selected_item"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
-            android:src="@drawable/selected_icon"
-            android:visibility="invisible" />
+            android:src="@drawable/ic_run_48"
+            android:visibility="visible" />
 
     </RelativeLayout>
 
@@ -26,14 +26,26 @@
         android:layout_height="match_parent"
         android:layout_margin="3sp"
         android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
 
         <TextView
             android:id="@+id/title_text"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
             android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/sport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:gravity="center_vertical"
+            android:textAlignment="viewEnd"/>
 
     </LinearLayout>
 
