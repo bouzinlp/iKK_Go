@@ -143,11 +143,7 @@ public class NewCalendarActivity extends AppCompatActivity
             intent_new_calendar.setClass(NewCalendarActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-<<<<<<< HEAD
         }  else if (id == R.id.chat) {
-=======
-        } else if (id == R.id.chat) {
->>>>>>> f6687832c56f5025932616e0a12a0b36ad18a95e
             Intent intent_chat_bot = new Intent();
             intent_chat_bot.setClass(NewCalendarActivity.this, ChatBotActivity.class);
             startActivity(intent_chat_bot);

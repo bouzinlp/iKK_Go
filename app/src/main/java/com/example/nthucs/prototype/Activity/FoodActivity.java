@@ -177,6 +177,7 @@ public class FoodActivity extends AppCompatActivity {
             } else {
                 // photo taken from gallery display with parsing uri
                 picUriString = food.getPicUriString();
+
                 picUri = Uri.parse(picUriString);
                 File file2 = new File(picUri.getPath());
 
@@ -225,13 +226,13 @@ public class FoodActivity extends AppCompatActivity {
                 float modifyPortions = Float.parseFloat(portionsText);
                 float modifyGrams = Float.parseFloat(gramsText);
                 if (originPortions == 0) originPortions = 1;
-                /*if (originGrams != modifyGrams) {
+                if (originGrams != modifyGrams) {
                     modifyPortions = modifyGrams / 100;
                     finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
                 } else if (originPortions != modifyPortions) {
                     modifyGrams = modifyPortions * 100;
                     finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
-                }*/
+                }
 
                 // set to food, back to main activity will be updated
                 food.setTitle(titleText);
@@ -289,9 +290,8 @@ public class FoodActivity extends AppCompatActivity {
 
     private void shareToFB(){
         try {
-            //File file = configFileName("P", ".jpg");
-            File file2 = new File(picUri.getPath());
-            Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file2));
+            File file = configFileName("P", ".jpg");
+            Bitmap image = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.fromFile(file));
             SharePhoto photo = new SharePhoto.Builder()
                     .setBitmap(image)
                     .build();
@@ -318,20 +318,7 @@ public class FoodActivity extends AppCompatActivity {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
-        /*NOTE   NEED TO DISTINGISH WHERE THE IMAGE PATH COME FROM*/
-        File file;
-        if (food.getPicUriString()!=null) {
-            // photo taken from gallery display with parsing uri
-            picUriString = food.getPicUriString();
-            picUri = Uri.parse(picUriString);
-            file = new File(picUri.getPath());
-        }
-        else{
-            // photo taken from camera display with config way
-            file = configFileName("P", ".jpg");
-        }
-        //File file = configFileName("P", ".jpg");
-        //File file = new File(picUri.getPath());
+        File file = configFileName("P", ".jpg");
         Uri uri = Uri.fromFile(file);
         shareIntent.putExtra(Intent.EXTRA_STREAM,uri);
         mShareActionProvider.setShareIntent(shareIntent);
@@ -415,7 +402,7 @@ public class FoodActivity extends AppCompatActivity {
 
     private void  selectfood(String[] foodarray   ) {
 
-        final ArrayList<String> items = new ArrayList<>();
+        ArrayList<String> items = new ArrayList<>();
         for(int i=0;i<foodarray.length;++i){
             if(foodarray[i].contains("Generic"))
                 items.add(foodarray[i]);
@@ -433,7 +420,7 @@ public class FoodActivity extends AppCompatActivity {
         builder.setItems(items.toArray(new String[items.size()]), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                String nowtext= items.get(index);
+                String nowtext= info[index];
                 handleInfoStr(nowtext);
             }
         });

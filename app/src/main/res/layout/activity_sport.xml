@@ -1,190 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_color">
+    android:stretchColumns="1,2,3,4"
+    android:background="@drawable/background_color"
+    tools:context=".Activity.SportActivity">
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_color"
-        android:stretchColumns="1,2,3,4"
-        tools:context=".Activity.SportActivity">
+        android:paddingTop="10dp">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="10dp">
+        <TextView
+            android:text="@string/sport_title"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textView" />
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_margin="3sp"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="10sp"
-                android:text="@string/sport_title"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
+        <!--<EditText
+            android:id="@+id/title_text"
+            android:hint="@string/enter_sport_title"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:layout_span="4"
+            android:textAppearance="?android:attr/textAppearanceMedium" />-->
 
-            <!--<EditText
-                android:id="@+id/title_text"
-                android:hint="@string/enter_sport_title"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:layout_margin="3sp"
-                android:layout_span="4"
-                android:textAppearance="?android:attr/textAppearanceMedium" />-->
+        <EditText
+            android:id="@+id/dialog_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_span="4"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <Button
+            android:id="@+id/go_search"
+            android:text="@string/search_button"
+            android:onClick="onSubmit"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:background="@drawable/bar_color"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <EditText
-                android:id="@+id/dialog_edittext"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_margin="3sp"
-                android:layout_span="4"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="6sp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
 
+    </TableRow>
+
+
+
+    <TableRow
+        android:paddingTop="10dp">
+        <TextView
+            android:text="@string/calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/calorie_text"
+            android:hint="@string/enter_calorie"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_span="4"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:paddingTop="10dp">
+
+        <TextView
+            android:text="@string/total_time"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/textView2" />
+
+        <EditText
+            android:id="@+id/hour_text"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/hour"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/minute_text"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_height="44dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:text="@string/min"
+            android:padding="6sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:paddingTop="10dp">
+
+        <TextView
+            android:text="@string/content"
+            android:layout_height="70sp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/rectangle_drawable"
+            android:gravity="center"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/content_text"
+            android:hint="@string/enter_content"
+            android:layout_gravity="top"
+            android:layout_height="70sp"
+            android:background="@drawable/rectangle_drawable"
+            android:padding="10sp"
+            android:layout_margin="3sp"
+            android:layout_weight="1"
+            android:layout_span="4"
+            android:textColor="@color/black"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="260dp"
+        android:stretchColumns="*">
+
+        <TableRow>
             <Button
-                android:id="@+id/go_search"
-                android:layout_margin="3sp"
-                android:background="@drawable/bar_color"
+                android:id="@+id/ok_item"
+                android:text="@string/affirm_button"
                 android:onClick="onSubmit"
                 android:padding="6sp"
-                android:text="@string/search_button"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-
-        </TableRow>
-
-
-        <TableRow android:paddingTop="10dp">
-
-            <TextView
                 android:layout_margin="3sp"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="10sp"
-                android:text="@string/calorie"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/calorie_text"
-                android:layout_margin="3sp"
-                android:layout_span="4"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle_drawable"
-                android:hint="@string/enter_calorie"
-                android:padding="10sp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-        </TableRow>
-
-        <TableRow android:paddingTop="10dp">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_margin="3sp"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="10sp"
-                android:text="@string/total_time"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/hour_text"
-                android:layout_height="44dp"
-                android:layout_margin="3sp"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="10sp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:layout_margin="3sp"
-                android:padding="6sp"
-                android:text="@string/hour"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/minute_text"
-                android:layout_height="44dp"
-                android:layout_margin="3sp"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle_drawable"
-                android:padding="10sp"
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            <TextView
-                android:layout_margin="3sp"
+            <Button
+                android:id="@+id/cancel_item"
+                android:text="@string/cancel_button"
+                android:onClick="onSubmit"
                 android:padding="6sp"
-                android:text="@string/min"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-        </TableRow>
-
-        <TableRow android:paddingTop="10dp">
-
-            <TextView
-                android:layout_height="70sp"
-                android:layout_gravity="center_vertical"
                 android:layout_margin="3sp"
-                android:background="@drawable/rectangle_drawable"
-                android:gravity="center"
-                android:padding="10sp"
-                android:text="@string/content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/content_text"
-                android:layout_height="70sp"
-                android:layout_gravity="top"
-                android:layout_margin="3sp"
-                android:layout_span="4"
-                android:layout_weight="1"
-                android:background="@drawable/rectangle_drawable"
-                android:hint="@string/enter_content"
-                android:padding="10sp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:background="@drawable/bar_color"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="260dp"
-            android:stretchColumns="*">
-
-            <TableRow>
-
-                <Button
-                    android:id="@+id/ok_item"
-                    android:layout_margin="3sp"
-                    android:background="@drawable/bar_color"
-                    android:onClick="onSubmit"
-                    android:padding="6sp"
-                    android:text="@string/affirm_button"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/black" />
-
-                <Button
-                    android:id="@+id/cancel_item"
-                    android:layout_margin="3sp"
-                    android:background="@drawable/bar_color"
-                    android:onClick="onSubmit"
-                    android:padding="6sp"
-                    android:text="@string/cancel_button"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="@color/black" />
-            </TableRow>
-
-        </TableLayout>
 
     </TableLayout>
-</ScrollView>
+
+</TableLayout>

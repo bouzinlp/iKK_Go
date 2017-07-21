@@ -38,7 +38,6 @@ import com.example.nthucs.prototype.Activity.CalorieConsumptionActivity;
 import com.example.nthucs.prototype.Activity.MyProfileActivity;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.Settings.Profile;
-import com.facebook.login.widget.ProfilePictureView;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
@@ -111,7 +110,6 @@ public class ChatBotActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-<<<<<<< HEAD
         //  宣告 recyclerView
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         messageArrayList = new ArrayList<>();
@@ -135,18 +133,6 @@ public class ChatBotActivity extends AppCompatActivity
                    final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
                    AIConfiguration.SupportedLanguages.English,
                    AIConfiguration.RecognitionEngine.System);
-=======
-        View headerView = navigationView.getHeaderView(0);
-        TextView facebookUsername = (TextView) headerView.findViewById(R.id.Facebook_name);
-        facebookUsername.setText("Hello, "+LoginActivity.facebookName);
-        ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
-        profilePictureView.setProfileId(LoginActivity.facebookUserID);
-
-        listenButton = (Button) findViewById(R.id.listenButton);
-        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
-                AIConfiguration.SupportedLanguages.ChineseTaiwan,
-                AIConfiguration.RecognitionEngine.System);
->>>>>>> f6687832c56f5025932616e0a12a0b36ad18a95e
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -421,13 +407,13 @@ public class ChatBotActivity extends AppCompatActivity
     }
 
     private void selectImage() {
-        final CharSequence[] items = {"照相", "從相簿中選取", "取消"};
+        final CharSequence[] items = {"Take with Camera", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setTitle("新增食物");
+        builder.setTitle("Select Image");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int index) {
-                if (items[index].equals("照相")) {
+                if (items[index].equals("Take with Camera")) {
                     if (activityIndex == ChATBOT_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
 
@@ -440,7 +426,7 @@ public class ChatBotActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("從相簿中選取")) {
+                } else if (items[index].equals("Choose from Gallery")) {
                     if (activityIndex == ChATBOT_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
@@ -453,11 +439,11 @@ public class ChatBotActivity extends AppCompatActivity
                         activity.startActivity(result);
                         activity.finish();
                     }
-                } else if (items[index].equals("取消")) {
+                } else if (items[index].equals("Cancel")) {
                     dialog.dismiss();
-//                    Intent intent = new Intent();
-//                    intent.setClass(ChatBotActivity.this, MailActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent();
+                    intent.setClass(ChatBotActivity.this, MailActivity.class);
+                    startActivity(intent);
                 }
             }
         });

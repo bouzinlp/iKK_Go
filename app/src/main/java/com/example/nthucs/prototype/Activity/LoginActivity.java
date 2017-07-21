@@ -115,7 +115,6 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onError(FacebookException exception) {
                         Log.v("mhealth", "onerror");
-                        Log.v("mhealth", exception.getMessage());
                         Toast.makeText(getApplicationContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

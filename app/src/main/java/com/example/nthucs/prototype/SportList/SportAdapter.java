@@ -50,21 +50,17 @@ public class SportAdapter extends ArrayAdapter<Sport> {
         RelativeLayout typeColor = (RelativeLayout) sportView.findViewById(R.id.type_color);
         ImageView selectedItem = (ImageView) sportView.findViewById(R.id.selected_item);
         TextView titleView = (TextView) sportView.findViewById(R.id.title_text);
-        TextView calorieView = (TextView) sportView.findViewById(R.id.sport);
 
         // 設定單一顏色
-//        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
-//        Color color = new Color();
-//        background.setColor(color.parseColor("#2E8B57"));
+        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
+        Color color = new Color();
+        background.setColor(color.parseColor("#2E8B57"));
 
         // 設定是否已選擇
-        //selectedItem.setVisibility(sport.isSelected() ? View.VISIBLE : View.INVISIBLE);
+        selectedItem.setVisibility(sport.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
         // 設定標題
         titleView.setText(sport.getTitle());
-        float cal = sport.getCalorie();
-        String cals = String.valueOf(cal);
-        calorieView.setText(cals);
 
         return sportView;
     }
