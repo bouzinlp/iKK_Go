@@ -134,12 +134,12 @@ public class ChatBotActivity extends AppCompatActivity
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
 
         //init Api ai listener
-//        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
-//                AIConfiguration.SupportedLanguages.ChineseTaiwan,
-//                AIConfiguration.RecognitionEngine.System);
-                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
-                   AIConfiguration.SupportedLanguages.English,
-                   AIConfiguration.RecognitionEngine.System);
+        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                AIConfiguration.SupportedLanguages.ChineseTaiwan,
+                AIConfiguration.RecognitionEngine.System);
+//                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
+//                   AIConfiguration.SupportedLanguages.English,
+//                   AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -263,7 +263,7 @@ public class ChatBotActivity extends AppCompatActivity
                     if (pro_BMI >= 24) {
                         parameterString += " 您過重了";
                     } else if (pro_BMI < 18.5) {
-                        parameterString += "您過輕了 均衡飲食有助身體健康";
+                        parameterString += " 您過輕了 均衡飲食有助身體健康";
                     } else parameterString += " BMI正常，請繼續保持";
                     break;
                 case "get_height_info":
