@@ -65,6 +65,7 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         String cals = String.valueOf(cal);
         calorieView.setText(cals);
 
+
         return foodView;
     }
 

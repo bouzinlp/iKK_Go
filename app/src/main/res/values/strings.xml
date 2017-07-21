@@ -117,4 +117,6 @@
     <string name="search_button">搜尋</string>
     <string name="back_button">返回</string>
     <string name="send_button">送出</string>
+
+    <string name="chat_bot_text">想說什麼呢?</string>
 </resources>

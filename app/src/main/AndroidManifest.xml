@@ -33,16 +33,14 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name="com.example.nthucs.prototype.Activity.LoginActivity" >
-
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER" />
+
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-
         <activity android:name="com.example.nthucs.prototype.Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -114,10 +112,11 @@
         </activity>
         <activity android:name="com.example.nthucs.prototype.Activity.MailActivity"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.ChatRoomActivity" />
-        <activity android:name="com.example.nthucs.prototype.Activity.MyProfileActivity" >
+            </activity>
+                <activity android:name="com.example.nthucs.prototype.Activity.ChatRoomActivity" />
+                <activity android:name="com.example.nthucs.prototype.Activity.MyProfileActivity" >
             <intent-filter>
+
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
 
                 <action android:name="android.intent.action.DEFAULT" />
@@ -229,8 +228,8 @@
             android:name="io.fabric.ApiKey"
             android:value="d8374694cf0a3addb84233ea4443b20e673d62d2" />
 
-            <activity android:name=".Activity.ChatBotActivity"
-                android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Activity.ChatBotActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

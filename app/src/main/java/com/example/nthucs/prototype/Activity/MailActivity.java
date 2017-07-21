@@ -154,7 +154,7 @@ public class MailActivity extends AppCompatActivity
             intent_new_calendar.setClass(MailActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        } else if (id == R.id.chat) {
+        }else if (id == R.id.chat) {
             Intent intent_chat_bot = new Intent();
             intent_chat_bot.setClass(MailActivity.this, ChatBotActivity.class);
             startActivity(intent_chat_bot);

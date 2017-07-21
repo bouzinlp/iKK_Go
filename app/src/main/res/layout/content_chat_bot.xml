@@ -25,6 +25,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:orientation="horizontal"
+        android:background="@android:color/white"
         android:weightSum="4">
 
         <android.support.v7.widget.AppCompatImageButton
@@ -37,19 +38,38 @@
             android:paddingLeft="10dp"
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_mic" />
-    </LinearLayout>
 
-    <Button
-        android:id="@+id/listenButton"
-        android:layout_width="368dp"
-        android:layout_height="60dp"
-        android:layout_weight="1"
-        android:textColor="@color/black"
-        android:background="@drawable/bar_color"
-        android:onClick="listenButtonOnClick"
-        android:text="聊天"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        <EditText
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="3.02"
+            android:background="@null"
+            android:lines="1"
+            android:paddingLeft="10dp"
+            android:hint="@string/chat_bot_text"/>
+
+        <!--<Button android:id="@+id/btn_send"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:text="ASK"
+            android:textSize="16dp"
+            android:textColor="@color/colorPrimary" />-->
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/btn_send"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:elevation="0dp"
+            android:paddingLeft="10dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/ic_send" />
+    </LinearLayout>
 
 </RelativeLayout>

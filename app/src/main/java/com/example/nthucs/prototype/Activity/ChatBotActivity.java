@@ -7,6 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -43,6 +47,8 @@ import java.util.Map;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
@@ -53,10 +59,14 @@ import io.fabric.sdk.android.services.concurrency.AsyncTask;
 
 public class ChatBotActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,AIListener {
-    private Button listenButton;
-    private Button Bswitch;
-    private TextView resultTextView;
+    private ImageButton btnSend;
+    private ImageButton btnRecord;
     private AIService aiService;
+    private RecyclerView recyclerView;
+    private ArrayList messageArrayList;
+    private ChatAdapter mAdapter;
+    private EditText inputMessage;
+    private boolean initialRequest;
 
     private Activity activity = ChatBotActivity.this;
     private int activityIndex = 7;
@@ -107,10 +117,29 @@ public class ChatBotActivity extends AppCompatActivity
         ProfilePictureView profilePictureView = (ProfilePictureView) headerView.findViewById(R.id.Facebook_profile_picture);
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
 
-        listenButton = (Button) findViewById(R.id.listenButton);
+        //  宣告 recyclerView
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        messageArrayList = new ArrayList<>();
+        mAdapter = new ChatAdapter(messageArrayList);
+        inputMessage = (EditText) findViewById(R.id.message);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+        this.inputMessage.setText("");
+        this.initialRequest = true;
+
+        btnSend = (ImageButton) findViewById(R.id.btn_send);
+        btnRecord= (ImageButton) findViewById(R.id.btn_record);
+
+        //init Api ai listener
         final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
                 AIConfiguration.SupportedLanguages.ChineseTaiwan,
                 AIConfiguration.RecognitionEngine.System);
+//                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
+//                   AIConfiguration.SupportedLanguages.English,
+//                   AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -146,6 +175,12 @@ public class ChatBotActivity extends AppCompatActivity
 //                }
 //            }
 //        }.execute(aiRequest);
+        btnRecord.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                    aiService.startListening();
+            }
+        });
+
     }
 
     public void onResult(final AIResponse response) {
@@ -185,7 +220,7 @@ public class ChatBotActivity extends AppCompatActivity
 
         final String speech = result.getFulfillment().getSpeech();
         // Get parameters
-        String parameterString = "Answer: ";
+        String parameterString = "";
         // if (result.getParameters() != null && !result.getParameters().isEmpty()) {
         for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
             //if(speech.equals("")) break;
@@ -228,7 +263,7 @@ public class ChatBotActivity extends AppCompatActivity
                     if (pro_BMI >= 24) {
                         parameterString += " 您過重了";
                     } else if (pro_BMI < 18.5) {
-                        parameterString += "您過輕了 均衡飲食有助身體健康";
+                        parameterString += " 您過輕了 均衡飲食有助身體健康";
                     } else parameterString += " BMI正常，請繼續保持";
                     break;
                 case "get_height_info":
@@ -244,10 +279,32 @@ public class ChatBotActivity extends AppCompatActivity
         //   else parameterString = "no parameter";
         parameterString += speech;
         // Show results in TextView.
-        resultTextView.setText("Query:" + result.getResolvedQuery() +
-                "\nAction: " + result.getAction() +
-                "\n" + parameterString);
+//        resultTextView.setText("Query:" + result.getResolvedQuery() +
+//                "\nAction: " + result.getAction() +
+//                "\n" + parameterString);
+        //TODO
+
+        Message inputMessage = new Message();
+        inputMessage.setQuery(result.getResolvedQuery());
+        inputMessage.setAct(result.getAction());
+        inputMessage.setAns(parameterString);
+        if(this.initialRequest) {
+            inputMessage.setId("1");
+            messageArrayList.add(inputMessage);
+            mAdapter.notifyDataSetChanged();
+            this.initialRequest = false;
+        }
+        else
+        {
+            inputMessage.setId("100");
+            messageArrayList.add(inputMessage);
+            mAdapter.notifyDataSetChanged();
+            this.initialRequest = true;
+        }
+
+
     }
+
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -312,11 +369,22 @@ public class ChatBotActivity extends AppCompatActivity
 
     @Override
     public void onError(final AIError error) {
-        resultTextView.setText(error.toString());
+
     }
 
-    public void listenButtonOnClick(final View view) {
-        aiService.startListening();
+//    public void listenButtonOnClick(final View view) {
+//        aiService.startListening();
+//    }
+
+    public void btn_sendButtonOnClick(Result result,String parameterString) {
+        //not finish
+        //TODO
+        Message inputMessage = new Message();
+        inputMessage.setQuery(result.getResolvedQuery());
+        inputMessage.setAct(result.getAction());
+        inputMessage.setAns(parameterString);
+        inputMessage.setId("1");
+        messageArrayList.add(inputMessage);
     }
 
     @Override

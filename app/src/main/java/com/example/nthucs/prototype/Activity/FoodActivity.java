@@ -318,7 +318,7 @@ public class FoodActivity extends AppCompatActivity {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("image/*");
-        /*NOTE   NEED TO DISTINGISH WHERE THE IMAGE PATH COME FROM*/
+         /*NOTE   NEED TO DISTINGISH WHERE THE IMAGE PATH COME FROM*/
         File file;
         if (food.getPicUriString()!=null) {
             // photo taken from gallery display with parsing uri

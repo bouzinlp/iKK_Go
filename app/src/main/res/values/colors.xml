@@ -9,4 +9,6 @@
     <color name="royal_blue">#4169E1</color>
     <color name="green">#009000</color>
     <color name="sea_green">#2E8B57</color>
+    <color name="bg_bubble_self">#62caa6</color>
+    <color name="bg_bubble_bot">#ecf0f1</color>
 </resources>

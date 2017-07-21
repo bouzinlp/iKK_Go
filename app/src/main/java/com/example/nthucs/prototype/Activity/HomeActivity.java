@@ -433,7 +433,7 @@ public class HomeActivity extends AppCompatActivity
             intent_new_calendar.setClass(HomeActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        } else if (id == R.id.chat){
+        } else if (id == R.id.chat) {
             Intent intent_chat = new Intent();
             intent_chat.setClass(HomeActivity.this, ChatBotActivity.class);
             startActivity(intent_chat);
@@ -497,4 +497,5 @@ public class HomeActivity extends AppCompatActivity
         });
         builder.show();
     }
+
 }
