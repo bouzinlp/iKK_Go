@@ -66,7 +66,7 @@ import static java.text.DateFormat.getTimeInstance;
  * Created by selab on 2016/8/15.
  */
 public class HomeActivity extends AppCompatActivity
-            implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener{
 
     public static final String TAG = "Prototype";
     private TextView exerciseTime,exerciseSteps,exerciseCalories,exerciseDistance;
@@ -226,10 +226,10 @@ public class HomeActivity extends AppCompatActivity
         protected void onPostExecute(Void unused)
         {
             super.onPostExecute(unused);
-            exerciseSteps.setText(getString(R.string.homeTextView,totalSteps,"\n步"));
-            exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),"\n卡"));
-            exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),"\n公尺"));
-            exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,"\n分"));
+            exerciseSteps.setText(getString(R.string.homeTextView,totalSteps,""));
+            exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),""));
+            exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),""));
+            exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,""));
             pd.dismiss();
 
             updateSport();
@@ -434,9 +434,9 @@ public class HomeActivity extends AppCompatActivity
             startActivity(intent_new_calendar);
             finish();
         } else if (id == R.id.chat) {
-            Intent intent_chat_bot = new Intent();
-            intent_chat_bot.setClass(HomeActivity.this, ChatBotActivity.class);
-            startActivity(intent_chat_bot);
+            Intent intent_chat = new Intent();
+            intent_chat.setClass(HomeActivity.this, ChatBotActivity.class);
+            startActivity(intent_chat);
             finish();
         }
 
@@ -497,4 +497,5 @@ public class HomeActivity extends AppCompatActivity
         });
         builder.show();
     }
+
 }

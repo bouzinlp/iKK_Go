@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.nthucs.prototype.R;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class FoodAdapter extends ArrayAdapter<Food> {
@@ -48,17 +49,22 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         RelativeLayout typeColor = (RelativeLayout) foodView.findViewById(R.id.type_color);
         ImageView selectedItem = (ImageView) foodView.findViewById(R.id.selected_item);
         TextView titleView = (TextView) foodView.findViewById(R.id.title_text);
+        TextView calorieView = (TextView) foodView.findViewById(R.id.calorie);
 
         // 設定單一顏色
-        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
-        Color color = new Color();
-        background.setColor(color.parseColor("#3F51B5"));
+//        GradientDrawable background = (GradientDrawable)typeColor.getBackground();
+//        Color color = new Color();
+//        background.setColor(color.parseColor("#3F51B5"));
 
         // 設定是否已選擇
-        selectedItem.setVisibility(food.isSelected() ? View.VISIBLE : View.INVISIBLE);
+        //selectedItem.setVisibility(food.isSelected() ? View.VISIBLE : View.INVISIBLE);
 
         // 設定標題
         titleView.setText(food.getTitle());
+        float cal = food.getCalorie();
+        String cals = String.valueOf(cal);
+        calorieView.setText(cals);
+
 
         return foodView;
     }
