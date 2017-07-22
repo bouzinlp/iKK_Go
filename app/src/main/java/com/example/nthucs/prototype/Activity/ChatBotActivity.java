@@ -134,12 +134,13 @@ public class ChatBotActivity extends AppCompatActivity
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
 
         //init Api ai listener
-        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
-                AIConfiguration.SupportedLanguages.ChineseTaiwan,
-                AIConfiguration.RecognitionEngine.System);
-//                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
-//                   AIConfiguration.SupportedLanguages.English,
-//                   AIConfiguration.RecognitionEngine.System);
+
+//        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+//                AIConfiguration.SupportedLanguages.ChineseTaiwan,
+//                AIConfiguration.RecognitionEngine.System);
+                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
+                   AIConfiguration.SupportedLanguages.English,
+                   AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
@@ -230,25 +231,64 @@ public class ChatBotActivity extends AppCompatActivity
             float pro_weight = curProfile.getWeight();
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
+
+            switch (result.getAction()){
+                case "Get_pressure":
+                    parameterString += "your blood pressure is " + String.valueOf(sys_pre) +
+                    "/" + String.valueOf(dia_pre) + ".";
+                    if(sys_pre < 90.0 || dia_pre < 60.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                    else if(sys_pre >= 140.0 || dia_pre >= 90.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                    else parameterString += " your blood pressure is normal, keep on hold";
+                    break;
+                case "Get_systolic_blood_pressure":
+                    parameterString += "your systolic pressure is " + String.valueOf(sys_pre) + ".";
+                    if (sys_pre < 90.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                    else if (sys_pre >= 140.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                    else parameterString += " your systolic pressure is normal, keep on hold";
+                    break;
+
+                case "Get_diastolic_blood_pressure":
+                    parameterString += "your diastolic pressure is " + String.valueOf(sys_pre);
+                    if (sys_pre < 90.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                    else if (sys_pre >= 140.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                    else parameterString += " your diastolic pressure is normal, keep on hold";
+                    break;
+
+                case "Get_BMI":
+                    parameterString += ("your BMI is " + String.valueOf(pro_BMI));
+                    if (pro_BMI >= 24) {
+                        parameterString += " You are overweight. Do exercise and control diet, plz";
+                    } else if (pro_BMI < 18.5) {
+                        parameterString += " You are overweight. pay attention to balanced diet and do exercise";
+                    } else parameterString += " Your BMI is normal. Congrats!";
+                    break;
+                case "Get_height":
+                    parameterString += ("Your height is " + String.valueOf(pro_height));
+                    break;
+                case "Get_weight":
+                    parameterString += ("Your weight is " + String.valueOf(pro_weight));
+                    break;
+            }
+/*
             switch (result.getAction()) {
                 case "get_pressure_info":
                     parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
                             "/" + String.valueOf(dia_pre);
-                    if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
+                    if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
                     else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                        parameterString += "您有高血壓，請前往醫院了解詳情";
+                        parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                     else parameterString += "您的血壓正常，請繼續保持";
                     break;
                 case "get_systolic_pressure_info":
                     parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
-                    if (sys_pre < 90.0) parameterString += "您有低血壓，請前往醫院了解詳情";
-                    else if (sys_pre >= 140.0) parameterString += "您有高血壓，請前往醫院了解詳情";
+                    if (sys_pre < 90.0) parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                    else if (sys_pre >= 140.0) parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
                     else parameterString += "您的收縮壓正常，請繼續保持";
                     break;
                 case "get_diastolic_pressure_info":
                     parameterString += "你的舒張壓為 " + String.valueOf(dia_pre);
-                    if (dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
-                    else if (dia_pre >= 90.0) parameterString += "您有高血壓，請前往醫院了解詳情";
+                    if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                    else if (dia_pre >= 90.0) parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                     else parameterString += "您的舒張壓正常，請繼續保持";
                     break;
                 case "get_pressure_high_or_low":
@@ -261,9 +301,9 @@ public class ChatBotActivity extends AppCompatActivity
 
                     parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
                     if (pro_BMI >= 24) {
-                        parameterString += " 您過重了";
+                        parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
                     } else if (pro_BMI < 18.5) {
-                        parameterString += " 您過輕了 均衡飲食有助身體健康";
+                        parameterString += " 正常範圍是18.5~24。您過輕了 均衡飲食有助身體健康";
                     } else parameterString += " BMI正常，請繼續保持";
                     break;
                 case "get_height_info":
@@ -272,7 +312,7 @@ public class ChatBotActivity extends AppCompatActivity
                 case "get_weight_info":
                     parameterString += ("您的體重為" + String.valueOf(pro_weight));
                     break;
-            }
+            }*/
         }
 
         //   }
