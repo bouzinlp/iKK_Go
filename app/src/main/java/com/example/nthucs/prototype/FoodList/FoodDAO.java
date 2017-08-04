@@ -10,6 +10,7 @@ import com.example.nthucs.prototype.Utility.MyDBHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class FoodDAO {
@@ -106,6 +107,19 @@ public class FoodDAO {
 
         cursor.close();
         return result;
+    }
+
+    public List<Food> getSelectedDate(int year, int month, int day) {
+        List<Food> result = getAll();
+        List<Food> finalResult = new ArrayList<>();
+        String date = year + "/" + month + "/" + day;
+
+        for (Food f : result){
+            if (f.getYYYYMD().equals(date))
+                finalResult.add(f);
+        }
+
+        return finalResult;
     }
 
     public Food get(long id) {

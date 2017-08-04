@@ -44,8 +44,8 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:gravity="end"
-            android:textAlignment="viewEnd"/>
+            android:gravity="center_vertical"
+            android:layout_marginLeft="100dp"/>
     </LinearLayout>
 
 </LinearLayout>

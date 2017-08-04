@@ -1,5 +1,6 @@
 package com.example.nthucs.prototype.SportList;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
@@ -55,6 +56,11 @@ public class Sport implements java.io.Serializable {
 
     public long getDatetime() {return datetime;}
     public String getLocaleDatetime() {return String.format(Locale.getDefault(), "%tF  %<tR", new Date(datetime));}
+    public String getYYYYMD() {
+        Date d = new Date(datetime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");
+        return sdf.format(d);
+    }
     public void setDatetime(long datetime) {this.datetime = datetime;}
 
     public long getTotalTime() {return totalTime;}

@@ -78,6 +78,7 @@ public class NewCalendarActivity extends AppCompatActivity
                 intent.putExtra("year", year);
                 intent.putExtra("month", month+1);
                 intent.putExtra("day", dayOfMonth);
+                intent.putExtra("DATE", calendarView.getDate());
                 startActivity(intent);
             }
         });

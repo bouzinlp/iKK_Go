@@ -41,6 +41,7 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -171,12 +172,19 @@ public class MainActivity extends AppCompatActivity
         //tabsController.processTabLayout();
 
         // food list data base
+        Intent intent = getIntent();
         foodDAO = new FoodDAO(getApplicationContext());
-        foods = foodDAO.getAll();
+        if (intent.getIntExtra("year", 0) == 0) foods = foodDAO.getAll();
+        else foods = foodDAO.getSelectedDate(intent.getIntExtra("year", 1970),
+                                    intent.getIntExtra("month", 1),
+                                    intent.getIntExtra("day", 1));
 
         // sport list data base
         sportDAO = new SportDAO(getApplicationContext());
-        sports = sportDAO.getAll();
+        if (intent.getIntExtra("year", 0) == 0) sports = sportDAO.getAll();
+        else sports = sportDAO.getSelectedDate(intent.getIntExtra("year", 1970),
+                                    intent.getIntExtra("month", 1),
+                                    intent.getIntExtra("day", 1));
 
         // initialize food & sport adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
@@ -359,6 +367,7 @@ public class MainActivity extends AppCompatActivity
                 // click position in food adapter
                 if (position < foodAdapter.getCount()) {
                     Food food = foodAdapter.getItem(position);
+                    //System.out.println("Main date =" + food.getYYYYMD());
 
                     if (selectedCount > 0) {
                         processMenu(food);
@@ -376,6 +385,7 @@ public class MainActivity extends AppCompatActivity
                     // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
                     Sport sport = sportAdapter.getItem(sport_position);
+                    //System.out.println("Main date = " + sport.getYYYYMD());
 
                     if (selectedCount > 0) {
                         processMenuFromSport(sport);

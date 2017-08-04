@@ -91,6 +91,19 @@ public class SportDAO {
         return result;
     }
 
+    public List<Sport> getSelectedDate(int year, int month, int day){
+        List<Sport> result = getAll();
+        List<Sport> finalResult = new ArrayList<>();
+        String date = year + "/" + month + "/" + day;
+
+        for (Sport s : result){
+            if (s.getYYYYMD().equals(date))
+                finalResult.add(s);
+        }
+
+        return finalResult;
+    }
+
     public Sport get(long id) {
         Sport sport = null;
 
