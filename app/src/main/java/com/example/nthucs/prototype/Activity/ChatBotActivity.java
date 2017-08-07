@@ -469,7 +469,7 @@ public class ChatBotActivity extends AppCompatActivity
                         // back to mail activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
-                        result.setClass(activity, MailActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
@@ -482,7 +482,7 @@ public class ChatBotActivity extends AppCompatActivity
                         // back to mail activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
-                        result.setClass(activity, MailActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }

@@ -400,7 +400,7 @@ public class MessageActivity extends AppCompatActivity
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
-                        result.setClass(activity, MessageActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
@@ -413,7 +413,7 @@ public class MessageActivity extends AppCompatActivity
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
-                        result.setClass(activity, MessageActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }

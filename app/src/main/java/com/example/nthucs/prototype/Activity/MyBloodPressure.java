@@ -412,7 +412,7 @@ public class MyBloodPressure extends AppCompatActivity
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
-                        result.setClass(activity, MyBloodPressure.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
@@ -425,7 +425,7 @@ public class MyBloodPressure extends AppCompatActivity
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
-                        result.setClass(activity, MyBloodPressure.class);
+                        result.setClass(activity, MailActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }

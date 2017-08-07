@@ -175,7 +175,7 @@ public class NewCalendarActivity extends AppCompatActivity
                         bundle.putInt("BACK", 1);
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.putExtras(bundle);
-                        result.setClass(activity, NewCalendarActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
@@ -191,7 +191,7 @@ public class NewCalendarActivity extends AppCompatActivity
                         bundle.putInt("BACK", 1);
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.putExtras(bundle);
-                        result.setClass(activity, NewCalendarActivity.class);
+                        result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
                     }
