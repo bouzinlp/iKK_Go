@@ -145,10 +145,12 @@ public class LoginActivity extends Activity {
         if(recordAudioPermission != PackageManager.PERMISSION_GRANTED){
             permissionList.add(Manifest.permission.RECORD_AUDIO);
         }
-        ActivityCompat.requestPermissions(
-                this,permissionList.toArray(new String[permissionList.size()])
-                ,REQUEST_MUTIPLE_PERMISSION
-        );
+        if(permissionList.size()!=0) {
+            ActivityCompat.requestPermissions(
+                    this, permissionList.toArray(new String[permissionList.size()])
+                    , REQUEST_MUTIPLE_PERMISSION
+            );
+        }
     }
 
     @Override

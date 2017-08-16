@@ -258,8 +258,11 @@ public class GalleryActivity extends AppCompatActivity {
         else if (Build.VERSION.SDK_INT < 19)
             realPath = RealPathUtil.getRealPathFromURI_API11to18(this, data.getData());
             // SDK > 19 (Android 4.4)
-        else
+        else if (Build.VERSION.SDK_INT == 19)
             realPath = RealPathUtil.getRealPathFromURI_API19(this, data.getData());
+        else{
+            realPath = RealPathUtil.getRealPathFromUri_AboveAPI19(this,data.getData());
+        }
         //set encodedString by compress bitmap
         encodedString = encodeImagetoString();
         // the address of the image on the SD card
