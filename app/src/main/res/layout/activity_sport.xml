@@ -78,6 +78,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_drawable"
                 android:hint="@string/enter_calorie"
+                android:inputType="number"
                 android:padding="10sp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/black" />
@@ -101,6 +102,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_drawable"
                 android:padding="10sp"
+                android:hint="0"
+                android:textDirection="firstStrongRtl"
+                android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/black" />
 
@@ -118,6 +122,9 @@
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_drawable"
                 android:padding="10sp"
+                android:inputType="number"
+                android:hint="0"
+                android:textDirection="firstStrongRtl"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
