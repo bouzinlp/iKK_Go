@@ -5,12 +5,14 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +49,7 @@ import java.util.List;
 import android.content.ActivityNotFoundException;
 import android.speech.RecognizerIntent;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,10 +94,30 @@ public class FoodActivity extends AppCompatActivity {
     private String[] info;
     String inputText;
     public ProgressDialog searchDialog;
+    private Spinner mealTypespinner;
+    private int mealTypeIndex = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
+
+        //spinner
+        mealTypespinner = (Spinner)findViewById(R.id.select_meal_spinner);
+        ArrayAdapter<CharSequence> mealList = ArrayAdapter.createFromResource(this,
+                R.array.meal_type,
+                android.R.layout.simple_spinner_dropdown_item);
+        mealTypespinner.setAdapter(mealList);
+        mealTypespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                mealTypeIndex = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+        });
 
         //voice
         txtText = (TextView) findViewById(R.id.txtText);
@@ -138,6 +162,7 @@ public class FoodActivity extends AppCompatActivity {
             calorie_text.setText(Float.toString(food.getCalorie()));
             portions_text.setText(Float.toString(food.getPortions()));
             grams_text.setText(Float.toString(food.getGrams()));
+            mealTypespinner.setSelection(food.getMealTypeIndex());
 
             isAddFood = false;
 
@@ -239,6 +264,7 @@ public class FoodActivity extends AppCompatActivity {
                 food.setCalorie(finalCalorie);
                 food.setPortions(modifyPortions);
                 food.setGrams(modifyGrams);
+                food.setMealTypeIndex(mealTypeIndex);
 
                 // if add food with photo, then also record establish time
                 if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {

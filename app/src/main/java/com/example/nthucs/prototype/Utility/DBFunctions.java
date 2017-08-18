@@ -91,6 +91,7 @@ public class DBFunctions {
                 map.put("foodCalories", cursor.getString(2));
                 map.put("foodTime", getDateTime(cursor.getLong(11)));
                 map.put("foodImage",cursor.getString(3));
+                map.put("mealTypeIndex",cursor.getString(12));
                 wordList.add(map);
             } while (cursor.moveToNext());
         }
