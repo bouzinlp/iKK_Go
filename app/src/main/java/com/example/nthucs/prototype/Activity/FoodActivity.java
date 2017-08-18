@@ -218,42 +218,52 @@ public class FoodActivity extends AppCompatActivity {
                 String portionsText = portions_text.getText().toString();
                 String gramsText = grams_text.getText().toString();
 
-                // related calorie, portion and grams
-                float finalCalorie = Float.parseFloat(calorieText);
-                float originPortions = food.getPortions();
-                float originGrams = food.getGrams();
-                float modifyPortions = Float.parseFloat(portionsText);
-                float modifyGrams = Float.parseFloat(gramsText);
-                if (originPortions == 0) originPortions = 1;
-                /*if (originGrams != modifyGrams) {
-                    modifyPortions = modifyGrams / 100;
-                    finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
-                } else if (originPortions != modifyPortions) {
-                    modifyGrams = modifyPortions * 100;
-                    finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
-                }*/
+                if (titleText.length() == 0) Toast.makeText(this, "食物名稱不可為空", Toast.LENGTH_SHORT).show();
+                else if (calorieText.length() == 0) Toast.makeText(this, "熱量不可為空", Toast.LENGTH_SHORT).show();
+                else if (portionsText.length() == 0) Toast.makeText(this, "食物份數不可為空", Toast.LENGTH_SHORT).show();
+                else if (gramsText.length() == 0) Toast.makeText(this, "食物重量不可為空", Toast.LENGTH_SHORT).show();
 
-                // set to food, back to main activity will be updated
-                food.setTitle(titleText);
-                food.setContent(contentText);
-                food.setCalorie(finalCalorie);
-                food.setPortions(modifyPortions);
-                food.setGrams(modifyGrams);
+                else {
+                    // related calorie, portion and grams
+                    float finalCalorie = Float.parseFloat(calorieText);
+                    float originPortions = food.getPortions();
+                    float originGrams = food.getGrams();
+                    float modifyPortions = Float.parseFloat(portionsText);
+                    float modifyGrams = Float.parseFloat(gramsText);
+                    if (originPortions == 0) originPortions = 1;
+                    /*if (originGrams != modifyGrams) {
+                        modifyPortions = modifyGrams / 100;
+                        finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+                    } else if (originPortions != modifyPortions) {
+                        modifyGrams = modifyPortions * 100;
+                        finalCalorie = (modifyPortions/originPortions)*Float.parseFloat(calorieText);
+                    }*/
 
-                // if add food with photo, then also record establish time
-                if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
-                    food.setDatetime(new Date().getTime());
+                    // set to food, back to main activity will be updated
+                    food.setTitle(titleText);
+                    food.setContent(contentText);
+                    food.setCalorie(finalCalorie);
+                    food.setPortions(modifyPortions);
+                    food.setGrams(modifyGrams);
+
+                    // if add food with photo, then also record establish time
+                    if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_FOOD")) {
+                        food.setDatetime(new Date().getTime());
+                    }
+
+                    Intent result = getIntent();
+                    result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
+                    setResult(Activity.RESULT_OK, result);
+                    finish();
                 }
-
-                Intent result = getIntent();
-                result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
-                setResult(Activity.RESULT_OK, result);
-                finish();
                 break;
             case R.id.go_searchFood:
-                searchDialog = ProgressDialog.show(this,"搜尋中","請稍後...");
-                inputText = dialogTitleEditText.getText().toString();
-                new searchFood().execute();
+                if (dialogTitleEditText.getText().toString().length() == 0) Toast.makeText(this, "食物名稱不可為空", Toast.LENGTH_SHORT).show();
+                else {
+                    searchDialog = ProgressDialog.show(this, "搜尋中", "請稍後...");
+                    inputText = dialogTitleEditText.getText().toString();
+                    new searchFood().execute();
+                }
                 break;
             case R.id.cancel_item:
                 finish();

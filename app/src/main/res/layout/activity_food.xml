@@ -106,6 +106,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
+                android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
@@ -132,6 +133,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
+                android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
@@ -158,6 +160,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
+                android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
