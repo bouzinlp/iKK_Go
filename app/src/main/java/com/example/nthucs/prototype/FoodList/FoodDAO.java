@@ -141,8 +141,8 @@ public class FoodDAO {
         result.setId(cursor.getLong(0));
         result.setCalorie(cursor.getFloat(2));
         result.setEncodedString(cursor.getString(3));
-        result.setPortions(cursor.getFloat(5));
-        result.setGrams(cursor.getFloat(6));
+        result.setPortions(cursor.getFloat(4));
+        result.setGrams(cursor.getFloat(5));
         result.setFileName(cursor.getString(6));
         result.setTitle(cursor.getString(7));
         result.setContent(cursor.getString(8));
