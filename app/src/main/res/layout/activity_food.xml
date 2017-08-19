@@ -106,7 +106,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
             <Spinner
                 android:id="@+id/select_meal_spinner"
@@ -137,7 +137,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 
@@ -164,7 +164,7 @@
                 android:layout_margin="3sp"
                 android:layout_weight="1"
                 android:textColor="@color/black"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>
 

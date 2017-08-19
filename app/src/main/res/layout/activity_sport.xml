@@ -78,7 +78,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/rectangle_drawable"
                 android:hint="@string/enter_calorie"
-                android:inputType="number"
+                android:inputType="numberDecimal"
                 android:padding="10sp"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/black" />

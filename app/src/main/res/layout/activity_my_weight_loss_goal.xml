@@ -28,6 +28,7 @@
                 android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
                 android:padding="7sp"
+                android:inputType="numberDecimal"
                 android:layout_margin="10sp"
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -49,6 +50,7 @@
                 android:textColor="@color/black"
                 android:background="@drawable/rectangle_drawable"
                 android:gravity="right"
+                android:inputType="numberDecimal"
                 android:padding="7sp"
                 android:layout_margin="10sp"
                 android:layout_weight="1"
