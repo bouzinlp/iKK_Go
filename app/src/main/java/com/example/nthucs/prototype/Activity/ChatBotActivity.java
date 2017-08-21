@@ -50,6 +50,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 
@@ -75,7 +76,7 @@ public class ChatBotActivity extends AppCompatActivity
     private static final int TAKE_PHOTO = 3;
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
-    private int flag = 0;
+    private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
 
     // To get user's blood pressure
     private Health curHealth;
@@ -92,6 +93,7 @@ public class ChatBotActivity extends AppCompatActivity
     private Profile curProfile;
 
     MyProfileActivity mypro = new MyProfileActivity();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -514,6 +516,9 @@ public class ChatBotActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.language_change){
+            Toast.makeText(ChatBotActivity.this,"work",Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

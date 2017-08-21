@@ -119,4 +119,5 @@
     <string name="send_button">送出</string>
 
     <string name="chat_bot_text">想說什麼呢?</string>
+    <string name="language_change">中英切換</string>
 </resources>
