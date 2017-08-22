@@ -103,7 +103,7 @@
                 android:background="@drawable/rectangle_drawable"
                 android:padding="10sp"
                 android:hint="0"
-                android:textDirection="firstStrongRtl"
+                android:gravity="right"
                 android:inputType="number"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/black" />
@@ -124,7 +124,7 @@
                 android:padding="10sp"
                 android:inputType="number"
                 android:hint="0"
-                android:textDirection="firstStrongRtl"
+                android:gravity="right"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
