@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
@@ -135,26 +136,32 @@ public class SportActivity extends AppCompatActivity {
             String hourText = hour_text.getText().toString();
             String minuteText = minute_text.getText().toString();
 
-            long totalTime = TimeUnit.HOURS.toMillis(Integer.parseInt(hourText))
-                                + TimeUnit.MINUTES.toMillis(Integer.parseInt(minuteText));
-            sport.setId(System.currentTimeMillis());
-            sport.setUserID(Long.parseLong(LoginActivity.facebookUserID));
-            sport.setTitle(titleText);
-            sport.setContent(contentText);
-            sport.setCalorie(Float.parseFloat(calorieText));
-            sport.setTotalTime(totalTime);
-            // add sport event first time
-            if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_SPORT")) {
-                sport.setDatetime(new Date().getTime());
+            if (titleText.length() == 0) Toast.makeText(this, "運動名稱不可為空", Toast.LENGTH_SHORT).show();
+            else if (calorieText.length() == 0) Toast.makeText(this, "熱量消耗不可為空", Toast.LENGTH_SHORT).show();
+            else if (hourText.length() == 0 && minuteText.length() == 0) Toast.makeText(this, "運動時間不可為空", Toast.LENGTH_SHORT).show();
+
+            else {
+                long totalTime = TimeUnit.HOURS.toMillis(Integer.parseInt(hourText))
+                        + TimeUnit.MINUTES.toMillis(Integer.parseInt(minuteText));
+                sport.setId(System.currentTimeMillis());
+                sport.setUserID(Long.parseLong(LoginActivity.facebookUserID));
+                sport.setTitle(titleText);
+                sport.setContent(contentText);
+                sport.setCalorie(Float.parseFloat(calorieText));
+                sport.setTotalTime(totalTime);
+                // add sport event first time
+                if (getIntent().getAction().equals("com.example.nthucs.prototype.ADD_SPORT")) {
+                    sport.setDatetime(new Date().getTime());
+                }
+
+                // output test
+                //System.out.println("hour: "+(totalTime/(1000*60*60)%24)+" minute: "+(totalTime/(1000*60)%60));
+
+                Intent result = getIntent();
+                result.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
+                setResult(Activity.RESULT_OK, result);
+                finish();
             }
-
-            // output test
-            //System.out.println("hour: "+(totalTime/(1000*60*60)%24)+" minute: "+(totalTime/(1000*60)%60));
-
-            Intent result = getIntent();
-            result.putExtra("com.example.nthucs.prototype.SportList.Sport", sport);
-            setResult(Activity.RESULT_OK, result);
-            finish();
         }
         else if(view.getId() == R.id.go_search){
             sportCalList.clear();

@@ -69,6 +69,7 @@
                 android:id="@+id/temperature_text"
                 android:gravity="right"
                 android:padding="7dp"
+                android:inputType="numberDecimal"
                 android:background="@drawable/rectangle_drawable"
                 android:layout_margin="10dp"
                 android:layout_weight="1"

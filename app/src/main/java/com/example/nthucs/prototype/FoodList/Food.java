@@ -37,6 +37,8 @@ public class Food implements java.io.Serializable {
 
     private String encodedString;
 
+    private int mealTypeIndex;
+
     public Food() {
         this.title = new String();
         this.content = new String();
@@ -117,5 +119,8 @@ public class Food implements java.io.Serializable {
 
     public void setEncodedString(String s){this.encodedString = s;}
     public String getEncodedString(){return encodedString;}
+
+    public void setMealTypeIndex(int i) {this.mealTypeIndex = i;}
+    public int getMealTypeIndex(){return mealTypeIndex;}
 }
 

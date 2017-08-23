@@ -210,9 +210,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
         }
 
         //sex
-        if (curProfile.getSex().equals("Male")) {
+        if (curProfile.getSex().equals("男")) {
             sex_num = 1;
-        } else if (curProfile.getSex().equals("Female")) {
+        } else if (curProfile.getSex().equals("女")) {
             sex_num = 0;
         }
 

@@ -119,5 +119,17 @@
     <string name="send_button">送出</string>
 
     <string name="chat_bot_text">想說什麼呢?</string>
+<<<<<<< HEAD
     <string name="language_change">中英切換</string>
+=======
+
+    <string-array name="meal_type">
+        <item>早餐</item>
+        <item>午餐</item>
+        <item>晚餐</item>
+        <item>點心</item>
+        <item>宵夜</item>
+        <item>其他</item>
+    </string-array>
+>>>>>>> b8f9ea7604ceff72304d4acc7a5997d284ad0497
 </resources>

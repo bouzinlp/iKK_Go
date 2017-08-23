@@ -29,6 +29,7 @@ public class FoodDAO {
     public static final String PICURISTRING_COLUMN = "picUriString";
     public static final String TAKEFROMCAMERA_COLUMN = "takeFromCamera";
     public static final String DATETIME_COLUMN = "datetime";
+    public static final String MEALTYPE_COLUMN = "mealType";
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +
@@ -43,7 +44,8 @@ public class FoodDAO {
                     CONTENT_COLUMN + " TEXT NOT NULL, "+
                     PICURISTRING_COLUMN + " TEXT, " +
                     TAKEFROMCAMERA_COLUMN + " TEXT NOT NULL, " +
-                    DATETIME_COLUMN + " INTEGER NOT NULL)";
+                    DATETIME_COLUMN + " INTEGER NOT NULL, " +
+                    MEALTYPE_COLUMN + " INTEGER NOT NULL)";
 
     private SQLiteDatabase db;
 
@@ -65,6 +67,7 @@ public class FoodDAO {
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
         cv.put(DATETIME_COLUMN, food.getDatetime());
+        cv.put(MEALTYPE_COLUMN,food.getMealTypeIndex());
 
         long id = this.db.insert(TABLE_NAME, null, cv);
 
@@ -86,6 +89,7 @@ public class FoodDAO {
         cv.put(PICURISTRING_COLUMN, food.getPicUriString());
         cv.put(TAKEFROMCAMERA_COLUMN, food.isTakeFromCamera());
         cv.put(DATETIME_COLUMN, food.getDatetime());
+        cv.put(MEALTYPE_COLUMN,food.getMealTypeIndex());
 
         String where = KEY_ID + "=" + food.getId();
 
@@ -141,14 +145,15 @@ public class FoodDAO {
         result.setId(cursor.getLong(0));
         result.setCalorie(cursor.getFloat(2));
         result.setEncodedString(cursor.getString(3));
-        result.setPortions(cursor.getFloat(5));
-        result.setGrams(cursor.getFloat(6));
+        result.setPortions(cursor.getFloat(4));
+        result.setGrams(cursor.getFloat(5));
         result.setFileName(cursor.getString(6));
         result.setTitle(cursor.getString(7));
         result.setContent(cursor.getString(8));
         result.setPicUriString(cursor.getString(9));
         result.setTakeFromCamera(cursor.getInt(10) > 0);
         result.setDatetime(cursor.getLong(11));
+        result.setMealTypeIndex(cursor.getInt(12));
 
         return result;
     }
