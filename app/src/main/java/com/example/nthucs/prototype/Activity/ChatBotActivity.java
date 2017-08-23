@@ -66,7 +66,7 @@ public class ChatBotActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private ArrayList messageArrayList;
     private ChatAdapter mAdapter;
-    private EditText inputMessage;
+    private EditText textMessage;
     private boolean initialRequest;
 
     private Activity activity = ChatBotActivity.this;
@@ -94,6 +94,8 @@ public class ChatBotActivity extends AppCompatActivity
 
     MyProfileActivity mypro = new MyProfileActivity();
 
+    //init Ai config
+    AIConfiguration config = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,64 +125,39 @@ public class ChatBotActivity extends AppCompatActivity
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         messageArrayList = new ArrayList<>();
         mAdapter = new ChatAdapter(messageArrayList);
-        inputMessage = (EditText) findViewById(R.id.message);
+        textMessage = (EditText) findViewById(R.id.message);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        this.inputMessage.setText("");
+        this.textMessage.setText("");
         this.initialRequest = true;
 
         btnSend = (ImageButton) findViewById(R.id.btn_send);
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
 
         //init Api ai listener
-
-//        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
-//                AIConfiguration.SupportedLanguages.ChineseTaiwan,
-//                AIConfiguration.RecognitionEngine.System);
-                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
-                   AIConfiguration.SupportedLanguages.English,
-                   AIConfiguration.RecognitionEngine.System);
+        //chinese ver.
+        config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                AIConfiguration.SupportedLanguages.ChineseTaiwan,
+                AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
-//        else {
-//            final AIConfiguration config = new AIConfiguration("420f06c5aeb74a7ebcb8d3d681a8f73a",
-//                    AIConfiguration.SupportedLanguages.English,
-//                    AIConfiguration.RecognitionEngine.System);
-//
-//            aiService = AIService.getService(this, config);
-//            aiService.setListener(this);
-//        }
 
-        //by texting
-//        final AIDataService aiDataService = new AIDataService(config);
-//        final AIRequest aiRequest = new AIRequest();
-//        aiRequest.setQuery("Hello");
-//
-//        new AsyncTask<AIRequest, Void, AIResponse>() {
-//            @Override
-//            protected AIResponse doInBackground(AIRequest... requests) {
-//                final AIRequest request = requests[0];
-//                try {
-//                    final AIResponse response = aiDataService.request(aiRequest);
-//                    return response;
-//                } catch (AIServiceException e) {
-//                }
-//                return null;
-//            }
-//            @Override
-//            protected void onPostExecute(AIResponse aiResponse) {
-//                if (aiResponse != null) {
-//                    // process aiResponse here
-//                }
-//            }
-//        }.execute(aiRequest);
+
         btnRecord.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                     aiService.startListening();
+            }
+        });
+
+
+        //by texting
+        btnSend.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                senMessage();
             }
         });
 
@@ -345,6 +322,66 @@ public class ChatBotActivity extends AppCompatActivity
         }
 
 
+    }
+
+    private void senMessage(){
+
+        final String inputmes = textMessage.getText().toString().trim();
+
+        final AIDataService aiDataService = new AIDataService(config);
+        final AIRequest aiRequest = new AIRequest();
+        aiRequest.setQuery(inputmes);
+        textMessage.setText("");
+
+        new AsyncTask<AIRequest, Void, AIResponse>() {
+            @Override
+            protected AIResponse doInBackground(AIRequest... requests) {
+                final AIRequest request = requests[0];
+                try {
+                    final AIResponse response = aiDataService.request(aiRequest);
+                    return response;
+                } catch (AIServiceException e) {
+                }
+                return null;
+            }
+            @Override
+            protected void onPostExecute(AIResponse aiResponse) {
+                if (aiResponse != null) {
+
+                    Result result = aiResponse.getResult();
+                    Message inputMessage = new Message();
+                    inputMessage.setQuery(result.getResolvedQuery());
+                    inputMessage.setAct(result.getAction());
+                    inputMessage.setAns(result.getFulfillment().getSpeech());
+
+                    //ToDo
+                    Message outputMessage = inputMessage;
+
+                    if(initialRequest) {
+                        inputMessage.setId("1");
+                        messageArrayList.add(inputMessage);
+                        mAdapter.notifyDataSetChanged();
+                        initialRequest = false;
+                    }
+                    else
+                    {
+                        inputMessage.setId("100");
+                        messageArrayList.add(inputMessage);
+                        mAdapter.notifyDataSetChanged();
+                        initialRequest = true;
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount()-1);
+                        }
+                    });
+
+                }
+            }
+        }.execute(aiRequest);
     }
 
 
@@ -518,7 +555,24 @@ public class ChatBotActivity extends AppCompatActivity
             return true;
         }
         if (id == R.id.language_change){
-            Toast.makeText(ChatBotActivity.this,"work",Toast.LENGTH_SHORT).show();
+            if(flag == 0){
+                config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
+                        AIConfiguration.SupportedLanguages.English,
+                        AIConfiguration.RecognitionEngine.System);
+                aiService = AIService.getService(this, config);
+                aiService.setListener(this);
+                flag = 1;
+                Toast.makeText(ChatBotActivity.this, "英文管家", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                        AIConfiguration.SupportedLanguages.ChineseTaiwan,
+                        AIConfiguration.RecognitionEngine.System);
+                aiService = AIService.getService(this, config);
+                aiService.setListener(this);
+                flag = 0;
+                Toast.makeText(ChatBotActivity.this, "中文管家", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
