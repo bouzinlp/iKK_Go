@@ -6,40 +6,32 @@ package com.example.nthucs.prototype.Activity;
 import java.io.Serializable;
 
 public class Message implements Serializable{
-    private String query;
+    private String message;
     private String action;
-    private String answer;
     String id;
 
     public Message() {
     }
 
-    public Message(String query, String action, String answer, String id) {
-        this.query = query;
+    public Message(String message, String action,String id) {
+        this.message = message;
         this.action = action;
-        this.answer = answer;
         this.id = id;
     }
 
-    public String getQuery() {
-        return query;
+    public String getMessage() {
+        return message;
     }
 
-    public void setQuery(String query) {
-        this.query = query;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public String getAns() {
-        return answer;
-    }
 
-    public void setAns(String answer) {
-        this.answer = answer;
-    }
     public String getAct() {return action;}
 
     public void setAct(String action){
-        this.answer = answer;
+        this.action = action;
     }
 
     public String getId() {return  id;}
