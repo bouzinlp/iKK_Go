@@ -17,11 +17,15 @@ import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.Date;
 import java.util.List;
+
+import static com.example.nthucs.prototype.R.id.graph;
 
 /**
  * Created by user on 2016/8/2.
@@ -55,6 +59,14 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
     // total calorie in the same days
     private int totalConCals[], totalAbsCals[];
 
+    // date label's number in axis X
+    private int mNumLabels = 3;
+
+    // X label date storage
+    private Date[] allDate;
+    //private Date startDate;
+    //private Date currentDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +89,10 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
 
         // from array list to data point
         for (int i = 0 ; i < consumptDays ; i++) {
-            conCalData[i] = new DataPoint(i, totalConCals[i]);
+            conCalData[i] = new DataPoint(allDate[i], totalConCals[i]);
         }
         for (int i = 0 ; i < absorbDays ; i++) {
-            absCalData[i] = new DataPoint(i, totalAbsCals[i]);
+            absCalData[i] = new DataPoint(allDate[i], totalAbsCals[i]);
         }
 
         // custom view in action bar
@@ -125,11 +137,19 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
 
     // example data for drawing calorie consumption chart
     private void drawExampleCalorieChart() {
-        GraphView graphView = (GraphView) findViewById(R.id.graph);
+        GraphView graphView = (GraphView) findViewById(graph);
+
         LineGraphSeries<DataPoint> consumeSeries = new LineGraphSeries<>(conCalData);
         consumeSeries.setColor(Color.argb(255, 255, 60, 60));
+        //consumeSeries.setDrawBackground(true);
+        consumeSeries.setAnimated(true);
+        consumeSeries.setDrawDataPoints(true);
         consumeSeries.setTitle("consume calorie");
+
         LineGraphSeries<DataPoint> absorbSeries = new LineGraphSeries<>(absCalData);
+        //absorbSeries.setDrawBackground(true);
+        absorbSeries.setAnimated(true);
+        absorbSeries.setDrawDataPoints(true);
         absorbSeries.setTitle("absorb calorie");
 
         // set manual Y bounds
@@ -139,8 +159,8 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
 
         // set manual X bounds
         graphView.getViewport().setYAxisBoundsManual(true);
-        graphView.getViewport().setMinX(0);
-        graphView.getViewport().setMaxX(findMaxDays()-1);
+        //graphView.getViewport().setMinX(0);
+        //graphView.getViewport().setMaxX(findMaxDays()-1);
 
         // activate horizontal scrolling
         //graphView.getViewport().setScrollable(true);
@@ -154,6 +174,18 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
 
         graphView.addSeries(consumeSeries);
         graphView.addSeries(absorbSeries);
+
+        // set date label formatter
+        graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(graphView.getContext()));
+        graphView.getGridLabelRenderer().setNumHorizontalLabels(mNumLabels);
+
+        // set manual X bounds to have nice steps
+        graphView.getViewport().setMinX(allDate[0].getTime());
+        graphView.getViewport().setMaxX(allDate[consumptDays-1].getTime());
+        graphView.getViewport().setXAxisBoundsManual(true);
+
+        // as we use dates as labels, the human rounding to nice readable numbers is not nessecary
+        graphView.getGridLabelRenderer().setHumanRounding(false);
     }
 
     // calculate the total days of consumption and absorption
@@ -165,24 +197,38 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
         // total calorie in the same days
         totalConCals = new int[30/*consumptDays*/];
         totalAbsCals = new int[30/*absorbDays*/];
+        allDate = new Date[30];
 
         for (int i = 0 ; i < foods.size() ; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(foods.get(i).getDatetime());
+            if (i == 0) {
+                //startDate = calendar.getTime();
+                allDate[i] = calendar.getTime();
+            } else if (i == foods.size()-1) {
+                //currentDate = calendar.getTime();
+            }
             eatDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
-            if (i > 0 && eatDays[i] != eatDays[i-1]) consumptDays++;
+            if (i > 0 && eatDays[i] != eatDays[i-1]) {
+                allDate[consumptDays] = calendar.getTime();
+                consumptDays++;
+            }
             totalConCals[consumptDays-1] += foods.get(i).getCalorie();
         }
         for (int i = 0 ; i < sports.size() ; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(sports.get(i).getDatetime());
             sportDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
-            if (i > 0 && sportDays[i] != sportDays[i-1]) absorbDays++;
+            if (i > 0 && sportDays[i] != sportDays[i-1]) {
+                absorbDays++;
+            }
             totalAbsCals[absorbDays-1] += sports.get(i).getCalorie();
         }
         System.out.println(consumptDays + " " + absorbDays);
         for (int i = 0; i < consumptDays ; i++) System.out.println(totalConCals[i]+"*");
         for (int i = 0; i < absorbDays ; i++) System.out.println(totalAbsCals[i]+"**");
+
+        mNumLabels = consumptDays;
     }
 
     // find maximum calorie in the consume & absorb days
