@@ -50,6 +50,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 
@@ -65,7 +66,7 @@ public class ChatBotActivity extends AppCompatActivity
     private RecyclerView recyclerView;
     private ArrayList messageArrayList;
     private ChatAdapter mAdapter;
-    private EditText inputMessage;
+    private EditText textMessage;
     private boolean initialRequest;
 
     private Activity activity = ChatBotActivity.this;
@@ -75,7 +76,7 @@ public class ChatBotActivity extends AppCompatActivity
     private static final int TAKE_PHOTO = 3;
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
-    private int flag = 0;
+    private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
 
     // To get user's blood pressure
     private Health curHealth;
@@ -92,6 +93,9 @@ public class ChatBotActivity extends AppCompatActivity
     private Profile curProfile;
 
     MyProfileActivity mypro = new MyProfileActivity();
+
+    //init Ai config
+    AIConfiguration config = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,64 +125,39 @@ public class ChatBotActivity extends AppCompatActivity
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         messageArrayList = new ArrayList<>();
         mAdapter = new ChatAdapter(messageArrayList);
-        inputMessage = (EditText) findViewById(R.id.message);
+        textMessage = (EditText) findViewById(R.id.message);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
-        this.inputMessage.setText("");
+        this.textMessage.setText("");
         this.initialRequest = true;
 
         btnSend = (ImageButton) findViewById(R.id.btn_send);
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
 
         //init Api ai listener
-
-//        final AIConfiguration config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
-//                AIConfiguration.SupportedLanguages.ChineseTaiwan,
-//                AIConfiguration.RecognitionEngine.System);
-                   final AIConfiguration config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
-                   AIConfiguration.SupportedLanguages.English,
-                   AIConfiguration.RecognitionEngine.System);
+        //chinese ver.
+        config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                AIConfiguration.SupportedLanguages.ChineseTaiwan,
+                AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
-//        else {
-//            final AIConfiguration config = new AIConfiguration("420f06c5aeb74a7ebcb8d3d681a8f73a",
-//                    AIConfiguration.SupportedLanguages.English,
-//                    AIConfiguration.RecognitionEngine.System);
-//
-//            aiService = AIService.getService(this, config);
-//            aiService.setListener(this);
-//        }
 
-        //by texting
-//        final AIDataService aiDataService = new AIDataService(config);
-//        final AIRequest aiRequest = new AIRequest();
-//        aiRequest.setQuery("Hello");
-//
-//        new AsyncTask<AIRequest, Void, AIResponse>() {
-//            @Override
-//            protected AIResponse doInBackground(AIRequest... requests) {
-//                final AIRequest request = requests[0];
-//                try {
-//                    final AIResponse response = aiDataService.request(aiRequest);
-//                    return response;
-//                } catch (AIServiceException e) {
-//                }
-//                return null;
-//            }
-//            @Override
-//            protected void onPostExecute(AIResponse aiResponse) {
-//                if (aiResponse != null) {
-//                    // process aiResponse here
-//                }
-//            }
-//        }.execute(aiRequest);
+
         btnRecord.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
                     aiService.startListening();
+            }
+        });
+
+
+        //by texting
+        btnSend.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View v) {
+                senMessage();
             }
         });
 
@@ -187,6 +166,104 @@ public class ChatBotActivity extends AppCompatActivity
     public void onResult(final AIResponse response) {
         Result result = response.getResult();
 
+        final String speech = result.getFulfillment().getSpeech();
+        // Get parameters
+        String parameterString = "";
+        //TODO
+
+        parameterString += aiResponses(parameterString,result);
+
+        parameterString += speech;
+
+        //TODO
+
+        Message inputMessage = new Message();
+        inputMessage.setMessage(result.getResolvedQuery());
+        inputMessage.setAct(result.getAction());
+        //inputMessage.setAns(parameterString);
+        inputMessage.setId("1");
+        messageArrayList.add(inputMessage);
+        mAdapter.notifyDataSetChanged();
+        this.initialRequest = false;
+
+  //      response
+        Message outMes = new Message();
+        outMes.setMessage(parameterString);
+        outMes.setId("2");
+        messageArrayList.add(outMes);
+
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.notifyDataSetChanged();
+                recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount()-1);
+            }
+        });
+
+
+    }
+
+    private void senMessage(){
+
+        final String inputmes = textMessage.getText().toString().trim();
+
+        final AIDataService aiDataService = new AIDataService(config);
+        final AIRequest aiRequest = new AIRequest();
+        aiRequest.setQuery(inputmes);
+        textMessage.setText("");
+
+
+        new AsyncTask<AIRequest, Void, AIResponse>() {
+            @Override
+            protected AIResponse doInBackground(AIRequest... requests) {
+                final AIRequest request = requests[0];
+                try {
+                    final AIResponse response = aiDataService.request(request);
+                    return response;
+                } catch (AIServiceException e) {
+                }
+                return null;
+            }
+            @Override
+            protected void onPostExecute(AIResponse aiResponse) {
+                if (aiResponse != null) {
+                    String parameterString = "";
+                    Result result = aiResponse.getResult();
+                    final String speech = result.getFulfillment().getSpeech();
+
+                    parameterString += aiResponses(parameterString,result);
+                    parameterString += speech;
+
+                    final Message inputMessage = new Message();
+                    inputMessage.setMessage(result.getResolvedQuery());
+                    inputMessage.setAct(result.getAction());
+
+                    inputMessage.setId("1");
+                    messageArrayList.add(inputMessage);
+                    mAdapter.notifyDataSetChanged();
+                    initialRequest = false;
+
+                    Message outMes = new Message();
+                    outMes.setMessage(parameterString);
+                    outMes.setId("2");
+                    messageArrayList.add(outMes);
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChanged();
+                            recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount()-1);
+                        }
+                    });
+
+                }
+            }
+        }.execute(aiRequest);
+    }
+
+    private String aiResponses(String parameterString,Result result) {
         //////to ger blood presure
         // initialize data base
         healthDAO = new HealthDAO(getApplicationContext());
@@ -218,13 +295,8 @@ public class ChatBotActivity extends AppCompatActivity
         } else {
             curProfile = profileList.get(profileList.size() - 1);
         }
-
-        final String speech = result.getFulfillment().getSpeech();
-        // Get parameters
-        String parameterString = "";
-        // if (result.getParameters() != null && !result.getParameters().isEmpty()) {
         for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
-            //if(speech.equals("")) break;
+
             float sys_pre = curHealth.getSystolicBloodPressure();
             float dia_pre = curHealth.getDiastolicBloodPressure();
             float pro_height = curProfile.getHeight();
@@ -232,119 +304,103 @@ public class ChatBotActivity extends AppCompatActivity
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
 
-            switch (result.getAction()){
-                case "Get_pressure":
-                    parameterString += "your blood pressure is " + String.valueOf(sys_pre) +
-                    "/" + String.valueOf(dia_pre) + ".";
-                    if(sys_pre < 90.0 || dia_pre < 60.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
-                    else if(sys_pre >= 140.0 || dia_pre >= 90.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                    else parameterString += " your blood pressure is normal, keep on hold";
-                    break;
-                case "Get_systolic_blood_pressure":
-                    parameterString += "your systolic pressure is " + String.valueOf(sys_pre) + ".";
-                    if (sys_pre < 90.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
-                    else if (sys_pre >= 140.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                    else parameterString += " your systolic pressure is normal, keep on hold";
-                    break;
+            if (flag == 1) {
+                switch (result.getAction()) {
+                    case "Get_pressure":
+                        parameterString += "your blood pressure is " + String.valueOf(sys_pre) +
+                                "/" + String.valueOf(dia_pre) + ".";
+                        if (sys_pre < 90.0 || dia_pre < 60.0)
+                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                        else if (sys_pre >= 140.0 || dia_pre >= 90.0)
+                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " your blood pressure is normal, keep on hold";
+                        break;
+                    case "Get_systolic_blood_pressure":
+                        parameterString += "your systolic pressure is " + String.valueOf(sys_pre) + ".";
+                        if (sys_pre < 90.0)
+                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                        else if (sys_pre >= 140.0)
+                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " your systolic pressure is normal, keep on hold";
+                        break;
 
-                case "Get_diastolic_blood_pressure":
-                    parameterString += "your diastolic pressure is " + String.valueOf(sys_pre);
-                    if (sys_pre < 90.0) parameterString += " you have low blood pressure,go to see a doctor, plz.";
-                    else if (sys_pre >= 140.0) parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                    else parameterString += " your diastolic pressure is normal, keep on hold";
-                    break;
+                    case "Get_diastolic_blood_pressure":
+                        parameterString += "your diastolic pressure is " + String.valueOf(sys_pre);
+                        if (sys_pre < 90.0)
+                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                        else if (sys_pre >= 140.0)
+                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " your diastolic pressure is normal, keep on hold";
+                        break;
 
-                case "Get_BMI":
-                    parameterString += ("your BMI is " + String.valueOf(pro_BMI));
-                    if (pro_BMI >= 24) {
-                        parameterString += " You are overweight. Do exercise and control diet, plz";
-                    } else if (pro_BMI < 18.5) {
-                        parameterString += " You are overweight. pay attention to balanced diet and do exercise";
-                    } else parameterString += " Your BMI is normal. Congrats!";
-                    break;
-                case "Get_height":
-                    parameterString += ("Your height is " + String.valueOf(pro_height));
-                    break;
-                case "Get_weight":
-                    parameterString += ("Your weight is " + String.valueOf(pro_weight));
-                    break;
+                    case "Get_BMI":
+                        parameterString += ("your BMI is " + String.valueOf(pro_BMI));
+                        if (pro_BMI >= 24) {
+                            parameterString += " You are overweight. Do exercise and control diet, plz";
+                        } else if (pro_BMI < 18.5) {
+                            parameterString += " You are overweight. pay attention to balanced diet and do exercise";
+                        } else parameterString += " Your BMI is normal. Congrats!";
+                        break;
+                    case "Get_height":
+                        parameterString += ("Your height is " + String.valueOf(pro_height));
+                        break;
+                    case "Get_weight":
+                        parameterString += ("Your weight is " + String.valueOf(pro_weight));
+                        break;
+                }
+            } else {
+                switch (result.getAction()) {
+                    case "get_pressure_info":
+                        parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
+                                "/" + String.valueOf(dia_pre);
+                        if (sys_pre < 90.0 || dia_pre < 60.0)
+                            parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                        else if (sys_pre >= 140.0 || dia_pre >= 90.0)
+                            parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                        else parameterString += "您的血壓正常，請繼續保持";
+                        break;
+                    case "get_systolic_pressure_info":
+                        parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
+                        if (sys_pre < 90.0)
+                            parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                        else if (sys_pre >= 140.0)
+                            parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
+                        else parameterString += "您的收縮壓正常，請繼續保持";
+                        break;
+                    case "get_diastolic_pressure_info":
+                        parameterString += "你的舒張壓為 " + String.valueOf(dia_pre);
+                        if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                        else if (dia_pre >= 90.0)
+                            parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                        else parameterString += "您的舒張壓正常，請繼續保持";
+                        break;
+                    case "get_pressure_high_or_low":
+                        if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
+                        else if (sys_pre >= 140.0 || dia_pre >= 90.0)
+                            parameterString += "您有高血壓，請前往醫院了解詳情";
+                        else parameterString += "您的血壓正常，請繼續保持";
+                        break;
+                    case "get_bmi_info":
+
+                        parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
+                        if (pro_BMI >= 24) {
+                            parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
+                        } else if (pro_BMI < 18.5) {
+                            parameterString += " 正常範圍是18.5~24。您過輕了 均衡飲食有助身體健康";
+                        } else parameterString += " BMI正常，請繼續保持";
+                        break;
+                    case "get_height_info":
+                        parameterString += ("您的身高為" + String.valueOf(pro_height));
+                        break;
+                    case "get_weight_info":
+                        parameterString += ("您的體重為" + String.valueOf(pro_weight));
+                        break;
+                }
             }
-/*
-            switch (result.getAction()) {
-                case "get_pressure_info":
-                    parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
-                            "/" + String.valueOf(dia_pre);
-                    if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                    else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                        parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
-                    else parameterString += "您的血壓正常，請繼續保持";
-                    break;
-                case "get_systolic_pressure_info":
-                    parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
-                    if (sys_pre < 90.0) parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                    else if (sys_pre >= 140.0) parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
-                    else parameterString += "您的收縮壓正常，請繼續保持";
-                    break;
-                case "get_diastolic_pressure_info":
-                    parameterString += "你的舒張壓為 " + String.valueOf(dia_pre);
-                    if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                    else if (dia_pre >= 90.0) parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
-                    else parameterString += "您的舒張壓正常，請繼續保持";
-                    break;
-                case "get_pressure_high_or_low":
-                    if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
-                    else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                        parameterString += "您有高血壓，請前往醫院了解詳情";
-                    else parameterString += "您的血壓正常，請繼續保持";
-                    break;
-                case "get_bmi_info":
-
-                    parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
-                    if (pro_BMI >= 24) {
-                        parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
-                    } else if (pro_BMI < 18.5) {
-                        parameterString += " 正常範圍是18.5~24。您過輕了 均衡飲食有助身體健康";
-                    } else parameterString += " BMI正常，請繼續保持";
-                    break;
-                case "get_height_info":
-                    parameterString += ("您的身高為" + String.valueOf(pro_height));
-                    break;
-                case "get_weight_info":
-                    parameterString += ("您的體重為" + String.valueOf(pro_weight));
-                    break;
-            }*/
         }
 
-        //   }
-        //   else parameterString = "no parameter";
-        parameterString += speech;
-        // Show results in TextView.
-//        resultTextView.setText("Query:" + result.getResolvedQuery() +
-//                "\nAction: " + result.getAction() +
-//                "\n" + parameterString);
-        //TODO
-
-        Message inputMessage = new Message();
-        inputMessage.setQuery(result.getResolvedQuery());
-        inputMessage.setAct(result.getAction());
-        inputMessage.setAns(parameterString);
-        if(this.initialRequest) {
-            inputMessage.setId("1");
-            messageArrayList.add(inputMessage);
-            mAdapter.notifyDataSetChanged();
-            this.initialRequest = false;
-        }
-        else
-        {
-            inputMessage.setId("100");
-            messageArrayList.add(inputMessage);
-            mAdapter.notifyDataSetChanged();
-            this.initialRequest = true;
-        }
-
-
+        return parameterString;
     }
-
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -410,21 +466,6 @@ public class ChatBotActivity extends AppCompatActivity
     @Override
     public void onError(final AIError error) {
 
-    }
-
-//    public void listenButtonOnClick(final View view) {
-//        aiService.startListening();
-//    }
-
-    public void btn_sendButtonOnClick(Result result,String parameterString) {
-        //not finish
-        //TODO
-        Message inputMessage = new Message();
-        inputMessage.setQuery(result.getResolvedQuery());
-        inputMessage.setAct(result.getAction());
-        inputMessage.setAns(parameterString);
-        inputMessage.setId("1");
-        messageArrayList.add(inputMessage);
     }
 
     @Override
@@ -514,6 +555,26 @@ public class ChatBotActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.language_change){
+            if(flag == 0){
+                config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
+                        AIConfiguration.SupportedLanguages.English,
+                        AIConfiguration.RecognitionEngine.System);
+                aiService = AIService.getService(this, config);
+                aiService.setListener(this);
+                flag = 1;
+                Toast.makeText(ChatBotActivity.this, "英文管家", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                        AIConfiguration.SupportedLanguages.ChineseTaiwan,
+                        AIConfiguration.RecognitionEngine.System);
+                aiService = AIService.getService(this, config);
+                aiService.setListener(this);
+                flag = 0;
+                Toast.makeText(ChatBotActivity.this, "中文管家", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
