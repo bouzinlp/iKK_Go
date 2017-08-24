@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -288,7 +289,13 @@ public class GalleryActivity extends AppCompatActivity {
         // assign variable: picUri.toString
         picUriString = picUri.toString();
         // set bitmap to imageView
-        picture.setImageBitmap(bitmap);
+        System.out.println("Width = " + bitmap.getWidth());
+        System.out.println("Height = " + bitmap.getHeight());
+        Bitmap newBm = resizeBitmap(bitmap);
+        System.out.println("Width = " + newBm.getWidth());
+        System.out.println("Height = " + newBm.getHeight());
+        //picture.setImageBitmap(bitmap);
+        picture.setImageBitmap(newBm);
         picture.setVisibility(View.VISIBLE);
     }
 
@@ -347,5 +354,17 @@ public class GalleryActivity extends AppCompatActivity {
         // Encode Image to String
         encodedString = Base64.encodeToString(byte_arr, Base64.DEFAULT);
         return encodedString;
+    }
+
+    private Bitmap resizeBitmap(Bitmap bm){
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = 0.75f;
+        float scaleHeight = 0.75f;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        return Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
     }
 }
