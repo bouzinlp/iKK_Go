@@ -4,10 +4,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".Activity.MainActivity">
 
-    <item android:id="@+id/action_settings"
+    <!--item android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/-->
+
+    <item android:id="@+id/search_all"
+        android:title="@string/all"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_breakfast"
+        android:title="@string/breakfast"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_lunch"
+        android:title="@string/lunch"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_dinner"
+        android:title="@string/dinner"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_snack"
+        android:title="@string/snack"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_night_snack"
+        android:title="@string/night_snack"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_other"
+        android:title="@string/other"
+        android:onClick="searchMeal"
+        />
+
+    <item android:id="@+id/search_sport"
+        android:title="@string/sport"
+        android:onClick="searchMeal"
+        />
     <!--<item
         android:id="@+id/calendar_food"
         android:icon="@drawable/ic_perm_contact_calendar_white_48dp"
