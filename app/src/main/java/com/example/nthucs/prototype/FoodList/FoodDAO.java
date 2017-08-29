@@ -126,6 +126,17 @@ public class FoodDAO {
         return finalResult;
     }
 
+    public List<Food> getSelectedType(int type){
+        String where = MEALTYPE_COLUMN + " = " + type;
+        List<Food> result = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_NAME, null, where, null, null, null, null);
+
+        while (cursor.moveToNext()) result.add(getRecord(cursor));
+
+        cursor.close();
+        return result;
+    }
+
     public Food get(long id) {
         Food food = null;
 

@@ -128,4 +128,13 @@
         <item>宵夜</item>
         <item>其他</item>
     </string-array>
+
+    <string name="all">全部</string>
+    <string name="breakfast">早餐</string>
+    <string name="lunch">午餐</string>
+    <string name="dinner">晚餐</string>
+    <string name="snack">點心</string>
+    <string name="night_snack">宵夜</string>
+    <string name="other">其他</string>
+    <string name="sport">運動</string>
 </resources>

@@ -688,4 +688,124 @@ public class MainActivity extends AppCompatActivity
         });
         builder.show();
     }
+
+    public void searchMeal(MenuItem menuItem){
+        int searchId = menuItem.getItemId();
+
+        switch (searchId){
+            case R.id.search_all:
+                foods = foodDAO.getAll();
+                sports = sportDAO.getAll();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_breakfast:
+                foods = foodDAO.getSelectedType(0);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_lunch:
+                foods = foodDAO.getSelectedType(1);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_dinner:
+                foods = foodDAO.getSelectedType(2);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_snack:
+                foods = foodDAO.getSelectedType(3);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_night_snack:
+                foods = foodDAO.getSelectedType(4);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_other:
+                foods = foodDAO.getSelectedType(5);
+                sports.clear();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+            case R.id.search_sport:
+                foods.clear();
+                sports = sportDAO.getAll();
+
+                foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
+                sportAdapter = new SportAdapter(this, R.layout.single_sport, sports);
+
+                eventAdapter = new MergeAdapter();
+                eventAdapter.addAdapter(foodAdapter);
+                eventAdapter.addAdapter(sportAdapter);
+                event_list = (ListView)findViewById(R.id.event_list);
+                processEventListControllers();
+                event_list.setAdapter(eventAdapter);
+                break;
+        }
+    }
 }

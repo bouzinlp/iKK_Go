@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Prototype.iml" filepath="$PROJECT_DIR$/Prototype.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/iKK_Go.iml" filepath="$PROJECT_DIR$/iKK_Go.iml" />
+>>>>>>> 93781df3db4e83d25c94193bcfef7ff2991401e6
     </modules>
   </component>
 </project>
