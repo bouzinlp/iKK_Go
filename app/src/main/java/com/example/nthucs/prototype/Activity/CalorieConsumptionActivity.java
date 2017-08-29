@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
@@ -20,7 +21,10 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.Date;
 import java.util.List;
@@ -145,12 +149,24 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
         consumeSeries.setAnimated(true);
         consumeSeries.setDrawDataPoints(true);
         consumeSeries.setTitle("consume calorie");
+        consumeSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series consumeSeries, DataPointInterface dataPoint) {
+                Toast.makeText(CalorieConsumptionActivity.this, "消耗熱量: "+dataPoint.getY()+"kcal", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         LineGraphSeries<DataPoint> absorbSeries = new LineGraphSeries<>(absCalData);
         //absorbSeries.setDrawBackground(true);
         absorbSeries.setAnimated(true);
         absorbSeries.setDrawDataPoints(true);
         absorbSeries.setTitle("absorb calorie");
+        absorbSeries.setOnDataPointTapListener(new OnDataPointTapListener() {
+            @Override
+            public void onTap(Series absorbSeries, DataPointInterface dataPoint) {
+                Toast.makeText(CalorieConsumptionActivity.this, "攝取熱量: "+dataPoint.getY()+"kcal", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // set manual Y bounds
         graphView.getViewport().setYAxisBoundsManual(true);
@@ -195,8 +211,8 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
         int sportDays[] = new int[sports.size()];
 
         // total calorie in the same days
-        totalConCals = new int[30/*consumptDays*/];
         totalAbsCals = new int[30/*absorbDays*/];
+        totalConCals = new int[30/*consumptDays*/];
         allDate = new Date[30];
 
         for (int i = 0 ; i < foods.size() ; i++) {
@@ -204,29 +220,31 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
             calendar.setTimeInMillis(foods.get(i).getDatetime());
             if (i == 0) {
                 //startDate = calendar.getTime();
+                calendar.set(Calendar.HOUR_OF_DAY, 12);
                 allDate[i] = calendar.getTime();
             } else if (i == foods.size()-1) {
                 //currentDate = calendar.getTime();
             }
             eatDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
             if (i > 0 && eatDays[i] != eatDays[i-1]) {
-                allDate[consumptDays] = calendar.getTime();
-                consumptDays++;
+                calendar.set(Calendar.HOUR_OF_DAY, 12);
+                allDate[absorbDays] = calendar.getTime();
+                absorbDays++;
             }
-            totalConCals[consumptDays-1] += foods.get(i).getCalorie();
+            totalAbsCals[absorbDays-1] += foods.get(i).getCalorie();
         }
         for (int i = 0 ; i < sports.size() ; i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(sports.get(i).getDatetime());
             sportDays[i] = calendar.get(Calendar.DAY_OF_MONTH);
             if (i > 0 && sportDays[i] != sportDays[i-1]) {
-                absorbDays++;
+                consumptDays++;
             }
-            totalAbsCals[absorbDays-1] += sports.get(i).getCalorie();
+            totalConCals[consumptDays-1] += sports.get(i).getCalorie();
         }
-        System.out.println(consumptDays + " " + absorbDays);
-        for (int i = 0; i < consumptDays ; i++) System.out.println(totalConCals[i]+"*");
+        System.out.println(absorbDays + " " + consumptDays);
         for (int i = 0; i < absorbDays ; i++) System.out.println(totalAbsCals[i]+"**");
+        for (int i = 0; i < consumptDays ; i++) System.out.println(totalConCals[i]+"*");
 
         mNumLabels = consumptDays;
     }
