@@ -9,49 +9,58 @@
         <RelativeLayout android:layout_width="match_parent"
             android:layout_height="match_parent" >
 
+            <!--<Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:layout_margin="3dp"
+                android:layout_alignRight="@+id/graph"
+                android:layout_weght="1"
+                android:id="@+id/week_spinner"
+                android:layout_column="1" />-->
             <com.jjoe64.graphview.GraphView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/graph" />
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/graph"
-                android:maxLines="3"
-                android:layout_marginTop="8dp"
-                android:text="Example Graph"
-                android:textColor="#222"
-                android:textStyle="bold"
-                android:textSize="22dp" />
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/graph"
+            android:maxLines="3"
+            android:layout_marginTop="8dp"
+            android:text="Example Graph"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:textSize="22dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:maxLines="3"
-                android:text="With animation"
-                android:textColor="#666"
-                android:textSize="14dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:maxLines="3"
+            android:text="With animation"
+            android:textColor="#666"
+            android:textSize="14dp" />
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/item_drawable"
-                android:id="@+id/imgFullscreen"
-                android:layout_margin="5dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/title"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/item_drawable"
+            android:id="@+id/imgFullscreen"
+            android:layout_margin="5dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/title"/>
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/item_drawable"
-                android:id="@+id/imgSource"
-                android:layout_margin="5dp"
-                android:layout_toLeftOf="@id/imgFullscreen"
-                android:layout_alignTop="@id/title"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/item_drawable"
+            android:id="@+id/imgSource"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@id/imgFullscreen"
+            android:layout_alignTop="@id/title"/>
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 </LinearLayout>

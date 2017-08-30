@@ -658,7 +658,7 @@ public class MainActivity extends AppCompatActivity
 
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
-                        // back to setting activity
+                        // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
@@ -671,7 +671,7 @@ public class MainActivity extends AppCompatActivity
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
-                        // back to setting activity
+                        // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
