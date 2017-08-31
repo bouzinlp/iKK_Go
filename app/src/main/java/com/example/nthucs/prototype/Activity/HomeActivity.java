@@ -118,10 +118,10 @@ public class HomeActivity extends AppCompatActivity
         // call function to active tabs listener
         //TabsController tabsController = new TabsController(3, HomeActivity.this, tabLayout, viewPager);
         //tabsController.processTabLayout();
-        if (BACK == 0) pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
+        pd = ProgressDialog.show(HomeActivity.this,"計算中","取得資料...",true);
         SD = new SportDAO(getApplicationContext());
         //selectTab(1);
-        if (BACK == 0) buildFitnessClient();
+        buildFitnessClient();
     }
 
 
