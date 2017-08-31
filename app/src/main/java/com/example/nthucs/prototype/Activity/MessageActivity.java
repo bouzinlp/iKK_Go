@@ -393,30 +393,38 @@ public class MessageActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int index) {
                 if (items[index].equals("照相")) {
                     if (activityIndex == MESSAGE_ACTIVITY) {
-                        Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-
-                        activity.startActivityForResult(intent_camera, SCAN_FOOD);
-                    } else {
+                        /*Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
+                        activity.startActivityForResult(intent_camera, SCAN_FOOD);*/
+                        Intent result = new Intent();
+                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    } /*else {
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
-                    }
+                    }*/
                 } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == MESSAGE_ACTIVITY) {
-                        Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                        //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
-                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
-                    } else {
+                        /*Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
+                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);*/
+                        Intent result = new Intent();
+                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.setClass(activity, MainActivity.class);
+                        activity.startActivity(result);
+                        activity.finish();
+                    } /*else {
                         // back to setting activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
-                    }
+                    }*/
                 } else if (items[index].equals("取消")) {
                     dialog.dismiss();
 //                    Intent intent = new Intent();
