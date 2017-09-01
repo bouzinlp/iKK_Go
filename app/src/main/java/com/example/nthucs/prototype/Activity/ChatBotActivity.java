@@ -295,7 +295,7 @@ public class ChatBotActivity extends AppCompatActivity
         } else {
             curProfile = profileList.get(profileList.size() - 1);
         }
-        for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
+        //for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
 
             float sys_pre = curHealth.getSystolicBloodPressure();
             float dia_pre = curHealth.getDiastolicBloodPressure();
@@ -303,6 +303,7 @@ public class ChatBotActivity extends AppCompatActivity
             float pro_weight = curProfile.getWeight();
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
+            String J_Food = new String("J_Food");
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -395,9 +396,12 @@ public class ChatBotActivity extends AppCompatActivity
                     case "get_weight_info":
                         parameterString += ("您的體重為" + String.valueOf(pro_weight));
                         break;
+                    case "choose_food":
+                        parameterString += ("建議您先吃"+result.getStringParameter(J_Food));
+                        break;
                 }
             }
-        }
+        //}
 
         return parameterString;
     }
