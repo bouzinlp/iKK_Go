@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.cardemulation.HostNfcFService;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -36,11 +38,17 @@ import com.example.nthucs.prototype.SportList.SportAdapter;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.TabsController;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
+import com.example.nthucs.prototype.Utility.DBFunctions;
 import com.facebook.login.widget.ProfilePictureView;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -107,6 +115,11 @@ public class MainActivity extends AppCompatActivity
 
     public static boolean metricFlag = true;
 
+    DBFunctions dbFunctions;
+
+    Handler handler = new Handler();
+    SyncThread syncThread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,6 +157,7 @@ public class MainActivity extends AppCompatActivity
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
         // calorie data base
         calorieDAO = new CalorieDAO(getApplicationContext());
+        dbFunctions = new DBFunctions(this.getApplicationContext());
 
         // if the app is re-install or open in first time, then read csv and store in data base
         if (calorieDAO.isTableEmpty() == true) {
@@ -313,6 +327,79 @@ public class MainActivity extends AppCompatActivity
         super.onResume();
         // Always select tab 0
         //selectTab(0);
+    }
+
+    private class SyncThread extends Thread{
+        @Override
+        public void run() {
+            AsyncHttpClient client = new AsyncHttpClient();
+            RequestParams params = new RequestParams();
+            ArrayList<HashMap<String, String>> userList = dbFunctions.getAllUsers();
+            if(userList.size()!=0){
+                if(dbFunctions.dbSyncCount() != 0){
+                    params.put("usersJSON", dbFunctions.composeUserfromSQLite());
+                    params.put("foodJSON", dbFunctions.composeFoodfromSQLite());
+                    params.put("sportJSON",dbFunctions.composeSportfromSQLite());
+                    params.put("healthJSON",dbFunctions.composeHealthfromSQLite());
+                    System.out.println("AAAAAAAAAAA = "+dbFunctions.composeFoodfromSQLite());
+                    client.setTimeout(10000);
+                    client.post("http://140.114.88.144/mhealth/insertuser.php",params ,new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes) {
+                            try {
+                                String str = new String(bytes,"UTF-8");
+                                System.out.println(str);
+                                Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+
+
+                            } catch (UnsupportedEncodingException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int status, cz.msebera.android.httpclient.Header[] headers, byte[] bytes, Throwable throwable) {
+                            if(status == 404){
+                                Toast.makeText(getApplicationContext(), "Requested resource not found", Toast.LENGTH_LONG).show();
+                            }
+                            else if(status == 500){
+                                try {
+                                    String str = new String(bytes,"UTF-8");
+                                    System.out.println("500 "+str);
+                                } catch (UnsupportedEncodingException e) {
+                                    e.printStackTrace();
+                                }
+                                Toast.makeText(getApplicationContext(), "Something went wrong at server end", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Status ="+status, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Unexpected Error occcured! [Most common Error: Device might not be connected to Internet]", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "SQLite and Remote MySQL DBs are in Sync!", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "No data in SQLite DB, please do enter User name to perform Sync action", Toast.LENGTH_LONG).show();
+            }
+
+            //handler.post(syncThread);
+        }
+
+
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        syncThread = new SyncThread();
+        handler.post(syncThread);
+
+        System.out.println("Sync executed");
     }
 
     // Open food calories
@@ -658,7 +745,7 @@ public class MainActivity extends AppCompatActivity
 
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
-                        // back to setting activity
+                        // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
@@ -671,7 +758,7 @@ public class MainActivity extends AppCompatActivity
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
-                        // back to setting activity
+                        // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
