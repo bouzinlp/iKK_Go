@@ -304,6 +304,11 @@ public class ChatBotActivity extends AppCompatActivity
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
             String J_Food = new String("J_Food");
+            String D_Food = new String("D_Food");
+            String E_Food = new String("E_Food");
+            String B_Food = new String("B_Food");
+            String A_Food = new String("A_Food");
+            String I_Food = new String("I_Food");
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -397,7 +402,20 @@ public class ChatBotActivity extends AppCompatActivity
                         parameterString += ("您的體重為" + String.valueOf(pro_weight));
                         break;
                     case "choose_food":
-                        parameterString += ("建議您先吃"+result.getStringParameter(J_Food));
+                        if(result.getStringParameter(J_Food).isEmpty() == false)
+                            parameterString += ("建議您先吃"+result.getStringParameter(J_Food));
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
+                            parameterString+=("接著再吃");
+                            if(result.getStringParameter(D_Food).isEmpty() == false)
+                                parameterString += (result.getStringParameter(D_Food));
+                            if(result.getStringParameter(E_Food).isEmpty() == false)
+                                parameterString += (result.getStringParameter(E_Food));
+                        if(result.getStringParameter(B_Food).isEmpty() == false)
+                            parameterString += ("接著再吃"+result.getStringParameter(B_Food));
+                        if(result.getStringParameter(A_Food).isEmpty() == false)
+                            parameterString += ("接著再吃"+result.getStringParameter(A_Food));
+                        if(result.getStringParameter(I_Food).isEmpty() == false)
+                            parameterString += ("接著再吃"+result.getStringParameter(I_Food));
                         break;
                 }
             }
