@@ -145,7 +145,7 @@ public class ChatBotActivity extends AppCompatActivity
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
-
+        mAdapter.notifyDataSetChanged();
 
         btnRecord.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -202,6 +202,11 @@ public class ChatBotActivity extends AppCompatActivity
         });
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void senMessage(){
@@ -544,6 +549,13 @@ public class ChatBotActivity extends AppCompatActivity
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        //savedInstanceState.putString();
+        super.onSaveInstanceState(savedInstanceState);
+
     }
 
     @Override

@@ -2,18 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Prototype.iml" filepath="$PROJECT_DIR$/Prototype.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/iKK_Go.iml" filepath="$PROJECT_DIR$/iKK_Go.iml" />
-      <module fileurl="file://$PROJECT_DIR$/iKK_Go.iml" filepath="$PROJECT_DIR$/iKK_Go.iml" />
->>>>>>> 76f62fad031eb6c33c7d7640c92de4e7e87c97ff
-      <module fileurl="file://$PROJECT_DIR$/iKK_Go.iml" filepath="$PROJECT_DIR$/iKK_Go.iml" />
->>>>>>> 93781df3db4e83d25c94193bcfef7ff2991401e6
     </modules>
   </component>
 </project>
