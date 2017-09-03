@@ -139,7 +139,8 @@ public class ChatBotActivity extends AppCompatActivity
 
         //init Api ai listener
         //chinese ver.
-        config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+        //change server on 09/03
+        config = new AIConfiguration("67f6a79ea0d948f2aa2614c707f8cdc4",
                 AIConfiguration.SupportedLanguages.ChineseTaiwan,
                 AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
@@ -309,6 +310,7 @@ public class ChatBotActivity extends AppCompatActivity
             String B_Food = new String("B_Food");
             String A_Food = new String("A_Food");
             String I_Food = new String("I_Food");
+            String L_Food = new String("L_Food");
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -402,20 +404,55 @@ public class ChatBotActivity extends AppCompatActivity
                         parameterString += ("您的體重為" + String.valueOf(pro_weight));
                         break;
                     case "choose_food":
-                        if(result.getStringParameter(J_Food).isEmpty() == false)
-                            parameterString += ("建議您先吃"+result.getStringParameter(J_Food));
-                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
-                            parameterString+=("接著再吃");
-                            if(result.getStringParameter(D_Food).isEmpty() == false)
+                        int number = 0;
+                        parameterString+=("建議您先吃");
+                        if(result.getStringParameter(J_Food).isEmpty() == false){
+                            parameterString += (result.getStringParameter(J_Food));
+                            number =1;
+                        }
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false) {
+
+                            if(number == 1)
+                                parameterString += ("接著再吃");
+                            else
+                                number = 1; //set flag
+
+                            if (result.getStringParameter(D_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(D_Food));
-                            if(result.getStringParameter(E_Food).isEmpty() == false)
+                            if (result.getStringParameter(E_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false)
+                                    parameterString +=("");
                                 parameterString += (result.getStringParameter(E_Food));
-                        if(result.getStringParameter(B_Food).isEmpty() == false)
-                            parameterString += ("接著再吃"+result.getStringParameter(B_Food));
-                        if(result.getStringParameter(A_Food).isEmpty() == false)
-                            parameterString += ("接著再吃"+result.getStringParameter(A_Food));
-                        if(result.getStringParameter(I_Food).isEmpty() == false)
-                            parameterString += ("接著再吃"+result.getStringParameter(I_Food));
+                            }
+                        }
+                        if(result.getStringParameter(B_Food).isEmpty() == false) {
+                            if(number == 1)
+                                parameterString += ("接著再吃");
+                            else
+                                number = 1; //set flag
+                            parameterString += ( result.getStringParameter(B_Food));
+                        }
+                        if(result.getStringParameter(A_Food).isEmpty() == false) {
+                            if(number == 1)
+                                parameterString += ("接著再吃");
+                            else
+                                number = 1; //set flag
+                            parameterString += (result.getStringParameter(A_Food));
+                        }
+                        if(result.getStringParameter(I_Food).isEmpty() == false) {
+                            if(number == 1)
+                                parameterString += ("接著再吃");
+                            else
+                                number = 1; //set flag
+                            parameterString += ( result.getStringParameter(I_Food));
+                        }
+                        if(result.getStringParameter(L_Food).isEmpty() == false) {
+                            if(number == 1)
+                                parameterString += ("接著再吃");
+                            else
+                                number = 1; //set flag
+                            parameterString += (result.getStringParameter(L_Food));
+                        }
                         break;
                 }
             }
