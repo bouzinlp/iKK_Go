@@ -349,7 +349,7 @@ public class MainActivity extends AppCompatActivity
                             try {
                                 String str = new String(bytes,"UTF-8");
                                 System.out.println(str);
-                                Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "資料庫同步完成！", Toast.LENGTH_LONG).show();
 
 
                             } catch (UnsupportedEncodingException e) {
