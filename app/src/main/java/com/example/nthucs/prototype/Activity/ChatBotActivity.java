@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,6 +33,10 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
+import com.example.nthucs.prototype.FoodList.CalorieDAO;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.Settings.Health;
 import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Activity.CalorieConsumptionActivity;
@@ -41,7 +46,11 @@ import com.example.nthucs.prototype.Settings.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 import com.google.gson.JsonElement;
 
+import java.io.IOException;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,6 +86,7 @@ public class ChatBotActivity extends AppCompatActivity
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
     private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
+    private long local_datetime;
 
     // To get user's blood pressure
     private Health curHealth;
@@ -93,6 +103,16 @@ public class ChatBotActivity extends AppCompatActivity
     private Profile curProfile;
 
     MyProfileActivity mypro = new MyProfileActivity();
+
+    // data base for storing calorie data
+    private CalorieDAO calorieDAO;
+    // list of foodCal
+    private List<FoodCal> foodCalList = new ArrayList<>();
+    // data base for storing food list
+    private FoodDAO foodDAO;
+    // list of foods
+    private List<Food> foods;
+
 
     //init Ai config
     AIConfiguration config = null;
@@ -315,6 +335,25 @@ public class ChatBotActivity extends AppCompatActivity
             String A_Food = new String("A_Food");
             String I_Food = new String("I_Food");
 
+        // to get user already have eaten food
+        foodDAO = new FoodDAO(getApplicationContext());
+        foods = foodDAO.getAll();
+
+        double calories = 0.0;
+        calories = foods.get(0).getCalorie(); // get food cal
+
+        parameterString += foods.get(0).getTitle(); //get food name
+
+        parameterString += foods.get(0).getYYYYMD() + "\n"; //get food time
+
+        parameterString +=  foods.get(0).getLocaleDatetime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //先定義時間格式
+        Date dt = new Date();  //取得目前時間
+        String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
+
+        parameterString += "現在日期 " + dts;
+
             if (flag == 1) {
                 switch (result.getAction()) {
                     case "Get_pressure":
@@ -369,6 +408,7 @@ public class ChatBotActivity extends AppCompatActivity
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
                             parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                         else parameterString += "您的血壓正常，請繼續保持";
+                        parameterString += "你的卡洛里為 " + calories;
                         break;
                     case "get_systolic_pressure_info":
                         parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
@@ -422,6 +462,12 @@ public class ChatBotActivity extends AppCompatActivity
                         if(result.getStringParameter(I_Food).isEmpty() == false)
                             parameterString += ("接著再吃"+result.getStringParameter(I_Food));
                         break;
+                    /*
+                    * case "recom_food"
+                    *   if(re)
+                    *
+                    * */
+
                 }
             }
         //}
