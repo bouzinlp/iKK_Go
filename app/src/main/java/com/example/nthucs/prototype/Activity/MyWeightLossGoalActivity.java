@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
@@ -275,19 +276,34 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            boolean updatable = true;
             // set target weight and weekly target
-            curProfile.setWeightLossGoal(Float.parseFloat(target_weight_text.getText().toString()));
-            curProfile.setWeeklyLossWeight(Float.parseFloat(weekly_target_text.getText().toString()));
+            if (target_weight_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "目標體重不可為空", Toast.LENGTH_LONG).show();
+            }
+            else curProfile.setWeightLossGoal(Float.parseFloat(target_weight_text.getText().toString()));
 
-            // set last modify time
-            curProfile.setLastModify(new Date().getTime());
+            if (weekly_target_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "每周目標不可為空", Toast.LENGTH_LONG).show();
+            }
 
-            // update to my profile data base
-            myProfileDAO.update(curProfile);
+            if (updatable) {
+                curProfile.setWeeklyLossWeight(Float.parseFloat(weekly_target_text.getText().toString()));
 
-            consume = absorb+(Float.parseFloat(weekly_target_text.getText().toString()))*1100;
-            absorb_text.setText(Float.toString(absorb));
-            consume_text.setText(Float.toString(consume));
+                // set last modify time
+                curProfile.setLastModify(new Date().getTime());
+
+                // update to my profile data base
+                myProfileDAO.update(curProfile);
+
+                consume = absorb + (Float.parseFloat(weekly_target_text.getText().toString())) * 1100;
+                absorb_text.setText(Float.toString(absorb));
+                consume_text.setText(Float.toString(consume));
+
+                Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

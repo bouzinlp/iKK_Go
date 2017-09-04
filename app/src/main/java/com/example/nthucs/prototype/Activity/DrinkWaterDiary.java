@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
@@ -248,6 +249,7 @@ public class DrinkWaterDiary extends AppCompatActivity {
     public void onSubmit(View view) {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            boolean updatable = true;
             // convert integer time to calendar
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, select_year);
@@ -256,21 +258,29 @@ public class DrinkWaterDiary extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY, select_hour);
             calendar.set(Calendar.MINUTE, select_min);
 
-            // set the chosen date time and last modify time
-            tempHealth.setDatetime(calendar.getTimeInMillis());
-            tempHealth.setLastModify(new Date().getTime());
-
-            // set user id
-            tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
-
             // set drink water
-            tempHealth.setDrunkWater(Integer.parseInt(waterDrinked_text.getText().toString()));
+            if (waterDrinked_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "飲水量不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setDrunkWater(Integer.parseInt(waterDrinked_text.getText().toString()));
 
-            // store to health data base use update & insert
-            if (healthDAO.isTableEmpty() == true){
-                healthDAO.insert(tempHealth);
-            } else{
-                healthDAO.insert(tempHealth);
+            if (updatable) {
+                // set the chosen date time and last modify time
+                tempHealth.setDatetime(calendar.getTimeInMillis());
+                tempHealth.setLastModify(new Date().getTime());
+
+                // set user id
+                tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
+
+                // store to health data base use update & insert
+                if (healthDAO.isTableEmpty() == true) {
+                    healthDAO.insert(tempHealth);
+                } else {
+                    healthDAO.insert(tempHealth);
+                }
+
+                Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
         }
     }

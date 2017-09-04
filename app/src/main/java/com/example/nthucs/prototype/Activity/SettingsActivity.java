@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity
         dbFunctions = new DBFunctions(this.getApplicationContext());
         //Initialize Progress Dialog properties
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Synching SQLite Data with Remote MySQL DB. Please wait...");
+        prgDialog.setMessage("正在與遠端資料庫同步中，請稍等‧‧‧");
         prgDialog.setCancelable(false);
         // initialize tabLayout and viewPager
         //viewPager = (ViewPager)findViewById(R.id.viewPager);
@@ -276,7 +276,7 @@ public class SettingsActivity extends AppCompatActivity
                         try {
                             String str = new String(bytes,"UTF-8");
                             System.out.println(str);
-                            Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "資料庫同步完成！", Toast.LENGTH_LONG).show();
 
 
                         } catch (UnsupportedEncodingException e) {
