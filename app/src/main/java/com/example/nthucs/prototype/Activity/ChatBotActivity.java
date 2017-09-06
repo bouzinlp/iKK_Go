@@ -113,6 +113,8 @@ public class ChatBotActivity extends AppCompatActivity
     // list of foods
     private List<Food> foods;
 
+    private List<Food> todayFoods;
+
 
     //init Ai config
     AIConfiguration config = null;
@@ -353,13 +355,22 @@ public class ChatBotActivity extends AppCompatActivity
 
         parameterString += foods.get(0).getYYYYMD() + "\n"; //get food time
 
-        parameterString +=  foods.get(0).getLocaleDatetime();
+        //parameterString +=  foods.get(0).getLocaleDatetime();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //先定義時間格式
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
         Date dt = new Date();  //取得目前時間
         String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
 
         parameterString += "現在日期 " + dts;
+
+        for(int i=0;i<foods.size();i++){
+            if(dts.equals(foods.get(i).getYYYYMD())){
+                todayFoods.add(foods.get(i));
+            }
+        }
+
+        parameterString += ("type is " + foods.get(0).getMealTypeIndex());
+
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -415,8 +426,7 @@ public class ChatBotActivity extends AppCompatActivity
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
                             parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                         else parameterString += "您的血壓正常，請繼續保持";
-                        parameterString += "你的卡洛里為 " + calories;
-                        break;
+
                     case "get_systolic_pressure_info":
                         parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
                         if (sys_pre < 90.0)
@@ -525,15 +535,10 @@ public class ChatBotActivity extends AppCompatActivity
                             parameterString += (result.getStringParameter(L_Food));
                         }
                         break;
-                    /*
-                    * case "recom_food"
-                    *   if(re)
-                    *
-                    * */
-
                 }
             }
-        //}
+
+
 
         return parameterString;
     }
