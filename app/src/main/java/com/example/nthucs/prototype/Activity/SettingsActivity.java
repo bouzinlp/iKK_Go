@@ -176,6 +176,12 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop(){
+        super.onStop();
+        prgDialog.dismiss();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.setting_menu, menu);
