@@ -396,10 +396,10 @@ public class MainActivity extends AppCompatActivity
     public void onStop(){
         super.onStop();
 
-        syncThread = new SyncThread();
+        /*syncThread = new SyncThread();
         handler.post(syncThread);
 
-        System.out.println("Sync executed");
+        System.out.println("Sync executed");*/
     }
 
     // Open food calories

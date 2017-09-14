@@ -4,11 +4,14 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -30,6 +33,7 @@ import com.example.nthucs.prototype.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,7 +51,8 @@ public class CameraActivity extends AppCompatActivity {
     // Picture's original name and image view
     private String fileName;
     private ImageView picture;
-
+    private Bitmap bitmaptoUpload;
+    private String encodedString;
     // Picture's file, uri, urlLink;
     private File picFile;
     private Uri picUri;
@@ -138,6 +143,8 @@ public class CameraActivity extends AppCompatActivity {
             picture.setVisibility(View.VISIBLE);
             // 設定照片
             FileUtil.fileToImageView(file.getAbsolutePath(), picture);
+            bitmaptoUpload = BitmapFactory.decodeFile(fileName);
+            encodedString = encodeImagetoString();
         }
     }
 
@@ -205,7 +212,7 @@ public class CameraActivity extends AppCompatActivity {
             } else {
                 // Process dialog with spinner wheel
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                                                            fileName, CameraActivity.this);
+                                                            fileName, CameraActivity.this,encodedString);
                 customDialog.processDialogControllers();
             }
         } else if (view.getId() == R.id.cancel_item) {
@@ -287,12 +294,23 @@ public class CameraActivity extends AppCompatActivity {
         food.setPortions(1.0f);
         food.setTakeFromCamera(true);
         food.setDatetime(new Date().getTime());
-
+        food.setEncodedString(encodedString);
         // back to main activity
         Intent result = getIntent();
         result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
         setResult(Activity.RESULT_OK, result);
 
         finish();
+    }
+
+    private String encodeImagetoString(){
+        String result;
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Must compress the Image to reduce image size to make upload easy
+        bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        byte[] byte_arr = stream.toByteArray();
+        // Encode Image to String
+        result = Base64.encodeToString(byte_arr, Base64.DEFAULT);
+        return result;
     }
 }

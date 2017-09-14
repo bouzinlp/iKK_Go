@@ -62,7 +62,6 @@ public class HomeActivity extends AppCompatActivity
     public static GoogleApiClient mClient = null;
     private ProgressDialog pd;
     int totalSteps = 0;
-    int BACK = 0;
     private Activity activity = HomeActivity.this;
     private int activityIndex = 0;
     private static final int HOME_ACTIVITY = 0;
@@ -89,8 +88,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Bundle bundle = getIntent().getExtras();
-        BACK = bundle.getInt("BACK");
 
         initLayout();
 
