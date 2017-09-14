@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
@@ -292,6 +293,7 @@ public class MyBloodPressure extends AppCompatActivity
     }
 
     public void onSubmit(View view) {
+        Boolean updatable = true;
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
             // convert integer time to calendar
@@ -302,23 +304,42 @@ public class MyBloodPressure extends AppCompatActivity
             calendar.set(Calendar.HOUR_OF_DAY, select_hour);
             calendar.set(Calendar.MINUTE, select_min);
 
-            // set the chosen date time and last modify time
-            tempHealth.setDatetime(calendar.getTimeInMillis());
-            tempHealth.setLastModify(new Date().getTime());
-
-            // set user id
-            tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
-
             // set systolic pressure, diastolic pressure, and pulse
-            tempHealth.setSystolicBloodPressure(Float.parseFloat(systolicBloodPressure_text.getText().toString()));
-            tempHealth.setDiastolicBloodPressure(Float.parseFloat(diastolicBloodPressure_text.getText().toString()));
-            tempHealth.setPulse(Float.parseFloat(pulse_text.getText().toString()));
+            if (systolicBloodPressure_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "收縮壓不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setSystolicBloodPressure(Float.parseFloat(systolicBloodPressure_text.getText().toString()));
 
-            // store to health data base use update & insert
-            if (healthDAO.isTableEmpty() == true){
-                healthDAO.insert(tempHealth);
-            } else{
-                healthDAO.insert(tempHealth);
+            if (diastolicBloodPressure_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "舒張壓不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setDiastolicBloodPressure(Float.parseFloat(diastolicBloodPressure_text.getText().toString()));
+
+            if (pulse_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "脈搏不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setPulse(Float.parseFloat(pulse_text.getText().toString()));
+
+            if (updatable) {
+                // set the chosen date time and last modify time
+                tempHealth.setDatetime(calendar.getTimeInMillis());
+                tempHealth.setLastModify(new Date().getTime());
+
+                // set user id
+                tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
+
+
+                // store to health data base use update & insert
+                if (healthDAO.isTableEmpty() == true) {
+                    healthDAO.insert(tempHealth);
+                } else {
+                    healthDAO.insert(tempHealth);
+                }
+
+                Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
 
             // output test
