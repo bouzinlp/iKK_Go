@@ -561,8 +561,20 @@ public class GalleryActivity extends AppCompatActivity {
     private Bitmap resizeBitmap(Bitmap bm){
         int width = bm.getWidth();
         int height = bm.getHeight();
-        float scaleWidth = 0.75f;
-        float scaleHeight = 0.75f;
+        float scaleWidth;
+        float scaleHeight;
+
+        if (width * height > 2000*2000) {
+            float scaleArea = (float) 2000*2000/width/height;
+            double scale = Math.sqrt((double) scaleArea);
+            scaleHeight = (float) scale;
+            scaleWidth = (float) scale;
+        }
+
+        else {
+            scaleHeight = 0.75f;
+            scaleWidth = 0.75f;
+        }
 
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);
