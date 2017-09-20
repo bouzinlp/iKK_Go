@@ -4,6 +4,10 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Prototype.iml" filepath="$PROJECT_DIR$/Prototype.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/iKK_Go.iml" filepath="$PROJECT_DIR$/iKK_Go.iml" />
+>>>>>>> 5c93335eeb382642ae599dcf8692c50324fc44f2
     </modules>
   </component>
 </project>

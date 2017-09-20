@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity
     Handler handler = new Handler();
     SyncThread syncThread;
 
+    Boolean IsDataChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +161,7 @@ public class MainActivity extends AppCompatActivity
         calorieDAO = new CalorieDAO(getApplicationContext());
         dbFunctions = new DBFunctions(this.getApplicationContext());
 
+        IsDataChanged = getIntent().getBooleanExtra("DataChanged", false);
         // if the app is re-install or open in first time, then read csv and store in data base
         if (calorieDAO.isTableEmpty() == true) {
             try {
@@ -243,6 +246,7 @@ public class MainActivity extends AppCompatActivity
                 // Always select food list tab after return
                 //selectTab(0);
                 Intent intent = new Intent();
+                intent.putExtra("DataChanged", true);
                 intent.setClass(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -259,6 +263,7 @@ public class MainActivity extends AppCompatActivity
                     sportDAO.update(sport);
 
                     sports.set(position, sport);
+                    IsDataChanged = true;
                     sportAdapter.notifyDataSetChanged();
                 }
                 return;
@@ -300,6 +305,7 @@ public class MainActivity extends AppCompatActivity
             // Always select food list tab after return
             //selectTab(0);
             Intent intent = new Intent();
+            intent.putExtra("DataChanged", true);
             intent.setClass(MainActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -396,10 +402,13 @@ public class MainActivity extends AppCompatActivity
     public void onStop(){
         super.onStop();
 
-        syncThread = new SyncThread();
-        handler.post(syncThread);
+        if (IsDataChanged) {
+            syncThread = new SyncThread();
+            handler.post(syncThread);
+            IsDataChanged = false;
+        }
 
-        System.out.println("Sync executed");
+        //System.out.println("Sync executed");
     }
 
     // Open food calories
@@ -646,6 +655,7 @@ public class MainActivity extends AppCompatActivity
                                     index_sport--;
                                 }
                                 sportAdapter.notifyDataSetChanged();
+                                IsDataChanged = true;
                             }
                         });
                 d.setNegativeButton(android.R.string.no, null);
@@ -742,12 +752,13 @@ public class MainActivity extends AppCompatActivity
                 if (items[index].equals("照相")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-
+                        IsDataChanged = false;
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.putExtra("DataChanged", true);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
@@ -756,11 +767,13 @@ public class MainActivity extends AppCompatActivity
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        IsDataChanged = false;
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.putExtra("DataChanged", true);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
