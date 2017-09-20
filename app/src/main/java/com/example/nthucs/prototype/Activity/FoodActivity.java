@@ -225,8 +225,10 @@ public class FoodActivity extends AppCompatActivity {
         switch (requestCode) {
             case RESULT_SPEECH: {
                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    txtText.setText(text.get(0));
+                   ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                   txtText.setText(text.get(0));
+                   dialogTitleEditText.setText(text.get(0));
+
                }
                break;
             }
