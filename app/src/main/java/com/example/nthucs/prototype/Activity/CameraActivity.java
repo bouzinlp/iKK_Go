@@ -161,7 +161,7 @@ public class CameraActivity extends AppCompatActivity {
             FileUtil.fileToImageView(file.getAbsolutePath(), picture);
             bitmaptoUpload = BitmapFactory.decodeFile(file.getAbsolutePath()/*fileName*/);
             if (bitmaptoUpload == null) {
-                System.out.println("bitmap null "+ fileName);
+                //System.out.println("bitmap null "+ fileName);
             }
             encodedString = encodeImagetoString();
         }
