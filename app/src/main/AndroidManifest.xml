@@ -31,7 +31,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.mydomain.fileprovider"
+            android:authorities="com.example.nthucs.prototype.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

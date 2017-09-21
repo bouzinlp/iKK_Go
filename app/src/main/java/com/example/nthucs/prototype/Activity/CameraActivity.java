@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -12,6 +13,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.Menu;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
+import com.example.nthucs.prototype.BuildConfig;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.SpinnerWheel.CustomDialog;
@@ -79,6 +83,8 @@ public class CameraActivity extends AppCompatActivity {
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
 
+    private Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +92,7 @@ public class CameraActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String action = intent.getAction();
+        context = this;
 
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
@@ -152,7 +159,10 @@ public class CameraActivity extends AppCompatActivity {
             picture.setVisibility(View.VISIBLE);
             // 設定照片
             FileUtil.fileToImageView(file.getAbsolutePath(), picture);
-            bitmaptoUpload = BitmapFactory.decodeFile(fileName);
+            bitmaptoUpload = BitmapFactory.decodeFile(file.getAbsolutePath()/*fileName*/);
+            if (bitmaptoUpload == null) {
+                System.out.println("bitmap null "+ fileName);
+            }
             encodedString = encodeImagetoString();
         }
     }
@@ -449,7 +459,12 @@ public class CameraActivity extends AppCompatActivity {
         Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
         File pictureFile = configFileName("P", ".jpg");
-        Uri uri = Uri.fromFile(pictureFile);
+        Uri uri;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            uri = Uri.fromFile(pictureFile);
+        } else {
+            uri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", pictureFile);
+        }
         picUri = uri;
 
         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);

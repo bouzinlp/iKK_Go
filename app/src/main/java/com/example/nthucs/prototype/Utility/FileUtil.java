@@ -96,9 +96,11 @@ public class FileUtil {
         if (new File(fileName).exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(fileName);
             imageView.setImageBitmap(bitmap);
+            System.out.println("file: "+fileName + " found.");
         }
         else {
             Log.e("fileToImageView", fileName + " not found.");
+            System.out.println("file: "+fileName + " not found.");
         }
     }
 
