@@ -379,6 +379,217 @@ public class ChatBotActivity extends AppCompatActivity
                     case "Get_weight":
                         parameterString += ("Your weight is " + String.valueOf(pro_weight));
                         break;
+                    case "choose_food":  //The case of choosing order (English version)
+                        int number = 0;
+
+                        if(result.getStringParameter(J_Food).isEmpty() == false){ //priority 1
+                            parameterString+=("You should eat ");
+                            parameterString += (result.getStringParameter(J_Food));
+                            number =1;
+
+                            if (result.getStringParameter(J_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(J_Food1));
+                            }
+                            if (result.getStringParameter(J_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(J_Food2));
+                            }
+
+                            parameterString+=(" first.");
+                        }
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
+
+                            if(number == 1)
+                                parameterString += ("\nand then we recommend you eat ");
+                            else {
+                                //number = 1; //set flag
+                                parameterString+=("You should eat ");
+                            }
+                            if (result.getStringParameter(D_Food).isEmpty() == false)
+                                parameterString += (result.getStringParameter(D_Food));
+                            if (result.getStringParameter(D_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(D_Food1));
+                            }
+                            if (result.getStringParameter(D_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(D_Food2));
+                            }
+                            if (result.getStringParameter(E_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(E_Food));
+                            }
+                            if (result.getStringParameter(E_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(E_Food1));
+                            }
+                            if (result.getStringParameter(E_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(E_Food2));
+                            }
+                            if (result.getStringParameter(G_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(G_Food));
+                            }
+
+                            if (result.getStringParameter(G_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(G_Food1));
+                            }
+                            if (result.getStringParameter(G_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(G_Food2));
+                            }
+
+                            if(number == 0) {
+                                parameterString +=(" first.");
+                                number = 1;
+                            }
+                        }
+                        if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
+                            if(number == 1)
+                                parameterString += ("\nand then we recommend you eat ");
+                            else {
+                                //number = 1; //set flag
+                                parameterString+=("You should eat ");
+                            }
+                            parameterString += ( result.getStringParameter(B_Food));
+
+                            if (result.getStringParameter(B_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(B_Food1));
+                            }
+                            if (result.getStringParameter(B_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(B_Food2));
+                            }
+
+                            if(number == 0) {
+                                parameterString +=(" first.");
+                                number = 1;
+                            }
+                        }
+                        if(result.getStringParameter(A_Food).isEmpty() == false || result.getStringParameter(O_Food).isEmpty() == false) { //priority 4
+                            if(number == 1)
+                                parameterString += ("\nand then we recommend you eat ");
+                            else {
+                                //number = 1; //set flag
+                                parameterString+=("You should eat ");
+                            }
+                            if(result.getStringParameter(A_Food).isEmpty() == false)
+                                parameterString += (result.getStringParameter(A_Food));
+
+                            if (result.getStringParameter(A_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(A_Food1));
+                            }
+                            if (result.getStringParameter(A_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(A_Food2));
+                            }
+
+                            if(result.getStringParameter(O_Food).isEmpty() == false) {
+                                if(result.getStringParameter(A_Food).isEmpty() == false)
+                                    parameterString += (",");
+                                parameterString += (result.getStringParameter(O_Food));
+                            }
+
+                            if (result.getStringParameter(O_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(O_Food1));
+                            }
+                            if (result.getStringParameter(O_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(O_Food2));
+                            }
+                            if (result.getStringParameter(O_Food3).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(O_Food3));
+                            }
+
+                            if(number == 0) {
+                                parameterString +=(" first.");
+                                number = 1;
+                            }
+                        }
+                        if(result.getStringParameter(I_Food).isEmpty() == false) { //priority 5
+                            if(number == 1)
+                                parameterString += ("\nand then we recommend you eat ");
+                            else {
+                                //number = 1; //set flag
+                                parameterString+=("You should eat ");
+                            }
+                            parameterString += ( result.getStringParameter(I_Food));
+
+                            if (result.getStringParameter(I_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(I_Food1));
+                            }
+                            if (result.getStringParameter(I_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(I_Food2));
+                            }
+
+                            if(number == 0) {
+                                parameterString +=(" first.");
+                                number = 1;
+                            }
+                        }
+                        if(result.getStringParameter(L_Food).isEmpty() == false || result.getStringParameter(K_Food).isEmpty() == false ) { //priority 6
+                            if(number == 1) {
+                                parameterString += ("\nand then we recommend you  ");
+                                if(result.getStringParameter(L_Food).isEmpty() == false)
+                                    parameterString +=("drink ");
+                                else
+                                    parameterString +=("eat ");
+                            }
+                            else {
+                                //number = 1; //set flag
+                                parameterString+=("You should eat ");
+                            }
+                            if(result.getStringParameter(L_Food).isEmpty() == false)
+                                parameterString += (result.getStringParameter(L_Food));
+
+                            if (result.getStringParameter(L_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(L_Food1));
+                            }
+                            if (result.getStringParameter(L_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(L_Food2));
+                            }
+
+                            if(result.getStringParameter(K_Food).isEmpty() == false) {
+                                if(result.getStringParameter(L_Food).isEmpty() == false)
+                                    parameterString += (",");
+                                parameterString += (result.getStringParameter(K_Food));
+                            }
+
+                            if (result.getStringParameter(K_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(K_Food1));
+                            }
+                            if (result.getStringParameter(K_Food2).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(K_Food2));
+                            }
+
+                            if(number == 0) {
+                                parameterString +=(" first.");
+                                number = 1;
+                            }
+
+                        }
+
+                        if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
+
+                            parameterString += ("I'm sorry. The food you search isn't available in the database");
+                        }
+
+                        break;
                 }
             } else {
                 switch (result.getAction()) {
@@ -444,15 +655,14 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(J_Food2));
                             }
 
-                            parameterString += ("\n");
                         }
                         if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
 
                             if(number == 1)
-                                parameterString += ("接著再吃");
+                                parameterString += ("\n接著再吃");
                             else {
                                 number = 1; //set flag
-                                parameterString+=("建議您先吃");
+                                parameterString+=("建議您先享用");
                             }
                             if (result.getStringParameter(D_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(D_Food));
@@ -491,15 +701,13 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food2));
                             }
-
-                            parameterString += ("\n");
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
                             if(number == 1)
-                                parameterString += ("接著再吃");
+                                parameterString += ("\n接著再吃");
                             else {
                                 number = 1; //set flag
-                                parameterString+=("建議您先吃");
+                                parameterString+=("建議您先享用");
                             }
                             parameterString += ( result.getStringParameter(B_Food));
 
@@ -511,12 +719,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(B_Food2));
                             }
-
-                            parameterString += ("\n");
                         }
                         if(result.getStringParameter(A_Food).isEmpty() == false || result.getStringParameter(O_Food).isEmpty() == false) { //priority 4
                             if(number == 1)
-                                parameterString += ("接著再吃");
+                                parameterString += ("\n接著再吃");
                             else {
                                 number = 1; //set flag
                                 parameterString+=("建議您先吃");
@@ -551,12 +757,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(O_Food3));
                             }
-
-                            parameterString += ("\n");
                         }
                         if(result.getStringParameter(I_Food).isEmpty() == false) { //priority 5
                             if(number == 1)
-                                parameterString += ("接著再吃");
+                                parameterString += ("\n接著再吃");
                             else {
                                 number = 1; //set flag
                                 parameterString+=("建議您先吃");
@@ -571,12 +775,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(I_Food2));
                             }
-
-                            parameterString += ("\n");
                         }
                         if(result.getStringParameter(L_Food).isEmpty() == false || result.getStringParameter(K_Food).isEmpty() == false) { //priority 6
                             if(number == 1)
-                                parameterString += ("接著再吃");
+                                parameterString += ("\n接著再吃");
                             else {
                                 number = 1; //set flag
                                 parameterString+=("建議您先吃");
@@ -593,8 +795,11 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(L_Food2));
                             }
 
-                            if(result.getStringParameter(K_Food).isEmpty() == false)
+                            if(result.getStringParameter(K_Food).isEmpty() == false) {
+                                if(result.getStringParameter(L_Food).isEmpty() == false)
+                                    parameterString += (",");
                                 parameterString += (result.getStringParameter(K_Food));
+                            }
 
                             if (result.getStringParameter(K_Food1).isEmpty() == false) {
                                 parameterString +=(",");
@@ -605,12 +810,12 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(K_Food2));
                             }
 
-                            parameterString += ("\n");
                         }
 
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
 
-                            parameterString += ("對不起 此食物目前不存在於資料庫中 ");
+                            parameterString += ("對不起 此食物目前不存在於資料庫中\n" +
+                                    "建議收詢方式: EX  便當 => 炒青菜+白飯+豬排+豆干");
                         }
 
                         break;
