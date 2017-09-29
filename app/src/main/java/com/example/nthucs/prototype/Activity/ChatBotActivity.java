@@ -140,7 +140,7 @@ public class ChatBotActivity extends AppCompatActivity
         //init Api ai listener
         //chinese ver.
         //change server on 09/03
-        config = new AIConfiguration("67f6a79ea0d948f2aa2614c707f8cdc4",
+        config = new AIConfiguration("a772958d63a149b39bf9f11cfad29889",
                 AIConfiguration.SupportedLanguages.ChineseTaiwan,
                 AIConfiguration.RecognitionEngine.System);
         aiService = AIService.getService(this, config);
@@ -638,7 +638,14 @@ public class ChatBotActivity extends AppCompatActivity
                     case "get_weight_info":
                         parameterString += ("您的體重為" + String.valueOf(pro_weight));
                         break;
-                    case "choose_food":  //The case of choosing order
+                    case "get_bmi_high_or_low":
+                        if (pro_BMI >= 24) {
+                            parameterString += " 您的體重過高，請多運動並控制飲食，並定期檢查BMI";
+                        } else if (pro_BMI < 18.5) {
+                            parameterString += " 您過的體太輕了 均衡飲食有助身體健康";
+                        } else parameterString += " 您的BMI正常，請繼續保持";
+                        break;
+                    case "choose_food_action":  //The case of choosing order
                         int number = 0;
                         //parameterString+=("建議您先吃");
                         if(result.getStringParameter(J_Food).isEmpty() == false){ //priority 1
@@ -999,7 +1006,7 @@ public class ChatBotActivity extends AppCompatActivity
                 Toast.makeText(ChatBotActivity.this, "英文管家", Toast.LENGTH_SHORT).show();
             }
             else{
-                config = new AIConfiguration("2bc9ae934d8e44fb979bdd3d896de3c8",
+                config = new AIConfiguration("a772958d63a149b39bf9f11cfad29889",
                         AIConfiguration.SupportedLanguages.ChineseTaiwan,
                         AIConfiguration.RecognitionEngine.System);
                 aiService = AIService.getService(this, config);
