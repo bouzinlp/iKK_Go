@@ -339,34 +339,47 @@ public class ChatBotActivity extends AppCompatActivity
             if (flag == 1) {
                 switch (result.getAction()) {
                     case "Get_pressure":
-                        parameterString += "your blood pressure is " + String.valueOf(sys_pre) +
+                        parameterString += "Your blood pressure is " + String.valueOf(sys_pre) +
                                 "/" + String.valueOf(dia_pre) + ".";
                         if (sys_pre < 90.0 || dia_pre < 60.0)
-                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " your blood pressure is normal, keep on hold";
+                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " Your blood pressure is normal, keep on hold";
                         break;
                     case "Get_systolic_blood_pressure":
-                        parameterString += "your systolic pressure is " + String.valueOf(sys_pre) + ".";
+                        parameterString += "Your systolic pressure is " + String.valueOf(sys_pre) + ".";
                         if (sys_pre < 90.0)
-                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
+                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
                         else if (sys_pre >= 140.0)
-                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " your systolic pressure is normal, keep on hold";
+                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " Your systolic pressure is normal, keep on hold";
                         break;
 
                     case "Get_diastolic_blood_pressure":
-                        parameterString += "your diastolic pressure is " + String.valueOf(sys_pre);
-                        if (sys_pre < 90.0)
-                            parameterString += " you have low blood pressure,go to see a doctor, plz.";
-                        else if (sys_pre >= 140.0)
-                            parameterString += " you have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " your diastolic pressure is normal, keep on hold";
+                        parameterString += "Your diastolic pressure is " + String.valueOf(dia_pre) + ".";
+                        if (dia_pre < 60.0)
+                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                        else if (dia_pre >= 90.0)
+                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " Your diastolic pressure is normal, keep on hold";
                         break;
-
+                    case "blood_pressure_high_or_low":
+                        if (dia_pre < 60.0)
+                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                        else if (dia_pre >= 90.0)
+                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                        else parameterString += " Your blood pressure is normal, keep on hold";
+                        break;
                     case "Get_BMI":
-                        parameterString += ("your BMI is " + String.valueOf(pro_BMI));
+                        parameterString += ("Your BMI is " + String.valueOf(pro_BMI) + ".");
+                        if (pro_BMI >= 24) {
+                            parameterString += " You are overweight. Do exercise and control diet, plz";
+                        } else if (pro_BMI < 18.5) {
+                            parameterString += " You are overweight. pay attention to balanced diet and do exercise";
+                        } else parameterString += " Your BMI is normal. Congrats!";
+                        break;
+                    case "BMI_high_or_low":
                         if (pro_BMI >= 24) {
                             parameterString += " You are overweight. Do exercise and control diet, plz";
                         } else if (pro_BMI < 18.5) {
@@ -374,10 +387,10 @@ public class ChatBotActivity extends AppCompatActivity
                         } else parameterString += " Your BMI is normal. Congrats!";
                         break;
                     case "Get_height":
-                        parameterString += ("Your height is " + String.valueOf(pro_height));
+                        parameterString += ("Your height is " + String.valueOf(pro_height) + ".");
                         break;
                     case "Get_weight":
-                        parameterString += ("Your weight is " + String.valueOf(pro_weight));
+                        parameterString += ("Your weight is " + String.valueOf(pro_weight) + ".");
                         break;
                     case "choose_food":  //The case of choosing order (English version)
                         int number = 0;
@@ -451,7 +464,7 @@ public class ChatBotActivity extends AppCompatActivity
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
                             if(number == 1)
-                                parameterString += ("\nand then we recommend you eat ");
+                                parameterString += ("\nand then we recommend you go eat ");
                             else {
                                 //number = 1; //set flag
                                 parameterString+=("You should eat ");
@@ -474,7 +487,7 @@ public class ChatBotActivity extends AppCompatActivity
                         }
                         if(result.getStringParameter(A_Food).isEmpty() == false || result.getStringParameter(O_Food).isEmpty() == false) { //priority 4
                             if(number == 1)
-                                parameterString += ("\nand then we recommend you eat ");
+                                parameterString += ("\nand then we recommend you go eat ");
                             else {
                                 //number = 1; //set flag
                                 parameterString+=("You should eat ");
@@ -517,7 +530,7 @@ public class ChatBotActivity extends AppCompatActivity
                         }
                         if(result.getStringParameter(I_Food).isEmpty() == false) { //priority 5
                             if(number == 1)
-                                parameterString += ("\nand then we recommend you eat ");
+                                parameterString += ("\nand then we recommend you go eat ");
                             else {
                                 //number = 1; //set flag
                                 parameterString+=("You should eat ");
@@ -542,9 +555,9 @@ public class ChatBotActivity extends AppCompatActivity
                             if(number == 1) {
                                 parameterString += ("\nand then we recommend you  ");
                                 if(result.getStringParameter(L_Food).isEmpty() == false)
-                                    parameterString +=("drink ");
+                                    parameterString +=("go drink ");
                                 else
-                                    parameterString +=("eat ");
+                                    parameterString +=("go eat ");
                             }
                             else {
                                 //number = 1; //set flag
