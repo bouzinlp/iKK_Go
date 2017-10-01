@@ -177,13 +177,15 @@
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.DrinkWaterDiary" >
+        <activity android:name="com.example.nthucs.prototype.Activity.DrinkWaterDiary"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.MyTemperatureRecord" >
+        <activity android:name="com.example.nthucs.prototype.Activity.MyTemperatureRecord"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
