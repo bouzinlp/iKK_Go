@@ -304,7 +304,7 @@ public class GalleryActivity extends AppCompatActivity {
             try {
                 try {
                     // Connect website: google search by image
-                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).get();
+                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).timeout(30000).get();
 
                     // Parse html with class name: _gUb
                     Elements elem = doc.getElementsByClass("_gUb");
