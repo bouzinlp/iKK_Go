@@ -28,6 +28,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.nthucs.prototype.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -166,13 +177,15 @@
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.DrinkWaterDiary" >
+        <activity android:name="com.example.nthucs.prototype.Activity.DrinkWaterDiary"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             >
         </activity>
-        <activity android:name="com.example.nthucs.prototype.Activity.MyTemperatureRecord" >
+        <activity android:name="com.example.nthucs.prototype.Activity.MyTemperatureRecord"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

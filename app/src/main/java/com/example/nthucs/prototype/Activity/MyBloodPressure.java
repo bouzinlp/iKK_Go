@@ -361,54 +361,55 @@ public class MyBloodPressure extends AppCompatActivity
             intent_home.putExtras(bundle);
             startActivity(intent_home);
             finish();
-        }
-        else if (id == R.id.food_list) {
+        } else if (id == R.id.food_list) {
             Intent intent_main = new Intent();
             intent_main.setClass(MyBloodPressure.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        }
-//        else if (id == R.id.calendar) {
-//            Intent intent_calendar = new Intent();
-//            intent_calendar.setClass(MyBloodPressure.this, CalendarActivity.class);
-//            startActivity(intent_calendar);
-//            finish();
-            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        //}
-        else if (id == R.id.Import) {
+        } else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.message) {
-            Intent intent_message = new Intent();
-            intent_message.setClass(MyBloodPressure.this, MessageActivity.class);
-            startActivity(intent_message);
-            finish();
-            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.setting_list) {
-            Intent intent_setting = new Intent();
-            intent_setting.setClass(MyBloodPressure.this, SettingsActivity.class);
-            startActivity(intent_setting);
-            finish();
-        } else if (id == R.id.blood_pressure){
-            Intent intent_blood_pressure = new Intent();
-            intent_blood_pressure.setClass(MyBloodPressure.this, MyBloodPressure.class);
-            startActivity(intent_blood_pressure);
-            finish();
-        } else if (id == R.id.mail){
-            Intent intent_mail = new Intent();
-            intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
-            startActivity(intent_mail);
+        } else if (id == R.id.chat) {
+            Intent intent_chat_bot = new Intent();
+            intent_chat_bot.setClass(MyBloodPressure.this, ChatBotActivity.class);
+            startActivity(intent_chat_bot);
             finish();
         } else if (id == R.id.new_calendar){
             Intent intent_new_calendar = new Intent();
             intent_new_calendar.setClass(MyBloodPressure.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        }else if (id == R.id.chat) {
-            Intent intent_chat = new Intent();
-            intent_chat.setClass(MyBloodPressure.this, ChatBotActivity.class);
-            startActivity(intent_chat);
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(MyBloodPressure.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.temp_record){
+            Intent intent_temp_record = new Intent();
+            intent_temp_record.setClass(MyBloodPressure.this, MyTemperatureRecord.class);
+            startActivity(intent_temp_record);
+            finish();
+        } else if (id == R.id.water_record){
+            Intent intent_water_record = new Intent();
+            intent_water_record.setClass(MyBloodPressure.this, DrinkWaterDiary.class);
+            startActivity(intent_water_record);
+            finish();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(MyBloodPressure.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(MyBloodPressure.this, SettingsActivity.class);
+            startActivity(intent_setting);
             finish();
         }
 
