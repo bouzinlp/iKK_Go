@@ -39,12 +39,12 @@ public class CalorieDAO {
                     CATEGORY_COLUMN + " TEXT NOT NULL, " +
                     CHINESENAME_COLUMN + " TEXT NOT NULL, " +
                     ENGLISHNAME_COLUMN + " TEXT, " +
-                    PROTEIN_COLUMN + " INTEGER, " +
-                    FAT_COLUMN + " INTEGER, " +
-                    CARBOHYDRATES_COLUMN + " INTEGER, " +
-                    DIETARYFIBER_COLUMN + " INTEGER, " +
-                    SODIUM_COLUMN + " INTEGER, " +
-                    CALCIUM_COLUMN + " INTEGER, " +
+                    PROTEIN_COLUMN + " REAL, " +
+                    FAT_COLUMN + " REAL, " +
+                    CARBOHYDRATES_COLUMN + " REAL, " +
+                    DIETARYFIBER_COLUMN + " REAL, " +
+                    SODIUM_COLUMN + " REAL, " +
+                    CALCIUM_COLUMN + " REAL, " +
                     CALORIE_COLUMN + " INTEGER NOT NULL, " +
                     MODIFIEDCALORIE_COLUMN + " INTEGER NOT NULL)";
 
@@ -94,12 +94,12 @@ public class CalorieDAO {
         result.setCategory(cursor.getString(2));
         result.setChineseName(cursor.getString(3));
         result.setEnglishName(cursor.getString(4));
-        result.setProtein(cursor.getInt(5));
-        result.setFat(cursor.getInt(6));
-        result.setCarbohydrates(cursor.getInt(7));
-        result.setDietaryFiber(cursor.getInt(8));
-        result.setSodium(cursor.getInt(9));
-        result.setCalcium(cursor.getInt(10));
+        result.setProtein(cursor.getFloat(5));
+        result.setFat(cursor.getFloat(6));
+        result.setCarbohydrates(cursor.getFloat(7));
+        result.setDietaryFiber(cursor.getFloat(8));
+        result.setSodium(cursor.getFloat(9));
+        result.setCalcium(cursor.getFloat(10));
         result.setCalorie(cursor.getInt(11));
         result.setModifiedCalorie(cursor.getInt(12));
 

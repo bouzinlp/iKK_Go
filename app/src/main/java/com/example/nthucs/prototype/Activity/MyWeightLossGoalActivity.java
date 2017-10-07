@@ -59,10 +59,13 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     //consume & absorb
     private TextView absorb_text , consume_text ;
     private int absorb_i;
-    public static float absorb ,consume;
+    private float absorb ,consume;
 
     //consume suggest
     private TextView consume_suggest;
+
+    // for chatbot use
+    public static float absorb_chatbot, consume_chatbot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +146,11 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        // for chatbot use
+
+        absorb_chatbot = absorb;
+        consume_chatbot = consume;
+        //
     }
 
     // process back button listener
@@ -249,6 +257,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             consume_suggest.setText("建議每日快跑2小時");
         }
 
+
         absorb_text.setText(Float.toString(absorb));
         consume_text.setText(Float.toString(consume));
     }
@@ -311,12 +320,8 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
+
         }
     }
 
-    public float getAbsorb(float absorb){
-        return absorb = this.absorb;
-    }
-
-    public float getConsume(){ return this.consume; }
 }

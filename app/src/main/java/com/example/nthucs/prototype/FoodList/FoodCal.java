@@ -24,22 +24,22 @@ public class FoodCal implements Parcelable {
     private String englishName;
 
     // food's protein
-    private int protein;
+    private float protein;
 
     // food's fat
-    private int fat;
+    private float fat;
 
     // food's carbohydrates
-    private int carbohydrates;
+    private float carbohydrates;
 
     // food's dietary fiber
-    private int dietaryFiber;
+    private float dietaryFiber;
 
     // food's sodium
-    private int sodium;
+    private float sodium;
 
     // food's calcium
-    private int calcium;
+    private float calcium;
 
     // calorie in the food, assume portion = 1.0
     private int calorie;
@@ -55,12 +55,12 @@ public class FoodCal implements Parcelable {
             foodCal.setCategory(source.readString());
             foodCal.setChineseName(source.readString());
             foodCal.setEnglishName(source.readString());
-            foodCal.setProtein(source.readInt());
-            foodCal.setFat(source.readInt());
-            foodCal.setCarbohydrates(source.readInt());
-            foodCal.setDietaryFiber(source.readInt());
-            foodCal.setSodium(source.readInt());
-            foodCal.setCalcium(source.readInt());
+            foodCal.setProtein(source.readFloat());
+            foodCal.setFat(source.readFloat());
+            foodCal.setCarbohydrates(source.readFloat());
+            foodCal.setDietaryFiber(source.readFloat());
+            foodCal.setSodium(source.readFloat());
+            foodCal.setCalcium(source.readFloat());
             foodCal.setCalorie(source.readInt());
             foodCal.setModifiedCalorie(source.readInt());
             return foodCal;
@@ -90,23 +90,23 @@ public class FoodCal implements Parcelable {
     public String getEnglishName() {return englishName;}
     public void setEnglishName(String englishName) {this.englishName = englishName;}
 
-    public int getProtein(){return this.protein;}
-    public void setProtein(int protein) {this.protein = protein;}
+    public float getProtein(){return this.protein;}
+    public void setProtein(float protein) {this.protein = protein;}
 
-    public int getFat(){return this.fat;}
-    public void setFat(int fat){this.fat = fat;}
+    public float getFat(){return this.fat;}
+    public void setFat(float fat){this.fat = fat;}
 
-    public int getCarbohydrates(){return this.carbohydrates;}
-    public void setCarbohydrates(int carbohydrates){this.carbohydrates = carbohydrates;}
+    public float getCarbohydrates(){return this.carbohydrates;}
+    public void setCarbohydrates(float carbohydrates){this.carbohydrates = carbohydrates;}
 
-    public int getDietaryFiber(){return this.dietaryFiber;}
-    public void setDietaryFiber(int dietaryFiber){this.dietaryFiber = dietaryFiber;}
+    public float getDietaryFiber(){return this.dietaryFiber;}
+    public void setDietaryFiber(float dietaryFiber){this.dietaryFiber = dietaryFiber;}
 
-    public int getSodium(){return this.sodium;}
-    public void setSodium(int sodium){this.sodium = sodium;}
+    public float getSodium(){return this.sodium;}
+    public void setSodium(float sodium){this.sodium = sodium;}
 
-    public int getCalcium(){return this.calcium;}
-    public void setCalcium(int calcium){this.calcium = calcium;}
+    public float getCalcium(){return this.calcium;}
+    public void setCalcium(float calcium){this.calcium = calcium;}
 
     public int getCalorie() {return calorie;}
     public void setCalorie(int calorie) {this.calorie = calorie;}
@@ -125,12 +125,12 @@ public class FoodCal implements Parcelable {
         out.writeString(category);
         out.writeString(chineseName);
         out.writeString(englishName);
-        out.writeInt(protein);
-        out.writeInt(fat);
-        out.writeInt(carbohydrates);
-        out.writeInt(dietaryFiber);
-        out.writeInt(sodium);
-        out.writeInt(calcium);
+        out.writeFloat(protein);
+        out.writeFloat(fat);
+        out.writeFloat(carbohydrates);
+        out.writeFloat(dietaryFiber);
+        out.writeFloat(sodium);
+        out.writeFloat(calcium);
         out.writeInt(calorie);
         out.writeInt(modifiedCalorie);
     }

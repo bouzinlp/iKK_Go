@@ -133,7 +133,7 @@ public class ChatBotActivity extends AppCompatActivity
 
     private float idel_absorb_cal;
 
-    MyWeightLossGoalActivity mwlga = new MyWeightLossGoalActivity();
+    MyWeightLossGoalActivity mwlga;
 
     //init Ai config
     AIConfiguration config = null;
@@ -217,13 +217,10 @@ public class ChatBotActivity extends AppCompatActivity
         final String speech = result.getFulfillment().getSpeech();
         // Get parameters
         String parameterString = "";
-        //TODO
 
         parameterString += aiResponses(parameterString,result);
 
         parameterString += speech;
-
-        //TODO
 
         Message inputMessage = new Message();
         inputMessage.setMessage(result.getResolvedQuery());
@@ -420,18 +417,6 @@ public class ChatBotActivity extends AppCompatActivity
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
         Date dt = new Date();  //取得目前時間
         String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
-
-        //TODO
-
-        if(foodCalList.size() == 0){
-            Toast.makeText(this,"fuck",Toast.LENGTH_SHORT).show();
-        }
-        else Toast.makeText(this,"good",Toast.LENGTH_SHORT).show();
-
-//        parameterString +=  foodCalList.size();
-//        parameterString += foodCalList.get(0).getChineseName().toString() + "\n";
-//        parameterString += foodCalList.get(0).getCarbohydrates()+"" + "\n";
-
 
         //get today's total food
         for(int i=0;i<foods.size();i++){
@@ -941,10 +926,6 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(K_Food2));
                             }
 
-<<<<<<< HEAD
-                            //parameterString += ("\n");
-=======
->>>>>>> 2926d6a493da2f129a45cf1c6332a2fa751d5e55
                         }
 
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
@@ -955,9 +936,8 @@ public class ChatBotActivity extends AppCompatActivity
 
                         break;
                     case "get_absorb_calorie":
-                        idel_absorb_cal = mwlga.getAbsorb(idel_absorb_cal);
-                        //parameterString += "here!!!!!!";
-                        parameterString += idel_absorb_cal;
+                        idel_absorb_cal = mwlga.absorb_chatbot;
+                        parameterString += "fuckyou "+ idel_absorb_cal;
 
                         //get today's total calories
                         for(int i=0;i<todayFoods.size();i++){
@@ -984,8 +964,7 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
 
                     case "get_consume_calorie":
-                        idel_consume_cal = mwlga.getConsume();
-                        parameterString += "here!!!!!!2222222222";
+                        idel_consume_cal = mwlga.consume_chatbot;
                         //get today's total calories
                         for(int i=0;i<todaySports.size();i++){
                             total_consume_calories += todaySports.get(i).getCalorie();
