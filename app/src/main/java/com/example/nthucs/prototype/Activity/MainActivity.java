@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity
 
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
-
+        Toast.makeText(this,allRows.get(0)[2],Toast.LENGTH_SHORT).show();
         // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
             // temporary declarer
@@ -427,12 +427,19 @@ public class MainActivity extends AppCompatActivity
             foodCal.setCategory(allRows.get(i)[1]);
             foodCal.setChineseName(allRows.get(i)[2]);
             foodCal.setEnglishName(allRows.get(i)[3]);
+            foodCal.setProtein(Integer.parseInt(allRows.get(i)[7]));
+            foodCal.setFat(Integer.parseInt(allRows.get(i)[8]));
+            foodCal.setCarbohydrates(Integer.parseInt(allRows.get(i)[10]));
+            foodCal.setDietaryFiber(Integer.parseInt(allRows.get(i)[11]));
+            foodCal.setSodium(Integer.parseInt(allRows.get(i)[18]));
+            foodCal.setCalcium(Integer.parseInt(allRows.get(i)[20]));
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
-
             // fetch data with not null english name temporary
             if (allRows.get(i)[3] != null) calorieDAO.insert(foodCal);
         }
+
+
     }
 
     // Initialize tab layout

@@ -94,13 +94,16 @@ public class ChatBotActivity extends AppCompatActivity
 
     // To get user's blood pressure
     private Health curHealth;
+
     // data base for profile
     private HealthDAO healthDAO;
+
     // list of profile
     private List<Health> healthList = new ArrayList<>();
 
     // data base for profile
     private MyProfileDAO myProfileDAO;
+
     // list of profile
     private List<Profile> profileList = new ArrayList<>();
 
@@ -108,10 +111,13 @@ public class ChatBotActivity extends AppCompatActivity
 
     // data base for storing calorie data
     private CalorieDAO calorieDAO;
+
     // list of foodCal
     private List<FoodCal> foodCalList = new ArrayList<>();
+
     // data base for storing food list
     private FoodDAO foodDAO;
+
     // list of foods
     private List<Food> foods;
 
@@ -166,6 +172,7 @@ public class ChatBotActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(messageArrayList.size()-1);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         this.textMessage.setText("");
@@ -184,10 +191,6 @@ public class ChatBotActivity extends AppCompatActivity
         aiService.setListener(this);
 
         mAdapter.notifyDataSetChanged();
-
-//        Bundle b = this.getIntent().getExtras();
-//
-//        idel_absorb_cal = b.getFloat("absorb");
 
         btnRecord.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
@@ -411,22 +414,24 @@ public class ChatBotActivity extends AppCompatActivity
         sportDAO = new SportDAO(getApplicationContext());
         sports = sportDAO.getAll();
 
+        calorieDAO = new CalorieDAO(getApplicationContext());
+        foodCalList = calorieDAO.getAll();
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
         Date dt = new Date();  //取得目前時間
         String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
 
+        //TODO
 
+        if(foodCalList.size() == 0){
+            Toast.makeText(this,"fuck",Toast.LENGTH_SHORT).show();
+        }
+        else Toast.makeText(this,"good",Toast.LENGTH_SHORT).show();
 
-//        parameterString += foods.get(0).getTitle(); //get food name
-//
-//        parameterString += foods.get(0).getYYYYMD() + "\n"; //get food time
-//
-//        parameterString +=  foods.get(0).getLocaleDatetime();
-//
+//        parameterString +=  foodCalList.size();
+//        parameterString += foodCalList.get(0).getChineseName().toString() + "\n";
+//        parameterString += foodCalList.get(0).getCarbohydrates()+"" + "\n";
 
-
-//        parameterString += "現在日期 " + dts + "\n";
-//        parameterString += "食物日期 " + foods.get(3).getYYYYMD();
 
         //get today's total food
         for(int i=0;i<foods.size();i++){
@@ -440,10 +445,6 @@ public class ChatBotActivity extends AppCompatActivity
                 todaySports.add(sports.get(i));
             }
         }
-
-
-//        parameterString += todayFoods.get(0).getTitle();
-//        parameterString += todayFoods.get(1).getTitle();
 
 
             if (flag == 1) {

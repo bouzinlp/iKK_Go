@@ -28,7 +28,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
 
-    public static final int VERSION = 27;
+    public static final int VERSION = 28;
 
 
     // 資料庫物件，固定的欄位變數
@@ -66,6 +66,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // create health table
         db.execSQL(HealthDAO.CREATE_TABLE);
+
     }
 
     @Override

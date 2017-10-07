@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.nthucs.prototype.Utility.MyDBHelper;
 
@@ -23,6 +24,12 @@ public class CalorieDAO {
     public static final String CHINESENAME_COLUMN = "chineseName";
     public static final String ENGLISHNAME_COLUMN = "englishName";
     public static final String CALORIE_COLUMN = "calorie";
+    public static final String PROTEIN_COLUMN = "protein";
+    public static final String FAT_COLUMN = "fat";
+    public static final String CARBOHYDRATES_COLUMN = "carbohydrates";
+    public static final String DIETARYFIBER_COLUMN = "dietaryFiber";
+    public static final String SODIUM_COLUMN = "sodium";
+    public static final String CALCIUM_COLUMN = "calcium";
     public static final String MODIFIEDCALORIE_COLUMN = "modifiedCalorie";
 
     public static final String CREATE_TABLE =
@@ -32,6 +39,12 @@ public class CalorieDAO {
                     CATEGORY_COLUMN + " TEXT NOT NULL, " +
                     CHINESENAME_COLUMN + " TEXT NOT NULL, " +
                     ENGLISHNAME_COLUMN + " TEXT, " +
+                    PROTEIN_COLUMN + " INTEGER, " +
+                    FAT_COLUMN + " INTEGER, " +
+                    CARBOHYDRATES_COLUMN + " INTEGER, " +
+                    DIETARYFIBER_COLUMN + " INTEGER, " +
+                    SODIUM_COLUMN + " INTEGER, " +
+                    CALCIUM_COLUMN + " INTEGER, " +
                     CALORIE_COLUMN + " INTEGER NOT NULL, " +
                     MODIFIEDCALORIE_COLUMN + " INTEGER NOT NULL)";
 
@@ -48,6 +61,12 @@ public class CalorieDAO {
         cv.put(CATEGORY_COLUMN, foodCal.getCategory());
         cv.put(CHINESENAME_COLUMN, foodCal.getChineseName());
         cv.put(ENGLISHNAME_COLUMN, foodCal.getEnglishName());
+        cv.put(PROTEIN_COLUMN, foodCal.getProtein());
+        cv.put(FAT_COLUMN, foodCal.getFat());
+        cv.put(CARBOHYDRATES_COLUMN, foodCal.getCarbohydrates());
+        cv.put(DIETARYFIBER_COLUMN, foodCal.getDietaryFiber());
+        cv.put(SODIUM_COLUMN, foodCal.getSodium());
+        cv.put(CALCIUM_COLUMN, foodCal.getCalcium());
         cv.put(CALORIE_COLUMN, foodCal.getCalorie());
         cv.put(MODIFIEDCALORIE_COLUMN, foodCal.getModifiedCalorie());
 
@@ -75,8 +94,15 @@ public class CalorieDAO {
         result.setCategory(cursor.getString(2));
         result.setChineseName(cursor.getString(3));
         result.setEnglishName(cursor.getString(4));
-        result.setCalorie(cursor.getInt(5));
-        result.setModifiedCalorie(cursor.getInt(6));
+        result.setProtein(cursor.getInt(5));
+        result.setFat(cursor.getInt(6));
+        result.setCarbohydrates(cursor.getInt(7));
+        result.setDietaryFiber(cursor.getInt(8));
+        result.setSodium(cursor.getInt(9));
+        result.setCalcium(cursor.getInt(10));
+        result.setCalorie(cursor.getInt(11));
+        result.setModifiedCalorie(cursor.getInt(12));
+
 
         return  result;
     }
