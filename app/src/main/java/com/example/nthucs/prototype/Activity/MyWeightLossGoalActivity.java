@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -62,6 +63,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     //consume suggest
     private TextView consume_suggest;
+
+    // for chatbot use
+    public static float absorb_chatbot, consume_chatbot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,12 +134,23 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
         // process BMI
         processTextViewControllers();
+//
+//        Intent i = new Intent();
+//        i.setClass(MyWeightLossGoalActivity.this,ChatBotActivity.class);
+//        Bundle b = new Bundle();
+//        b.putFloat("absorb",absorb);
+//        i.putExtras(b);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // for chatbot use
+
+        absorb_chatbot = absorb;
+        consume_chatbot = consume;
+        //
     }
 
     // process back button listener
@@ -242,6 +257,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             consume_suggest.setText("建議每日快跑2小時");
         }
 
+
         absorb_text.setText(Float.toString(absorb));
         consume_text.setText(Float.toString(consume));
     }
@@ -304,6 +320,8 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
+
         }
     }
+
 }

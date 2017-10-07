@@ -10,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -32,16 +33,28 @@ import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
 import ai.api.model.Result;
 
+import com.example.nthucs.prototype.FoodList.CalorieDAO;
+import com.example.nthucs.prototype.FoodList.Food;
+import com.example.nthucs.prototype.FoodList.FoodCal;
+import com.example.nthucs.prototype.FoodList.FoodDAO;
 import com.example.nthucs.prototype.Settings.Health;
 import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Activity.CalorieConsumptionActivity;
 import com.example.nthucs.prototype.Activity.MyProfileActivity;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.Settings.Profile;
+import com.example.nthucs.prototype.SportList.Sport;
+import com.example.nthucs.prototype.SportList.SportDAO;
 import com.facebook.login.widget.ProfilePictureView;
+import com.example.nthucs.prototype.Activity.MyWeightLossGoalActivity;
 import com.google.gson.JsonElement;
 
+import java.io.IOException;
+
+import java.security.Policy;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -77,25 +90,55 @@ public class ChatBotActivity extends AppCompatActivity
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
     private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
+    private long local_datetime;
 
     // To get user's blood pressure
     private Health curHealth;
+
     // data base for profile
     private HealthDAO healthDAO;
+
     // list of profile
     private List<Health> healthList = new ArrayList<>();
 
     // data base for profile
     private MyProfileDAO myProfileDAO;
+
     // list of profile
     private List<Profile> profileList = new ArrayList<>();
 
     private Profile curProfile;
 
-    MyProfileActivity mypro = new MyProfileActivity();
+    // data base for storing calorie data
+    private CalorieDAO calorieDAO;
+
+    // list of foodCal
+    private List<FoodCal> foodCalList = new ArrayList<>();
+
+    // data base for storing food list
+    private FoodDAO foodDAO;
+
+    // list of foods
+    private List<Food> foods;
+
+    // data base for storing sport list
+    private SportDAO sportDAO;
+
+    // list of sports
+    private List<Sport> sports;
+
+    private List<Food> todayFoods = new ArrayList<Food>();
+
+    private List<Sport> todaySports = new ArrayList<Sport>();
+
+    private float idel_absorb_cal;
+
+    MyWeightLossGoalActivity mwlga;
 
     //init Ai config
     AIConfiguration config = null;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +172,7 @@ public class ChatBotActivity extends AppCompatActivity
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.scrollToPosition(messageArrayList.size()-1);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
         this.textMessage.setText("");
@@ -146,14 +190,15 @@ public class ChatBotActivity extends AppCompatActivity
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
-
+        mAdapter.notifyDataSetChanged();
 
         btnRecord.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v) {
-                    aiService.startListening();
+                aiService.startListening();
+                btnRecord.setImageResource(R.drawable.icons8_ic_mic_red_24px);
+                Toast.makeText(v.getContext(),"錄音中",Toast.LENGTH_SHORT).show();
             }
         });
-
 
         //by texting
         btnSend.setOnClickListener(new View.OnClickListener(){
@@ -165,18 +210,17 @@ public class ChatBotActivity extends AppCompatActivity
     }
 
     public void onResult(final AIResponse response) {
+        btnRecord.setImageResource(R.drawable.ic_mic_black_48dp);
+
         Result result = response.getResult();
 
         final String speech = result.getFulfillment().getSpeech();
         // Get parameters
         String parameterString = "";
-        //TODO
 
         parameterString += aiResponses(parameterString,result);
 
         parameterString += speech;
-
-        //TODO
 
         Message inputMessage = new Message();
         inputMessage.setMessage(result.getResolvedQuery());
@@ -187,11 +231,14 @@ public class ChatBotActivity extends AppCompatActivity
         mAdapter.notifyDataSetChanged();
         this.initialRequest = false;
 
-  //      response
+        //response
         Message outMes = new Message();
         outMes.setMessage(parameterString);
         outMes.setId("2");
         messageArrayList.add(outMes);
+
+        //
+
 
 
         runOnUiThread(new Runnable() {
@@ -205,67 +252,78 @@ public class ChatBotActivity extends AppCompatActivity
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void senMessage(){
 
         final String inputmes = textMessage.getText().toString().trim();
 
-        final AIDataService aiDataService = new AIDataService(config);
-        final AIRequest aiRequest = new AIRequest();
-        aiRequest.setQuery(inputmes);
-        textMessage.setText("");
+        if(!inputmes.isEmpty()) {
+            final AIDataService aiDataService = new AIDataService(config);
+            final AIRequest aiRequest = new AIRequest();
+            aiRequest.setQuery(inputmes);
+            textMessage.setText("");
 
 
-        new AsyncTask<AIRequest, Void, AIResponse>() {
-            @Override
-            protected AIResponse doInBackground(AIRequest... requests) {
-                final AIRequest request = requests[0];
-                try {
-                    final AIResponse response = aiDataService.request(request);
-                    return response;
-                } catch (AIServiceException e) {
+            new AsyncTask<AIRequest, Void, AIResponse>() {
+                @Override
+                protected AIResponse doInBackground(AIRequest... requests) {
+                    final AIRequest request = requests[0];
+                    try {
+                        final AIResponse response = aiDataService.request(request);
+                        return response;
+                    } catch (AIServiceException e) {
+                    }
+                    return null;
                 }
-                return null;
-            }
-            @Override
-            protected void onPostExecute(AIResponse aiResponse) {
-                if (aiResponse != null) {
-                    String parameterString = "";
-                    Result result = aiResponse.getResult();
-                    final String speech = result.getFulfillment().getSpeech();
 
-                    parameterString += aiResponses(parameterString,result);
-                    parameterString += speech;
+                @Override
+                protected void onPostExecute(AIResponse aiResponse) {
+                    if (aiResponse != null) {
+                        String parameterString = "";
+                        Result result = aiResponse.getResult();
+                        final String speech = result.getFulfillment().getSpeech();
 
-                    final Message inputMessage = new Message();
-                    inputMessage.setMessage(result.getResolvedQuery());
-                    inputMessage.setAct(result.getAction());
+                        parameterString += aiResponses(parameterString, result);
+                        parameterString += speech;
 
-                    inputMessage.setId("1");
-                    messageArrayList.add(inputMessage);
-                    mAdapter.notifyDataSetChanged();
-                    initialRequest = false;
+                        final Message inputMessage = new Message();
+                        inputMessage.setMessage(result.getResolvedQuery());
+                        inputMessage.setAct(result.getAction());
 
-                    Message outMes = new Message();
-                    outMes.setMessage(parameterString);
-                    outMes.setId("2");
-                    messageArrayList.add(outMes);
+                        inputMessage.setId("1");
+                        messageArrayList.add(inputMessage);
+                        mAdapter.notifyDataSetChanged();
+                        initialRequest = false;
+
+                        Message outMes = new Message();
+                        outMes.setMessage(parameterString);
+                        outMes.setId("2");
+                        messageArrayList.add(outMes);
 
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.notifyDataSetChanged();
-                            recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount()-1);
-                        }
-                    });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mAdapter.notifyDataSetChanged();
+                                recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+                            }
+                        });
 
+                    }
                 }
-            }
-        }.execute(aiRequest);
+            }.execute(aiRequest);
+        }
+        else{
+            Toast.makeText(this,"訊息不可為空！",Toast.LENGTH_SHORT).show();
+        }
     }
 
     private String aiResponses(String parameterString,Result result) {
-        //////to ger blood presure
+        //////to get blood presure
         // initialize data base
         healthDAO = new HealthDAO(getApplicationContext());
         // get all health data from data base
@@ -304,6 +362,7 @@ public class ChatBotActivity extends AppCompatActivity
             float pro_weight = curProfile.getWeight();
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
+
             String A_Food = new String("A_Food");
             String A_Food1 = new String("A_Food1");
             String A_Food2 = new String("A_Food2");
@@ -335,6 +394,43 @@ public class ChatBotActivity extends AppCompatActivity
             String O_Food1 = new String("O_Food1");
             String O_Food2 = new String("O_Food2");
             String O_Food3 = new String("O_Food3");
+
+            //float idel_absorb_cal;
+
+            float idel_consume_cal;
+
+            float total_absorb_calories=0;
+
+            float total_consume_calories=0;
+
+        // to get user already have eaten food
+        foodDAO = new FoodDAO(getApplicationContext());
+        foods = foodDAO.getAll();
+
+        // to get user already have exercised
+        sportDAO = new SportDAO(getApplicationContext());
+        sports = sportDAO.getAll();
+
+        calorieDAO = new CalorieDAO(getApplicationContext());
+        foodCalList = calorieDAO.getAll();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
+        Date dt = new Date();  //取得目前時間
+        String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
+
+        //get today's total food
+        for(int i=0;i<foods.size();i++){
+            if(dts.equals(foods.get(i).getYYYYMD())){
+                todayFoods.add(foods.get(i));
+            }
+        }
+
+        for(int i=0;i<sports.size();i++){
+            if(dts.contentEquals(sports.get(i).getYYYYMD())){
+                todaySports.add(sports.get(i));
+            }
+        }
+
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -667,11 +763,11 @@ public class ChatBotActivity extends AppCompatActivity
                             number =1;
 
                             if (result.getStringParameter(J_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(J_Food1));
                             }
                             if (result.getStringParameter(J_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(J_Food2));
                             }
 
@@ -687,38 +783,38 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(D_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(D_Food));
                             if (result.getStringParameter(D_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(D_Food1));
                             }
                             if (result.getStringParameter(D_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(D_Food2));
                             }
                             if (result.getStringParameter(E_Food).isEmpty() == false) {
                                 if(result.getStringParameter(D_Food).isEmpty() == false)
-                                    parameterString +=(",");
+                                    parameterString +=(", ");
                                 parameterString += (result.getStringParameter(E_Food));
                             }
                             if (result.getStringParameter(E_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(E_Food1));
                             }
                             if (result.getStringParameter(E_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(E_Food2));
                             }
                             if (result.getStringParameter(G_Food).isEmpty() == false) {
                                 if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
-                                    parameterString +=(",");
+                                    parameterString +=(", ");
                                 parameterString += (result.getStringParameter(G_Food));
                             }
 
                             if (result.getStringParameter(G_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(G_Food1));
                             }
                             if (result.getStringParameter(G_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(G_Food2));
                             }
                         }
@@ -732,11 +828,11 @@ public class ChatBotActivity extends AppCompatActivity
                             parameterString += ( result.getStringParameter(B_Food));
 
                             if (result.getStringParameter(B_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(B_Food1));
                             }
                             if (result.getStringParameter(B_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(B_Food2));
                             }
                         }
@@ -751,30 +847,30 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(A_Food));
 
                             if (result.getStringParameter(A_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(A_Food1));
                             }
                             if (result.getStringParameter(A_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(A_Food2));
                             }
 
                             if(result.getStringParameter(O_Food).isEmpty() == false) {
                                 if(result.getStringParameter(A_Food).isEmpty() == false)
-                                    parameterString += (",");
+                                    parameterString += (", ");
                                 parameterString += (result.getStringParameter(O_Food));
                             }
 
                             if (result.getStringParameter(O_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(O_Food1));
                             }
                             if (result.getStringParameter(O_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(O_Food2));
                             }
                             if (result.getStringParameter(O_Food3).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(O_Food3));
                             }
                         }
@@ -788,11 +884,11 @@ public class ChatBotActivity extends AppCompatActivity
                             parameterString += ( result.getStringParameter(I_Food));
 
                             if (result.getStringParameter(I_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(I_Food1));
                             }
                             if (result.getStringParameter(I_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(I_Food2));
                             }
                         }
@@ -807,11 +903,11 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(L_Food));
 
                             if (result.getStringParameter(L_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(L_Food1));
                             }
                             if (result.getStringParameter(L_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(L_Food2));
                             }
 
@@ -822,11 +918,11 @@ public class ChatBotActivity extends AppCompatActivity
                             }
 
                             if (result.getStringParameter(K_Food1).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(K_Food1));
                             }
                             if (result.getStringParameter(K_Food2).isEmpty() == false) {
-                                parameterString +=(",");
+                                parameterString +=(", ");
                                 parameterString += (result.getStringParameter(K_Food2));
                             }
 
@@ -839,10 +935,61 @@ public class ChatBotActivity extends AppCompatActivity
                         }
 
                         break;
+                    case "get_absorb_calorie":
+                        idel_absorb_cal = mwlga.absorb_chatbot;
+                        parameterString += "fuckyou "+ idel_absorb_cal;
+
+                        //get today's total calories
+                        for(int i=0;i<todayFoods.size();i++){
+                            total_absorb_calories += todayFoods.get(i).getCalorie();
+                        }
+
+                        if(total_absorb_calories < idel_absorb_cal){
+                            parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
+                            parameterString += "您距離每日理想熱量還有" + (((double)idel_absorb_cal-total_consume_calories)+"")
+                                    + "大卡\n";
+                            parameterString += "建議補足每日需求熱量";
+
+                        }
+                        else if(total_absorb_calories > idel_absorb_cal){
+                            parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
+                            parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories-(double)idel_absorb_cal)+"")
+                                    + "大卡\n";
+                            parameterString += "建議多運動或減少每日進食量";
+                        }
+                        else {
+                            parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+                        }
+
+                        break;
+
+                    case "get_consume_calorie":
+                        idel_consume_cal = mwlga.consume_chatbot;
+                        //get today's total calories
+                        for(int i=0;i<todaySports.size();i++){
+                            total_consume_calories += todaySports.get(i).getCalorie();
+                        }
+
+                        if(total_consume_calories > idel_consume_cal){
+                            parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
+                            parameterString += "建議補充膳食纖維高的食品以及多休息";
+                        }
+                        else if(total_consume_calories < idel_consume_cal){
+                            parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
+                            parameterString += "距離每日理想消耗熱量還有" + ((double)idel_consume_cal-total_consume_calories)
+                                    + "大卡\n";
+                            parameterString += "建議多運動以保持理想熱量消耗量";
+                        }
+                        else{
+                            parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持";
+                        }
+                        break;
                 }
             }
-        //}
 
+
+        todayFoods.clear();
+        todaySports.clear();
         return parameterString;
     }
 
@@ -926,10 +1073,12 @@ public class ChatBotActivity extends AppCompatActivity
 
     @Override
     public void onListeningCanceled() {
+        btnRecord.setImageResource(R.drawable.ic_mic_black_48dp);
     }
 
     @Override
     public void onListeningFinished() {
+        btnRecord.setImageResource(R.drawable.ic_mic_black_48dp);
     }
 
     @Override
@@ -996,6 +1145,13 @@ public class ChatBotActivity extends AppCompatActivity
             }
         });
         builder.show();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState){
+        //savedInstanceState.putString();
+        super.onSaveInstanceState(savedInstanceState);
+
     }
 
     @Override

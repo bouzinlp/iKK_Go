@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.nfc.cardemulation.HostNfcFService;
 import android.os.Bundle;
 import android.os.Handler;
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity
             } catch (IOException e) {
                 System.out.println("open food cal: IO exception");
             }
-        // if open app more once time, just get the data base immediately
+            // if open app more once time, just get the data base immediately
         } else {
             foodCalList = calorieDAO.getAll();
 
@@ -177,6 +179,16 @@ public class MainActivity extends AppCompatActivity
             /*for (int i = 0 ; i < foodCalList.size() ; i++) {
                 System.out.println(foodCalList.get(i).getEnglishName());
             }*/
+
+
+
+
+
+
+
+
+
+
         }
 
         // initialize tabLayout and viewPager
@@ -193,15 +205,15 @@ public class MainActivity extends AppCompatActivity
         foodDAO = new FoodDAO(getApplicationContext());
         if (intent.getIntExtra("year", 0) == 0) foods = foodDAO.getAll();
         else foods = foodDAO.getSelectedDate(intent.getIntExtra("year", 1970),
-                                    intent.getIntExtra("month", 1),
-                                    intent.getIntExtra("day", 1));
+                intent.getIntExtra("month", 1),
+                intent.getIntExtra("day", 1));
 
         // sport list data base
         sportDAO = new SportDAO(getApplicationContext());
         if (intent.getIntExtra("year", 0) == 0) sports = sportDAO.getAll();
         else sports = sportDAO.getSelectedDate(intent.getIntExtra("year", 1970),
-                                    intent.getIntExtra("month", 1),
-                                    intent.getIntExtra("day", 1));
+                intent.getIntExtra("month", 1),
+                intent.getIntExtra("day", 1));
 
         // initialize food & sport adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
@@ -251,7 +263,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
                 return;
-            // Sport edit event
+                // Sport edit event
             } else if (requestCode == EDIT_SPORT) {
                 // get sport data
                 Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
@@ -278,7 +290,7 @@ public class MainActivity extends AppCompatActivity
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
-            // Edit food list
+                // Edit food list
             } else if (requestCode == EDIT_FOOD) {
                 int position = data.getIntExtra("position", -1);
 
@@ -288,13 +300,13 @@ public class MainActivity extends AppCompatActivity
                     foods.set(position, food);
                     foodAdapter.notifyDataSetChanged();
                 }
-            // Scan picture as adding food
+                // Scan picture as adding food
             } else if (requestCode == SCAN_FOOD) {
                 food = foodDAO.insert(food);
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
-            // Take photo from library(gallery)
+                // Take photo from library(gallery)
             } else if (requestCode == TAKE_PHOTO) {
                 food = foodDAO.insert(food);
 
@@ -419,6 +431,7 @@ public class MainActivity extends AppCompatActivity
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
+
         // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
             // temporary declarer
@@ -429,7 +442,12 @@ public class MainActivity extends AppCompatActivity
             foodCal.setEnglishName(allRows.get(i)[3]);
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
-
+            foodCal.setProtein(Float.parseFloat(allRows.get(i)[7]));
+            foodCal.setFat(Float.parseFloat(allRows.get(i)[8]));
+            foodCal.setCarbohydrates(Float.parseFloat(allRows.get(i)[10]));
+            foodCal.setDietaryFiber(Float.parseFloat(allRows.get(i)[11]));
+            foodCal.setSodium(Float.parseFloat(allRows.get(i)[18]));
+            foodCal.setCalcium(Float.parseFloat(allRows.get(i)[20]));
             // fetch data with not null english name temporary
             if (allRows.get(i)[3] != null) calorieDAO.insert(foodCal);
         }
@@ -476,7 +494,7 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
                         startActivityForResult(intent, EDIT_FOOD);
                     }
-                // click position in sport adapter
+                    // click position in sport adapter
                 } else {
                     // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
@@ -512,7 +530,7 @@ public class MainActivity extends AppCompatActivity
 
                     processMenu(food);
                     foodAdapter.set(position, food);
-                // long click position in sport adapter
+                    // long click position in sport adapter
                 } else {
                     // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
