@@ -316,6 +316,8 @@ public class ChatBotActivity extends AppCompatActivity
             String D_Food2 = new String("D_Food2");
             String E_Food1 = new String ("E_Food1");
             String E_Food2 = new String ("E_Food2");
+            String F_Food = new String("F_Food");
+            String F_Food1 = new String("F_Food1");
             String G_Food = new String("G_Food");
             String G_Food1 = new String("G_Food1");
             String G_Food2 = new String("G_Food2");
@@ -411,7 +413,7 @@ public class ChatBotActivity extends AppCompatActivity
 
                             parameterString+=(" first.");
                         }
-                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
                             if(number == 1)
                                 parameterString += ("\nand then we recommend you eat ");
@@ -447,7 +449,6 @@ public class ChatBotActivity extends AppCompatActivity
                                     parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food));
                             }
-
                             if (result.getStringParameter(G_Food1).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food1));
@@ -455,6 +456,17 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(G_Food2).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food2));
+                            }
+
+                            if (result.getStringParameter(F_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food));
+                            }
+
+                            if (result.getStringParameter(F_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food1));
                             }
 
                             if(number == 0) {
@@ -601,7 +613,6 @@ public class ChatBotActivity extends AppCompatActivity
 
                             parameterString += ("I'm sorry. The food you search isn't available in the database");
                         }
-
                         break;
                 }
             } else {
@@ -676,7 +687,7 @@ public class ChatBotActivity extends AppCompatActivity
                             }
 
                         }
-                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
                             if(number == 1)
                                 parameterString += ("\n接著再吃");
@@ -708,8 +719,12 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(E_Food2));
                             }
                             if (result.getStringParameter(G_Food).isEmpty() == false) {
-                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
-                                    parameterString +=(",");
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false) {
+                                    if(result.getStringParameter(G_Food).contains("乳") || result.getStringParameter(G_Food).contains("奶") || result.getStringParameter(G_Food).contains("阿華田"))
+                                        parameterString += (",喝");
+                                    else
+                                        parameterString += (",");
+                                }
                                 parameterString += (result.getStringParameter(G_Food));
                             }
 
@@ -720,6 +735,17 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(G_Food2).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food2));
+                            }
+
+                            if (result.getStringParameter(F_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food));
+                            }
+
+                            if (result.getStringParameter(F_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food1));
                             }
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
@@ -797,11 +823,15 @@ public class ChatBotActivity extends AppCompatActivity
                             }
                         }
                         if(result.getStringParameter(L_Food).isEmpty() == false || result.getStringParameter(K_Food).isEmpty() == false) { //priority 6
-                            if(number == 1)
-                                parameterString += ("\n接著再吃");
+                            if(number == 1) {
+                                if(result.getStringParameter(L_Food).isEmpty() == false)
+                                    parameterString += ("\n接著再喝");
+                                else
+                                    parameterString +=("\n接著再吃");
+                            }
                             else {
                                 number = 1; //set flag
-                                parameterString+=("建議您先吃");
+                                parameterString+=("建議您先享用");
                             }
                             if(result.getStringParameter(L_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(L_Food));
@@ -817,7 +847,7 @@ public class ChatBotActivity extends AppCompatActivity
 
                             if(result.getStringParameter(K_Food).isEmpty() == false) {
                                 if(result.getStringParameter(L_Food).isEmpty() == false)
-                                    parameterString += (",");
+                                    parameterString += (",吃");
                                 parameterString += (result.getStringParameter(K_Food));
                             }
 
