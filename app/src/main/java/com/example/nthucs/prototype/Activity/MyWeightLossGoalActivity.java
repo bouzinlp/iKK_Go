@@ -1,6 +1,7 @@
 package com.example.nthucs.prototype.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -63,9 +64,6 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     //consume suggest
     private TextView consume_suggest;
-
-    // for chatbot use
-    public static float absorb_chatbot, consume_chatbot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,11 +144,6 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // for chatbot use
-
-        absorb_chatbot = absorb;
-        consume_chatbot = consume;
-        //
     }
 
     // process back button listener
@@ -319,6 +312,11 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
                 consume_text.setText(Float.toString(consume));
 
                 Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
+
+                //for chatbot use
+                SharedPreferences sharedPreferences =  getSharedPreferences("LossGoal",MODE_PRIVATE);
+                sharedPreferences.edit().putFloat("absorb",absorb).apply();
+                sharedPreferences.edit().putFloat("consume",consume).apply();
             }
 
         }

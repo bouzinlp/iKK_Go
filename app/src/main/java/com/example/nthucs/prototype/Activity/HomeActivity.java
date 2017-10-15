@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.nthucs.prototype.FoodList.CalorieDAO;
+import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportDAO;
@@ -41,7 +44,10 @@ import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
+import com.google.android.gms.phenotype.Flag;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +55,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import au.com.bytecode.opencsv.CSVReader;
 
 
 /**
@@ -80,6 +87,7 @@ public class HomeActivity extends AppCompatActivity
     private FitnessActivity fa;
     SportDAO SD;
     public ArrayList<FitnessActivity> fitnessProperties = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +128,6 @@ public class HomeActivity extends AppCompatActivity
         //selectTab(1);
         buildFitnessClient();
     }
-
 
     @Override
     public void onResume(){
