@@ -71,10 +71,10 @@ public class SettingsActivity extends AppCompatActivity
     private static final String displayAsMetricImperial = "單位設定";
     private static final String weightChart = "體重圖表";
     private static final String calorieConsumption = "熱量消耗";
-    private static final String drinkWaterDiary = "飲水日誌";
-    private static final String myTemperatureRecord = "體溫紀錄";
+    //private static final String drinkWaterDiary = "飲水日誌";
+    //private static final String myTemperatureRecord = "體溫紀錄";
 	// , drinkWaterDiary , myTemperatureRecord
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption, drinkWaterDiary, myTemperatureRecord};
+    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption};
 
     // list view for including textView
     private ListView setting_list;
