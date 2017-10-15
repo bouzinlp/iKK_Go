@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
 import android.support.design.widget.FloatingActionButton;
@@ -46,6 +47,7 @@ import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.Settings.Profile;
 import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportDAO;
+import com.example.nthucs.prototype.Utility.DBFunctions;
 import com.facebook.login.widget.ProfilePictureView;
 import com.example.nthucs.prototype.Activity.MyWeightLossGoalActivity;
 import com.google.gson.JsonElement;
@@ -70,8 +72,12 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.R;
 
 import com.crashlytics.android.Crashlytics;
+
+import org.json.JSONObject;
+
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import io.fabric.sdk.android.services.settings.SettingsRequest;
 
 public class ChatBotActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,AIListener {
@@ -133,7 +139,7 @@ public class ChatBotActivity extends AppCompatActivity
 
     private List<Sport> todaySports = new ArrayList<Sport>();
 
-    private float idel_absorb_cal;
+    private float idel_absorb_cal, idel_consume_cal;
 
     MyWeightLossGoalActivity mwlga;
 
@@ -410,10 +416,6 @@ public class ChatBotActivity extends AppCompatActivity
             String O_Food3 = new String("O_Food3");
             String date = new String("date");
 
-            //float idel_absorb_cal;
-
-            float idel_consume_cal;
-
             float total_absorb_calories=0;
 
             float total_consume_calories=0;
@@ -430,9 +432,14 @@ public class ChatBotActivity extends AppCompatActivity
         calorieDAO = new CalorieDAO(getApplicationContext());
         foodCalList = calorieDAO.getAll();
 
+        //parameterString += foodCalList.get(foodCalList.size()-1).getChineseName();
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
         Date dt = new Date();  //取得目前時間
         String dts = sdf.format(dt);  //經由SimpleDateFormat將時間轉為字串
+
+        // to get user's weight loss goal
+        SharedPreferences sharedPreferences = getSharedPreferences("LossGoal",MODE_PRIVATE);
 
         //get today's total food
         for(int i=0;i<foods.size();i++){
@@ -821,13 +828,12 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "choose_food_action":  //The case of choosing order
                         int number = 0;
-                        //parameterString+=("建議您先吃");
                         if(result.getStringParameter(J_Food).isEmpty() == false){ //priority 1
                             parameterString+=("建議您先吃");
                             parameterString += (result.getStringParameter(J_Food));
                             number =1;
-                            //int i;
-                            /*for(i=0;i<foodCalList.size();i++){
+                            /*int i;
+                            for(i=0;i<foodCalList.size();i++){
                                 parameterString += (foodCalList.get(i).getChineseName()+" ");
                                 if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(J_Food))){
                                     parameterString += ("它的熱量為 "+foodCalList.get(i).getCalorie());
@@ -1030,57 +1036,92 @@ public class ChatBotActivity extends AppCompatActivity
                         }
 
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
-                            parameterString += ("對不起 此食物目前不存在於資料庫中\n" +
-                                    "建議收詢方式: EX  便當 => 炒青菜+白飯+豬排+豆干");
+                            parameterString += ("很抱歉，此食物目前不存於資料庫中");
                         }
 
                         break;
                     case "get_absorb_calorie":
+
                         //idel_absorb_cal = mwlga.absorb_chatbot;   //?????    Bug detected
                         //parameterString +=  idel_absorb_cal;
-                        idel_absorb_cal = 2000; //預設每日需攝取2000卡
+                        /*idel_absorb_cal = 2000; //預設每日需攝取2000卡
                         float carolie_need; //還需要多少卡路里
 
                         //get today's total calories
                         for( i=0;i<todayFoods.size();i++){
-                            total_absorb_calories += todayFoods.get(i).getCalorie();
-                        }
+                            total_absorb_calories += todayFoods.get(i).getCalorie();*/
 
-                        if(total_absorb_calories < idel_absorb_cal){
-                            parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
-                            carolie_need = idel_absorb_cal - total_absorb_calories;
-                            parameterString += "您距離每日理想熱量還有" + carolie_need +""+ "大卡\n";
-                            parameterString += "建議補足每日需求熱量";
+                        idel_absorb_cal = sharedPreferences.getFloat("absorb",0);
+                        parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
 
-                        }
-                        else if(total_absorb_calories > idel_absorb_cal){
-                            parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
-                            parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories-(double)idel_absorb_cal)+"")
-                                    + "大卡\n";
-                            parameterString += "建議多運動或減少每日進食量";
+                        if(idel_absorb_cal == 0 || total_absorb_calories == 0){
+                            if(idel_absorb_cal == 0){
+                                parameterString += "請前往“設定”填寫您的減重目標！";
+                            }
+                            else{
+                                parameterString += "您今天尚未吃任何食物！";
+                            }
+
                         }
                         else {
-                            parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+                            //get today's total calories
+                            for ( i = 0; i < todayFoods.size(); i++) {
+                                total_absorb_calories += todayFoods.get(i).getCalorie();
+                            }
+
+
+                            if (total_absorb_calories < idel_absorb_cal) {
+                                parameterString += "您今天吸收的熱量為" + total_absorb_calories + "大卡\n";
+                                float carolie_need = idel_absorb_cal - total_absorb_calories;
+                                parameterString += "您距離每日理想熱量還有" + carolie_need + "" + "大卡\n";
+                                parameterString += "建議補足每日需求熱量";
+
+                            } else if (total_absorb_calories > idel_absorb_cal) {
+                                parameterString += "您今天吸收的熱量為" + total_absorb_calories + "大卡\n";
+                                parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories - (double) idel_absorb_cal) + "")
+                                        + "大卡\n";
+                                parameterString += "建議多運動或減少每日進食量";
+                            } else {
+                                parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+
+                                if (total_absorb_calories < idel_absorb_cal) {
+
+                                    parameterString += "您距離每日理想熱量還有" + ((idel_absorb_cal - total_absorb_calories))
+                                            + "大卡\n";
+                                    parameterString += "建議補足每日需求熱量";
+
+                                } else if (total_absorb_calories > idel_absorb_cal) {
+                                    parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories - idel_absorb_cal))
+                                            + "大卡\n";
+                                    parameterString += "建議多運動或減少每日進食量";
+                                } else {
+                                    parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+                                }
+
+                            }
                         }
                         break;
                     case "get_consume_calorie":
-                        idel_consume_cal = mwlga.consume_chatbot;
+
+                        //idel_consume_cal = mwlga.consume_chatbot;
+                        idel_consume_cal = 2000;
                         //get today's total calories
                         for(i=0;i<todaySports.size();i++){
                             total_consume_calories += todaySports.get(i).getCalorie();
                         }
 
-                        if(total_consume_calories > idel_consume_cal){
-                            parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
-                            parameterString += "建議補充膳食纖維高的食品以及多休息";
-                        }
-                        else if(total_consume_calories < idel_consume_cal){
-                            parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
-                            parameterString += "距離每日理想消耗熱量還有" + ((double)idel_consume_cal-total_consume_calories)
-                                    + "大卡\n";
-                            parameterString += "建議多運動以保持理想熱量消耗量";
+                        idel_consume_cal = sharedPreferences.getFloat("consume",0);
+
+                        if(idel_consume_cal == 0 || total_absorb_calories == 0){
+                            if(idel_consume_cal == 0){
+                                parameterString += "請前往“設定”填寫您的減重目標！";
+                            }
+                            else{
+                                parameterString += "您今天尚未做任何運動！";
+                            }
                         }
                         else{
+
                             parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持"+(double)idel_consume_cal;
                         }
                         break;
@@ -1089,7 +1130,27 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "get_water":
                         parameterString += ("您喝了"+water_drunk);
-                        break;
+                    break;
+                            //get today's total calories
+                            /*for(int i=0;i<todaySports.size();i++){
+                                total_consume_calories += todaySports.get(i).getCalorie();
+                            }
+
+                            if(total_consume_calories > idel_consume_cal){
+                                parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
+                                parameterString += "建議補充膳食纖維高的食品以及多休息";
+                            }
+                            else if(total_consume_calories < idel_consume_cal){
+                                parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
+                                parameterString += "距離每日理想消耗熱量還有" + (idel_consume_cal-total_consume_calories)
+                                        + "大卡\n";
+                                parameterString += "建議多運動以保持理想熱量消耗量";
+                            }
+                            else{
+                                parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持";
+                            }
+                        }*/
+
                 }
             }
 

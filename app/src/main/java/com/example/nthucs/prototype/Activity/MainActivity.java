@@ -174,20 +174,10 @@ public class MainActivity extends AppCompatActivity
             // if open app more once time, just get the data base immediately
         } else {
             foodCalList = calorieDAO.getAll();
-
             // output test
             /*for (int i = 0 ; i < foodCalList.size() ; i++) {
                 System.out.println(foodCalList.get(i).getEnglishName());
             }*/
-
-
-
-
-
-
-
-
-
 
         }
 
@@ -431,7 +421,6 @@ public class MainActivity extends AppCompatActivity
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
 
-
         // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
             // temporary declarer
@@ -442,12 +431,37 @@ public class MainActivity extends AppCompatActivity
             foodCal.setEnglishName(allRows.get(i)[3]);
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
-            foodCal.setProtein(Float.parseFloat(allRows.get(i)[7]));
-            foodCal.setFat(Float.parseFloat(allRows.get(i)[8]));
-            foodCal.setCarbohydrates(Float.parseFloat(allRows.get(i)[10]));
-            foodCal.setDietaryFiber(Float.parseFloat(allRows.get(i)[11]));
-            foodCal.setSodium(Float.parseFloat(allRows.get(i)[18]));
-            foodCal.setCalcium(Float.parseFloat(allRows.get(i)[20]));
+
+            if(!(allRows.get(i)[7].equals("") || allRows.get(i)[7] == null)){
+                foodCal.setProtein(Float.parseFloat(allRows.get(i)[7]));
+            }
+            else foodCal.setProtein(0);
+
+            if(!(allRows.get(i)[8].equals("") || allRows.get(i)[8] == null)){
+                foodCal.setFat(Float.parseFloat(allRows.get(i)[8]));
+            }
+            else foodCal.setFat(0);
+
+            if(!(allRows.get(i)[10].equals("") || allRows.get(i)[10] == null)){
+                foodCal.setCarbohydrates(Float.parseFloat(allRows.get(i)[10]));
+            }
+            else  foodCal.setCarbohydrates(0);
+
+
+            if(!(allRows.get(i)[11].equals("") || allRows.get(i)[11] == null)){
+                foodCal.setDietaryFiber(Float.parseFloat(allRows.get(i)[11]));
+            }
+            else foodCal.setDietaryFiber(0);
+
+            if(!(allRows.get(i)[18].equals("") || allRows.get(i)[18] == null)){
+                foodCal.setSodium(Float.parseFloat(allRows.get(i)[18]));
+            }
+            else foodCal.setSodium(0);
+
+            if(!(allRows.get(i)[20].equals("") || allRows.get(i)[20] == null)){
+                foodCal.setCalcium(Float.parseFloat(allRows.get(i)[20]));
+            }
+            else foodCal.setCalcium(0);
             // fetch data with not null english name temporary
             if (allRows.get(i)[3] != null) calorieDAO.insert(foodCal);
         }
