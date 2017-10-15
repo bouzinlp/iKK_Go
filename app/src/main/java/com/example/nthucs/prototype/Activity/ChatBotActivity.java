@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.IntDef;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -56,6 +57,7 @@ import java.io.IOException;
 import java.security.Policy;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -145,7 +147,6 @@ public class ChatBotActivity extends AppCompatActivity
     AIConfiguration config = null;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -196,6 +197,18 @@ public class ChatBotActivity extends AppCompatActivity
         aiService = AIService.getService(this, config);
         aiService.setListener(this);
 
+        //Instruction (chatbot使用說明 => 讓user清楚知道目前聊天機器人有甚麼功能)
+        Message ini_message = new Message();
+        ini_message.setId("3");
+        ini_message.setMessage("歡迎"+LoginActivity.facebookName +" 本聊天機器人目前支援功能有\n" +
+                "1.詢問身高、體重、bmi\n" +
+                "2.詢問飲食順序\n" +
+                "3.詢問血壓/脈搏狀況\n"+
+        "4.查詢目前消耗/吸收熱量\n"+
+        "5.查詢今日所吃的食物");
+
+        messageArrayList.add(ini_message);
+
         mAdapter.notifyDataSetChanged();
 
         btnRecord.setOnClickListener(new View.OnClickListener(){
@@ -245,8 +258,6 @@ public class ChatBotActivity extends AppCompatActivity
 
         //
 
-
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -254,7 +265,6 @@ public class ChatBotActivity extends AppCompatActivity
                 recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount()-1);
             }
         });
-
 
     }
 
@@ -368,6 +378,8 @@ public class ChatBotActivity extends AppCompatActivity
             float pro_weight = curProfile.getWeight();
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
+            float tem = curHealth.getTemperature();
+            int water_drunk = curHealth.getDrunkWater();
 
             String A_Food = new String("A_Food");
             String A_Food1 = new String("A_Food1");
@@ -381,6 +393,8 @@ public class ChatBotActivity extends AppCompatActivity
             String D_Food2 = new String("D_Food2");
             String E_Food1 = new String ("E_Food1");
             String E_Food2 = new String ("E_Food2");
+            String F_Food = new String("F_Food");
+            String F_Food1 = new String("F_Food1");
             String G_Food = new String("G_Food");
             String G_Food1 = new String("G_Food1");
             String G_Food2 = new String("G_Food2");
@@ -400,6 +414,7 @@ public class ChatBotActivity extends AppCompatActivity
             String O_Food1 = new String("O_Food1");
             String O_Food2 = new String("O_Food2");
             String O_Food3 = new String("O_Food3");
+            String date = new String("date");
 
             float total_absorb_calories=0;
 
@@ -413,10 +428,11 @@ public class ChatBotActivity extends AppCompatActivity
         sportDAO = new SportDAO(getApplicationContext());
         sports = sportDAO.getAll();
 
+        //database
         calorieDAO = new CalorieDAO(getApplicationContext());
         foodCalList = calorieDAO.getAll();
 
-        parameterString += foodCalList.get(foodCalList.size()-1).getChineseName();
+        //parameterString += foodCalList.get(foodCalList.size()-1).getChineseName();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
         Date dt = new Date();  //取得目前時間
@@ -437,9 +453,6 @@ public class ChatBotActivity extends AppCompatActivity
                 todaySports.add(sports.get(i));
             }
         }
-
-
-
 
             if (flag == 1) {
                 switch (result.getAction()) {
@@ -497,6 +510,9 @@ public class ChatBotActivity extends AppCompatActivity
                     case "Get_weight":
                         parameterString += ("Your weight is " + String.valueOf(pro_weight) + ".");
                         break;
+                    case "choose_food_lunch_include":
+                        parameterString += (todayFoods.get(1).toString());
+                        break;
                     case "choose_food":  //The case of choosing order (English version)
                         int number = 0;
 
@@ -516,7 +532,7 @@ public class ChatBotActivity extends AppCompatActivity
 
                             parameterString+=(" first.");
                         }
-                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
                             if(number == 1)
                                 parameterString += ("\nand then we recommend you eat ");
@@ -552,7 +568,6 @@ public class ChatBotActivity extends AppCompatActivity
                                     parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food));
                             }
-
                             if (result.getStringParameter(G_Food1).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food1));
@@ -560,6 +575,17 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(G_Food2).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(G_Food2));
+                            }
+
+                            if (result.getStringParameter(F_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food));
+                            }
+
+                            if (result.getStringParameter(F_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food1));
                             }
 
                             if(number == 0) {
@@ -699,50 +725,87 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(" first.");
                                 number = 1;
                             }
-
                         }
-
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
 
                             parameterString += ("I'm sorry. The food you search isn't available in the database");
                         }
-
                         break;
                 }
             } else {
                 switch (result.getAction()) {
+                    case "get_today_food":
+                        int i;
+                        int total_calorie=0;
+                        parameterString += ("您今天吃了");
+                        for(i=0;i<todayFoods.size();i++){
+                            if(i!=0)
+                                parameterString += ("、");
+                            parameterString += (todayFoods.get(i).getTitle());
+                            parameterString += (todayFoods.get(i).getGrams());
+                            parameterString += ("g");
+                            total_calorie += (todayFoods.get(i).getCalorie());
+                        }
+                        parameterString += ("\n您今天一共吃了"+total_calorie+"大卡");
+
+                        break;
+                    case "get_historic_food":
+                        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
+                        parameterString += ("您"+result.getStringParameter(date)+"吃了");
+                        String [] tokens = result.getStringParameter(date).split("-");
+                        int year = Integer.parseInt(tokens[0]);
+                        int month = Integer.parseInt(tokens[1]);
+                        int day = Integer.parseInt(tokens[2]);
+                        Calendar calender = Calendar.getInstance();
+                        calender.set(year,month-1,day);
+                        String dts1 = sdf1.format(calender.getTime());  //經由SimpleDateFormat將時間轉為字串
+                        //get today's total food
+                        for(i=0;i<foods.size();i++){
+                            if(dts1.equals(foods.get(i).getYYYYMD())){
+                                parameterString += (foods.get(i).getTitle());
+                                parameterString += (foods.get(i).getFileName());
+                            }
+                        }
+                        break;
                     case "get_pressure_info":
                         parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
-                                "/" + String.valueOf(dia_pre);
-                        if (sys_pre < 90.0 || dia_pre < 60.0)
+                                "/" + String.valueOf(dia_pre)+"\n";
+                        if(sys_pre == 0 || dia_pre == 0)
+                            parameterString += ("您尚未輸入血壓數值");
+                        else if (sys_pre < 90.0 || dia_pre < 60.0)
                             parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
                             parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                         else parameterString += "您的血壓正常，請繼續保持";
                         break;
                     case "get_systolic_pressure_info":
-                        parameterString += "你的收縮壓為 " + String.valueOf(sys_pre);
-                        if (sys_pre < 90.0)
+                        parameterString += "你的收縮壓為 " + String.valueOf(sys_pre)+"\n";
+                        if(sys_pre == 0)
+                            parameterString += ("您尚未輸入血壓數值");
+                        else if (sys_pre < 90.0)
                             parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
                         else if (sys_pre >= 140.0)
                             parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
                         else parameterString += "您的收縮壓正常，請繼續保持";
                         break;
                     case "get_diastolic_pressure_info":
-                        parameterString += "你的舒張壓為 " + String.valueOf(dia_pre);
-                        if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                        parameterString += "你的舒張壓為 " + String.valueOf(dia_pre)+"\n";
+                        if(dia_pre == 0)
+                            parameterString += ("您尚未輸入血壓數值");
+                        else if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
                         else if (dia_pre >= 90.0)
                             parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                         else parameterString += "您的舒張壓正常，請繼續保持";
                         break;
                     case "get_pressure_high_or_low":
-                        if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
+                        if(sys_pre == 0 || dia_pre == 0)
+                            parameterString += ("您尚未輸入血壓數值");
+                        else if (sys_pre < 90.0 || dia_pre < 60.0) parameterString += "您有低血壓，請前往醫院了解詳情";
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
                             parameterString += "您有高血壓，請前往醫院了解詳情";
                         else parameterString += "您的血壓正常，請繼續保持";
                         break;
                     case "get_bmi_info":
-
                         parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
                         if (pro_BMI >= 24) {
                             parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
@@ -765,12 +828,17 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "choose_food_action":  //The case of choosing order
                         int number = 0;
-                        //parameterString+=("建議您先吃");
                         if(result.getStringParameter(J_Food).isEmpty() == false){ //priority 1
                             parameterString+=("建議您先吃");
                             parameterString += (result.getStringParameter(J_Food));
                             number =1;
-
+                            /*int i;
+                            for(i=0;i<foodCalList.size();i++){
+                                parameterString += (foodCalList.get(i).getChineseName()+" ");
+                                if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(J_Food))){
+                                    parameterString += ("它的熱量為 "+foodCalList.get(i).getCalorie());
+                                }
+                            }*/
                             if (result.getStringParameter(J_Food1).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(J_Food1));
@@ -781,7 +849,7 @@ public class ChatBotActivity extends AppCompatActivity
                             }
 
                         }
-                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false) { //priority 2
+                        if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
                             if(number == 1)
                                 parameterString += ("\n接著再吃");
@@ -791,6 +859,7 @@ public class ChatBotActivity extends AppCompatActivity
                             }
                             if (result.getStringParameter(D_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(D_Food));
+
                             if (result.getStringParameter(D_Food1).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(D_Food1));
@@ -813,8 +882,17 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(E_Food2));
                             }
                             if (result.getStringParameter(G_Food).isEmpty() == false) {
+
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false) {
+                                    if(result.getStringParameter(G_Food).contains("乳") || result.getStringParameter(G_Food).contains("奶") || result.getStringParameter(G_Food).contains("阿華田"))
+                                        parameterString += (",喝");
+                                    else
+                                        parameterString += (",");
+                                }
+
                                 if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
                                     parameterString +=(", ");
+
                                 parameterString += (result.getStringParameter(G_Food));
                             }
 
@@ -825,6 +903,17 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(G_Food2).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(G_Food2));
+                            }
+
+                            if (result.getStringParameter(F_Food).isEmpty() == false) {
+                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false)
+                                    parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food));
+                            }
+
+                            if (result.getStringParameter(F_Food1).isEmpty() == false) {
+                                parameterString +=(",");
+                                parameterString += (result.getStringParameter(F_Food1));
                             }
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
@@ -868,6 +957,12 @@ public class ChatBotActivity extends AppCompatActivity
                                 if(result.getStringParameter(A_Food).isEmpty() == false)
                                     parameterString += (", ");
                                 parameterString += (result.getStringParameter(O_Food));
+                                //int i;
+                                for(i=0;i<foodCalList.size();i++){
+                                    if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(O_Food))){
+                                        parameterString += ("它的熱量為"+foodCalList.get(i).getCalorie());
+                                    }
+                                }
                             }
 
                             if (result.getStringParameter(O_Food1).isEmpty() == false) {
@@ -902,11 +997,15 @@ public class ChatBotActivity extends AppCompatActivity
                             }
                         }
                         if(result.getStringParameter(L_Food).isEmpty() == false || result.getStringParameter(K_Food).isEmpty() == false) { //priority 6
-                            if(number == 1)
-                                parameterString += ("\n接著再吃");
+                            if(number == 1) {
+                                if(result.getStringParameter(L_Food).isEmpty() == false)
+                                    parameterString += ("\n接著再喝");
+                                else
+                                    parameterString +=("\n接著再吃");
+                            }
                             else {
                                 number = 1; //set flag
-                                parameterString+=("建議您先吃");
+                                parameterString+=("建議您先享用");
                             }
                             if(result.getStringParameter(L_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(L_Food));
@@ -922,7 +1021,7 @@ public class ChatBotActivity extends AppCompatActivity
 
                             if(result.getStringParameter(K_Food).isEmpty() == false) {
                                 if(result.getStringParameter(L_Food).isEmpty() == false)
-                                    parameterString += (",");
+                                    parameterString += (",吃");
                                 parameterString += (result.getStringParameter(K_Food));
                             }
 
@@ -934,17 +1033,24 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(K_Food2));
                             }
-
                         }
 
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
-
-                            parameterString += ("對不起 此食物目前不存在於資料庫中\n" +
-                                    "建議收詢方式: EX  便當 => 炒青菜+白飯+豬排+豆干");
+                            parameterString += ("很抱歉，此食物目前不存於資料庫中");
                         }
 
                         break;
                     case "get_absorb_calorie":
+
+                        //idel_absorb_cal = mwlga.absorb_chatbot;   //?????    Bug detected
+                        //parameterString +=  idel_absorb_cal;
+                        /*idel_absorb_cal = 2000; //預設每日需攝取2000卡
+                        float carolie_need; //還需要多少卡路里
+
+                        //get today's total calories
+                        for( i=0;i<todayFoods.size();i++){
+                            total_absorb_calories += todayFoods.get(i).getCalorie();*/
+
                         idel_absorb_cal = sharedPreferences.getFloat("absorb",0);
                         parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
 
@@ -955,32 +1061,55 @@ public class ChatBotActivity extends AppCompatActivity
                             else{
                                 parameterString += "您今天尚未吃任何食物！";
                             }
+
                         }
-                        else{
+                        else {
                             //get today's total calories
-                            for(int i=0;i<todayFoods.size();i++){
+                            for ( i = 0; i < todayFoods.size(); i++) {
                                 total_absorb_calories += todayFoods.get(i).getCalorie();
                             }
 
-                            if(total_absorb_calories < idel_absorb_cal){
 
-                                parameterString += "您距離每日理想熱量還有" + ((idel_absorb_cal-total_absorb_calories))
-                                        + "大卡\n";
+                            if (total_absorb_calories < idel_absorb_cal) {
+                                parameterString += "您今天吸收的熱量為" + total_absorb_calories + "大卡\n";
+                                float carolie_need = idel_absorb_cal - total_absorb_calories;
+                                parameterString += "您距離每日理想熱量還有" + carolie_need + "" + "大卡\n";
                                 parameterString += "建議補足每日需求熱量";
 
-                            }
-                            else if(total_absorb_calories > idel_absorb_cal){
-                                parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories-idel_absorb_cal))
+                            } else if (total_absorb_calories > idel_absorb_cal) {
+                                parameterString += "您今天吸收的熱量為" + total_absorb_calories + "大卡\n";
+                                parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories - (double) idel_absorb_cal) + "")
                                         + "大卡\n";
                                 parameterString += "建議多運動或減少每日進食量";
-                            }
-                            else {
+                            } else {
                                 parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+
+                                if (total_absorb_calories < idel_absorb_cal) {
+
+                                    parameterString += "您距離每日理想熱量還有" + ((idel_absorb_cal - total_absorb_calories))
+                                            + "大卡\n";
+                                    parameterString += "建議補足每日需求熱量";
+
+                                } else if (total_absorb_calories > idel_absorb_cal) {
+                                    parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories - idel_absorb_cal))
+                                            + "大卡\n";
+                                    parameterString += "建議多運動或減少每日進食量";
+                                } else {
+                                    parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
+                                }
+
                             }
                         }
                         break;
-
                     case "get_consume_calorie":
+
+                        //idel_consume_cal = mwlga.consume_chatbot;
+                        idel_consume_cal = 2000;
+                        //get today's total calories
+                        for(i=0;i<todaySports.size();i++){
+                            total_consume_calories += todaySports.get(i).getCalorie();
+                        }
+
                         idel_consume_cal = sharedPreferences.getFloat("consume",0);
 
                         if(idel_consume_cal == 0 || total_absorb_calories == 0){
@@ -992,8 +1121,18 @@ public class ChatBotActivity extends AppCompatActivity
                             }
                         }
                         else{
+
+                            parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持"+(double)idel_consume_cal;
+                        }
+                        break;
+                    case "get_tem":
+                        parameterString += ("您的體溫為"+tem);
+                        break;
+                    case "get_water":
+                        parameterString += ("您喝了"+water_drunk);
+                    break;
                             //get today's total calories
-                            for(int i=0;i<todaySports.size();i++){
+                            /*for(int i=0;i<todaySports.size();i++){
                                 total_consume_calories += todaySports.get(i).getCalorie();
                             }
 
@@ -1010,70 +1149,8 @@ public class ChatBotActivity extends AppCompatActivity
                             else{
                                 parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持";
                             }
-                        }
-                        break;
-                    case "choose_food_lunch_include":
-//                        StringBuffer sb = new StringBuffer();
-//                        for(int i=0;i<todayFoods.size();i++){
-//                            Food f = todayFoods.get(i);
-//                            if(f.getMealTypeIndex() == 0){
-//                                sb.append(f.getTitle() + " ");
-//                            }
-//                        }
-//                        parameterString += "搜尋中...";
-//
-//                        final AIDataService aiDataService_l = new AIDataService(config);
-//                        final AIRequest aiRequest = new AIRequest();
-//                        aiRequest.setQuery(sb.toString());
-//
-//                        new AsyncTask<AIRequest, Void, AIResponse>() {
-//                            @Override
-//                            protected AIResponse doInBackground(AIRequest... requests) {
-//                                final AIRequest request = requests[0];
-//                                try {
-//                                    final AIResponse response = aiDataService_l.request(request);
-//                                    return response;
-//                                } catch (AIServiceException e) {
-//                                }
-//                                return null;
-//                            }
-//
-//                            @Override
-//                            protected void onPostExecute(AIResponse aiResponse) {
-//                                if (aiResponse != null) {
-//                                    String parameterString = "";
-//                                    Result result = aiResponse.getResult();
-//                                    final String speech = result.getFulfillment().getSpeech();
-//                            //TODO
-//                                    /*回話的地方，例如目前吃了麵包跟奶茶當早餐，現在可以抓到“麵包”跟“奶茶”key word
-//                                      然後回傳給api ai 排序
-//                                    */
-//                                    parameterString += aiResponses(parameterString, result);
-//                                    parameterString += speech;
-//
-//                                    final Message inputMessage = new Message();
-//                                    inputMessage.setMessage(result.getResolvedQuery());
-//                                    inputMessage.setAct(result.getAction());
-//
-//                                    Message outMes = new Message();
-//                                    outMes.setMessage(parameterString);
-//                                    outMes.setId("2");
-//                                    messageArrayList.add(outMes);
-//
-//
-//                                    runOnUiThread(new Runnable() {
-//                                        @Override
-//                                        public void run() {
-//                                            mAdapter.notifyDataSetChanged();
-//                                            recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
-//                                        }
-//                                    });
-//
-//                                }
-//                            }
-//                        }.execute(aiRequest);
+                        }*/
 
-                        break;
                 }
             }
 
@@ -1270,7 +1347,19 @@ public class ChatBotActivity extends AppCompatActivity
                 aiService = AIService.getService(this, config);
                 aiService.setListener(this);
                 flag = 1;
-                Toast.makeText(ChatBotActivity.this, "英文管家", Toast.LENGTH_SHORT).show();
+                //Instruction (chatbot使用說明 => 讓user清楚知道目前聊天機器人有甚麼功能)
+                Message eng_message = new Message();
+                eng_message.setId("4");
+                eng_message.setMessage("Welcome "+LoginActivity.facebookName + "\n"+
+                        "Now chatbot can support\n" +
+                        "1.Ask info about height、weight、bmi\n" +
+                        "2.Ask info about eating order\n" +
+                        "3.Ask info about pressure\n"+
+                        "4.Ask info about calories");
+                messageArrayList.clear();
+                messageArrayList.add(eng_message);
+                mAdapter.notifyDataSetChanged();
+                Toast.makeText(ChatBotActivity.this, "English Chat Bot", Toast.LENGTH_SHORT).show();
             }
             else{
                 config = new AIConfiguration("a772958d63a149b39bf9f11cfad29889",
@@ -1279,6 +1368,17 @@ public class ChatBotActivity extends AppCompatActivity
                 aiService = AIService.getService(this, config);
                 aiService.setListener(this);
                 flag = 0;
+                //Instruction (chatbot使用說明 => 讓user清楚知道目前聊天機器人有甚麼功能)
+                Message ini_message = new Message();
+                ini_message.setId("3");
+                ini_message.setMessage("歡迎"+LoginActivity.facebookName +" 本聊天機器人目前支援功能有\n" +
+                        "1.詢問身高、體重、bmi\n" +
+                        "2.詢問飲食順序\n" +
+                        "3.詢問血壓/脈搏狀況\n"+
+                        "4.查詢目前消耗/吸收熱量");
+                messageArrayList.clear();
+                messageArrayList.add(ini_message);
+                mAdapter.notifyDataSetChanged();
                 Toast.makeText(ChatBotActivity.this, "中文管家", Toast.LENGTH_SHORT).show();
             }
         }
