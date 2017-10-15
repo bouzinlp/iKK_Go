@@ -7,6 +7,8 @@ import android.content.pm.Signature;
 import android.util.Base64;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import java.security.MessageDigest;
 
 /**
@@ -17,6 +19,7 @@ public class createKey extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         printKey();
     }
 
