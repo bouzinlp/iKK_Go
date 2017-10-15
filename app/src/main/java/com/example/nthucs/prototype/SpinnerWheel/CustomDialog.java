@@ -71,7 +71,7 @@ public class CustomDialog {
     }
 
     public CustomDialog(int[] compare_result, Food food, List<FoodCal> foodCalList,
-                        String fileName, Activity activity) {
+                        String fileName, Activity activity,String encodedString) {
         this.compare_result = compare_result;
         this.food = food;
         this.foodCalList = foodCalList;
@@ -83,6 +83,8 @@ public class CustomDialog {
 
         // parent activity is camera
         this.parentIsGallery = false;
+
+        this.encodedString = encodedString;
     }
 
     // Dialog with spinner wheel to choose food name & calorie
@@ -210,7 +212,7 @@ public class CustomDialog {
                 food.setGrams(100.0f);
                 food.setPortions(1.0f);
                 food.setPicUriString(picUriString);
-
+                food.setEncodedString(encodedString);
                 // distinguish parent activity
                 if (parentIsGallery == true) {
                     food.setTakeFromCamera(false);

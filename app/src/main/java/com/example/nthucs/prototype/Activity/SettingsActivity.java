@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity
         dbFunctions = new DBFunctions(this.getApplicationContext());
         //Initialize Progress Dialog properties
         prgDialog = new ProgressDialog(this);
-        prgDialog.setMessage("Synching SQLite Data with Remote MySQL DB. Please wait...");
+        prgDialog.setMessage("正在與遠端資料庫同步中，請稍等‧‧‧");
         prgDialog.setCancelable(false);
         // initialize tabLayout and viewPager
         //viewPager = (ViewPager)findViewById(R.id.viewPager);
@@ -176,6 +176,12 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStop(){
+        super.onStop();
+        prgDialog.dismiss();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.setting_menu, menu);
@@ -234,18 +240,18 @@ public class SettingsActivity extends AppCompatActivity
                         startActivity(intent_calorie_consumption);
                         finish();
                         break;
-                    case drinkWaterDiary:
-                        Intent intent_drink_water_diary = new Intent();
-                        intent_drink_water_diary.setClass(SettingsActivity.this , DrinkWaterDiary.class);
-                        startActivity(intent_drink_water_diary);
-                        finish();
-                        break;
-                    case myTemperatureRecord:
-                        Intent intent_my_temperature_record = new Intent();
-                        intent_my_temperature_record.setClass(SettingsActivity.this , MyTemperatureRecord.class);
-                        startActivity(intent_my_temperature_record);
-                        finish();
-                        break;
+//                    case drinkWaterDiary:
+//                        Intent intent_drink_water_diary = new Intent();
+//                        intent_drink_water_diary.setClass(SettingsActivity.this , DrinkWaterDiary.class);
+//                        startActivity(intent_drink_water_diary);
+//                        finish();
+//                        break;
+//                    case myTemperatureRecord:
+//                        Intent intent_my_temperature_record = new Intent();
+//                        intent_my_temperature_record.setClass(SettingsActivity.this , MyTemperatureRecord.class);
+//                        startActivity(intent_my_temperature_record);
+//                        finish();
+//                        break;
                 }
             }
         };
@@ -276,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity
                         try {
                             String str = new String(bytes,"UTF-8");
                             System.out.println(str);
-                            Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "資料庫同步完成！", Toast.LENGTH_LONG).show();
 
 
                         } catch (UnsupportedEncodingException e) {
@@ -330,54 +336,55 @@ public class SettingsActivity extends AppCompatActivity
             intent_home.putExtras(bundle);
             startActivity(intent_home);
             finish();
-        }
-        else if (id == R.id.food_list) {
+        } else if (id == R.id.food_list) {
             Intent intent_main = new Intent();
             intent_main.setClass(SettingsActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        }
-//        else if (id == R.id.calendar) {
-//            Intent intent_calendar = new Intent();
-//            intent_calendar.setClass(SettingsActivity.this, CalendarActivity.class);
-//            startActivity(intent_calendar);
-//            finish();
-            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        //}
-        else if (id == R.id.Import) {
+        } else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.message) {
-            Intent intent_message = new Intent();
-            intent_message.setClass(SettingsActivity.this, MessageActivity.class);
-            startActivity(intent_message);
-            finish();
-            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.setting_list) {
-            Intent intent_setting = new Intent();
-            intent_setting.setClass(SettingsActivity.this, SettingsActivity.class);
-            startActivity(intent_setting);
-            finish();
-        } else if (id == R.id.blood_pressure){
-            Intent intent_blood_pressure = new Intent();
-            intent_blood_pressure.setClass(SettingsActivity.this, MyBloodPressure.class);
-            startActivity(intent_blood_pressure);
-            finish();
-        } else if (id == R.id.mail){
-            Intent intent_mail = new Intent();
-            intent_mail.setClass(SettingsActivity.this, MailActivity.class);
-            startActivity(intent_mail);
+        } else if (id == R.id.chat) {
+            Intent intent_chat_bot = new Intent();
+            intent_chat_bot.setClass(SettingsActivity.this, ChatBotActivity.class);
+            startActivity(intent_chat_bot);
             finish();
         } else if (id == R.id.new_calendar){
             Intent intent_new_calendar = new Intent();
             intent_new_calendar.setClass(SettingsActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        } else if (id == R.id.chat) {
-            Intent intent_chat_bot = new Intent();
-            intent_chat_bot.setClass(SettingsActivity.this, ChatBotActivity.class);
-            startActivity(intent_chat_bot);
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(SettingsActivity.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.temp_record){
+            Intent intent_temp_record = new Intent();
+            intent_temp_record.setClass(SettingsActivity.this, MyTemperatureRecord.class);
+            startActivity(intent_temp_record);
+            finish();
+        } else if (id == R.id.water_record){
+            Intent intent_water_record = new Intent();
+            intent_water_record.setClass(SettingsActivity.this, DrinkWaterDiary.class);
+            startActivity(intent_water_record);
+            finish();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(SettingsActivity.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(SettingsActivity.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(SettingsActivity.this, SettingsActivity.class);
+            startActivity(intent_setting);
             finish();
         }
 

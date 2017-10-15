@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewDebug;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
@@ -61,6 +63,9 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
     //consume suggest
     private TextView consume_suggest;
+
+    // for chatbot use
+    public static float absorb_chatbot, consume_chatbot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,12 +134,23 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
 
         // process BMI
         processTextViewControllers();
+//
+//        Intent i = new Intent();
+//        i.setClass(MyWeightLossGoalActivity.this,ChatBotActivity.class);
+//        Bundle b = new Bundle();
+//        b.putFloat("absorb",absorb);
+//        i.putExtras(b);
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // for chatbot use
+
+        absorb_chatbot = absorb;
+        consume_chatbot = consume;
+        //
     }
 
     // process back button listener
@@ -241,6 +257,7 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
             consume_suggest.setText("建議每日快跑2小時");
         }
 
+
         absorb_text.setText(Float.toString(absorb));
         consume_text.setText(Float.toString(consume));
     }
@@ -275,19 +292,36 @@ public class MyWeightLossGoalActivity extends AppCompatActivity {
     public void onSubmit(View view) {
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
+            boolean updatable = true;
             // set target weight and weekly target
-            curProfile.setWeightLossGoal(Float.parseFloat(target_weight_text.getText().toString()));
-            curProfile.setWeeklyLossWeight(Float.parseFloat(weekly_target_text.getText().toString()));
+            if (target_weight_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "目標體重不可為空", Toast.LENGTH_LONG).show();
+            }
+            else curProfile.setWeightLossGoal(Float.parseFloat(target_weight_text.getText().toString()));
 
-            // set last modify time
-            curProfile.setLastModify(new Date().getTime());
+            if (weekly_target_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "每周目標不可為空", Toast.LENGTH_LONG).show();
+            }
 
-            // update to my profile data base
-            myProfileDAO.update(curProfile);
+            if (updatable) {
+                curProfile.setWeeklyLossWeight(Float.parseFloat(weekly_target_text.getText().toString()));
 
-            consume = absorb+(Float.parseFloat(weekly_target_text.getText().toString()))*1100;
-            absorb_text.setText(Float.toString(absorb));
-            consume_text.setText(Float.toString(consume));
+                // set last modify time
+                curProfile.setLastModify(new Date().getTime());
+
+                // update to my profile data base
+                myProfileDAO.update(curProfile);
+
+                consume = absorb + (Float.parseFloat(weekly_target_text.getText().toString())) * 1100;
+                absorb_text.setText(Float.toString(absorb));
+                consume_text.setText(Float.toString(consume));
+
+                Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
+            }
+
         }
     }
+
 }

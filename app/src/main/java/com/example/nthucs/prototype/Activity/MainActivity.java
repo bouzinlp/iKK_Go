@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.nfc.cardemulation.HostNfcFService;
 import android.os.Bundle;
 import android.os.Handler;
+
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -120,6 +122,8 @@ public class MainActivity extends AppCompatActivity
     Handler handler = new Handler();
     SyncThread syncThread;
 
+    Boolean IsDataChanged = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,6 +163,7 @@ public class MainActivity extends AppCompatActivity
         calorieDAO = new CalorieDAO(getApplicationContext());
         dbFunctions = new DBFunctions(this.getApplicationContext());
 
+        IsDataChanged = getIntent().getBooleanExtra("DataChanged", false);
         // if the app is re-install or open in first time, then read csv and store in data base
         if (calorieDAO.isTableEmpty() == true) {
             try {
@@ -166,7 +171,7 @@ public class MainActivity extends AppCompatActivity
             } catch (IOException e) {
                 System.out.println("open food cal: IO exception");
             }
-        // if open app more once time, just get the data base immediately
+            // if open app more once time, just get the data base immediately
         } else {
             foodCalList = calorieDAO.getAll();
 
@@ -174,6 +179,16 @@ public class MainActivity extends AppCompatActivity
             /*for (int i = 0 ; i < foodCalList.size() ; i++) {
                 System.out.println(foodCalList.get(i).getEnglishName());
             }*/
+
+
+
+
+
+
+
+
+
+
         }
 
         // initialize tabLayout and viewPager
@@ -190,15 +205,15 @@ public class MainActivity extends AppCompatActivity
         foodDAO = new FoodDAO(getApplicationContext());
         if (intent.getIntExtra("year", 0) == 0) foods = foodDAO.getAll();
         else foods = foodDAO.getSelectedDate(intent.getIntExtra("year", 1970),
-                                    intent.getIntExtra("month", 1),
-                                    intent.getIntExtra("day", 1));
+                intent.getIntExtra("month", 1),
+                intent.getIntExtra("day", 1));
 
         // sport list data base
         sportDAO = new SportDAO(getApplicationContext());
         if (intent.getIntExtra("year", 0) == 0) sports = sportDAO.getAll();
         else sports = sportDAO.getSelectedDate(intent.getIntExtra("year", 1970),
-                                    intent.getIntExtra("month", 1),
-                                    intent.getIntExtra("day", 1));
+                intent.getIntExtra("month", 1),
+                intent.getIntExtra("day", 1));
 
         // initialize food & sport adapter
         foodAdapter = new FoodAdapter(this, R.layout.single_food, foods);
@@ -243,11 +258,12 @@ public class MainActivity extends AppCompatActivity
                 // Always select food list tab after return
                 //selectTab(0);
                 Intent intent = new Intent();
+                intent.putExtra("DataChanged", true);
                 intent.setClass(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
                 return;
-            // Sport edit event
+                // Sport edit event
             } else if (requestCode == EDIT_SPORT) {
                 // get sport data
                 Sport sport = (Sport)data.getExtras().getSerializable("com.example.nthucs.prototype.SportList.Sport");
@@ -259,6 +275,7 @@ public class MainActivity extends AppCompatActivity
                     sportDAO.update(sport);
 
                     sports.set(position, sport);
+                    IsDataChanged = true;
                     sportAdapter.notifyDataSetChanged();
                 }
                 return;
@@ -273,7 +290,7 @@ public class MainActivity extends AppCompatActivity
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
-            // Edit food list
+                // Edit food list
             } else if (requestCode == EDIT_FOOD) {
                 int position = data.getIntExtra("position", -1);
 
@@ -283,13 +300,13 @@ public class MainActivity extends AppCompatActivity
                     foods.set(position, food);
                     foodAdapter.notifyDataSetChanged();
                 }
-            // Scan picture as adding food
+                // Scan picture as adding food
             } else if (requestCode == SCAN_FOOD) {
                 food = foodDAO.insert(food);
 
                 foods.add(food);
                 foodAdapter.notifyDataSetChanged();
-            // Take photo from library(gallery)
+                // Take photo from library(gallery)
             } else if (requestCode == TAKE_PHOTO) {
                 food = foodDAO.insert(food);
 
@@ -300,6 +317,7 @@ public class MainActivity extends AppCompatActivity
             // Always select food list tab after return
             //selectTab(0);
             Intent intent = new Intent();
+            intent.putExtra("DataChanged", true);
             intent.setClass(MainActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -349,7 +367,7 @@ public class MainActivity extends AppCompatActivity
                             try {
                                 String str = new String(bytes,"UTF-8");
                                 System.out.println(str);
-                                Toast.makeText(getApplicationContext(), "DB Sync completed!", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "資料庫同步完成！", Toast.LENGTH_LONG).show();
 
 
                             } catch (UnsupportedEncodingException e) {
@@ -396,10 +414,13 @@ public class MainActivity extends AppCompatActivity
     public void onStop(){
         super.onStop();
 
-        syncThread = new SyncThread();
-        handler.post(syncThread);
+        if (IsDataChanged) {
+            syncThread = new SyncThread();
+            handler.post(syncThread);
+            IsDataChanged = false;
+        }
 
-        System.out.println("Sync executed");
+        //System.out.println("Sync executed");
     }
 
     // Open food calories
@@ -409,6 +430,7 @@ public class MainActivity extends AppCompatActivity
 
         // Read all rows at once
         ArrayList<String[]> allRows= (ArrayList)foodCalReader.readAll();
+
 
         // Read CSV line by line
         for (int i = 1; i < allRows.size() ; i++) {
@@ -420,7 +442,12 @@ public class MainActivity extends AppCompatActivity
             foodCal.setEnglishName(allRows.get(i)[3]);
             foodCal.setCalorie(Integer.parseInt(allRows.get(i)[4]));
             foodCal.setModifiedCalorie(Integer.parseInt(allRows.get(i)[5]));
-
+            foodCal.setProtein(Float.parseFloat(allRows.get(i)[7]));
+            foodCal.setFat(Float.parseFloat(allRows.get(i)[8]));
+            foodCal.setCarbohydrates(Float.parseFloat(allRows.get(i)[10]));
+            foodCal.setDietaryFiber(Float.parseFloat(allRows.get(i)[11]));
+            foodCal.setSodium(Float.parseFloat(allRows.get(i)[18]));
+            foodCal.setCalcium(Float.parseFloat(allRows.get(i)[20]));
             // fetch data with not null english name temporary
             if (allRows.get(i)[3] != null) calorieDAO.insert(foodCal);
         }
@@ -467,7 +494,7 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
                         startActivityForResult(intent, EDIT_FOOD);
                     }
-                // click position in sport adapter
+                    // click position in sport adapter
                 } else {
                     // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
@@ -503,7 +530,7 @@ public class MainActivity extends AppCompatActivity
 
                     processMenu(food);
                     foodAdapter.set(position, food);
-                // long click position in sport adapter
+                    // long click position in sport adapter
                 } else {
                     // minus position to original one
                     int sport_position = position - foodAdapter.getCount();
@@ -646,6 +673,7 @@ public class MainActivity extends AppCompatActivity
                                     index_sport--;
                                 }
                                 sportAdapter.notifyDataSetChanged();
+                                IsDataChanged = true;
                             }
                         });
                 d.setNegativeButton(android.R.string.no, null);
@@ -675,55 +703,55 @@ public class MainActivity extends AppCompatActivity
             intent_home.putExtras(bundle);
             startActivity(intent_home);
             finish();
-        }
-        else if (id == R.id.food_list) {
-            // Handle the camera action
+        } else if (id == R.id.food_list) {
             Intent intent_main = new Intent();
             intent_main.setClass(MainActivity.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        }
-//        else if (id == R.id.calendar) {
-//            Intent intent_calendar = new Intent();
-//            intent_calendar.setClass(MainActivity.this, CalendarActivity.class);
-//            startActivity(intent_calendar);
-//            finish();
-            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        //}
-        else if (id == R.id.Import) {
+        } else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.message) {
-            Intent intent_message = new Intent();
-            intent_message.setClass(MainActivity.this, MessageActivity.class);
-            startActivity(intent_message);
-            finish();
-            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.setting_list) {
-            Intent intent_setting = new Intent();
-            intent_setting.setClass(MainActivity.this, SettingsActivity.class);
-            startActivity(intent_setting);
-            finish();
-        } else if (id == R.id.blood_pressure){
-            Intent intent_blood_pressure = new Intent();
-            intent_blood_pressure.setClass(MainActivity.this, MyBloodPressure.class);
-            startActivity(intent_blood_pressure);
-            finish();
-        } else if (id == R.id.mail){
-            Intent intent_mail = new Intent();
-            intent_mail.setClass(MainActivity.this, MailActivity.class);
-            startActivity(intent_mail);
+        } else if (id == R.id.chat) {
+            Intent intent_chat_bot = new Intent();
+            intent_chat_bot.setClass(MainActivity.this, ChatBotActivity.class);
+            startActivity(intent_chat_bot);
             finish();
         } else if (id == R.id.new_calendar){
             Intent intent_new_calendar = new Intent();
             intent_new_calendar.setClass(MainActivity.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        } else if (id == R.id.chat) {
-            Intent intent_chat_bot = new Intent();
-            intent_chat_bot.setClass(MainActivity.this, ChatBotActivity.class);
-            startActivity(intent_chat_bot);
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(MainActivity.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.temp_record){
+            Intent intent_temp_record = new Intent();
+            intent_temp_record.setClass(MainActivity.this, MyTemperatureRecord.class);
+            startActivity(intent_temp_record);
+            finish();
+        } else if (id == R.id.water_record){
+            Intent intent_water_record = new Intent();
+            intent_water_record.setClass(MainActivity.this, DrinkWaterDiary.class);
+            startActivity(intent_water_record);
+            finish();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(MainActivity.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(MainActivity.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(MainActivity.this, SettingsActivity.class);
+            startActivity(intent_setting);
             finish();
         }
 
@@ -742,12 +770,13 @@ public class MainActivity extends AppCompatActivity
                 if (items[index].equals("照相")) {
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-
+                        IsDataChanged = false;
                         activity.startActivityForResult(intent_camera, SCAN_FOOD);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
+                        result.putExtra("DataChanged", true);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
@@ -756,11 +785,13 @@ public class MainActivity extends AppCompatActivity
                     if (activityIndex == MAIN_ACTIVITY) {
                         Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
                         //intent_gallery.putParcelableArrayListExtra(calDATA, foodCalList);
+                        IsDataChanged = false;
                         activity.startActivityForResult(intent_gallery, TAKE_PHOTO);
                     } else {
                         // back to main activity
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
+                        result.putExtra("DataChanged", true);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();

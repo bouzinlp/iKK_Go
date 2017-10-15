@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:stretchColumns="1"
+    android:background="@drawable/background_color"
     tools:context=".Activity.CameraActivity">
 
     <!-- 顯示圖片 -->
@@ -28,6 +29,7 @@
                 android:text="@string/search_picture"
                 android:onClick="onSubmit"
                 android:padding="6sp"
+                android:background="@drawable/bar_color"
                 android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -36,6 +38,7 @@
                 android:text="@string/cancel_button"
                 android:onClick="onSubmit"
                 android:padding="6sp"
+                android:background="@drawable/bar_color"
                 android:layout_margin="2sp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </TableRow>>

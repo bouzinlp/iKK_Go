@@ -2,10 +2,10 @@ package com.example.nthucs.prototype.Activity;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.nthucs.prototype.AsyncTask.AsyncTaskConnect;
 import com.example.nthucs.prototype.AsyncTask.AsyncTaskJsoup;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
@@ -27,21 +26,22 @@ import com.example.nthucs.prototype.Utility.CompFoodDB;
 import com.example.nthucs.prototype.Utility.FileUtil;
 import com.example.nthucs.prototype.FoodList.Food;
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Utility.HttpFileUpload;
 import com.example.nthucs.prototype.Utility.RealPathUtil;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -156,45 +156,184 @@ public class GalleryActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    public void onSubmit(View view) {
-        if (view.getId() == R.id.search_item) {
-            // Use Async Task to open httpUrlConnection for upload picture
-            String responseString = new String();
+    private class ATC extends AsyncTask<String, Integer, String> {
 
-            // Use Async Task
-            try{
-                System.out.println("REAL PATH = "+realPath);
-                System.out.println("FILE = "+picFile);
-                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, realPath, GalleryActivity.this);
-                responseString =  asyncTaskConnect.execute().get();
-            } catch (InterruptedException e) {
-                System.out.println("Interrupted exception");
-            } catch (ExecutionException e) {
-                System.out.println("Execution exception");
+        // URL upload
+        private static final String SERVER_URL = "http://uploads.im/api?upload";
+
+        // Http response
+        private String responseString;
+
+        // Picture
+        File PicFile;
+        String PicPath;
+
+        GalleryActivity galleryActivity;
+
+        // ProgressDialog
+        private ProgressDialog uploadProgressDialog;
+        private final CharSequence dialogTitle = "上傳中";
+        private final CharSequence dialogMessage = "請等待上傳資料";
+
+        public ATC(File picFile, String picPath, GalleryActivity galleryActivity) {
+            this.PicFile = picFile;
+            this.PicPath = picPath;
+            this.galleryActivity = galleryActivity;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            uploadProgressDialog = new ProgressDialog(galleryActivity);
+
+            // set title, message & style
+            uploadProgressDialog.setTitle(dialogTitle);
+            uploadProgressDialog.setMessage(dialogMessage);
+            //uploadProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+
+            // start from zero, end to max
+            //uploadProgressDialog.setProgress(0);
+            //uploadProgressDialog.setMax(100);
+
+            // show dialog when uploading
+            uploadProgressDialog.show();
+
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                try {
+                    // Set your file path here
+                    FileInputStream fstrm = new FileInputStream(PicFile);
+
+                    // Set your server page url (and the file title/description)
+                    HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
+
+                    // Send to server, pass file input stream and file's path
+                    hfu.Send_Now(fstrm, PicPath);
+
+                    // Get the response string from server
+                    responseString = hfu.getResponseString();
+
+                } catch (FileNotFoundException e) {
+                    // Error: File not found
+                }
+                return responseString;
+            } /*catch (IOException e) {
+             return "Unable to retrieve web page. URL may be invalid.";
+         }*/
+            finally {
+
             }
+        }
 
-            //System.out.println("response = "+responseString);
-            // Parse response string
+//        @Override
+//        protected void onProgressUpdate(Integer... progress) {
+//            uploadProgressDialog.incrementProgressBy(5);
+//            super.onProgressUpdate(progress);
+//        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            if (result.equals(responseString)) {
+                uploadProgressDialog.dismiss();
+            }
             imageUrl = getParseString(responseString, "data", "img_url");
-
-            // output test
             System.out.println(imageUrl);
 
             // Use Async Task to retrieve data from google image search result with Jsoup
-            String resultString = new String();
+            //String resultString = new String();
 
             // Use Async Task
-            try{
-                AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
-                resultString = asyncTaskJsoup.execute().get();
-            } catch (InterruptedException e) {
-                System.out.println("Interrupted exception");
-            } catch (ExecutionException e) {
-                System.out.println("Execution exception");
-            }
+//            try{
+//                AsyncTaskJsoup atj = new AsyncTaskJsoup(imageUrl);
+//                resultString = atj.execute().get();
+                ATJ atj = new ATJ(imageUrl, GalleryActivity.this);
+                atj.execute();
+//            } catch (InterruptedException e) {
+//                System.out.println("Interrupted exception");
+//            } catch (ExecutionException e) {
+//                System.out.println("Execution exception");
+//            }
 
             // Get the result text from the response string
-            resultText = resultString;
+//            resultText = resultString;
+//
+//            // Compare Food Cal DAO to get calorie
+//            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+//            int[] compare_result = compFoodDB.compareFoodCalDB();
+//
+//            // output test
+//            System.out.println("Suggested result: " + resultText);
+//
+//            // if the compare result is empty
+//            if (compare_result == null || compare_result.length == 0) {
+//                // Process normal food event
+//                processFoodEvent();
+//            } else {
+//                // Process dialog with spinner wheel
+//                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+//                        fileName, picUriString, GalleryActivity.this,encodedString);
+//                customDialog.processDialogControllers();
+//            }
+            super.onPostExecute(result);
+        }
+    }
+
+    private class ATJ extends AsyncTask<String, Void, String> {
+        String Url;
+        GalleryActivity galleryActivity;
+        String result_text;
+        ProgressDialog prd;
+
+        public ATJ(String Url, GalleryActivity galleryActivity){
+            this.Url = Url;
+            this.galleryActivity = galleryActivity;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            prd = new ProgressDialog(galleryActivity);
+            prd.setTitle("搜尋中");
+            prd.setMessage("請等待搜尋結果");
+            prd.show();
+        }
+
+        @Override
+        protected String doInBackground(String... urls) {
+            try {
+                try {
+                    // Connect website: google search by image
+                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).timeout(30000).get();
+
+                    // Parse html with class name: _gUb
+                    Elements elem = doc.getElementsByClass("_gUb");
+
+                    // Get the text content
+                    result_text = elem.text();
+
+                    // output test
+                /*System.out.println("============");
+                System.out.println(elem);
+                System.out.println("============");*/
+                } catch (IOException e) {
+                    System.out.println("IO exception");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return result_text;
+            }
+            finally {
+
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            // Get the result text from the response string
+            if (prd.isShowing()) prd.dismiss();
+            resultText = result;
 
             // Compare Food Cal DAO to get calorie
             CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
@@ -210,9 +349,72 @@ public class GalleryActivity extends AppCompatActivity {
             } else {
                 // Process dialog with spinner wheel
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                                                            fileName, picUriString, GalleryActivity.this,encodedString);
+                        fileName, picUriString, GalleryActivity.this,encodedString);
                 customDialog.processDialogControllers();
             }
+        }
+    }
+
+    public void onSubmit(View view) {
+        if (view.getId() == R.id.search_item) {
+            // Use Async Task to open httpUrlConnection for upload picture
+            //String responseString = new String();
+
+            // Use Async Task
+            //try{
+                System.out.println("REAL PATH = "+realPath);
+                System.out.println("FILE = "+picFile);
+//                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, realPath, GalleryActivity.this);
+//                responseString =  asyncTaskConnect.execute().get();
+                ATC atc = new ATC(picFile, realPath, GalleryActivity.this);
+                atc.execute();
+                //responseString = atc.execute().get();
+//            } catch (InterruptedException e) {
+//                System.out.println("Interrupted exception");
+//            } catch (ExecutionException e) {
+//                System.out.println("Execution exception");
+//            }
+
+            //System.out.println("response = "+responseString);
+            // Parse response string
+            //imageUrl = getParseString(responseString, "data", "img_url");
+
+            // output test
+            //System.out.println(imageUrl);
+
+            // Use Async Task to retrieve data from google image search result with Jsoup
+//            String resultString = new String();
+//
+//            // Use Async Task
+//            try{
+//                AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
+//                resultString = asyncTaskJsoup.execute().get();
+//            } catch (InterruptedException e) {
+//                System.out.println("Interrupted exception");
+//            } catch (ExecutionException e) {
+//                System.out.println("Execution exception");
+//            }
+//
+//            // Get the result text from the response string
+//            resultText = resultString;
+//
+//            // Compare Food Cal DAO to get calorie
+//            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+//            int[] compare_result = compFoodDB.compareFoodCalDB();
+//
+//            // output test
+//            System.out.println("Suggested result: " + resultText);
+//
+//            // if the compare result is empty
+//            if (compare_result == null || compare_result.length == 0) {
+//                // Process normal food event
+//                processFoodEvent();
+//            } else {
+//                // Process dialog with spinner wheel
+//                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+//                                                            fileName, picUriString, GalleryActivity.this,encodedString);
+//                customDialog.processDialogControllers();
+//            }
         } else if (view.getId() == R.id.cancel_item) {
             finish();
         }
@@ -359,8 +561,20 @@ public class GalleryActivity extends AppCompatActivity {
     private Bitmap resizeBitmap(Bitmap bm){
         int width = bm.getWidth();
         int height = bm.getHeight();
-        float scaleWidth = 0.75f;
-        float scaleHeight = 0.75f;
+        float scaleWidth;
+        float scaleHeight;
+
+        if (width * height > 2000*2000) {
+            float scaleArea = (float) 2000*2000/width/height;
+            double scale = Math.sqrt((double) scaleArea);
+            scaleHeight = (float) scale;
+            scaleWidth = (float) scale;
+        }
+
+        else {
+            scaleHeight = 0.75f;
+            scaleWidth = 0.75f;
+        }
 
         Matrix matrix = new Matrix();
         matrix.postScale(scaleWidth, scaleHeight);

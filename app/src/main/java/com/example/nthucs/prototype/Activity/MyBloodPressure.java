@@ -21,6 +21,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
@@ -292,6 +293,7 @@ public class MyBloodPressure extends AppCompatActivity
     }
 
     public void onSubmit(View view) {
+        Boolean updatable = true;
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
             // convert integer time to calendar
@@ -302,23 +304,42 @@ public class MyBloodPressure extends AppCompatActivity
             calendar.set(Calendar.HOUR_OF_DAY, select_hour);
             calendar.set(Calendar.MINUTE, select_min);
 
-            // set the chosen date time and last modify time
-            tempHealth.setDatetime(calendar.getTimeInMillis());
-            tempHealth.setLastModify(new Date().getTime());
-
-            // set user id
-            tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
-
             // set systolic pressure, diastolic pressure, and pulse
-            tempHealth.setSystolicBloodPressure(Float.parseFloat(systolicBloodPressure_text.getText().toString()));
-            tempHealth.setDiastolicBloodPressure(Float.parseFloat(diastolicBloodPressure_text.getText().toString()));
-            tempHealth.setPulse(Float.parseFloat(pulse_text.getText().toString()));
+            if (systolicBloodPressure_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "收縮壓不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setSystolicBloodPressure(Float.parseFloat(systolicBloodPressure_text.getText().toString()));
 
-            // store to health data base use update & insert
-            if (healthDAO.isTableEmpty() == true){
-                healthDAO.insert(tempHealth);
-            } else{
-                healthDAO.insert(tempHealth);
+            if (diastolicBloodPressure_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "舒張壓不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setDiastolicBloodPressure(Float.parseFloat(diastolicBloodPressure_text.getText().toString()));
+
+            if (pulse_text.getText().toString().length() == 0) {
+                updatable = false;
+                Toast.makeText(getApplicationContext(), "脈搏不可為空", Toast.LENGTH_LONG).show();
+            }
+            else tempHealth.setPulse(Float.parseFloat(pulse_text.getText().toString()));
+
+            if (updatable) {
+                // set the chosen date time and last modify time
+                tempHealth.setDatetime(calendar.getTimeInMillis());
+                tempHealth.setLastModify(new Date().getTime());
+
+                // set user id
+                tempHealth.setUserFBID(Long.parseLong(LoginActivity.facebookUserID));
+
+
+                // store to health data base use update & insert
+                if (healthDAO.isTableEmpty() == true) {
+                    healthDAO.insert(tempHealth);
+                } else {
+                    healthDAO.insert(tempHealth);
+                }
+
+                Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
 
             // output test
@@ -340,54 +361,55 @@ public class MyBloodPressure extends AppCompatActivity
             intent_home.putExtras(bundle);
             startActivity(intent_home);
             finish();
-        }
-        else if (id == R.id.food_list) {
+        } else if (id == R.id.food_list) {
             Intent intent_main = new Intent();
             intent_main.setClass(MyBloodPressure.this, MainActivity.class);
             startActivity(intent_main);
             finish();
             //Toast.makeText(this, "Open food list", Toast.LENGTH_SHORT).show();
-        }
-//        else if (id == R.id.calendar) {
-//            Intent intent_calendar = new Intent();
-//            intent_calendar.setClass(MyBloodPressure.this, CalendarActivity.class);
-//            startActivity(intent_calendar);
-//            finish();
-            //Toast.makeText(this, "Open calendar", Toast.LENGTH_SHORT).show();
-        //}
-        else if (id == R.id.Import) {
+        } else if (id == R.id.Import) {
             selectImage();
             //Toast.makeText(this, "Import food", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.message) {
-            Intent intent_message = new Intent();
-            intent_message.setClass(MyBloodPressure.this, MessageActivity.class);
-            startActivity(intent_message);
-            finish();
-            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.setting_list) {
-            Intent intent_setting = new Intent();
-            intent_setting.setClass(MyBloodPressure.this, SettingsActivity.class);
-            startActivity(intent_setting);
-            finish();
-        } else if (id == R.id.blood_pressure){
-            Intent intent_blood_pressure = new Intent();
-            intent_blood_pressure.setClass(MyBloodPressure.this, MyBloodPressure.class);
-            startActivity(intent_blood_pressure);
-            finish();
-        } else if (id == R.id.mail){
-            Intent intent_mail = new Intent();
-            intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
-            startActivity(intent_mail);
+        } else if (id == R.id.chat) {
+            Intent intent_chat_bot = new Intent();
+            intent_chat_bot.setClass(MyBloodPressure.this, ChatBotActivity.class);
+            startActivity(intent_chat_bot);
             finish();
         } else if (id == R.id.new_calendar){
             Intent intent_new_calendar = new Intent();
             intent_new_calendar.setClass(MyBloodPressure.this, NewCalendarActivity.class);
             startActivity(intent_new_calendar);
             finish();
-        }else if (id == R.id.chat) {
-            Intent intent_chat = new Intent();
-            intent_chat.setClass(MyBloodPressure.this, ChatBotActivity.class);
-            startActivity(intent_chat);
+        } else if (id == R.id.blood_pressure){
+            Intent intent_blood_pressure = new Intent();
+            intent_blood_pressure.setClass(MyBloodPressure.this, MyBloodPressure.class);
+            startActivity(intent_blood_pressure);
+            finish();
+        } else if (id == R.id.temp_record){
+            Intent intent_temp_record = new Intent();
+            intent_temp_record.setClass(MyBloodPressure.this, MyTemperatureRecord.class);
+            startActivity(intent_temp_record);
+            finish();
+        } else if (id == R.id.water_record){
+            Intent intent_water_record = new Intent();
+            intent_water_record.setClass(MyBloodPressure.this, DrinkWaterDiary.class);
+            startActivity(intent_water_record);
+            finish();
+        } else if (id == R.id.message) {
+            Intent intent_message = new Intent();
+            intent_message.setClass(MyBloodPressure.this, MessageActivity.class);
+            startActivity(intent_message);
+            finish();
+            //Toast.makeText(this, "Send message", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.mail){
+            Intent intent_mail = new Intent();
+            intent_mail.setClass(MyBloodPressure.this, MailActivity.class);
+            startActivity(intent_mail);
+            finish();
+        } else if (id == R.id.setting_list) {
+            Intent intent_setting = new Intent();
+            intent_setting.setClass(MyBloodPressure.this, SettingsActivity.class);
+            startActivity(intent_setting);
             finish();
         }
 

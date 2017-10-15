@@ -84,30 +84,50 @@ public class CalorieConsumptionActivity extends AppCompatActivity {
         sportDAO = new SportDAO(getApplicationContext());
         sports = sportDAO.getAll();
 
-        // count the total days
-        countTotalDays();
+        if (foods.isEmpty() == true && sports.isEmpty() == false) {
+            Toast.makeText(CalorieConsumptionActivity.this, "飲食紀錄不可為空", Toast.LENGTH_SHORT).show();
+            Intent back = new Intent();
+            back.setClass(CalorieConsumptionActivity.this, SettingsActivity.class);
+            startActivity(back);
+            finish();
+        } else if (foods.isEmpty() == false && sports.isEmpty() == true) {
+            Toast.makeText(CalorieConsumptionActivity.this, "運動紀錄不可為空", Toast.LENGTH_SHORT).show();
+            Intent back = new Intent();
+            back.setClass(CalorieConsumptionActivity.this, SettingsActivity.class);
+            startActivity(back);
+            finish();
+        } else if (foods.isEmpty() == true && sports.isEmpty() == true) {
+            Toast.makeText(CalorieConsumptionActivity.this, "飲食與運動紀錄不可為空", Toast.LENGTH_SHORT).show();
+            Intent back = new Intent();
+            back.setClass(CalorieConsumptionActivity.this, SettingsActivity.class);
+            startActivity(back);
+            finish();
+        } else {
+            // count the total days
+            countTotalDays();
 
-        // initialize data point array
-        conCalData = new DataPoint[consumptDays];
-        absCalData = new DataPoint[absorbDays];
+            // initialize data point array
+            conCalData = new DataPoint[consumptDays];
+            absCalData = new DataPoint[absorbDays];
 
-        // from array list to data point
-        for (int i = 0 ; i < consumptDays ; i++) {
-            conCalData[i] = new DataPoint(allDate[i], totalConCals[i]);
+            // from array list to data point
+            for (int i = 0; i < consumptDays; i++) {
+                conCalData[i] = new DataPoint(allDate[i], totalConCals[i]);
+            }
+            for (int i = 0; i < absorbDays; i++) {
+                absCalData[i] = new DataPoint(allDate[i], totalAbsCals[i]);
+            }
+
+            // custom view in action bar
+            getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+            getSupportActionBar().setCustomView(R.layout.calorie_consumption_menu);
+
+            // process back button
+            processBackControllers();
+
+            // temporary test graph view
+            drawExampleCalorieChart();
         }
-        for (int i = 0 ; i < absorbDays ; i++) {
-            absCalData[i] = new DataPoint(allDate[i], totalAbsCals[i]);
-        }
-
-        // custom view in action bar
-        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setCustomView(R.layout.calorie_consumption_menu);
-
-        // process back button
-        processBackControllers();
-
-        // temporary test graph view
-        drawExampleCalorieChart();
     }
 
     @Override

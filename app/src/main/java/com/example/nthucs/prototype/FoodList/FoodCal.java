@@ -1,5 +1,6 @@
 package com.example.nthucs.prototype.FoodList;
 
+import android.os.CountDownTimer;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -22,6 +23,24 @@ public class FoodCal implements Parcelable {
     // food in english
     private String englishName;
 
+    // food's protein
+    private float protein;
+
+    // food's fat
+    private float fat;
+
+    // food's carbohydrates
+    private float carbohydrates;
+
+    // food's dietary fiber
+    private float dietaryFiber;
+
+    // food's sodium
+    private float sodium;
+
+    // food's calcium
+    private float calcium;
+
     // calorie in the food, assume portion = 1.0
     private int calorie;
 
@@ -36,6 +55,12 @@ public class FoodCal implements Parcelable {
             foodCal.setCategory(source.readString());
             foodCal.setChineseName(source.readString());
             foodCal.setEnglishName(source.readString());
+            foodCal.setProtein(source.readFloat());
+            foodCal.setFat(source.readFloat());
+            foodCal.setCarbohydrates(source.readFloat());
+            foodCal.setDietaryFiber(source.readFloat());
+            foodCal.setSodium(source.readFloat());
+            foodCal.setCalcium(source.readFloat());
             foodCal.setCalorie(source.readInt());
             foodCal.setModifiedCalorie(source.readInt());
             return foodCal;
@@ -65,6 +90,24 @@ public class FoodCal implements Parcelable {
     public String getEnglishName() {return englishName;}
     public void setEnglishName(String englishName) {this.englishName = englishName;}
 
+    public float getProtein(){return this.protein;}
+    public void setProtein(float protein) {this.protein = protein;}
+
+    public float getFat(){return this.fat;}
+    public void setFat(float fat){this.fat = fat;}
+
+    public float getCarbohydrates(){return this.carbohydrates;}
+    public void setCarbohydrates(float carbohydrates){this.carbohydrates = carbohydrates;}
+
+    public float getDietaryFiber(){return this.dietaryFiber;}
+    public void setDietaryFiber(float dietaryFiber){this.dietaryFiber = dietaryFiber;}
+
+    public float getSodium(){return this.sodium;}
+    public void setSodium(float sodium){this.sodium = sodium;}
+
+    public float getCalcium(){return this.calcium;}
+    public void setCalcium(float calcium){this.calcium = calcium;}
+
     public int getCalorie() {return calorie;}
     public void setCalorie(int calorie) {this.calorie = calorie;}
 
@@ -82,12 +125,18 @@ public class FoodCal implements Parcelable {
         out.writeString(category);
         out.writeString(chineseName);
         out.writeString(englishName);
+        out.writeFloat(protein);
+        out.writeFloat(fat);
+        out.writeFloat(carbohydrates);
+        out.writeFloat(dietaryFiber);
+        out.writeFloat(sodium);
+        out.writeFloat(calcium);
         out.writeInt(calorie);
         out.writeInt(modifiedCalorie);
     }
 
     @Override
     public String toString() {
-        return "FoodCal [index="+index+" category="+category+" chinese name="+chineseName+" english name="+englishName+" calorie="+calorie+" modified calorie="+modifiedCalorie+"]";
+        return "FoodCal [index="+index+" category="+category+" chinese name="+chineseName+" english name="+englishName+" protein="+protein+" fat="+fat+" carbohydrates="+carbohydrates+" dietaryFiber="+dietaryFiber+" sodium="+sodium+" calcium="+calcium+" calorie="+calorie+" modified calorie="+modifiedCalorie+"]";
     }
 }

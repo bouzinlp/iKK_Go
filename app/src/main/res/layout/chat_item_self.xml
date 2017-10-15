@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="right"
@@ -13,16 +14,19 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="15dp"
         android:background="@drawable/bg_bubble_self"
         android:textColor="@android:color/white"
         android:textIsSelectable="true"
         android:textSize="18sp" />
 
     <android.support.v7.widget.AppCompatImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/appCompatImageView"
+        android:layout_width="45dp"
+        android:layout_height="52dp"
         android:layout_marginRight="5dp"
-        android:src="@mipmap/ic_user_48" />
+        android:adjustViewBounds="true"
+        android:background="@color/aidialog_background"
+        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square" />
 </LinearLayout>
