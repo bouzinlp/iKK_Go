@@ -751,7 +751,7 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "get_historic_food":
                         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
-                        parameterString += ("您"+result.getStringParameter(date)+"吃了");
+                        parameterString += ("您在"+result.getStringParameter(date)+"吃了 ");
                         String [] tokens = result.getStringParameter(date).split("-");
                         int year = Integer.parseInt(tokens[0]);
                         int month = Integer.parseInt(tokens[1]);
@@ -763,6 +763,7 @@ public class ChatBotActivity extends AppCompatActivity
                         for(i=0;i<foods.size();i++){
                             if(dts1.equals(foods.get(i).getYYYYMD())){
                                 parameterString += (foods.get(i).getTitle());
+                                if(i!=foods.size()-1) parameterString += "、";
                                 parameterString += (foods.get(i).getFileName());
                             }
                         }
@@ -1042,17 +1043,13 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "get_absorb_calorie":
 
-                        //idel_absorb_cal = mwlga.absorb_chatbot;   //?????    Bug detected
-                        //parameterString +=  idel_absorb_cal;
-                        /*idel_absorb_cal = 2000; //預設每日需攝取2000卡
-                        float carolie_need; //還需要多少卡路里
-
                         //get today's total calories
-                        for( i=0;i<todayFoods.size();i++){
-                            total_absorb_calories += todayFoods.get(i).getCalorie();*/
+                        for( i=0;i<todayFoods.size();i++) {
+                            total_absorb_calories += todayFoods.get(i).getCalorie();
+                        }
 
                         idel_absorb_cal = sharedPreferences.getFloat("absorb",0);
-                        parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
+//                        parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
 
                         if(idel_absorb_cal == 0 || total_absorb_calories == 0){
                             if(idel_absorb_cal == 0){
@@ -1064,12 +1061,6 @@ public class ChatBotActivity extends AppCompatActivity
 
                         }
                         else {
-                            //get today's total calories
-                            for ( i = 0; i < todayFoods.size(); i++) {
-                                total_absorb_calories += todayFoods.get(i).getCalorie();
-                            }
-
-
                             if (total_absorb_calories < idel_absorb_cal) {
                                 parameterString += "您今天吸收的熱量為" + total_absorb_calories + "大卡\n";
                                 float carolie_need = idel_absorb_cal - total_absorb_calories;
@@ -1083,28 +1074,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += "建議多運動或減少每日進食量";
                             } else {
                                 parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
-
-                                if (total_absorb_calories < idel_absorb_cal) {
-
-                                    parameterString += "您距離每日理想熱量還有" + ((idel_absorb_cal - total_absorb_calories))
-                                            + "大卡\n";
-                                    parameterString += "建議補足每日需求熱量";
-
-                                } else if (total_absorb_calories > idel_absorb_cal) {
-                                    parameterString += "您超過每日理想需求熱量" + ((total_absorb_calories - idel_absorb_cal))
-                                            + "大卡\n";
-                                    parameterString += "建議多運動或減少每日進食量";
-                                } else {
-                                    parameterString += "您今天攝取的熱量已足夠！ 建議多休息";
-                                }
-
                             }
                         }
                         break;
                     case "get_consume_calorie":
-
-                        //idel_consume_cal = mwlga.consume_chatbot;
-                        idel_consume_cal = 2000;
                         //get today's total calories
                         for(i=0;i<todaySports.size();i++){
                             total_consume_calories += todaySports.get(i).getCalorie();
@@ -1112,7 +1085,7 @@ public class ChatBotActivity extends AppCompatActivity
 
                         idel_consume_cal = sharedPreferences.getFloat("consume",0);
 
-                        if(idel_consume_cal == 0 || total_absorb_calories == 0){
+                        if(idel_consume_cal == 0 || total_consume_calories == 0){
                             if(idel_consume_cal == 0){
                                 parameterString += "請前往“設定”填寫您的減重目標！";
                             }
@@ -1121,21 +1094,6 @@ public class ChatBotActivity extends AppCompatActivity
                             }
                         }
                         else{
-
-                            parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持"+(double)idel_consume_cal;
-                        }
-                        break;
-                    case "get_tem":
-                        parameterString += ("您的體溫為"+tem);
-                        break;
-                    case "get_water":
-                        parameterString += ("您喝了"+water_drunk);
-                    break;
-                            //get today's total calories
-                            /*for(int i=0;i<todaySports.size();i++){
-                                total_consume_calories += todaySports.get(i).getCalorie();
-                            }
-
                             if(total_consume_calories > idel_consume_cal){
                                 parameterString += "您今天消耗" + total_consume_calories + "大卡\n";
                                 parameterString += "建議補充膳食纖維高的食品以及多休息";
@@ -1149,8 +1107,14 @@ public class ChatBotActivity extends AppCompatActivity
                             else{
                                 parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持";
                             }
-                        }*/
-
+                        }
+                        break;
+                    case "get_tem":
+                        parameterString += ("您的體溫為"+tem);
+                        break;
+                    case "get_water":
+                        parameterString += ("您喝了"+water_drunk);
+                    break;
                 }
             }
 
