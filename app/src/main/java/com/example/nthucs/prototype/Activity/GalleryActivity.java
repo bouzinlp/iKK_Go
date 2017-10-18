@@ -304,7 +304,7 @@ public class GalleryActivity extends AppCompatActivity {
             try {
                 try {
                     // Connect website: google search by image
-                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).timeout(30000).get();
+                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).timeout(0).get();
 
                     // Parse html with class name: _gUb
                     Elements elem = doc.getElementsByClass("_gUb");
@@ -333,7 +333,7 @@ public class GalleryActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             // Get the result text from the response string
             if (prd.isShowing()) prd.dismiss();
-            resultText = result;
+            resultText = result.replace(" ","");
 
             // Compare Food Cal DAO to get calorie
             CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
@@ -341,7 +341,7 @@ public class GalleryActivity extends AppCompatActivity {
 
             // output test
             System.out.println("Suggested result: " + resultText);
-
+            System.out.println("after : " + resultText.replace(" ",""));
             // if the compare result is empty
             if (compare_result == null || compare_result.length == 0) {
                 // Process normal food event
