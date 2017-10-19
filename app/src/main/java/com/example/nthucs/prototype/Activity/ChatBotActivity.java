@@ -735,39 +735,66 @@ public class ChatBotActivity extends AppCompatActivity
             } else {
                 switch (result.getAction()) {
                     case "get_today_food":
-                        int i;
+                        int i,j,k;
                         int total_calorie=0;
-                        parameterString += ("您今天吃了");
-                        for(i=0;i<todayFoods.size();i++){
-                            if(i!=0)
-                                parameterString += ("、");
-                            parameterString += (todayFoods.get(i).getTitle());
-                            parameterString += (todayFoods.get(i).getGrams());
-                            parameterString += ("g");
-                            total_calorie += (todayFoods.get(i).getCalorie());
+                        String [] cato = new String[20];
+                        boolean [] cato_bool = new boolean[20];
+                        for(i=0;i<10;i++){
+                            cato_bool[i] = false;
                         }
-                        parameterString += ("\n您今天一共吃了"+total_calorie+"大卡");
+                        cato[0] = "穀物類";cato[1] = "澱粉類";cato[2] = "堅果及種子類";
+                        cato[3] = "水果類";cato[4] = "蔬菜類";cato[5] = "藻類";cato[6] = "菇類";
+                        cato[7] = "豆類";cato[8] = "肉類";cato[9] = "魚貝類";cato[10] = "蛋類";
+                        cato[11] = "乳品類";cato[12] = "油脂類";cato[13] = "糖類"; cato[14] = "嗜好性飲料類";
+                        cato[15] = "調味料及香辛料類"; cato[16] ="糕餅點心類"; cato[17] = "加工調理食品類";
 
-                        break;
-                    case "get_historic_food":
-                        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/M/d");  //定義時間格式
-                        parameterString += ("您在"+result.getStringParameter(date)+"吃了 ");
-                        String [] tokens = result.getStringParameter(date).split("-");
-                        int year = Integer.parseInt(tokens[0]);
-                        int month = Integer.parseInt(tokens[1]);
-                        int day = Integer.parseInt(tokens[2]);
-                        Calendar calender = Calendar.getInstance();
-                        calender.set(year,month-1,day);
-                        String dts1 = sdf1.format(calender.getTime());  //經由SimpleDateFormat將時間轉為字串
-                        //get today's total food
-                        for(i=0;i<foods.size();i++){
-                            if(dts1.equals(foods.get(i).getYYYYMD())){
-                                parameterString += (foods.get(i).getTitle());
-                                if(i!=foods.size()-1) parameterString += "、";
-                                parameterString += (foods.get(i).getFileName());
+
+                        if(todayFoods.isEmpty() == true)
+                            parameterString += ("您今日尚未攝取食物");
+                        else {
+                            parameterString += ("您今天吃了");
+                            for (i = 0; i < todayFoods.size(); i++) {
+                                if (i != 0)
+                                    parameterString += ("、");
+                                parameterString += (todayFoods.get(i).getTitle());
+                                parameterString += (todayFoods.get(i).getGrams());
+                                parameterString += ("g");
+                                total_calorie += (todayFoods.get(i).getCalorie());
+                                if(todayFoods.get(i).getTitle().contains("(") == true) {//把字串去括號 => 方便蒐尋食物類別
+                                    String token_new = new String("");
+                                    String title = todayFoods.get(i).getTitle();
+                                    for(j=0;j<title.length();j++) {
+                                        if(title.charAt(j) == '(')
+                                            break;
+                                    }
+                                    token_new = title.substring(0,j);
+                                    todayFoods.get(i).setTitle(token_new);
+                                }
+                                for (j = 0; j < foodCalList.size(); j++) {
+                                    if (foodCalList.get(j).getChineseName().contains(todayFoods.get(i).getTitle())) {
+                                        for (k = 0; k < cato_bool.length; k++) {
+                                            if (foodCalList.get(j).getCategory().equals(cato[k])) {
+                                                parameterString += ("它為" + cato[k] + "類食物\n");
+                                                cato_bool[k] = true;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
                             }
                         }
+                        parameterString += ("\n您今天一共吃了"+total_calorie+"大卡"+"\n");
+                        parameterString += ("離每日所需熱量尚有"+Integer.toString(2200-total_calorie)+"大卡"+"\n");
+
+                        parameterString += ("您今天尚未攝取");
+                        if(cato_bool[0] == false && cato_bool[1] == false && cato_bool[2] == false )
+                            parameterString += ("五穀根莖類食物\n");
+                        if(cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false)
+                            parameterString += ("蔬果類食物\n");
+                        if(cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false)
+                            parameterString += ("蛋豆魚肉類食物\n");
                         break;
+
                     case "get_pressure_info":
                         parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
                                 "/" + String.valueOf(dia_pre)+"\n";
@@ -833,13 +860,13 @@ public class ChatBotActivity extends AppCompatActivity
                             parameterString+=("建議您先吃");
                             parameterString += (result.getStringParameter(J_Food));
                             number =1;
-                            /*int i;
+
                             for(i=0;i<foodCalList.size();i++){
-                                parameterString += (foodCalList.get(i).getChineseName()+" ");
+                                //parameterString += (foodCalList.get(i).getChineseName()+" ");
                                 if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(J_Food))){
                                     parameterString += ("它的熱量為 "+foodCalList.get(i).getCalorie());
                                 }
-                            }*/
+                            }
                             if (result.getStringParameter(J_Food1).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(J_Food1));
@@ -945,6 +972,13 @@ public class ChatBotActivity extends AppCompatActivity
                             if(result.getStringParameter(A_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(A_Food));
 
+                            for(i=0;i<foodCalList.size();i++){
+
+                                if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(A_Food))){
+                                    parameterString += ("它的熱量為 "+foodCalList.get(i).getCalorie());
+                                }
+                            }
+
                             if (result.getStringParameter(A_Food1).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(A_Food1));
@@ -953,6 +987,7 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(A_Food2));
                             }
+
 
                             if(result.getStringParameter(O_Food).isEmpty() == false) {
                                 if(result.getStringParameter(A_Food).isEmpty() == false)
