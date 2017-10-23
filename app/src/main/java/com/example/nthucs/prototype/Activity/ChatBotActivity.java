@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.IntDef;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -200,8 +201,9 @@ public class ChatBotActivity extends AppCompatActivity
         //Instruction (chatbot使用說明 => 讓user清楚知道目前聊天機器人有甚麼功能)
         Message ini_message = new Message();
         ini_message.setId("3");
-        ini_message.setMessage("歡迎"+LoginActivity.facebookName +" 本聊天機器人目前支援功能有\n" +
-                "1.詢問身高、體重、bmi\n" +
+        ini_message.setMessage("您好"+LoginActivity.facebookName +"\n"+
+                "本聊天機器人目前支援功能有\n" +
+                "1.詢問/設定 身高、體重、bmi\n" +
                 "2.詢問飲食順序\n" +
                 "3.詢問血壓/脈搏狀況\n"+
         "4.查詢目前消耗/吸收熱量\n"+
@@ -364,6 +366,7 @@ public class ChatBotActivity extends AppCompatActivity
         myProfileDAO = new MyProfileDAO(getApplicationContext());
         profileList = myProfileDAO.getAll();
 
+
         // get the last profile data in the list
         if (myProfileDAO.isTableEmpty() == true) {
             curProfile = new Profile();
@@ -376,10 +379,12 @@ public class ChatBotActivity extends AppCompatActivity
             float dia_pre = curHealth.getDiastolicBloodPressure();
             float pro_height = curProfile.getHeight();
             float pro_weight = curProfile.getWeight();
+            float pulse = curHealth.getPulse();
             float hi = (pro_height / 100);
             float pro_BMI = pro_weight / (hi * hi);
             float tem = curHealth.getTemperature();
             int water_drunk = curHealth.getDrunkWater();
+
 
             String A_Food = new String("A_Food");
             String A_Food1 = new String("A_Food1");
@@ -415,6 +420,8 @@ public class ChatBotActivity extends AppCompatActivity
             String O_Food2 = new String("O_Food2");
             String O_Food3 = new String("O_Food3");
             String date = new String("date");
+            String sys_height = new String("number");
+            String sys_weight = new String("number");
 
             float total_absorb_calories=0;
 
@@ -457,37 +464,54 @@ public class ChatBotActivity extends AppCompatActivity
             if (flag == 1) {
                 switch (result.getAction()) {
                     case "Get_pressure":
-                        parameterString += "Your blood pressure is " + String.valueOf(sys_pre) +
-                                "/" + String.valueOf(dia_pre) + ".";
-                        if (sys_pre < 90.0 || dia_pre < 60.0)
-                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
-                        else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " Your blood pressure is normal, keep on hold";
+                        if(sys_pre ==0 || dia_pre == 0)
+                            parameterString += ("Please set the info about blood pressure first!!");
+                        else {
+                            parameterString += "Your blood pressure is " + String.valueOf(sys_pre) +
+                                    "/" + String.valueOf(dia_pre) + ".";
+                            if (sys_pre < 90.0 || dia_pre < 60.0)
+                                parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                            else if (sys_pre >= 140.0 || dia_pre >= 90.0)
+                                parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                            else parameterString += " Your blood pressure is normal, keep on hold";
+                        }
                         break;
                     case "Get_systolic_blood_pressure":
-                        parameterString += "Your systolic pressure is " + String.valueOf(sys_pre) + ".";
-                        if (sys_pre < 90.0)
-                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
-                        else if (sys_pre >= 140.0)
-                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " Your systolic pressure is normal, keep on hold";
+                        if(sys_pre == 0)
+                            parameterString += ("Please set the info about blood pressure first!!");
+                        else {
+                            parameterString += "Your systolic pressure is " + String.valueOf(sys_pre) + ".";
+                            if (sys_pre < 90.0)
+                                parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                            else if (sys_pre >= 140.0)
+                                parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                            else
+                                parameterString += " Your systolic pressure is normal, keep on hold";
+                        }
                         break;
-
                     case "Get_diastolic_blood_pressure":
-                        parameterString += "Your diastolic pressure is " + String.valueOf(dia_pre) + ".";
-                        if (dia_pre < 60.0)
-                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
-                        else if (dia_pre >= 90.0)
-                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " Your diastolic pressure is normal, keep on hold";
+                        if(dia_pre == 0)
+                            parameterString += ("Please set the info about blood pressure first!!");
+                        else {
+                            parameterString += "Your diastolic pressure is " + String.valueOf(dia_pre) + ".";
+                            if (dia_pre < 60.0)
+                                parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                            else if (dia_pre >= 90.0)
+                                parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                            else
+                                parameterString += " Your diastolic pressure is normal, keep on hold";
+                        }
                         break;
                     case "blood_pressure_high_or_low":
-                        if (dia_pre < 60.0)
-                            parameterString += " You have low blood pressure,go to see a doctor, plz.";
-                        else if (dia_pre >= 90.0)
-                            parameterString += " You have high blood pressure,go to see a doctor, plz.";
-                        else parameterString += " Your blood pressure is normal, keep on hold";
+                        if(dia_pre ==0 || sys_pre ==0)
+                            parameterString += ("Please set the info about blood pressure first!!");
+                        else {
+                            if (dia_pre < 60.0)
+                                parameterString += " You have low blood pressure,go to see a doctor, plz.";
+                            else if (dia_pre >= 90.0)
+                                parameterString += " You have high blood pressure,go to see a doctor, plz.";
+                            else parameterString += " Your blood pressure is normal, keep on hold";
+                        }
                         break;
                     case "Get_BMI":
                         parameterString += ("Your BMI is " + String.valueOf(pro_BMI) + ".");
@@ -505,17 +529,22 @@ public class ChatBotActivity extends AppCompatActivity
                         } else parameterString += " Your BMI is normal. Congrats!";
                         break;
                     case "Get_height":
-                        parameterString += ("Your height is " + String.valueOf(pro_height) + ".");
+                        if(pro_height == 0)
+                            parameterString += ("Please set the info about height first!!");
+                        else
+                            parameterString += ("Your height is " + String.valueOf(pro_height) + ".");
                         break;
                     case "Get_weight":
-                        parameterString += ("Your weight is " + String.valueOf(pro_weight) + ".");
+                        if(pro_weight == 0)
+                            parameterString += ("Please set the info about weight first!!");
+                        else
+                            parameterString += ("Your weight is " + String.valueOf(pro_weight) + ".");
                         break;
                     case "choose_food_lunch_include":
                         parameterString += (todayFoods.get(1).toString());
                         break;
                     case "choose_food":  //The case of choosing order (English version)
                         int number = 0;
-
                         if(result.getStringParameter(J_Food).isEmpty() == false){ //priority 1
                             parameterString+=("You should eat ");
                             parameterString += (result.getStringParameter(J_Food));
@@ -796,34 +825,41 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
 
                     case "get_pressure_info":
-                        parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
-                                "/" + String.valueOf(dia_pre)+"\n";
                         if(sys_pre == 0 || dia_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
-                        else if (sys_pre < 90.0 || dia_pre < 60.0)
-                            parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                        else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                            parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
-                        else parameterString += "您的血壓正常，請繼續保持";
+                        else {
+                            parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
+                                    "/" + String.valueOf(dia_pre)+"\n";
+                             if (sys_pre < 90.0 || dia_pre < 60.0)
+                                parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                            else if (sys_pre >= 140.0 || dia_pre >= 90.0)
+                                parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                            else parameterString += "您的血壓正常，請繼續保持";
+                        }
                         break;
                     case "get_systolic_pressure_info":
-                        parameterString += "你的收縮壓為 " + String.valueOf(sys_pre)+"\n";
                         if(sys_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
-                        else if (sys_pre < 90.0)
-                            parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                        else if (sys_pre >= 140.0)
-                            parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
-                        else parameterString += "您的收縮壓正常，請繼續保持";
+                        else {
+                            parameterString += "你的收縮壓為 " + String.valueOf(sys_pre)+"\n";
+                            if (sys_pre < 90.0)
+                                parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                            else if (sys_pre >= 140.0)
+                                parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
+                            else parameterString += "您的收縮壓正常，請繼續保持";
+                        }
                         break;
                     case "get_diastolic_pressure_info":
-                        parameterString += "你的舒張壓為 " + String.valueOf(dia_pre)+"\n";
                         if(dia_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
-                        else if (dia_pre < 60.0) parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
-                        else if (dia_pre >= 90.0)
-                            parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
-                        else parameterString += "您的舒張壓正常，請繼續保持";
+                        else {
+                            parameterString += "你的舒張壓為 " + String.valueOf(dia_pre)+"\n";
+                            if (dia_pre < 60.0)
+                                parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                            else if (dia_pre >= 90.0)
+                                parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                            else parameterString += "您的舒張壓正常，請繼續保持";
+                        }
                         break;
                     case "get_pressure_high_or_low":
                         if(sys_pre == 0 || dia_pre == 0)
@@ -833,25 +869,59 @@ public class ChatBotActivity extends AppCompatActivity
                             parameterString += "您有高血壓，請前往醫院了解詳情";
                         else parameterString += "您的血壓正常，請繼續保持";
                         break;
+                    case "get_pulse":
+                        if(pulse == 0)
+                            parameterString += ("您尚未輸入您的脈搏");
+                        else
+                            parameterString += ("您的脈搏為" +pulse);
+                        break;
                     case "get_bmi_info":
-                        parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
-                        if (pro_BMI >= 24) {
-                            parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
-                        } else if (pro_BMI < 18.5) {
-                            parameterString += " 正常範圍是18.5~24。您過輕了 均衡飲食有助身體健康";
-                        } else parameterString += " BMI正常，請繼續保持";
+                        if(pro_height == 0 || pro_weight == 0 )
+                            parameterString += ("您尚未輸入身高、體重相關數值");
+                        else {
+                            parameterString += ("您的BMI為" + String.valueOf(pro_BMI));
+                            if (pro_BMI >= 24) {
+                                parameterString += " 正常範圍是18.5~24。您過重了，請適量運動並控制飲食，並定期檢查BMI";
+                            } else if (pro_BMI < 18.5) {
+                                parameterString += " 正常範圍是18.5~24。您過輕了 均衡飲食有助身體健康";
+                            } else parameterString += " BMI正常，請繼續保持";
+                        }
                         break;
                     case "get_height_info":
-                        parameterString += ("您的身高為" + String.valueOf(pro_height));
+                        if(pro_height == 0)
+                            parameterString += ("您尚未輸入身高數值");
+                        else
+                            parameterString += ("您的身高為" + String.valueOf(pro_height)+"cm");
+                        break;
+                    case "set_height":
+                        if(result.getFloatParameter(sys_height)!=0) {
+                            parameterString += ("恭喜您成功更新身高數值 " + "\n");
+                            curProfile.setHeight(result.getFloatParameter(sys_height));
+                            myProfileDAO.update(curProfile); // update database
+                            pro_height = curProfile.getHeight();
+                            parameterString += ("您現在的身高為" + String.valueOf(pro_height) + "cm");
+                        }
                         break;
                     case "get_weight_info":
-                        parameterString += ("您的體重為" + String.valueOf(pro_weight));
+                        if(pro_weight == 0)
+                            parameterString += ("您尚未輸入體重數值");
+                        else
+                            parameterString += ("您的體重為" + String.valueOf(pro_weight)+"kg");
+                        break;
+                    case "set_weight":
+                        if(result.getFloatParameter(sys_weight)!=0) {
+                            parameterString += ("恭喜您成功更新體重數值 " + "\n");
+                            curProfile.setWeight(result.getFloatParameter(sys_weight));
+                            myProfileDAO.update(curProfile); // update database
+                            pro_weight = curProfile.getWeight();
+                            parameterString += ("您現在的體重為" + String.valueOf(pro_weight) + "kg");
+                        }
                         break;
                     case "get_bmi_high_or_low":
                         if (pro_BMI >= 24) {
                             parameterString += " 您的體重過高，請多運動並控制飲食，並定期檢查BMI";
                         } else if (pro_BMI < 18.5) {
-                            parameterString += " 您過的體太輕了 均衡飲食有助身體健康";
+                            parameterString += " 您的體重太輕了 均衡飲食有助身體健康";
                         } else parameterString += " 您的BMI正常，請繼續保持";
                         break;
                     case "choose_food_action":  //The case of choosing order
@@ -1077,14 +1147,11 @@ public class ChatBotActivity extends AppCompatActivity
 
                         break;
                     case "get_absorb_calorie":
-
                         //get today's total calories
                         for( i=0;i<todayFoods.size();i++) {
                             total_absorb_calories += todayFoods.get(i).getCalorie();
                         }
-
                         idel_absorb_cal = sharedPreferences.getFloat("absorb",0);
-//                        parameterString += "您今天吸收的熱量為"+ total_absorb_calories + "大卡\n";
 
                         if(idel_absorb_cal == 0 || total_absorb_calories == 0){
                             if(idel_absorb_cal == 0){
@@ -1093,7 +1160,6 @@ public class ChatBotActivity extends AppCompatActivity
                             else{
                                 parameterString += "您今天尚未吃任何食物！";
                             }
-
                         }
                         else {
                             if (total_absorb_calories < idel_absorb_cal) {
@@ -1152,7 +1218,6 @@ public class ChatBotActivity extends AppCompatActivity
                     break;
                 }
             }
-
 
         todayFoods.clear();
         todaySports.clear();
@@ -1270,43 +1335,23 @@ public class ChatBotActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int index) {
                 if (items[index].equals("照相")) {
                     if (activityIndex == ChATBOT_ACTIVITY) {
-                        /*Intent intent_camera = new Intent("com.example.nthucs.prototype.TAKE_PICT");
-                        activity.startActivityForResult(intent_camera, SCAN_FOOD);*/
                         Intent result = new Intent();
                         result.putExtra(FROM_CAMERA, SCAN_FOOD);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
-                    } /*else {
-                        // back to mail activity
-                        Intent result = new Intent();
-                        result.putExtra(FROM_CAMERA, SCAN_FOOD);
-                        result.setClass(activity, MainActivity.class);
-                        activity.startActivity(result);
-                        activity.finish();
-                    }*/
+                    }
                 } else if (items[index].equals("從相簿中選取")) {
                     if (activityIndex == ChATBOT_ACTIVITY) {
-                        /*Intent intent_gallery = new Intent("com.example.nthucs.prototype.TAKE_PHOTO");
-                        activity.startActivityForResult(intent_gallery, TAKE_PHOTO);*/
                         Intent result = new Intent();
                         result.putExtra(FROM_GALLERY, TAKE_PHOTO);
                         result.setClass(activity, MainActivity.class);
                         activity.startActivity(result);
                         activity.finish();
-                    } /*else {
-                        // back to mail activity
-                        Intent result = new Intent();
-                        result.putExtra(FROM_GALLERY, TAKE_PHOTO);
-                        result.setClass(activity, MainActivity.class);
-                        activity.startActivity(result);
-                        activity.finish();
-                    }*/
+                    }
                 } else if (items[index].equals("取消")) {
                     dialog.dismiss();
-//                    Intent intent = new Intent();
-//                    intent.setClass(ChatBotActivity.this, MailActivity.class);
-//                    startActivity(intent);
+
                 }
             }
         });
@@ -1340,6 +1385,7 @@ public class ChatBotActivity extends AppCompatActivity
         }
         if (id == R.id.language_change){
             if(flag == 0){
+                setTitle("CHAT BOT");
                 config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
                         AIConfiguration.SupportedLanguages.English,
                         AIConfiguration.RecognitionEngine.System);
@@ -1361,6 +1407,7 @@ public class ChatBotActivity extends AppCompatActivity
                 Toast.makeText(ChatBotActivity.this, "English Chat Bot", Toast.LENGTH_SHORT).show();
             }
             else{
+                setTitle("健康管家");
                 config = new AIConfiguration("a772958d63a149b39bf9f11cfad29889",
                         AIConfiguration.SupportedLanguages.ChineseTaiwan,
                         AIConfiguration.RecognitionEngine.System);
@@ -1370,11 +1417,13 @@ public class ChatBotActivity extends AppCompatActivity
                 //Instruction (chatbot使用說明 => 讓user清楚知道目前聊天機器人有甚麼功能)
                 Message ini_message = new Message();
                 ini_message.setId("3");
-                ini_message.setMessage("歡迎"+LoginActivity.facebookName +" 本聊天機器人目前支援功能有\n" +
-                        "1.詢問身高、體重、bmi\n" +
+                ini_message.setMessage("您好"+LoginActivity.facebookName +"\n"+
+                        "本聊天機器人目前支援功能有\n" +
+                        "1.詢問/設定身高、體重、bmi\n" +
                         "2.詢問飲食順序\n" +
                         "3.詢問血壓/脈搏狀況\n"+
-                        "4.查詢目前消耗/吸收熱量");
+                        "4.查詢目前消耗/吸收熱量\n"+
+                        "5.查詢今日所吃的食物");
                 messageArrayList.clear();
                 messageArrayList.add(ini_message);
                 mAdapter.notifyDataSetChanged();
@@ -1384,6 +1433,5 @@ public class ChatBotActivity extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
-
 
 }
