@@ -9,6 +9,6 @@
     <item
         android:id="@+id/language_change"
         android:orderInCategory="120"
-        android:title="中英切換"
+        android:title="中文/English"
         app:showAsAction="never"/>
 </menu>
