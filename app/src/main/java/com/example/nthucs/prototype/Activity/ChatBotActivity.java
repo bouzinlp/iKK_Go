@@ -205,7 +205,7 @@ public class ChatBotActivity extends AppCompatActivity
                 "本聊天機器人目前支援功能有\n" +
                 "1.詢問/設定 身高、體重、bmi\n" +
                 "2.詢問飲食順序\n" +
-                "3.詢問血壓/脈搏狀況\n"+
+                "3.詢問/設定 血壓、脈搏狀況\n"+
         "4.查詢目前消耗/吸收熱量\n"+
         "5.查詢今日所吃的食物");
 
@@ -375,57 +375,40 @@ public class ChatBotActivity extends AppCompatActivity
         }
         //for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
 
-            float sys_pre = curHealth.getSystolicBloodPressure();
-            float dia_pre = curHealth.getDiastolicBloodPressure();
-            float pro_height = curProfile.getHeight();
-            float pro_weight = curProfile.getWeight();
-            float pulse = curHealth.getPulse();
-            float hi = (pro_height / 100);
-            float pro_BMI = pro_weight / (hi * hi);
-            float tem = curHealth.getTemperature();
-            int water_drunk = curHealth.getDrunkWater();
+        float sys_pre = curHealth.getSystolicBloodPressure();
+        float dia_pre = curHealth.getDiastolicBloodPressure();
+        float pro_height = curProfile.getHeight();
+        float pro_weight = curProfile.getWeight();
+        float pulse = curHealth.getPulse();
+        float hi = (pro_height / 100);
+        float pro_BMI = pro_weight / (hi * hi);
+        float tem = curHealth.getTemperature();
+        int water_drunk = curHealth.getDrunkWater();
 
+        String A_Food = new String("A_Food");String A_Food1 = new String("A_Food1");String A_Food2 = new String("A_Food2");
+        String B_Food = new String("B_Food");String B_Food1 = new String("B_Food1");String B_Food2 = new String("B_Food2");
+        String D_Food = new String("D_Food");String D_Food1 = new String("D_Food1");String D_Food2 = new String("D_Food2");
+        String E_Food = new String("E_Food");String E_Food1 = new String ("E_Food1");String E_Food2 = new String ("E_Food2");
+        String F_Food = new String("F_Food");String F_Food1 = new String("F_Food1");String O_Food3 = new String("O_Food3");
+        String G_Food = new String("G_Food");String G_Food1 = new String("G_Food1");String G_Food2 = new String("G_Food2");
+        String I_Food = new String("I_Food");String I_Food1 = new String("I_Food1");String I_Food2 = new String("I_Food2");
+        String J_Food = new String("J_Food");String J_Food1 = new String("J_Food1");String J_Food2 = new String("J_Food2");
+        String K_Food = new String("K_Food");String K_Food1 = new String("K_Food1");String K_Food2 = new String("K_Food2");
+        String L_Food = new String("L_Food");String L_Food1 = new String("L_Food1");String L_Food2 = new String("L_Food2");
+        String O_Food = new String("O_Food");String O_Food1 = new String("O_Food1");String O_Food2 = new String("O_Food2");
+        String date = new String("date");
+        String sys_height = new String("number");
+        String sys_weight = new String("number");
+        String sys_height_eng = new String("unit-length");
+        String sys_weight_eng = new String("unit-weight");
+        String pressure_num1 = new String("number");
+        String pressure_num2 = new String("number1");
+        String pressure_parameter = new String("blood_pressure_problem");
+        String pressure_para_eng = new String("Pressure_Problem");
+        String pressure_para_eng1 = new String("Pressure_Problem1");
 
-            String A_Food = new String("A_Food");
-            String A_Food1 = new String("A_Food1");
-            String A_Food2 = new String("A_Food2");
-            String B_Food = new String("B_Food");
-            String B_Food1 = new String("B_Food1");
-            String B_Food2 = new String("B_Food2");
-            String D_Food = new String("D_Food");
-            String E_Food = new String("E_Food");
-            String D_Food1 = new String("D_Food1");
-            String D_Food2 = new String("D_Food2");
-            String E_Food1 = new String ("E_Food1");
-            String E_Food2 = new String ("E_Food2");
-            String F_Food = new String("F_Food");
-            String F_Food1 = new String("F_Food1");
-            String G_Food = new String("G_Food");
-            String G_Food1 = new String("G_Food1");
-            String G_Food2 = new String("G_Food2");
-            String I_Food = new String("I_Food");
-            String I_Food1 = new String("I_Food1");
-            String I_Food2 = new String("I_Food2");
-            String J_Food = new String("J_Food");
-            String J_Food1 = new String("J_Food1");
-            String J_Food2 = new String("J_Food2");
-            String K_Food = new String("K_Food");
-            String K_Food1 = new String("K_Food1");
-            String K_Food2 = new String("K_Food2");
-            String L_Food = new String("L_Food");
-            String L_Food1 = new String("L_Food1");
-            String L_Food2 = new String("L_Food2");
-            String O_Food = new String("O_Food");
-            String O_Food1 = new String("O_Food1");
-            String O_Food2 = new String("O_Food2");
-            String O_Food3 = new String("O_Food3");
-            String date = new String("date");
-            String sys_height = new String("number");
-            String sys_weight = new String("number");
-
-            float total_absorb_calories=0;
-
-            float total_consume_calories=0;
+        float total_absorb_calories=0;
+        float total_consume_calories=0;
 
         // to get user already have eaten food
         foodDAO = new FoodDAO(getApplicationContext());
@@ -513,6 +496,50 @@ public class ChatBotActivity extends AppCompatActivity
                             else parameterString += " Your blood pressure is normal, keep on hold";
                         }
                         break;
+                    case "set_pressure":
+                        if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)!=0){
+                            if(result.getStringParameter(pressure_para_eng).equals("systolic blood pressure")) {
+                                parameterString += ("Congrats!! You update the info successfully." + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num2));
+                                //curHealth.setDatetime(calendar.getTimeInMillis());
+                                curHealth.setLastModify(new Date().getTime());
+                            }
+                            else if(result.getStringParameter(pressure_para_eng).equals("diastolic blood pressure")) {
+                                parameterString += ( "Congrats!! You update the info successfully." + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num2));
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
+                            }
+                            else{
+                                parameterString += ("Please specify which kind of blood pressure you want to update (systolic blood or diastolic blood pressure)");
+                            }
+                            healthDAO.update(curHealth); //update database
+                            sys_pre = curHealth.getSystolicBloodPressure();
+                            dia_pre = curHealth.getDiastolicBloodPressure();
+                            parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "Hg"+"\n");
+                            parameterString += ("Your diastolic blood pressure is " + String.valueOf(dia_pre) + "Hg");
+                        }
+                        else if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)==0){
+                            if(result.getStringParameter(pressure_para_eng).equals("systolic blood pressure")){
+                                parameterString += ("Congrats!! You update the info successfully." + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                sys_pre = curHealth.getSystolicBloodPressure();
+                                parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "Hg");
+                                healthDAO.update(curHealth);
+                            }else if(result.getStringParameter(pressure_para_eng).equals("diastolic blood pressure")){
+                                parameterString += ("Congrats!! You update the info successfully." + "\n");
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                dia_pre = curHealth.getDiastolicBloodPressure();
+                                parameterString += ("Your diastolic blood pressure is" + String.valueOf(dia_pre) + "Hg");
+                                healthDAO.update(curHealth);
+                            }else{
+                                parameterString += ("Please specify which kind of blood pressure you want to update (systolic blood or diastolic blood pressure)");
+                            }
+                        }
+                        else{
+                            parameterString +=("Please specify which kind of blood pressure you want to update (systolic blood or diastolic blood pressure)");
+                        }
+                        break;
                     case "Get_BMI":
                         parameterString += ("Your BMI is " + String.valueOf(pro_BMI) + ".");
                         if (pro_BMI >= 24) {
@@ -532,13 +559,31 @@ public class ChatBotActivity extends AppCompatActivity
                         if(pro_height == 0)
                             parameterString += ("Please set the info about height first!!");
                         else
-                            parameterString += ("Your height is " + String.valueOf(pro_height) + ".");
+                            parameterString += ("Your height is " + String.valueOf(pro_height) + "cm "+".");
+                        break;
+                    case "set_height":
+                        if(result.getFloatParameter(sys_height)!=0) {
+                            parameterString += ("Congrats!! You update the info successfully" + "\n");
+                            curProfile.setHeight(result.getFloatParameter(sys_height));
+                            myProfileDAO.update(curProfile); // update database
+                            pro_height = curProfile.getHeight();
+                            parameterString += ("Your height is " + String.valueOf(pro_height) + "cm"+" now");
+                        }
                         break;
                     case "Get_weight":
                         if(pro_weight == 0)
                             parameterString += ("Please set the info about weight first!!");
                         else
-                            parameterString += ("Your weight is " + String.valueOf(pro_weight) + ".");
+                            parameterString += ("Your weight is " + String.valueOf(pro_weight) + "kg"+".");
+                        break;
+                    case "set_weight":
+                        if(result.getFloatParameter(sys_weight)!=0) {
+                            parameterString += ("Congrats!! You update the info successfully" + "\n");
+                            curProfile.setWeight(result.getFloatParameter(sys_weight));
+                            myProfileDAO.update(curProfile); // update database
+                            pro_weight = curProfile.getWeight();
+                            parameterString += ("Your weight is " + String.valueOf(pro_weight) + "kg"+" now");
+                        }
                         break;
                     case "choose_food_lunch_include":
                         parameterString += (todayFoods.get(1).toString());
@@ -821,7 +866,7 @@ public class ChatBotActivity extends AppCompatActivity
                         if(cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false)
                             parameterString += ("蔬果類食物\n");
                         if(cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false)
-                            parameterString += ("蛋豆魚肉類食物\n");
+                            parameterString += ("蛋豆魚肉類食物");
                         break;
 
                     case "get_pressure_info":
@@ -857,7 +902,7 @@ public class ChatBotActivity extends AppCompatActivity
                             if (dia_pre < 60.0)
                                 parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
                             else if (dia_pre >= 90.0)
-                                parameterString += "正常舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常舒張壓為60~90。您可能有高血壓，請休息幾分鐘再次測量。";
                             else parameterString += "您的舒張壓正常，請繼續保持";
                         }
                         break;
@@ -868,6 +913,50 @@ public class ChatBotActivity extends AppCompatActivity
                         else if (sys_pre >= 140.0 || dia_pre >= 90.0)
                             parameterString += "您有高血壓，請前往醫院了解詳情";
                         else parameterString += "您的血壓正常，請繼續保持";
+                        break;
+                    case "set_pressure":
+                        if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)!=0){
+                            if(result.getStringParameter(pressure_parameter).equals("收縮壓")) {
+                                parameterString += ("恭喜您成功更新血壓數值 " + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num2));
+                                //curHealth.setDatetime(calendar.getTimeInMillis());
+                                curHealth.setLastModify(new Date().getTime());
+                            }
+                            else if(result.getStringParameter(pressure_parameter).equals("舒張壓")) {
+                                parameterString += ("恭喜您成功更新血壓數值 " + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num2));
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
+                            }
+                            else{
+                                parameterString += ("請明確說出你想更新收縮壓還是舒張壓");
+                            }
+                            healthDAO.update(curHealth); //update database
+                            sys_pre = curHealth.getSystolicBloodPressure();
+                            dia_pre = curHealth.getDiastolicBloodPressure();
+                            parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "Hg"+"\n");
+                            parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "Hg");
+                        }
+                        else if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)==0){
+                            if(result.getStringParameter(pressure_parameter).equals("收縮壓")){
+                                parameterString += ("恭喜您成功更新血壓數值 " + "\n");
+                                curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                sys_pre = curHealth.getSystolicBloodPressure();
+                                parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "Hg");
+                                healthDAO.update(curHealth);
+                            }else if(result.getStringParameter(pressure_parameter).equals("舒張壓")){
+                                parameterString += ("恭喜您成功更新血壓數值 " + "\n");
+                                curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
+                                dia_pre = curHealth.getDiastolicBloodPressure();
+                                parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "Hg");
+                                healthDAO.update(curHealth);
+                            }else{
+                                parameterString += ("請明確說出你想更新收縮壓還是舒張壓");
+                            }
+                        }
+                        else{
+                            parameterString +=("麻煩您輸入血壓數值，謝謝");
+                        }
                         break;
                     case "get_pulse":
                         if(pulse == 0)
@@ -1397,9 +1486,9 @@ public class ChatBotActivity extends AppCompatActivity
                 eng_message.setId("4");
                 eng_message.setMessage("Welcome "+LoginActivity.facebookName + "\n"+
                         "Now chatbot can support\n" +
-                        "1.Ask info about height、weight、bmi\n" +
+                        "1.Ask/Set info about height、weight、bmi\n" +
                         "2.Ask info about eating order\n" +
-                        "3.Ask info about pressure\n"+
+                        "3.Ask/Set info about pressure\n"+
                         "4.Ask info about calories");
                 messageArrayList.clear();
                 messageArrayList.add(eng_message);
@@ -1419,9 +1508,9 @@ public class ChatBotActivity extends AppCompatActivity
                 ini_message.setId("3");
                 ini_message.setMessage("您好"+LoginActivity.facebookName +"\n"+
                         "本聊天機器人目前支援功能有\n" +
-                        "1.詢問/設定身高、體重、bmi\n" +
+                        "1.詢問/設定 身高、體重、bmi\n" +
                         "2.詢問飲食順序\n" +
-                        "3.詢問血壓/脈搏狀況\n"+
+                        "3.詢問/設定 血壓、脈搏狀況\n"+
                         "4.查詢目前消耗/吸收熱量\n"+
                         "5.查詢今日所吃的食物");
                 messageArrayList.clear();
