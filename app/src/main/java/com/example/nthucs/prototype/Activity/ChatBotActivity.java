@@ -100,6 +100,8 @@ public class ChatBotActivity extends AppCompatActivity
     private static final String FROM_GALLERY = "take_photo";
     private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
     private long local_datetime;
+    private static boolean heart_disease = false;
+    private static boolean diabetes_disease = false;
 
     // To get user's blood pressure
     private Health curHealth;
@@ -406,6 +408,7 @@ public class ChatBotActivity extends AppCompatActivity
         String pressure_parameter = new String("blood_pressure_problem");
         String pressure_para_eng = new String("Pressure_Problem");
         String pressure_para_eng1 = new String("Pressure_Problem1");
+        String disease = new String("disease");
 
         float total_absorb_calories=0;
         float total_consume_calories=0;
@@ -1035,6 +1038,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(J_Food2));
                             }
 
+                            if( heart_disease == true ){
+                                parameterString += ("\n建議多攝取纖維素，減少膽固醇生成，對心臟的健康有所助益");
+                            }
+
                         }
                         if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
@@ -1101,6 +1108,10 @@ public class ChatBotActivity extends AppCompatActivity
                             if (result.getStringParameter(F_Food1).isEmpty() == false) {
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(F_Food1));
+                            }
+
+                            if( heart_disease == true){
+                                parameterString += ("\n(但不建議您攝取肉類食物)");
                             }
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
@@ -1305,6 +1316,14 @@ public class ChatBotActivity extends AppCompatActivity
                     case "get_water":
                         parameterString += ("您喝了"+water_drunk);
                     break;
+                    case "declare_disease":
+                        if(result.getStringParameter(disease).equals("心臟病")){
+                            curHealth.setHeartDiseasePos();
+                            heart_disease = true;
+                            //healthDAO.update(curHealth);
+                            //parameterString += ("\nDebug "+curHealth.getHeartDisease());
+                        }
+                        break;
                 }
             }
 
