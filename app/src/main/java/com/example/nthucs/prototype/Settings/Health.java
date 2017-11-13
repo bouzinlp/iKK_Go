@@ -23,6 +23,9 @@ public class Health implements java.io.Serializable {
     private float diastolicBloodPressure;
     private float pulse;
     private float activityFactor;
+    // disease info
+    private boolean heart_disease;
+    private boolean diabetes_disease;
 
     public Health() {
         this.datetime = 0;
@@ -32,6 +35,9 @@ public class Health implements java.io.Serializable {
         this.systolicBloodPressure = 0;
         this.diastolicBloodPressure = 0;
         this.pulse = 0;
+        //disease (for chatbot use)
+        this.heart_disease = false;
+        this.diabetes_disease = false;
     }
 
     public long getId() {return this.id;}
@@ -64,4 +70,11 @@ public class Health implements java.io.Serializable {
 
     public float getActivityFactor() {return  this.activityFactor;}
     public void setActivityFactor(float activityFactor) {this.activityFactor = activityFactor;}
+
+    //disease (for chatbot use)
+    public void setHeartDiseasePos(){this.heart_disease = true;};
+    public boolean getHeartDisease(){return this.heart_disease;};
+
+    public void setDiabetesDiseasePos(){this.diabetes_disease = true;};
+    public boolean getDiabetesDisease(){return this.diabetes_disease;};
 }

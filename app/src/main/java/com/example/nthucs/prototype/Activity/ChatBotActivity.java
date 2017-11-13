@@ -100,6 +100,8 @@ public class ChatBotActivity extends AppCompatActivity
     private static final String FROM_GALLERY = "take_photo";
     private int flag = 0; //when flag = 0, language will be chinese ; flag = 1 will be english
     private long local_datetime;
+    private static boolean heart_disease = false;
+    private static boolean diabetes_disease = false;
 
     // To get user's blood pressure
     private Health curHealth;
@@ -406,6 +408,7 @@ public class ChatBotActivity extends AppCompatActivity
         String pressure_parameter = new String("blood_pressure_problem");
         String pressure_para_eng = new String("Pressure_Problem");
         String pressure_para_eng1 = new String("Pressure_Problem1");
+        String disease = new String("disease");
 
         float total_absorb_calories=0;
         float total_consume_calories=0;
@@ -1035,6 +1038,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(J_Food2));
                             }
 
+                            if( heart_disease == true ){
+                                parameterString += ("\n建議多攝取纖維素，減少膽固醇生成，對心臟的健康有所助益");
+                            }
+
                         }
                         if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
@@ -1102,6 +1109,10 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(",");
                                 parameterString += (result.getStringParameter(F_Food1));
                             }
+
+                            if( heart_disease == true){ //Special Case(heart disease)
+                                parameterString += ("\n(但不建議您攝取肉類食物)");
+                            }
                         }
                         if(result.getStringParameter(B_Food).isEmpty() == false) { //priority 3
                             if(number == 1)
@@ -1131,13 +1142,6 @@ public class ChatBotActivity extends AppCompatActivity
                             if(result.getStringParameter(A_Food).isEmpty() == false)
                                 parameterString += (result.getStringParameter(A_Food));
 
-                            for(i=0;i<foodCalList.size();i++){
-
-                                if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(A_Food))){
-                                    parameterString += ("它的熱量為 "+foodCalList.get(i).getCalorie());
-                                }
-                            }
-
                             if (result.getStringParameter(A_Food1).isEmpty() == false) {
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(A_Food1));
@@ -1147,17 +1151,14 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(A_Food2));
                             }
 
+                            if(result.getStringParameter(A_Food).isEmpty() == false && diabetes_disease == true){ //Special Case (diabetes disease)
+                                parameterString += ("\n(請小心控制碳水化合物的攝取，過量的碳水化合物可能導致血糖過高)");
+                            }
 
                             if(result.getStringParameter(O_Food).isEmpty() == false) {
                                 if(result.getStringParameter(A_Food).isEmpty() == false)
                                     parameterString += (", ");
                                 parameterString += (result.getStringParameter(O_Food));
-                                //int i;
-                                for(i=0;i<foodCalList.size();i++){
-                                    if(foodCalList.get(i).getChineseName().equals(result.getStringParameter(O_Food))){
-                                        parameterString += ("它的熱量為"+foodCalList.get(i).getCalorie());
-                                    }
-                                }
                             }
 
                             if (result.getStringParameter(O_Food1).isEmpty() == false) {
@@ -1228,6 +1229,14 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(K_Food2));
                             }
+
+                            if(result.getStringParameter(K_Food).isEmpty() == false && diabetes_disease == true){ //Special Case(diabetes disease)
+                                parameterString += ("(不建議您攝取此類食物)");
+                            }
+                        }
+
+                        if(diabetes_disease == true){ //Special Case(diabetes disease)
+                            parameterString += ("\n(提醒您三餐須按時吃，平均分配食物有助於防止血糖過高或過低)");
                         }
 
                         if(number == 0){ //default conversation ( !! FOOD ISN'T IN THE DATABASE)
@@ -1305,6 +1314,19 @@ public class ChatBotActivity extends AppCompatActivity
                     case "get_water":
                         parameterString += ("您喝了"+water_drunk);
                     break;
+                    case "declare_disease":
+                        if(result.getStringParameter(disease).equals("心臟病")){
+                            curHealth.setHeartDiseasePos();
+                            heart_disease = true;
+                            //healthDAO.update(curHealth);
+                            //parameterString += ("\nDebug "+curHealth.getHeartDisease());
+                        }
+                        else if(result.getStringParameter(disease).equals("糖尿病")){
+                            curHealth.setDiabetesDiseasePos();
+                            diabetes_disease = true;
+                        }
+                        Toast.makeText(ChatBotActivity.this, "系統已成功更新資料", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             }
 
