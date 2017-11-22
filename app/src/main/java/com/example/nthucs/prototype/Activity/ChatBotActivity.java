@@ -453,8 +453,8 @@ public class ChatBotActivity extends AppCompatActivity
                         if(sys_pre ==0 || dia_pre == 0)
                             parameterString += ("Please set the info about blood pressure first!!");
                         else {
-                            parameterString += "Your blood pressure is " + String.valueOf(sys_pre) +
-                                    "/" + String.valueOf(dia_pre) + ".";
+                            parameterString += "Your blood pressure is " + String.valueOf(sys_pre) + "(mmHg)"+
+                                    "/" + String.valueOf(dia_pre) + "(mmHg)" +".";
                             if (sys_pre < 90.0 || dia_pre < 60.0)
                                 parameterString += " You have low blood pressure,go to see a doctor, plz.";
                             else if (sys_pre >= 140.0 || dia_pre >= 90.0)
@@ -466,7 +466,7 @@ public class ChatBotActivity extends AppCompatActivity
                         if(sys_pre == 0)
                             parameterString += ("Please set the info about blood pressure first!!");
                         else {
-                            parameterString += "Your systolic pressure is " + String.valueOf(sys_pre) + ".";
+                            parameterString += "Your systolic pressure is " + String.valueOf(sys_pre) + " (mmHg) "+ ".";
                             if (sys_pre < 90.0)
                                 parameterString += " You have low blood pressure,go to see a doctor, plz.";
                             else if (sys_pre >= 140.0)
@@ -479,7 +479,7 @@ public class ChatBotActivity extends AppCompatActivity
                         if(dia_pre == 0)
                             parameterString += ("Please set the info about blood pressure first!!");
                         else {
-                            parameterString += "Your diastolic pressure is " + String.valueOf(dia_pre) + ".";
+                            parameterString += "Your diastolic pressure is " + String.valueOf(dia_pre) + " (mmHg)" +".";
                             if (dia_pre < 60.0)
                                 parameterString += " You have low blood pressure,go to see a doctor, plz.";
                             else if (dia_pre >= 90.0)
@@ -519,21 +519,21 @@ public class ChatBotActivity extends AppCompatActivity
                             healthDAO.update(curHealth); //update database
                             sys_pre = curHealth.getSystolicBloodPressure();
                             dia_pre = curHealth.getDiastolicBloodPressure();
-                            parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "Hg"+"\n");
-                            parameterString += ("Your diastolic blood pressure is " + String.valueOf(dia_pre) + "Hg");
+                            parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "(mmHg)"+"\n");
+                            parameterString += ("Your diastolic blood pressure is " + String.valueOf(dia_pre) + "(mmHg)");
                         }
                         else if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)==0){
                             if(result.getStringParameter(pressure_para_eng).equals("systolic blood pressure")){
                                 parameterString += ("Congrats!! You update the info successfully." + "\n");
                                 curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
                                 sys_pre = curHealth.getSystolicBloodPressure();
-                                parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "Hg");
+                                parameterString += ("Your systolic blood pressure is" + String.valueOf(sys_pre) + "(mmHg)");
                                 healthDAO.update(curHealth);
                             }else if(result.getStringParameter(pressure_para_eng).equals("diastolic blood pressure")){
                                 parameterString += ("Congrats!! You update the info successfully." + "\n");
                                 curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
                                 dia_pre = curHealth.getDiastolicBloodPressure();
-                                parameterString += ("Your diastolic blood pressure is" + String.valueOf(dia_pre) + "Hg");
+                                parameterString += ("Your diastolic blood pressure is" + String.valueOf(dia_pre) + "(mmHg)");
                                 healthDAO.update(curHealth);
                             }else{
                                 parameterString += ("Please specify which kind of blood pressure you want to update (systolic blood or diastolic blood pressure)");
@@ -848,16 +848,17 @@ public class ChatBotActivity extends AppCompatActivity
                                     todayFoods.get(i).setTitle(token_new);
                                 }
                                 for (j = 0; j < foodCalList.size(); j++) {
-                                    if (foodCalList.get(j).getChineseName().contains(todayFoods.get(i).getTitle())) {
+                                    if (foodCalList.get(j).getChineseName().contains(todayFoods.get(i).getTitle()) ) {
                                         for (k = 0; k < cato_bool.length; k++) {
                                             if (foodCalList.get(j).getCategory().equals(cato[k])) {
-                                                parameterString += ("它為" + cato[k] + "類食物\n");
+                                                //parameterString += ("它為" + cato[k] + "類食物\n"); //Only for debugging
                                                 cato_bool[k] = true;
                                             }
                                         }
                                         break;
                                     }
                                 }
+
                             }
                         }
                         parameterString += ("\n您今天一共吃了"+total_calorie+"大卡"+"\n");
@@ -866,22 +867,48 @@ public class ChatBotActivity extends AppCompatActivity
                         parameterString += ("您今天尚未攝取");
                         if(cato_bool[0] == false && cato_bool[1] == false && cato_bool[2] == false )
                             parameterString += ("五穀根莖類食物\n");
-                        if(cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false)
-                            parameterString += ("蔬果類食物\n");
-                        if(cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false)
+                        if(cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false) {
+                            parameterString += ("蔬果類食物");
+                            if(diabetes_disease == true){
+                                parameterString += ("(建議您可以吃洋蔥、苦瓜等食物，這些食物功能類似於胰島素)");
+                            }
+                            if(heart_disease == true){
+                                parameterString += ("(建議您可以多吃芹菜，芹菜富含豐芹菜鹼，具有保護心血管的功能)");
+                            }
+                            if(sys_pre >140 || dia_pre>90){ // High blood pressure
+                                parameterString += ("(建議您多吃芹菜、木耳、洋蔥等蔬菜類食物，這些食物有利於降低血壓)");
+                            }
+                            parameterString += ("\n");
+                        }
+                        if(cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false) {
                             parameterString += ("蛋豆魚肉類食物");
+                            if(diabetes_disease == true){
+                                parameterString += ("(建議您可以吃鱔魚，該食物功能類似於胰島素)");
+                            }
+                            if(sys_pre > 140 || dia_pre >90){
+                                parameterString += ("(建議您以魚類代替肉類的攝取)");
+                            }
+                        }
+
+                        if(diabetes_disease == true){
+                            parameterString+=("\n！！提醒您每餐須正常時間進食，少量多餐有助於控制穩定的血壓");
+                        }
+                        if(heart_disease == true){
+
+                            parameterString += ("\n！！提醒您少吃肉類食物");
+                        }
                         break;
 
                     case "get_pressure_info":
                         if(sys_pre == 0 || dia_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
                         else {
-                            parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) +
-                                    "/" + String.valueOf(dia_pre)+"\n";
+                            parameterString += "你的收縮壓/舒張壓為 " + String.valueOf(sys_pre) + "(mmHg)"+
+                                    "/" + String.valueOf(dia_pre)+"(mmHg)"+"\n";
                              if (sys_pre < 90.0 || dia_pre < 60.0)
-                                parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常收縮壓/舒張壓為90~140/60~90(mmHg)。您可能有低血壓，請休息幾分鐘再次測量。";
                             else if (sys_pre >= 140.0 || dia_pre >= 90.0)
-                                parameterString += "正常收縮壓/舒張壓為90~140/60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常收縮壓/舒張壓為90~140/60~90(mmHg)。您可能有高血壓，請休息幾分鐘再次測量。";
                             else parameterString += "您的血壓正常，請繼續保持";
                         }
                         break;
@@ -889,11 +916,11 @@ public class ChatBotActivity extends AppCompatActivity
                         if(sys_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
                         else {
-                            parameterString += "你的收縮壓為 " + String.valueOf(sys_pre)+"\n";
+                            parameterString += "你的收縮壓為 " + String.valueOf(sys_pre)+ "(mmHg)"+"\n";
                             if (sys_pre < 90.0)
-                                parameterString += "正常收縮壓為90~140/60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常收縮壓為90~140(mmHg)。您可能有低血壓，請休息幾分鐘再次測量。";
                             else if (sys_pre >= 140.0)
-                                parameterString += "正常收縮壓為90~140。您可能有高血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常收縮壓為90~140(mmHg)。您可能有高血壓，請休息幾分鐘再次測量。";
                             else parameterString += "您的收縮壓正常，請繼續保持";
                         }
                         break;
@@ -901,11 +928,11 @@ public class ChatBotActivity extends AppCompatActivity
                         if(dia_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
                         else {
-                            parameterString += "你的舒張壓為 " + String.valueOf(dia_pre)+"\n";
+                            parameterString += "你的舒張壓為 " + String.valueOf(dia_pre)+"(mmHg)"+"\n";
                             if (dia_pre < 60.0)
-                                parameterString += "正常舒張壓為60~90。您可能有低血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常舒張壓為60~90(mmHg)。您可能有低血壓，請休息幾分鐘再次測量。";
                             else if (dia_pre >= 90.0)
-                                parameterString += "正常舒張壓為60~90。您可能有高血壓，請休息幾分鐘再次測量。";
+                                parameterString += "正常舒張壓為60~90(mmHg)。您可能有高血壓，請休息幾分鐘再次測量。";
                             else parameterString += "您的舒張壓正常，請繼續保持";
                         }
                         break;
@@ -937,21 +964,21 @@ public class ChatBotActivity extends AppCompatActivity
                             healthDAO.update(curHealth); //update database
                             sys_pre = curHealth.getSystolicBloodPressure();
                             dia_pre = curHealth.getDiastolicBloodPressure();
-                            parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "Hg"+"\n");
-                            parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "Hg");
+                            parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "(mmHg)"+"\n");
+                            parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "(mmHg)");
                         }
                         else if(result.getFloatParameter(pressure_num1)!=0 && result.getFloatParameter(pressure_num2)==0){
                             if(result.getStringParameter(pressure_parameter).equals("收縮壓")){
                                 parameterString += ("恭喜您成功更新血壓數值 " + "\n");
                                 curHealth.setSystolicBloodPressure(result.getFloatParameter(pressure_num1));
                                 sys_pre = curHealth.getSystolicBloodPressure();
-                                parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "Hg");
+                                parameterString += ("您現在的收縮壓為" + String.valueOf(sys_pre) + "(mmHg)");
                                 healthDAO.update(curHealth);
                             }else if(result.getStringParameter(pressure_parameter).equals("舒張壓")){
                                 parameterString += ("恭喜您成功更新血壓數值 " + "\n");
                                 curHealth.setDiastolicBloodPressure(result.getFloatParameter(pressure_num1));
                                 dia_pre = curHealth.getDiastolicBloodPressure();
-                                parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "Hg");
+                                parameterString += ("您現在的舒張壓為" + String.valueOf(dia_pre) + "(mmHg)");
                                 healthDAO.update(curHealth);
                             }else{
                                 parameterString += ("請明確說出你想更新收縮壓還是舒張壓");
