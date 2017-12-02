@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    android:background="@drawable/background_color"
+    android:background="@drawable/img_background_1"
     tools:context="com.example.nthucs.prototype.Activity.HomeActivity"
     tools:showIn="@layout/app_bar_home">
         <ImageView
@@ -54,9 +54,9 @@
             android:src="@drawable/ic_distance_48"/>
 
     <com.github.mikephil.charting.charts.PieChart
-        android:layout_width="300sp"
+        android:layout_width="270sp"
         android:layout_height="320sp"
-        android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="false"
         android:layout_below="@id/clk_image"
         android:id="@+id/piechart">
     </com.github.mikephil.charting.charts.PieChart>
@@ -65,48 +65,87 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/current_title"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="60dp"
         android:text="@string/current_achieve"
-        android:layout_below="@id/piechart"
+        android:layout_toEndOf="@id/piechart"
+        android:layout_toRightOf="@id/piechart"
+        android:layout_below="@id/exr_image"
         android:textStyle="bold"
         android:textColor="#553500"
-        android:textSize="30sp"/>
+        android:textSize="28sp"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/current_achieve"
-        android:layout_below="@id/piechart"
-        android:layout_toEndOf="@id/current_title"
-        android:layout_toRightOf="@id/current_title"
+        android:layout_below="@id/current_title"
+        android:layout_toLeftOf="@+id/unit1"
+        android:layout_toStartOf="@+id/unit1"
         android:textStyle="bold"
         android:textColor="#553500"
-        android:layout_margin="0dp"
-        android:textSize="30sp"
+        android:textSize="28sp"
+        android:textDirection="rtl"
         android:text="@string/default_home_values"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/unit1"
+        android:textSize="28sp"
+        android:text="單位"
+        android:textStyle="bold"
+        android:textColor="#553500"
+        android:layout_below="@id/current_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
 
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/goal_achieve"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
+        android:paddingTop="20dp"
         android:id="@+id/goal_title"
-        android:layout_below="@id/current_title"
+        android:layout_toEndOf="@id/piechart"
+        android:layout_toRightOf="@id/piechart"
+        android:layout_below="@id/current_achieve"
         android:textStyle="bold"
         android:textColor="#553500"
         android:layout_margin="0dp"
-        android:textSize="30sp"/>
+        android:textSize="28sp"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:id="@+id/goal_achieve"
-        android:layout_below="@id/current_title"
-        android:layout_toEndOf="@id/goal_title"
-        android:layout_toRightOf="@id/goal_title"
+        android:layout_below="@id/goal_title"
+        android:layout_toLeftOf="@+id/unit2"
+        android:layout_toStartOf="@+id/unit2"
         android:textStyle="bold"
         android:textColor="#553500"
         android:layout_margin="0dp"
-        android:textSize="30sp"
+        android:textSize="28sp"
         android:text="@string/default_home_values"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/unit2"
+        android:textSize="28sp"
+        android:text="單位"
+        android:textStyle="bold"
+        android:textColor="#553500"
+        android:layout_below="@id/goal_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/suggestion"
+        android:paddingTop="10dp"
+        android:textStyle="bold"
+        android:layout_below="@id/piechart"
+        android:layout_centerHorizontal="true"
+        android:textSize="32sp"
+        android:textColor="#553500"/>
 </RelativeLayout>

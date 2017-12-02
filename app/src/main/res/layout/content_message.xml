@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.nthucs.prototype.Activity.MessageActivity"
-    android:background="@drawable/background_color"
+    android:background="@drawable/img_background_1"
     tools:showIn="@layout/app_bar_message">
 
     <LinearLayout

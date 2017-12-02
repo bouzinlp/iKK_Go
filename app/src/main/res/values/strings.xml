@@ -138,6 +138,6 @@
     <string name="other">其他</string>
     <string name="sport">運動</string>
 
-    <string name="current_achieve">目前：</string>
-    <string name="goal_achieve">目標：</string>
+    <string name="current_achieve">目前</string>
+    <string name="goal_achieve">目標</string>
 </resources>
