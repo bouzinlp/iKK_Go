@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -61,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.view.View;
@@ -79,6 +81,8 @@ import org.json.JSONObject;
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
 import io.fabric.sdk.android.services.settings.SettingsRequest;
+
+
 
 public class ChatBotActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener ,AIListener {
@@ -149,6 +153,8 @@ public class ChatBotActivity extends AppCompatActivity
     //init Ai config
     AIConfiguration config = null;
 
+    TextToSpeech text_to_audio = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,6 +197,18 @@ public class ChatBotActivity extends AppCompatActivity
         btnSend = (ImageButton) findViewById(R.id.btn_send);
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
 
+        //text to audio implementation (By YuJui Chen)
+        // TextToAudio English Version
+        text_to_audio = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status!=TextToSpeech.ERROR){
+                    text_to_audio.setLanguage(Locale.TAIWAN);
+                }
+            }
+        }
+        );
+
         //init Api ai listener
         //chinese ver.
         //change server on 09/03
@@ -210,6 +228,8 @@ public class ChatBotActivity extends AppCompatActivity
                 "3.詢問/設定 血壓、脈搏狀況\n"+
         "4.查詢目前消耗/吸收熱量\n"+
         "5.查詢今日所吃的食物");
+
+
 
         messageArrayList.add(ini_message);
 
@@ -244,6 +264,8 @@ public class ChatBotActivity extends AppCompatActivity
         parameterString += aiResponses(parameterString,result);
 
         parameterString += speech;
+
+        text_to_audio.speak(parameterString.toString(),TextToSpeech.QUEUE_FLUSH,null);
 
         Message inputMessage = new Message();
         inputMessage.setMessage(result.getResolvedQuery());
@@ -1065,6 +1087,11 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += (result.getStringParameter(J_Food2));
                             }
 
+                             /*Special Case => High Blood Pressure*/
+                            if(result.getStringParameter(J_Food).contains("人參")&& (sys_pre>=140 || dia_pre>=90)){
+                                parameterString += ("\n(提醒您，您有高血壓，應減少人參的攝取)");
+                            }
+
                             if( heart_disease == true ){
                                 parameterString += ("\n建議多攝取纖維素，減少膽固醇生成，對心臟的健康有所助益");
                             }
@@ -1072,8 +1099,16 @@ public class ChatBotActivity extends AppCompatActivity
                         }
                         if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false || result.getStringParameter(G_Food).isEmpty() == false || result.getStringParameter(F_Food).isEmpty() == false) { //priority 2
 
-                            if(number == 1)
-                                parameterString += ("\n接著再吃");
+                            if(number == 1) {
+                                // deal with "drink"
+                                if(result.getStringParameter(D_Food).isEmpty() == true && result.getStringParameter(E_Food).isEmpty() == true && result.getStringParameter(G_Food).isEmpty() == false){
+                                    if(result.getStringParameter(G_Food).contains("乳") || result.getStringParameter(G_Food).contains("奶") || result.getStringParameter(G_Food).contains("阿華田"))
+                                        parameterString += ("\n接著再喝");
+                                }
+                                else {
+                                    parameterString += ("\n接著再吃");
+                                }
+                            }
                             else {
                                 number = 1; //set flag
                                 parameterString+=("建議您先享用");
@@ -1089,6 +1124,12 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(D_Food2));
                             }
+
+                            /*Special Case => High Blood Pressure*/
+                            if(result.getStringParameter(D_Food).contains("雞") && (sys_pre>=140 || dia_pre>=90)){
+                                parameterString += ("\n(提醒您，您有高血壓，應減少雞肉的攝取)");
+                            }
+
                             if (result.getStringParameter(E_Food).isEmpty() == false) {
                                 if(result.getStringParameter(D_Food).isEmpty() == false)
                                     parameterString +=(", ");
@@ -1102,6 +1143,12 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString +=(", ");
                                 parameterString += (result.getStringParameter(E_Food2));
                             }
+
+                            /*Special Case => High Blood Pressure*/
+                            if((result.getStringParameter(E_Food).contains("髓") || result.getStringParameter(E_Food).contains("豬肝") || result.getStringParameter(E_Food).contains("豬腰") ) && (sys_pre>=140 || dia_pre>=90)){
+                                parameterString += ("\n(提醒您，您有高血壓，應減少"+result.getStringParameter(E_Food)+"的攝取)");
+                            }
+
                             if (result.getStringParameter(G_Food).isEmpty() == false) {
 
                                 if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false) {
@@ -1110,9 +1157,6 @@ public class ChatBotActivity extends AppCompatActivity
                                     else
                                         parameterString += (",");
                                 }
-
-                                if(result.getStringParameter(D_Food).isEmpty() == false || result.getStringParameter(E_Food).isEmpty() == false)
-                                    parameterString +=(", ");
 
                                 parameterString += (result.getStringParameter(G_Food));
                             }
@@ -1357,6 +1401,7 @@ public class ChatBotActivity extends AppCompatActivity
                 }
             }
 
+        //text_to_audio.speak(parameterString.toString(),TextToSpeech.QUEUE_FLUSH,null);
         todayFoods.clear();
         todaySports.clear();
         return parameterString;
@@ -1542,6 +1587,7 @@ public class ChatBotActivity extends AppCompatActivity
                 messageArrayList.clear();
                 messageArrayList.add(eng_message);
                 mAdapter.notifyDataSetChanged();
+                text_to_audio.setLanguage(Locale.UK);
                 Toast.makeText(ChatBotActivity.this, "English Chat Bot", Toast.LENGTH_SHORT).show();
             }
             else{
@@ -1565,6 +1611,7 @@ public class ChatBotActivity extends AppCompatActivity
                 messageArrayList.clear();
                 messageArrayList.add(ini_message);
                 mAdapter.notifyDataSetChanged();
+                text_to_audio.setLanguage(Locale.TAIWAN);
                 Toast.makeText(ChatBotActivity.this, "中文管家", Toast.LENGTH_SHORT).show();
             }
         }
