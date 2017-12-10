@@ -76,7 +76,7 @@ public class HomeActivity extends AppCompatActivity
 
     public static final String TAG = "Prototype";
     //private TextView exerciseTime,exerciseSteps,exerciseCalories,exerciseDistance;
-    private TextView currentAchieve, goalAchieve, unit1, unit2, suggest;
+    private TextView currentAchieve, goalAchieve, unit1, unit2;
     public static GoogleApiClient mClient = null;
     private ProgressDialog pd;
     int totalSteps = 0;
@@ -102,7 +102,10 @@ public class HomeActivity extends AppCompatActivity
     PieChart pieChart;
     String exrTime, exrStep, exrBurn, exrDist;
     ImageView clkImg, exrImg, burnImg, distImg;
-
+    int goalTime, goalStep, goalBurn, goalDist;
+    int index;
+    EditText newGoal;
+    CharSequence hint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,80 +146,17 @@ public class HomeActivity extends AppCompatActivity
         //selectTab(1);
         buildFitnessClient();
 
-        clkImg = (ImageView)findViewById(R.id.clk_image);
-        exrImg = (ImageView)findViewById(R.id.exr_image);
-        burnImg = (ImageView)findViewById(R.id.burn_image);
-        distImg = (ImageView)findViewById(R.id.dis_image);
+        clkImg = findViewById(R.id.clk_image);
+        exrImg = findViewById(R.id.exr_image);
+        burnImg = findViewById(R.id.burn_image);
+        distImg = findViewById(R.id.dis_image);
 
         clkImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pieChart.clear();
-
-                int goal = 30;
-                int current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
-                float g, c, cp, gp;
-                ArrayList<PieEntry> yValues = new ArrayList<>();
-                PieDataSet dataSet = new PieDataSet(yValues, "");
-                PieData data = new PieData((dataSet));
-                currentAchieve = (TextView)findViewById(R.id.current_achieve);
-                currentAchieve.setText(String.valueOf(current));
-                goalAchieve = (TextView)findViewById(R.id.goal_achieve);
-                goalAchieve.setText(String.valueOf(goal));
-                unit1 = (TextView)findViewById(R.id.unit1);
-                unit1.setText("分");
-                unit2 = (TextView)findViewById(R.id.unit2);
-                unit2.setText("分");
-                pieChart = (PieChart) findViewById(R.id.piechart);
-
-                pieChart.setUsePercentValues(true); //使用%數來畫圖
-                pieChart.getDescription().setEnabled(false);
-                //pieChart.setExtraOffsets(5, 10, 5, 5); //圖形上下左右預留空間
-                pieChart.setExtraOffsets(2, 2, 2, 2);
-
-                pieChart.setDragDecelerationFrictionCoef(0.5f); //拖拉的轉速
-                pieChart.setDrawHoleEnabled(true); //填滿圓形或甜甜圈型的圓餅圖
-                pieChart.setHoleColor(Color.TRANSPARENT); //甜甜圈型中間空洞顏色
-                pieChart.setHoleRadius(60.0f);
-
-                //c = (float) current;
-                c = 15.0f;
-                g = (float) goal;
-                cp = (c/g)*100;
-
-                if (cp <= 100.0f) gp = 100 - cp;
-                else gp = 0.0f;
-                //設定圓餅圖的entry
-                yValues.add(new PieEntry(cp, "已完成")); //PieEntry(比例, 標籤)
-                yValues.add(new PieEntry(gp, "尚有"));
-                if ((c/g)*100 < 25.0f)
-                    suggest.setText("好的開始是成功的一半");
-                else if ((c/g)*100 >= 25.0f && (c/g)*100 < 50.0f)
-                    suggest.setText("倒吃甘蔗 漸入佳境");
-                else if ((c/g)*100 >= 50.0f && (c/g)*100 < 75.0f)
-                    suggest.setText("已經達成一半了 繼續加油");
-                else if ((c/g)*100 >= 75.0f && (c/g)*100 < 100.0f)
-                    suggest.setText("行百里者半九十");
-                else if ((c/g)*100 >= 100.0f)
-                    suggest.setText("今天目標已經達成囉");
-
-                //設定entry set
-                dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
-                dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
-                //dataSet.setColors(ColorTemplate.JOYFUL_COLORS); //圓餅圖的顏色
-                int[] colors = {Color.rgb(231, 151, 015), Color.rgb(88, 1, 165)};
-                dataSet.setColors(colors);
-
-                data.setValueTextSize(20f);
-                data.setValueTextColor(Color.WHITE);
-
-                pieChart.setCenterText("時間");
-                pieChart.setCenterTextColor(Color.BLACK);
-                pieChart.setCenterTextSize(20f);
-
-                pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //圓餅圖的出現動畫
-
-                pieChart.setData(data);
+                index = 1;
+                setPieChart();
             }
         });
 
@@ -224,72 +164,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 pieChart.clear();
-
-                int goal = 8000;
-                int current = Integer.parseInt(getString(R.string.homeTextView,totalSteps,""));
-                float g, c, cp, gp;
-                ArrayList<PieEntry> yValues = new ArrayList<>();
-                PieDataSet dataSet = new PieDataSet(yValues, "");
-                PieData data = new PieData((dataSet));
-                currentAchieve = (TextView)findViewById(R.id.current_achieve);
-                currentAchieve.setText(String.valueOf(current));
-                goalAchieve = (TextView)findViewById(R.id.goal_achieve);
-                goalAchieve.setText(String.valueOf(goal));
-                unit1 = (TextView)findViewById(R.id.unit1);
-                unit1.setText("步");
-                unit2 = (TextView)findViewById(R.id.unit2);
-                unit2.setText("步");
-                suggest = (TextView)findViewById(R.id.suggestion);
-                pieChart = (PieChart) findViewById(R.id.piechart);
-
-                pieChart.setUsePercentValues(true); //使用%數來畫圖
-                pieChart.getDescription().setEnabled(false);
-                //pieChart.setExtraOffsets(5, 10, 5, 5); //圖形上下左右預留空間
-                pieChart.setExtraOffsets(2, 2, 2, 2);
-
-                pieChart.setDragDecelerationFrictionCoef(0.5f); //拖拉的轉速
-                pieChart.setDrawHoleEnabled(true); //填滿圓形或甜甜圈型的圓餅圖
-                pieChart.setHoleColor(Color.TRANSPARENT); //甜甜圈型中間空洞顏色
-                pieChart.setHoleRadius(60.0f);
-
-                //c = (float) current;
-                c = 2000.0f;
-                g = (float) goal;
-                cp = (c/g)*100;
-
-                if (cp <= 100.0f) gp = 100 - cp;
-                else gp = 0.0f;
-                //設定圓餅圖的entry
-                yValues.add(new PieEntry(cp, "已完成")); //PieEntry(比例, 標籤)
-                yValues.add(new PieEntry(gp, "尚有"));
-                if ((c/g)*100 < 25.0f)
-                    suggest.setText("好的開始是成功的一半");
-                else if ((c/g)*100 >= 25.0f && (c/g)*100 < 50.0f)
-                    suggest.setText("倒吃甘蔗 漸入佳境");
-                else if ((c/g)*100 >= 50.0f && (c/g)*100 < 75.0f)
-                    suggest.setText("已經達成一半了 繼續加油");
-                else if ((c/g)*100 >= 75.0f && (c/g)*100 < 100.0f)
-                    suggest.setText("行百里者半九十");
-                else if ((c/g)*100 >= 100.0f)
-                    suggest.setText("今天目標已經達成囉");
-
-                //設定entry set
-                dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
-                dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
-                //dataSet.setColors(ColorTemplate.JOYFUL_COLORS); //圓餅圖的顏色
-                int[] colors = {Color.BLUE, Color.MAGENTA};
-                dataSet.setColors(colors);
-
-                data.setValueTextSize(20f);
-                data.setValueTextColor(Color.WHITE);
-
-                pieChart.setCenterText("步數");
-                pieChart.setCenterTextColor(Color.BLACK);
-                pieChart.setCenterTextSize(20f);
-
-                pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //圓餅圖的出現動畫
-
-                pieChart.setData(data);
+                index = 2;
+                setPieChart();
             }
         });
 
@@ -297,72 +173,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 pieChart.clear();
-
-                int goal = 2000;
-                int current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalCals),""));
-                float g, c, cp, gp;
-                ArrayList<PieEntry> yValues = new ArrayList<>();
-                PieDataSet dataSet = new PieDataSet(yValues, "");
-                PieData data = new PieData((dataSet));
-                currentAchieve = (TextView)findViewById(R.id.current_achieve);
-                currentAchieve.setText(String.valueOf(current));
-                goalAchieve = (TextView)findViewById(R.id.goal_achieve);
-                goalAchieve.setText(String.valueOf(goal));
-                unit1 = (TextView)findViewById(R.id.unit1);
-                unit1.setText("大卡");
-                unit2 = (TextView)findViewById(R.id.unit2);
-                unit2.setText("大卡");
-                suggest = (TextView)findViewById(R.id.suggestion);
-                pieChart = (PieChart) findViewById(R.id.piechart);
-
-                pieChart.setUsePercentValues(true); //使用%數來畫圖
-                pieChart.getDescription().setEnabled(false);
-                //pieChart.setExtraOffsets(5, 10, 5, 5); //圖形上下左右預留空間
-                pieChart.setExtraOffsets(2, 2, 2, 2);
-
-                pieChart.setDragDecelerationFrictionCoef(0.5f); //拖拉的轉速
-                pieChart.setDrawHoleEnabled(true); //填滿圓形或甜甜圈型的圓餅圖
-                pieChart.setHoleColor(Color.TRANSPARENT); //甜甜圈型中間空洞顏色
-                pieChart.setHoleRadius(60.0f);
-
-                //c = (float) current;
-                c = 800.0f;
-                g = (float) goal;
-                cp = (c/g)*100;
-
-                if (cp <= 100.0f) gp = 100 - cp;
-                else gp = 0.0f;
-                //設定圓餅圖的entry
-                yValues.add(new PieEntry(cp, "已完成")); //PieEntry(比例, 標籤)
-                yValues.add(new PieEntry(gp, "尚有"));
-                if ((c/g)*100 < 25.0f)
-                    suggest.setText("好的開始是成功的一半");
-                else if ((c/g)*100 >= 25.0f && (c/g)*100 < 50.0f)
-                    suggest.setText("倒吃甘蔗 漸入佳境");
-                else if ((c/g)*100 >= 50.0f && (c/g)*100 < 75.0f)
-                    suggest.setText("已經達成一半了 繼續加油");
-                else if ((c/g)*100 >= 75.0f && (c/g)*100 < 100.0f)
-                    suggest.setText("行百里者半九十");
-                else if ((c/g)*100 >= 100.0f)
-                    suggest.setText("今天目標已經達成囉");
-
-                //設定entry set
-                dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
-                dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
-                //dataSet.setColors(ColorTemplate.JOYFUL_COLORS); //圓餅圖的顏色
-                int[] colors = {Color.rgb(1, 165, 3), Color.RED};
-                dataSet.setColors(colors);
-
-                data.setValueTextSize(20f);
-                data.setValueTextColor(Color.WHITE);
-
-                pieChart.setCenterText("熱量");
-                pieChart.setCenterTextColor(Color.BLACK);
-                pieChart.setCenterTextSize(20f);
-
-                pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //圓餅圖的出現動畫
-
-                pieChart.setData(data);
+                index = 3;
+                setPieChart();
             }
         });
 
@@ -370,72 +182,8 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 pieChart.clear();
-
-                int goal = 6;
-                int current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalDistance),""));
-                float g, c, cp, gp;
-                ArrayList<PieEntry> yValues = new ArrayList<>();
-                PieDataSet dataSet = new PieDataSet(yValues, "");
-                PieData data = new PieData((dataSet));
-                currentAchieve = (TextView)findViewById(R.id.current_achieve);
-                currentAchieve.setText(String.valueOf(current));
-                goalAchieve = (TextView)findViewById(R.id.goal_achieve);
-                goalAchieve.setText(String.valueOf(goal));
-                unit1 = (TextView)findViewById(R.id.unit1);
-                unit1.setText("公里");
-                unit2 = (TextView)findViewById(R.id.unit2);
-                unit2.setText("公里");
-                suggest = (TextView)findViewById(R.id.suggestion);
-                pieChart = (PieChart) findViewById(R.id.piechart);
-
-                pieChart.setUsePercentValues(true); //使用%數來畫圖
-                pieChart.getDescription().setEnabled(false);
-                //pieChart.setExtraOffsets(5, 10, 5, 5); //圖形上下左右預留空間
-                pieChart.setExtraOffsets(2, 2, 2, 2);
-
-                pieChart.setDragDecelerationFrictionCoef(0.5f); //拖拉的轉速
-                pieChart.setDrawHoleEnabled(true); //填滿圓形或甜甜圈型的圓餅圖
-                pieChart.setHoleColor(Color.TRANSPARENT); //甜甜圈型中間空洞顏色
-                pieChart.setHoleRadius(60.0f);
-
-                //c = (float) current;
-                c = 4.6f;
-                g = (float) goal;
-                cp = (c/g)*100;
-
-                if (cp <= 100.0f) gp = 100 - cp;
-                else gp = 0.0f;
-                //設定圓餅圖的entry
-                yValues.add(new PieEntry(cp, "已完成")); //PieEntry(比例, 標籤)
-                yValues.add(new PieEntry(gp, "尚有"));
-                if ((c/g)*100 < 25.0f)
-                    suggest.setText("好的開始是成功的一半");
-                else if ((c/g)*100 >= 25.0f && (c/g)*100 < 50.0f)
-                    suggest.setText("倒吃甘蔗 漸入佳境");
-                else if ((c/g)*100 >= 50.0f && (c/g)*100 < 75.0f)
-                    suggest.setText("已經達成一半了 繼續加油");
-                else if ((c/g)*100 >= 75.0f && (c/g)*100 < 100.0f)
-                    suggest.setText("行百里者半九十");
-                else if ((c/g)*100 >= 100.0f)
-                    suggest.setText("今天目標已經達成囉");
-
-                //設定entry set
-                dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
-                dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
-                //dataSet.setColors(ColorTemplate.JOYFUL_COLORS); //圓餅圖的顏色
-                int[] colors = {Color.GRAY, Color.DKGRAY};
-                dataSet.setColors(colors);
-
-                data.setValueTextSize(20f);
-                data.setValueTextColor(Color.WHITE);
-
-                pieChart.setCenterText("距離");
-                pieChart.setCenterTextColor(Color.BLACK);
-                pieChart.setCenterTextSize(20f);
-
-                pieChart.animateY(1000, Easing.EasingOption.EaseInOutCubic); //圓餅圖的出現動畫
-
-                pieChart.setData(data);
+                index = 4;
+                setPieChart();
             }
         });
     }
@@ -457,28 +205,82 @@ public class HomeActivity extends AppCompatActivity
         /*exerciseSteps = (TextView)findViewById(R.id.exerciseSteps);
         exerciseCalories = (TextView)findViewById(R.id.exerciseCalories);
         exerciseDistance = (TextView)findViewById(R.id.exerciseDistance);*/
-        int goal = 30;
-        int current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
-        float g, c, cp, gp;
+        goalTime = 30;
+        goalStep = 8000;
+        goalBurn = 2000;
+        goalDist = 6000;
+        index = 1;
+        newGoal = findViewById(R.id.new_goal);
+        hint = newGoal.getHint();
+        setPieChart();
+    }
+
+    private void setPieChart() {
+        String unit, kind;
+        int current, goal;
         ArrayList<PieEntry> yValues = new ArrayList<>();
         PieDataSet dataSet = new PieDataSet(yValues, "");
         PieData data = new PieData((dataSet));
+        dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
+        dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
+        int[] colors;
+        int[] colors1 = {Color.rgb(231, 151, 015), Color.rgb(88, 1, 165)};
+        int[] colors2 = {Color.BLUE, Color.MAGENTA};
+        int[] colors3 = {Color.rgb(1, 165, 3), Color.RED};
+        int[] colors4 = {Color.GRAY, Color.DKGRAY};
+
+        switch(index){
+            case 1: //time
+                unit = "分";
+                kind = "時間";
+                current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                goal = goalTime;
+                colors = colors1;
+                break;
+            case 2: //step
+                unit = "步";
+                kind = "步數";
+                current = Integer.parseInt(getString(R.string.homeTextView,totalSteps,""));
+                goal = goalStep;
+                colors = colors2;
+                break;
+            case 3: //calorie
+                unit = "大卡";
+                kind = "熱量";
+                current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalCals),""));
+                goal = goalBurn;
+                colors = colors3;
+                break;
+            case 4: //meter
+                unit = "公尺";
+                kind = "距離";
+                current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalDistance),""));
+                goal = goalDist;
+                colors = colors4;
+                break;
+            default:
+                unit = "分";
+                kind = "時間";
+                current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                goal = goalTime;
+                colors = colors1;
+                break;
+        }
+        float g, c, cp, gp;
 
         currentAchieve = (TextView)findViewById(R.id.current_achieve);
         currentAchieve.setText(String.valueOf(current));
         goalAchieve = (TextView)findViewById(R.id.goal_achieve);
         goalAchieve.setText(String.valueOf(goal));
         unit1 = (TextView)findViewById(R.id.unit1);
-        unit1.setText("分");
+        unit1.setText(unit);
         unit2 = (TextView)findViewById(R.id.unit2);
-        unit2.setText("分");
-        suggest = (TextView)findViewById(R.id.suggestion);
+        unit2.setText(unit);
         pieChart = (PieChart) findViewById(R.id.piechart);
 
         pieChart.setUsePercentValues(true); //使用%數來畫圖
         pieChart.getDescription().setEnabled(false);
-        //pieChart.setExtraOffsets(5, 10, 5, 5); //圖形上下左右預留空間
-        pieChart.setExtraOffsets(2, 2, 2, 2);
+        pieChart.setExtraOffsets(2, 2, 2, 2); //圖形上下左右預留空間
 
         pieChart.setDragDecelerationFrictionCoef(0.5f); //拖拉的轉速
         pieChart.setDrawHoleEnabled(true); //填滿圓形或甜甜圈型的圓餅圖
@@ -494,28 +296,16 @@ public class HomeActivity extends AppCompatActivity
         //設定圓餅圖的entry
         yValues.add(new PieEntry(cp, "已完成")); //PieEntry(比例, 標籤)
         yValues.add(new PieEntry(gp, "尚有"));
-        if ((c/g)*100 < 25.0f)
-            suggest.setText("好的開始是成功的一半");
-        else if ((c/g)*100 >= 25.0f && (c/g)*100 < 50.0f)
-            suggest.setText("倒吃甘蔗 漸入佳境");
-        else if ((c/g)*100 >= 50.0f && (c/g)*100 < 75.0f)
-            suggest.setText("已經達成一半了 繼續加油");
-        else if ((c/g)*100 >= 75.0f && (c/g)*100 < 100.0f)
-            suggest.setText("行百里者半九十");
-        else if ((c/g)*100 >= 100.0f)
-            suggest.setText("今天目標已經達成囉");
 
         //設定entry set
         dataSet.setSliceSpace(5f); //每一個data圖形彼此之間的間隔
         dataSet.setSelectionShift(10f); //被選中的data往外挪移距離
-        //dataSet.setColors(ColorTemplate.JOYFUL_COLORS); //圓餅圖的顏色
-        int[] colors = {Color.rgb(231, 151, 015), Color.rgb(88, 1, 165)};
         dataSet.setColors(colors);
 
-        data.setValueTextSize(20f);
+        data.setValueTextSize(12f);
         data.setValueTextColor(Color.WHITE);
 
-        pieChart.setCenterText("時間");
+        pieChart.setCenterText(kind);
         pieChart.setCenterTextColor(Color.BLACK);
         pieChart.setCenterTextSize(20f);
 
@@ -524,7 +314,44 @@ public class HomeActivity extends AppCompatActivity
         pieChart.setData(data);
     }
 
+    public void onUpdate(View view) {
+        if (view.getId() == R.id.update_button) {
+            String new_goal = newGoal.getText().toString();
 
+            if (new_goal.length() != 0) {
+                switch(index) {
+                    case 1:
+                        goalTime = Integer.parseInt(new_goal);
+                        newGoal.setText("");
+                        setPieChart();
+                        break;
+                    case 2:
+                        goalStep = Integer.parseInt(new_goal);
+                        newGoal.setText("");
+                        setPieChart();
+                        break;
+                    case 3:
+                        goalBurn = Integer.parseInt(new_goal);
+                        newGoal.setText("");
+                        setPieChart();
+                        break;
+                    case 4:
+                        goalDist = Integer.parseInt(new_goal);
+                        newGoal.setText("");
+                        setPieChart();
+                        break;
+                    default:
+                        goalTime = Integer.parseInt(new_goal);
+                        newGoal.setText("");
+                        setPieChart();
+                        break;
+                }
+                Toast.makeText(this, "更新完成", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "目標不可為空", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
     private void buildFitnessClient() {
         // Create the Google API Client
         mClient = new GoogleApiClient.Builder(this)

@@ -13,49 +13,55 @@
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="15dp"
             android:id="@+id/clk_image"
             android:clickable="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/home_icon_description"
             android:src="@drawable/ic_clock_48"/>
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="15dp"
             android:id="@+id/exr_image"
             android:clickable="true"
-            android:layout_toEndOf="@id/clk_image"
-            android:layout_toRightOf="@id/clk_image"
+            android:layout_toStartOf="@+id/center_point"
+            android:layout_toLeftOf="@+id/center_point"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/home_icon_description"
             android:src="@drawable/ic_exercise_48"/>
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="15dp"
             android:id="@+id/burn_image"
             android:clickable="true"
-            android:layout_toEndOf="@id/exr_image"
-            android:layout_toRightOf="@id/exr_image"
+            android:layout_toEndOf="@+id/center_point"
+            android:layout_toRightOf="@+id/center_point"
+            android:paddingStart="10dp"
+            android:paddingLeft="10dp"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/home_icon_description"
             android:src="@drawable/ic_fire_48"/>
         <ImageView
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_margin="25dp"
+            android:layout_margin="15dp"
             android:id="@+id/dis_image"
             android:clickable="true"
-            android:layout_toEndOf="@id/burn_image"
-            android:layout_toRightOf="@id/burn_image"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="center_vertical"
             android:contentDescription="@string/home_icon_description"
             android:src="@drawable/ic_distance_48"/>
 
     <com.github.mikephil.charting.charts.PieChart
-        android:layout_width="270sp"
-        android:layout_height="320sp"
+        android:layout_width="220sp"
+        android:layout_height="270sp"
         android:layout_centerHorizontal="false"
         android:layout_below="@id/clk_image"
         android:id="@+id/piechart">
@@ -74,7 +80,7 @@
         android:layout_below="@id/exr_image"
         android:textStyle="bold"
         android:textColor="#553500"
-        android:textSize="28sp"/>
+        android:textSize="20sp"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -84,7 +90,7 @@
         android:layout_toStartOf="@+id/unit1"
         android:textStyle="bold"
         android:textColor="#553500"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:textDirection="rtl"
         android:text="@string/default_home_values"/>
 
@@ -92,7 +98,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/unit1"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:text="單位"
         android:textStyle="bold"
         android:textColor="#553500"
@@ -112,7 +118,7 @@
         android:textStyle="bold"
         android:textColor="#553500"
         android:layout_margin="0dp"
-        android:textSize="28sp"/>
+        android:textSize="20sp"/>
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -123,14 +129,14 @@
         android:textStyle="bold"
         android:textColor="#553500"
         android:layout_margin="0dp"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:text="@string/default_home_values"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/unit2"
-        android:textSize="28sp"
+        android:textSize="20sp"
         android:text="單位"
         android:textStyle="bold"
         android:textColor="#553500"
@@ -138,14 +144,38 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
+    <EditText
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:id="@+id/new_goal"
+        android:hint="更新目標"
+        android:layout_margin="10dp"
+        android:inputType="number"
+        android:background="@drawable/rectangle_drawable"
+        android:layout_below="@id/piechart"
+        android:layout_toStartOf="@+id/center_point"
+        android:layout_toLeftOf="@+id/center_point"/>
+
+    <Button
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/update_button"
+        android:text="@string/update_btn"
+        android:textColor="@color/black"
+        android:layout_margin="10dp"
+        android:onClick="onUpdate"
+        android:background="@drawable/bar_color"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@id/piechart"
+        android:layout_toEndOf="@+id/center_point"
+        android:layout_toRightOf="@+id/center_point"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/suggestion"
-        android:paddingTop="10dp"
-        android:textStyle="bold"
-        android:layout_below="@id/piechart"
+        android:id="@+id/center_point"
         android:layout_centerHorizontal="true"
-        android:textSize="32sp"
-        android:textColor="#553500"/>
+        android:layout_below="@id/piechart"/>
+
+
 </RelativeLayout>
