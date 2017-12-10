@@ -30,6 +30,8 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodCal;
 import com.example.nthucs.prototype.R;
+import com.example.nthucs.prototype.Settings.Goal;
+import com.example.nthucs.prototype.Settings.GoalDAO;
 import com.example.nthucs.prototype.SportList.Sport;
 import com.example.nthucs.prototype.SportList.SportDAO;
 import com.example.nthucs.prototype.TabsBar.ViewPagerAdapter;
@@ -106,6 +108,9 @@ public class HomeActivity extends AppCompatActivity
     int index;
     EditText newGoal;
     CharSequence hint;
+    private GoalDAO goalDAO;
+    List<Goal> goals;
+    Goal goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,13 +210,30 @@ public class HomeActivity extends AppCompatActivity
         /*exerciseSteps = (TextView)findViewById(R.id.exerciseSteps);
         exerciseCalories = (TextView)findViewById(R.id.exerciseCalories);
         exerciseDistance = (TextView)findViewById(R.id.exerciseDistance);*/
-        goalTime = 30;
+        /*goalTime = 30;
         goalStep = 8000;
         goalBurn = 2000;
-        goalDist = 6000;
+        goalDist = 6000;*/
         index = 1;
         newGoal = findViewById(R.id.new_goal);
         hint = newGoal.getHint();
+        goalDAO = new GoalDAO(getApplicationContext());
+
+        if (goalDAO.getCurrentGoal(Long.parseLong(LoginActivity.facebookUserID)) == null) {
+            goalTime = 30;
+            goalStep = 8000;
+            goalBurn = 2000;
+            goalDist = 6000;
+            goal = new Goal(goalTime, goalStep, goalBurn, goalDist);
+            goal.setUserID(Long.parseLong(LoginActivity.facebookUserID));
+            goal = goalDAO.insert(goal);
+        } else {
+            goal = goalDAO.getCurrentGoal(Long.parseLong(LoginActivity.facebookUserID));
+            goalTime = goal.getGoalTime();
+            goalStep = goal.getGoalStep();
+            goalBurn = goal.getGoalBurn();
+            goalDist = goal.getGoalDist();
+        }
         setPieChart();
     }
 
@@ -323,30 +345,36 @@ public class HomeActivity extends AppCompatActivity
                     case 1:
                         goalTime = Integer.parseInt(new_goal);
                         newGoal.setText("");
+                        goal.setGoalTime(goalTime);
                         setPieChart();
                         break;
                     case 2:
                         goalStep = Integer.parseInt(new_goal);
                         newGoal.setText("");
+                        goal.setGoalStep(goalStep);
                         setPieChart();
                         break;
                     case 3:
                         goalBurn = Integer.parseInt(new_goal);
                         newGoal.setText("");
+                        goal.setGoalBurn(goalBurn);
                         setPieChart();
                         break;
                     case 4:
                         goalDist = Integer.parseInt(new_goal);
                         newGoal.setText("");
+                        goal.setGoalDist(goalDist);
                         setPieChart();
                         break;
                     default:
                         goalTime = Integer.parseInt(new_goal);
                         newGoal.setText("");
+                        goal.setGoalTime(goalTime);
                         setPieChart();
                         break;
                 }
-                Toast.makeText(this, "更新完成", Toast.LENGTH_LONG).show();
+                if (goalDAO.update(goal))
+                    Toast.makeText(this, "更新完成", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "目標不可為空", Toast.LENGTH_LONG).show();
             }

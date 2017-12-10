@@ -10,6 +10,7 @@ import android.util.Log;
 import com.example.nthucs.prototype.Activity.LoginActivity;
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.FoodDAO;
+import com.example.nthucs.prototype.Settings.GoalDAO;
 import com.example.nthucs.prototype.Settings.HealthDAO;
 import com.example.nthucs.prototype.Settings.MyProfileDAO;
 import com.example.nthucs.prototype.SportList.SportDAO;
@@ -28,7 +29,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
 
-    public static final int VERSION = 28;
+    public static final int VERSION = 29;
 
 
     // 資料庫物件，固定的欄位變數
@@ -67,6 +68,8 @@ public class MyDBHelper extends SQLiteOpenHelper {
         // create health table
         db.execSQL(HealthDAO.CREATE_TABLE);
 
+        // create goal table
+        db.execSQL(GoalDAO.CREATE_TABLE);
     }
 
     @Override
@@ -85,6 +88,9 @@ public class MyDBHelper extends SQLiteOpenHelper {
 
         // delete origin health table
         db.execSQL("DROP TABLE IF EXISTS " + HealthDAO.TABLE_NAME);
+
+        // delete origin goal table
+        db.execSQL("DROP TABLE IF EXISTS " + GoalDAO.TABLE_NAME);
 
         // 呼叫onCreate建立新版的表格
         onCreate(db);
