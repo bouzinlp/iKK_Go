@@ -43,6 +43,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -102,15 +103,13 @@ public class HomeActivity extends AppCompatActivity
     public ArrayList<FitnessActivity> fitnessProperties = new ArrayList<>();
 
     PieChart pieChart;
-    String exrTime, exrStep, exrBurn, exrDist;
+    //String exrTime, exrStep, exrBurn, exrDist;
     ImageView clkImg, exrImg, burnImg, distImg;
     int goalTime, goalStep, goalBurn, goalDist;
     int index;
     EditText newGoal;
-    CharSequence hint;
     private GoalDAO goalDAO;
-    List<Goal> goals;
-    Goal goal;
+    Goal _goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +149,7 @@ public class HomeActivity extends AppCompatActivity
         SD = new SportDAO(getApplicationContext());
         //selectTab(1);
         buildFitnessClient();
+        //setPieChart();
 
         clkImg = findViewById(R.id.clk_image);
         exrImg = findViewById(R.id.exr_image);
@@ -210,13 +210,8 @@ public class HomeActivity extends AppCompatActivity
         /*exerciseSteps = (TextView)findViewById(R.id.exerciseSteps);
         exerciseCalories = (TextView)findViewById(R.id.exerciseCalories);
         exerciseDistance = (TextView)findViewById(R.id.exerciseDistance);*/
-        /*goalTime = 30;
-        goalStep = 8000;
-        goalBurn = 2000;
-        goalDist = 6000;*/
         index = 1;
         newGoal = findViewById(R.id.new_goal);
-        hint = newGoal.getHint();
         goalDAO = new GoalDAO(getApplicationContext());
 
         if (goalDAO.getCurrentGoal(Long.parseLong(LoginActivity.facebookUserID)) == null) {
@@ -224,15 +219,15 @@ public class HomeActivity extends AppCompatActivity
             goalStep = 8000;
             goalBurn = 2000;
             goalDist = 6000;
-            goal = new Goal(goalTime, goalStep, goalBurn, goalDist);
-            goal.setUserID(Long.parseLong(LoginActivity.facebookUserID));
-            goal = goalDAO.insert(goal);
+            _goal = new Goal(goalTime, goalStep, goalBurn, goalDist);
+            _goal.setUserID(Long.parseLong(LoginActivity.facebookUserID));
+            _goal = goalDAO.insert(_goal);
         } else {
-            goal = goalDAO.getCurrentGoal(Long.parseLong(LoginActivity.facebookUserID));
-            goalTime = goal.getGoalTime();
-            goalStep = goal.getGoalStep();
-            goalBurn = goal.getGoalBurn();
-            goalDist = goal.getGoalDist();
+            _goal = goalDAO.getCurrentGoal(Long.parseLong(LoginActivity.facebookUserID));
+            goalTime = _goal.getGoalTime();
+            goalStep = _goal.getGoalStep();
+            goalBurn = _goal.getGoalBurn();
+            goalDist = _goal.getGoalDist();
         }
         setPieChart();
     }
@@ -256,6 +251,7 @@ public class HomeActivity extends AppCompatActivity
                 unit = "分";
                 kind = "時間";
                 current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                //current = Integer.parseInt(exrTime);
                 goal = goalTime;
                 colors = colors1;
                 break;
@@ -263,6 +259,7 @@ public class HomeActivity extends AppCompatActivity
                 unit = "步";
                 kind = "步數";
                 current = Integer.parseInt(getString(R.string.homeTextView,totalSteps,""));
+                //current = Integer.parseInt(exrStep);
                 goal = goalStep;
                 colors = colors2;
                 break;
@@ -270,6 +267,7 @@ public class HomeActivity extends AppCompatActivity
                 unit = "大卡";
                 kind = "熱量";
                 current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalCals),""));
+                //current = Integer.parseInt(exrBurn);
                 goal = goalBurn;
                 colors = colors3;
                 break;
@@ -277,6 +275,7 @@ public class HomeActivity extends AppCompatActivity
                 unit = "公尺";
                 kind = "距離";
                 current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalDistance),""));
+                //current = Integer.parseInt(exrDist);
                 goal = goalDist;
                 colors = colors4;
                 break;
@@ -284,6 +283,7 @@ public class HomeActivity extends AppCompatActivity
                 unit = "分";
                 kind = "時間";
                 current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                //current = Integer.parseInt(exrTime);
                 goal = goalTime;
                 colors = colors1;
                 break;
@@ -345,35 +345,35 @@ public class HomeActivity extends AppCompatActivity
                     case 1:
                         goalTime = Integer.parseInt(new_goal);
                         newGoal.setText("");
-                        goal.setGoalTime(goalTime);
+                        _goal.setGoalTime(goalTime);
                         setPieChart();
                         break;
                     case 2:
                         goalStep = Integer.parseInt(new_goal);
                         newGoal.setText("");
-                        goal.setGoalStep(goalStep);
+                        _goal.setGoalStep(goalStep);
                         setPieChart();
                         break;
                     case 3:
                         goalBurn = Integer.parseInt(new_goal);
                         newGoal.setText("");
-                        goal.setGoalBurn(goalBurn);
+                        _goal.setGoalBurn(goalBurn);
                         setPieChart();
                         break;
                     case 4:
                         goalDist = Integer.parseInt(new_goal);
                         newGoal.setText("");
-                        goal.setGoalDist(goalDist);
+                        _goal.setGoalDist(goalDist);
                         setPieChart();
                         break;
                     default:
                         goalTime = Integer.parseInt(new_goal);
                         newGoal.setText("");
-                        goal.setGoalTime(goalTime);
+                        _goal.setGoalTime(goalTime);
                         setPieChart();
                         break;
                 }
-                if (goalDAO.update(goal))
+                if (goalDAO.update(_goal))
                     Toast.makeText(this, "更新完成", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "目標不可為空", Toast.LENGTH_LONG).show();
@@ -382,6 +382,7 @@ public class HomeActivity extends AppCompatActivity
     }
     private void buildFitnessClient() {
         // Create the Google API Client
+
         mClient = new GoogleApiClient.Builder(this)
                 .addApi(Fitness.HISTORY_API)
                 .addScope(new Scope(Scopes.FITNESS_ACTIVITY_READ_WRITE))
@@ -454,10 +455,10 @@ public class HomeActivity extends AppCompatActivity
             exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),""));
             exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),""));
             exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,""));*/
-            exrTime = getString(R.string.homeTextView,activityTime/60,"");
+            /*exrTime = getString(R.string.homeTextView,activityTime/60,"");
             exrStep = getString(R.string.homeTextView,totalSteps,"");
             exrBurn = getString(R.string.homeTextView,Math.round(totalCals),"");
-            exrDist = getString(R.string.homeTextView,Math.round(totalDistance),"");
+            exrDist = getString(R.string.homeTextView,Math.round(totalDistance),"");*/
             pd.dismiss();
 
             updateSport();
