@@ -5,7 +5,7 @@
 
     <!-- view background color -->
     <solid
-        android:color="@color/bg_bubble_bot" >
+        android:color="#FFFFDD" >
     </solid>
 
 
@@ -20,7 +20,7 @@
 
     <!-- Here is the corner radius -->
     <corners
-        android:radius="5dp"   >
+        android:radius="20dp"   >
     </corners>
 
 </shape>

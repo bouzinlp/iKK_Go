@@ -52,6 +52,7 @@ import ai.api.android.AIService;
 import ai.api.model.AIError;
 import ai.api.model.AIRequest;
 import ai.api.model.AIResponse;
+import ai.api.model.GoogleAssistantResponseMessages;
 import ai.api.model.Result;
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.services.concurrency.AsyncTask;
@@ -122,12 +123,17 @@ public class ChatBotActivity extends AppCompatActivity
 
     private float idel_absorb_cal, idel_consume_cal;
 
+    //boolean attribute that controls sound
+    private boolean sound_open = false;
+
     MyWeightLossGoalActivity mwlga;
 
     //init Ai config
     AIConfiguration config = null;
 
     TextToSpeech text_to_audio = null;
+
+    private String food_name = new String("");
 
     String A_Food = new String("A_Food");String A_Food1 = new String("A_Food1");String A_Food2 = new String("A_Food2");
     String B_Food = new String("B_Food");String B_Food1 = new String("B_Food1");String B_Food2 = new String("B_Food2");
@@ -146,6 +152,7 @@ public class ChatBotActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("健康管家");
+
         Fabric.with(this, new Crashlytics()); //to use fabric
         setContentView(R.layout.activity_chat_bot_nav);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -167,6 +174,7 @@ public class ChatBotActivity extends AppCompatActivity
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
 
         //  宣告 recyclerView
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         messageArrayList = new ArrayList<>();
         mAdapter = new ChatAdapter(messageArrayList);
@@ -179,6 +187,9 @@ public class ChatBotActivity extends AppCompatActivity
         recyclerView.setAdapter(mAdapter);
         this.textMessage.setText("");
         this.initialRequest = true;
+        //ProfilePictureView profilePicture_chatbot = (ProfilePictureView)recyclerView.get
+        //profilePicture_chatbot.setCropped(true);
+        //profilePicture_chatbot.setProfileId(LoginActivity.facebookUserID);
 
         btnSend = (ImageButton) findViewById(R.id.btn_send);
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
@@ -250,7 +261,8 @@ public class ChatBotActivity extends AppCompatActivity
 
         parameterString += speech;
 
-        text_to_audio.speak(parameterString.toString(),TextToSpeech.QUEUE_FLUSH,null);
+        if(sound_open == true)
+            text_to_audio.speak(parameterString.toString(),TextToSpeech.QUEUE_FLUSH,null);
 
         Message inputMessage = new Message();
         inputMessage.setMessage(result.getResolvedQuery());
@@ -656,102 +668,23 @@ public class ChatBotActivity extends AppCompatActivity
                     case "choose_food":  //The case of choosing order (English version)
                         parameterString += eatingOrder(parameterString,result,1);
                         break;
+                    case "get_today_food":
+                        parameterString += eatingTodayFood(parameterString,result,1);
+                        if(food_name.isEmpty() == false) {
+                            textMessage.setText("What's my eating order " + food_name);
+                            senMessage_test();
+                        }
+                        break;
                 }
             } else {
                 switch (result.getAction()) {
                     case "get_today_food":
-                        String food_name = new String("");
-                        int i,j,k;
-                        int total_calorie=0;
-                        String [] cato = new String[20];
-                        boolean [] cato_bool = new boolean[20];
-                        for(i=0;i<10;i++){
-                            cato_bool[i] = false;
+                        parameterString += eatingTodayFood(parameterString,result,0);
+                        if(food_name.isEmpty() == false) {
+                            textMessage.setText("我要先吃甚麼 " + food_name);
+                            senMessage_test();
                         }
-                        cato[0] = "穀物類";cato[1] = "澱粉類";cato[2] = "堅果及種子類";
-                        cato[3] = "水果類";cato[4] = "蔬菜類";cato[5] = "藻類";cato[6] = "菇類";
-                        cato[7] = "豆類";cato[8] = "肉類";cato[9] = "魚貝類";cato[10] = "蛋類";
-                        cato[11] = "乳品類";cato[12] = "油脂類";cato[13] = "糖類"; cato[14] = "嗜好性飲料類";
-                        cato[15] = "調味料及香辛料類"; cato[16] ="糕餅點心類"; cato[17] = "加工調理食品類";
-
-
-                        if(todayFoods.isEmpty() == true)
-                            parameterString += ("您今日尚未攝取食物");
-                        else {
-                            parameterString += ("您今天吃了");
-                            for (i = 0; i < todayFoods.size(); i++) {
-                                if (i != 0)
-                                    parameterString += ("、");
-                                food_name += (" "+todayFoods.get(i).getTitle());
-                                parameterString += (todayFoods.get(i).getTitle());
-                                parameterString += (todayFoods.get(i).getGrams());
-                                parameterString += ("g");
-                                total_calorie += (todayFoods.get(i).getCalorie());
-                                if(todayFoods.get(i).getTitle().contains("(") == true) {//把字串去括號 => 方便蒐尋食物類別
-                                    String token_new = new String("");
-                                    String title = todayFoods.get(i).getTitle();
-                                    for(j=0;j<title.length();j++) {
-                                        if(title.charAt(j) == '(')
-                                            break;
-                                    }
-                                    token_new = title.substring(0,j);
-                                    todayFoods.get(i).setTitle(token_new);
-                                }
-                                for (j = 0; j < foodCalList.size(); j++) {
-                                    if (foodCalList.get(j).getChineseName().contains(todayFoods.get(i).getTitle()) ) {
-                                        for (k = 0; k < cato_bool.length; k++) {
-                                            if (foodCalList.get(j).getCategory().equals(cato[k])) {
-                                                //parameterString += ("它為" + cato[k] + "類食物\n"); //Only for debugging
-                                                cato_bool[k] = true;
-                                            }
-                                        }
-                                        break;
-                                    }
-                                }
-
-                            }
-                        }
-                        parameterString += ("\n您今天一共吃了"+total_calorie+"大卡"+"\n");
-                        parameterString += ("離每日所需熱量尚有"+Integer.toString(2200-total_calorie)+"大卡"+"\n");
-
-                        parameterString += ("您今天尚未攝取");
-                        if(cato_bool[0] == false && cato_bool[1] == false && cato_bool[2] == false )
-                            parameterString += ("五穀根莖類食物\n");
-                        if(cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false) {
-                            parameterString += ("蔬果類食物");
-                            if(diabetes_disease == true){
-                                parameterString += ("(建議您可以吃洋蔥、苦瓜等食物，這些食物功能類似於胰島素)");
-                            }
-                            if(heart_disease == true){
-                                parameterString += ("(建議您可以多吃芹菜，芹菜富含豐芹菜鹼，具有保護心血管的功能)");
-                            }
-                            if(sys_pre >140 || dia_pre>90){ // High blood pressure
-                                parameterString += ("(建議您多吃芹菜、木耳、洋蔥等蔬菜類食物，這些食物有利於降低血壓)");
-                            }
-                            parameterString += ("\n");
-                        }
-                        if(cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false) {
-                            parameterString += ("蛋豆魚肉類食物");
-                            if(diabetes_disease == true){
-                                parameterString += ("(建議您可以吃鱔魚，該食物功能類似於胰島素)");
-                            }
-                            if(sys_pre > 140 || dia_pre >90){
-                                parameterString += ("(建議您以魚類代替肉類的攝取)");
-                            }
-                        }
-
-                        if(diabetes_disease == true){
-                            parameterString+=("\n！！提醒您每餐須正常時間進食，少量多餐有助於控制穩定的血壓");
-                        }
-                        if(heart_disease == true){
-
-                            parameterString += ("\n！！提醒您少吃肉類食物");
-                        }
-                        textMessage.setText("我要先吃甚麼 "+ food_name);
-
-                        senMessage_test();
                         break;
-
                     case "get_pressure_info":
                         if(sys_pre == 0 || dia_pre == 0)
                             parameterString += ("您尚未輸入血壓數值");
@@ -900,6 +833,7 @@ public class ChatBotActivity extends AppCompatActivity
                         parameterString += eatingOrder(parameterString,result,0);
                         break;
                     case "get_absorb_calorie":
+                        int i;
                         //get today's total calories
                         for( i=0;i<todayFoods.size();i++) {
                             total_absorb_calories += todayFoods.get(i).getCalorie();
@@ -985,7 +919,6 @@ public class ChatBotActivity extends AppCompatActivity
                 }
             }
 
-        //text_to_audio.speak(parameterString.toString(),TextToSpeech.QUEUE_FLUSH,null);
         todayFoods.clear();
         todaySports.clear();
         return parameterString;
@@ -1145,12 +1078,34 @@ public class ChatBotActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        MenuItem item_sound = findViewById(R.id.action_settings);
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_settings) { //sound open or not
+            if(sound_open == false) {
+                sound_open = true;
+                if(flag == 0) {
+                    Toast.makeText(ChatBotActivity.this, "開啟聲音", Toast.LENGTH_SHORT).show();
+                    item.setTitle("關閉聲音");
+                }
+                else {
+                    Toast.makeText(ChatBotActivity.this, "Turn on the sound", Toast.LENGTH_SHORT).show();
+                    item.setTitle("Turn off the sound");
+                }
+            }
+            else{
+                sound_open = false;
+                if(flag == 0) {
+                    Toast.makeText(ChatBotActivity.this, "關閉聲音", Toast.LENGTH_SHORT).show();
+                    item.setTitle("開啟聲音");
+                }
+                else {
+                    Toast.makeText(ChatBotActivity.this, "Turn off the sound", Toast.LENGTH_SHORT).show();
+                    item.setTitle("Turn on the sound");
+                }
+            }
         }
-        if (id == R.id.language_change){
+        if (id == R.id.language_change){ // change language
             if(flag == 0){
                 setTitle("CHAT BOT");
                 config = new AIConfiguration("3f5da70a97c44731b8d7ac44b6acb7ef",
@@ -1167,12 +1122,14 @@ public class ChatBotActivity extends AppCompatActivity
                         "1.Ask/Set info about height、weight、bmi\n" +
                         "2.Ask info about eating order\n" +
                         "3.Ask/Set info about pressure\n"+
-                        "4.Ask info about calories");
+                        "4.Ask info about calories\n"+
+                        "5.Check the food you eat today");
                 messageArrayList.clear();
                 messageArrayList.add(eng_message);
                 mAdapter.notifyDataSetChanged();
                 text_to_audio.setLanguage(Locale.UK);
                 Toast.makeText(ChatBotActivity.this, "English Chat Bot", Toast.LENGTH_SHORT).show();
+
             }
             else{
                 setTitle("健康管家");
@@ -1200,7 +1157,120 @@ public class ChatBotActivity extends AppCompatActivity
             }
         }
 
+
         return super.onOptionsItemSelected(item);
+
+    }
+
+    //Here is the function to deal with today's eating food
+    /*Function Description:  parameterString: The string parameter that chatbot answers
+                                               result : api.ai's result
+                                               label : 0 denotes Chinese version, 1 denotes English version
+         */
+
+    private String eatingTodayFood(String parameterString,Result result,int label){
+
+        float sys_pre = curHealth.getSystolicBloodPressure();
+        float dia_pre = curHealth.getDiastolicBloodPressure();
+        int i,j,k;
+        int total_calorie=0;
+        String [] cato = new String[20];
+        boolean [] cato_bool = new boolean[20];
+        for(i=0;i<10;i++){
+            cato_bool[i] = false;
+        }
+        cato[0] = "穀物類";cato[1] = "澱粉類";cato[2] = "堅果及種子類";
+        cato[3] = "水果類";cato[4] = "蔬菜類";cato[5] = "藻類";cato[6] = "菇類";
+        cato[7] = "豆類";cato[8] = "肉類";cato[9] = "魚貝類";cato[10] = "蛋類";
+        cato[11] = "乳品類";cato[12] = "油脂類";cato[13] = "糖類"; cato[14] = "嗜好性飲料類";
+        cato[15] = "調味料及香辛料類"; cato[16] ="糕餅點心類"; cato[17] = "加工調理食品類";
+
+        if(todayFoods.isEmpty() == true) {
+            if(label == 0)
+                parameterString += ("您今日尚未攝取食物");
+            else
+                parameterString += ("You haven't eaten any food today. ");
+        }
+        else {
+            if(label == 0)
+                parameterString += ("您今天吃了");
+            else
+                parameterString += ("You've eaten");
+
+            food_name = new String("");
+            for (i = 0; i < todayFoods.size(); i++) {
+                if (i != 0)
+                    parameterString += ("、");
+                food_name += (" "+todayFoods.get(i).getTitle());
+                parameterString += (todayFoods.get(i).getTitle());
+                parameterString += (todayFoods.get(i).getGrams());
+                parameterString += ("g");
+                total_calorie += (todayFoods.get(i).getCalorie());
+                if(todayFoods.get(i).getTitle().contains("(") == true) {//把字串去括號 => 方便蒐尋食物類別
+                    String token_new = new String("");
+                    String title = todayFoods.get(i).getTitle();
+                    for(j=0;j<title.length();j++) {
+                        if(title.charAt(j) == '(')
+                            break;
+                    }
+                    token_new = title.substring(0,j);
+                    todayFoods.get(i).setTitle(token_new);
+                }
+                for (j = 0; j < foodCalList.size(); j++) {
+                    if (foodCalList.get(j).getChineseName().contains(todayFoods.get(i).getTitle()) ) {
+                        for (k = 0; k < cato_bool.length; k++) {
+                            if (foodCalList.get(j).getCategory().equals(cato[k])) {
+                                //parameterString += ("它為" + cato[k] + "類食物\n"); //Only for debugging
+                                cato_bool[k] = true;
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
+        if(label == 0) { // Chinese Version
+            parameterString += ("\n您今天一共吃了" + total_calorie + "大卡" + "\n");
+            parameterString += ("離每日所需熱量尚有" + Integer.toString(2200 - total_calorie) + "大卡" + "\n");
+
+            parameterString += ("您今天尚未攝取");
+            if (cato_bool[0] == false && cato_bool[1] == false && cato_bool[2] == false)
+                parameterString += ("五穀根莖類食物\n");
+            if (cato_bool[3] == false && cato_bool[4] == false && cato_bool[5] == false && cato_bool[6] == false) {
+                parameterString += ("蔬果類食物");
+                if (diabetes_disease == true) {
+                    parameterString += ("(建議您可以吃洋蔥、苦瓜等食物，這些食物功能類似於胰島素)");
+                }
+                if (heart_disease == true) {
+                    parameterString += ("(建議您可以多吃芹菜，芹菜富含豐芹菜鹼，具有保護心血管的功能)");
+                }
+                if (sys_pre > 140 || dia_pre > 90) { // High blood pressure
+                    parameterString += ("(建議您多吃芹菜、木耳、洋蔥等蔬菜類食物，這些食物有利於降低血壓)");
+                }
+                parameterString += ("\n");
+            }
+            if (cato_bool[7] == false && cato_bool[8] == false && cato_bool[9] == false && cato_bool[10] == false) {
+                parameterString += ("蛋豆魚肉類食物");
+                if (diabetes_disease == true) {
+                    parameterString += ("(建議您可以吃鱔魚，該食物功能類似於胰島素)");
+                }
+                if (sys_pre > 140 || dia_pre > 90) {
+                    parameterString += ("(建議您以魚類代替肉類的攝取)");
+                }
+            }
+
+            if (diabetes_disease == true) {
+                parameterString += ("\n！！提醒您每餐須正常時間進食，少量多餐有助於控制穩定的血壓");
+            }
+            if (heart_disease == true) {
+
+                parameterString += ("\n！！提醒您少吃肉類食物");
+            }
+        }
+
+        //parameterString += ("Debugging: "+food_name);
+        return parameterString;
     }
 
     //Here is the function to deal with eating order
