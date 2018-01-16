@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,23 +66,23 @@ public class SettingsActivity extends AppCompatActivity
     private static final String FROM_GALLERY = "take_photo";
 
     // settings' title
-    private static final String myProfile = "個人資料";
-    private static final String myCurrentExercise = "運動情形";//運動紀錄
-    private static final String myWeightLossGoal = "減重目標";
-    private static final String displayAsMetricImperial = "單位設定";
-    private static final String weightChart = "體重圖表";
-    private static final String calorieConsumption = "熱量消耗";
+    //private static final String myProfile = "個人資料";
+    //private static final String myCurrentExercise = "運動情形";//運動紀錄
+    //private static final String myWeightLossGoal = "減重目標";
+    //private static final String displayAsMetricImperial = "單位設定";
+    //private static final String weightChart = "體重圖表";
+    //private static final String calorieConsumption = "熱量消耗";
     //private static final String drinkWaterDiary = "飲水日誌";
     //private static final String myTemperatureRecord = "體溫紀錄";
 	// , drinkWaterDiary , myTemperatureRecord
-    private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption};
+    //private String[] titleStr = new String[]{myProfile, myCurrentExercise, myWeightLossGoal, displayAsMetricImperial, weightChart, calorieConsumption};
 
     // list view for including textView
     private ListView setting_list;
 
     // string list for every setting item's title
-    private List<String> setting_title;
-    private ArrayAdapter<String> adapter;
+    //private List<String> setting_title;
+    //private ArrayAdapter<String> adapter;
 
     // element for the bottom of the tab content
     private ViewPager viewPager;
@@ -92,6 +93,12 @@ public class SettingsActivity extends AppCompatActivity
     //Progress Dialog Object
     ProgressDialog prgDialog;
 
+    ImageView profile_img;
+    ImageView current_exercise_img;
+    ImageView list_img;
+    ImageView unit_img;
+    ImageView weight_graph_img;
+    ImageView line_chart_img;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity
         //tabsController.processTabLayout();
 
         // initialize setting list and process controllers
-        setting_list = (ListView)findViewById(R.id.setting_list);
+        //setting_list = (ListView)findViewById(R.id.setting_list);
         processControllers();
 
         // initialize and set adapter, pass title with string
@@ -142,10 +149,10 @@ public class SettingsActivity extends AppCompatActivity
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
 
 
-        setting_list = (ListView) findViewById(R.id.setting_list);
-        setting_title = new ArrayList<>(Arrays.asList(titleStr));
-        adapter = new ArrayAdapter<>(this, R.layout.custom_list_view, setting_title);
-        setting_list.setAdapter(adapter);
+        //setting_list = (ListView) findViewById(R.id.setting_list);
+        //setting_title = new ArrayList<>(Arrays.asList(titleStr));
+        //adapter = new ArrayAdapter<>(this, R.layout.custom_list_view, setting_title);
+        //setting_list.setAdapter(adapter);
 
         //selectTab(4);
     }
@@ -197,7 +204,7 @@ public class SettingsActivity extends AppCompatActivity
     // process list click listener
     private void processControllers() {
         // construct settings list click listener
-        AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
+        /*AdapterView.OnItemClickListener itemListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -254,10 +261,77 @@ public class SettingsActivity extends AppCompatActivity
 //                        break;
                 }
             }
-        };
+        };*/
 
         // register settings list click listener
-        setting_list.setOnItemClickListener(itemListener);
+        //setting_list.setOnItemClickListener(itemListener);
+
+        profile_img = findViewById(R.id.profile_image);
+        current_exercise_img = findViewById(R.id.current_exercise_image);
+        list_img = findViewById(R.id.list_image);
+        unit_img = findViewById(R.id.unit_image);
+        weight_graph_img = findViewById(R.id.weight_graph_image);
+        line_chart_img = findViewById(R.id.line_chart_image);
+
+        profile_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_profile = new Intent();
+                intent_profile.setClass(SettingsActivity.this, MyProfileActivity.class);
+                startActivity(intent_profile);
+                finish();
+            }
+        });
+
+        current_exercise_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_profile = new Intent();
+                intent_profile.setClass(SettingsActivity.this, MyCurrentExerciseActivity.class);
+                startActivity(intent_profile);
+                finish();
+            }
+        });
+
+        list_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_weight_loss = new Intent();
+                intent_weight_loss.setClass(SettingsActivity.this, MyWeightLossGoalActivity.class);
+                startActivity(intent_weight_loss);
+                finish();
+            }
+        });
+
+        unit_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_display = new Intent();
+                intent_display.setClass(SettingsActivity.this, DisplayAsMetricImperialActivity.class);
+                startActivity(intent_display);
+                finish();
+            }
+        });
+
+        weight_graph_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_weight_chart = new Intent();
+                intent_weight_chart.setClass(SettingsActivity.this, WeightChartActivity.class);
+                startActivity(intent_weight_chart);
+                finish();
+            }
+        });
+
+        line_chart_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_calorie_consumption = new Intent();
+                intent_calorie_consumption.setClass(SettingsActivity.this, CalorieConsumptionActivity.class);
+                startActivity(intent_calorie_consumption);
+                finish();
+            }
+        });
     }
 
 

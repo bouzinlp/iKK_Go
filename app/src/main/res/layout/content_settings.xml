@@ -10,11 +10,95 @@
     android:background="@drawable/img_background_1"
     tools:showIn="@layout/app_bar_settings">
 
-    <ListView
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:layout_margin="10dp"
+        android:stretchColumns="0,1">
+
+        <TableRow
+            android:id="@+id/image_row1">
+
+            <ImageView
+                android:id="@+id/profile_image"
+                android:src="@drawable/profile_image"
+                android:clickable="true"/>
+            <ImageView
+                android:id="@+id/current_exercise_image"
+                android:src="@drawable/current_exercise_image"
+                android:clickable="true"/>
+        </TableRow>
+        <TableRow
+            android:id="@+id/title_row1">
+
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/profile_title"/>
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/current_exercise_title"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/image_row2"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/list_image"
+                android:src="@drawable/list_image"
+                android:clickable="true"/>
+            <ImageView
+                android:id="@+id/unit_image"
+                android:src="@drawable/unit_image"
+                android:clickable="true"/>
+        </TableRow>
+        <TableRow
+            android:id="@+id/title_row2">
+
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/list_title"/>
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/unit_title"/>
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/image_row3"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:id="@+id/weight_graph_image"
+                android:src="@drawable/weight_graph_image"
+                android:clickable="true"/>
+            <ImageView
+                android:id="@+id/line_chart_image"
+                android:src="@drawable/line_chart_image"
+                android:clickable="true"/>
+        </TableRow>
+        <TableRow
+            android:id="@+id/title_row3">
+
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/weight_graph_title"/>
+            <TextView
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                android:textAlignment="center"
+                android:text="@string/line_chart_title"/>
+        </TableRow>
+    </TableLayout>
+    <!--ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:id="@+id/setting_list"/>
+        android:id="@+id/setting_list"/-->
 
     <!--FrameLayout
         android:id="@+id/content_frame"

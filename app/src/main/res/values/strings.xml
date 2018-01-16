@@ -140,4 +140,11 @@
 
     <string name="current_achieve">目前</string>
     <string name="goal_achieve">目標</string>
+
+    <string name="profile_title">個人資料</string>
+    <string name="current_exercise_title">運動情形</string>
+    <string name="list_title">減重目標</string>
+    <string name="unit_title">單位設定</string>
+    <string name="weight_graph_title">體重圖表</string>
+    <string name="line_chart_title">熱量消耗</string>
 </resources>
