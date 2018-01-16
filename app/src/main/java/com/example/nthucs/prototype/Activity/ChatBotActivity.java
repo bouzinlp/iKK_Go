@@ -81,6 +81,7 @@ public class ChatBotActivity extends AppCompatActivity
     private long local_datetime;
     private static boolean heart_disease = false;
     private static boolean diabetes_disease = false;
+    private static boolean stomach_problem = false;
 
     // To get user's blood pressure
     private Health curHealth;
@@ -174,7 +175,6 @@ public class ChatBotActivity extends AppCompatActivity
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
 
         //  宣告 recyclerView
-
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         messageArrayList = new ArrayList<>();
         mAdapter = new ChatAdapter(messageArrayList);
@@ -190,6 +190,7 @@ public class ChatBotActivity extends AppCompatActivity
         //ProfilePictureView profilePicture_chatbot = (ProfilePictureView)recyclerView.get
         //profilePicture_chatbot.setCropped(true);
         //profilePicture_chatbot.setProfileId(LoginActivity.facebookUserID);
+
 
         btnSend = (ImageButton) findViewById(R.id.btn_send);
         btnRecord= (ImageButton) findViewById(R.id.btn_record);
@@ -273,10 +274,13 @@ public class ChatBotActivity extends AppCompatActivity
         mAdapter.notifyDataSetChanged();
         this.initialRequest = false;
 
+
         //response
         Message outMes = new Message();
         outMes.setMessage(parameterString);
         outMes.setId("2");
+
+
         messageArrayList.add(outMes);
 
         //
@@ -407,6 +411,11 @@ public class ChatBotActivity extends AppCompatActivity
                         outMes.setMessage(parameterString);
                         outMes.setId("2");
                         messageArrayList.add(outMes);
+
+                        //View view  = recyclerView.findViewHolderForItemId(2).itemView;
+                        /*View v = recyclerView.findViewHolderForItemId(mAdapter.getItemId(2)).itemView;
+                        ProfilePictureView profilePicture_chatbot = (ProfilePictureView)v.findViewById(R.id.Facebook_profile_picture_chatbot);
+                        profilePicture_chatbot.setProfileId(LoginActivity.facebookUserID);*/
 
 
                         runOnUiThread(new Runnable() {
@@ -914,6 +923,9 @@ public class ChatBotActivity extends AppCompatActivity
                             curHealth.setDiabetesDiseasePos();
                             diabetes_disease = true;
                         }
+                        else if(result.getStringParameter(disease).equals("下腹突出")){
+                            stomach_problem = true;
+                        }
                         Toast.makeText(ChatBotActivity.this, "系統已成功更新資料", Toast.LENGTH_SHORT).show();
                         break;
                 }
@@ -1312,6 +1324,10 @@ public class ChatBotActivity extends AppCompatActivity
                 if (heart_disease == true) {
                     parameterString += ("\n建議多攝取纖維素，減少膽固醇生成，對心臟的健康有所助益");
                 }
+
+                if(stomach_problem == true){
+                    parameterString += ("\n(提醒您應多吃生菜，方可改善下腹突出情形)");
+                }
             }
 
             else{
@@ -1425,6 +1441,10 @@ public class ChatBotActivity extends AppCompatActivity
             if(label == 0) {
                 if (heart_disease == true) {
                     parameterString += ("\n(但不建議您攝取肉類食物)");
+                }
+
+                if(stomach_problem == true){
+                    parameterString += ("\n(提醒您應多攝取脂肪較少的肉類，如魚肉、瘦肉等，方可改善下腹突出情形)");
                 }
             }
 

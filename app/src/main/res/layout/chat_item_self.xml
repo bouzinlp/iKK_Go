@@ -24,15 +24,14 @@
         android:textSize="18sp" />
 
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/appCompatImageView"
-        android:layout_width="45dp"
-        android:layout_height="52dp"
-        android:layout_marginRight="5dp"
-        android:adjustViewBounds="true"
-        android:background="@color/aidialog_background"
-        app:srcCompat="@drawable/com_facebook_profile_picture_blank_square"
-        />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/Facebook_profile_picture_chatbot"
+            android:layout_height="50dp"
+            android:layout_width="50dp"/>
+    </FrameLayout>
 
 
 </LinearLayout>
