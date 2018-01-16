@@ -53,6 +53,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import clarifai2.api.ClarifaiBuilder;
+import clarifai2.api.ClarifaiClient;
+import clarifai2.dto.input.ClarifaiInput;
+import clarifai2.dto.model.output.ClarifaiOutput;
+import clarifai2.dto.prediction.Concept;
+import okhttp3.OkHttpClient;
+
 public class CameraActivity extends AppCompatActivity {
 
     private MenuItem search_pic;
@@ -225,24 +232,42 @@ public class CameraActivity extends AppCompatActivity {
             try {
                 try {
                     // Set your file path here
-                    FileInputStream fstrm = new FileInputStream(PicFile);
+                    //FileInputStream fstrm = new FileInputStream(PicFile);
 
                     // Set your server page url (and the file title/description)
-                    HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
+                    //HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
 
                     // Send to server, pass file input stream and file's path
-                    hfu.Send_Now(fstrm, PicPath);
+                    //hfu.Send_Now(fstrm, PicPath);
 
                     // Get the response string from server
-                    responseString = hfu.getResponseString();
+                    //responseString = hfu.getResponseString();
 
-                } catch (FileNotFoundException e) {
+                     /*For image recognition , Implemented by YuJui Chen*/
+                    //ReImplemented by YuJui Chen
+                    /*利用線上clarifai來進行圖片分析 此處使用food model進行實作 */
+                    ClarifaiClient client_clarifi = new ClarifaiBuilder("c3064802a10e4254bd714f7e121e2c99")
+                            .client(new OkHttpClient()) // OPTIONAL. Allows customization of OkHttp by the user
+                            .buildSync();
+
+                    /*predict 每張圖片裡面的內容 從中選取機率最大的*/
+                    final List<ClarifaiOutput<Concept>> predictionResults =
+                            client_clarifi.getDefaultModels().foodModel() // You can also do client.getModelByID("id") to get your custom models
+                                    .predict()
+                                    .withInputs(
+                                            ClarifaiInput.forImage(new File(this.PicPath))) //利用clarifai來預測圖片傳進去的結果
+                                    .executeSync()
+                                    .get();
+
+                    System.out.println(predictionResults);
+                    System.out.println(predictionResults.get(0).data().get(0).name());
+                    responseString = new String(predictionResults.get(0).data().get(0).name());
+
+                } catch (Exception e) {
                     // Error: File not found
                 }
                 return responseString;
-            } /*catch (IOException e) {
-             return "Unable to retrieve web page. URL may be invalid.";
-         }*/
+            }
             finally {
 
             }
@@ -262,41 +287,28 @@ public class CameraActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
-            // Use Async Task to retrieve data from google image search result with Jsoup
-            //String resultString = new String();
+            /*ATJ atj = new ATJ(imageUrl, CameraActivity.this);
+            atj.execute();*/
 
-            // Use Async Task
-//            try{
-//                AsyncTaskJsoup atj = new AsyncTaskJsoup(imageUrl);
-//                resultString = atj.execute().get();
-            ATJ atj = new ATJ(imageUrl, CameraActivity.this);
-            atj.execute();
-//            } catch (InterruptedException e) {
-//                System.out.println("Interrupted exception");
-//            } catch (ExecutionException e) {
-//                System.out.println("Execution exception");
-//            }
+            resultText = result.replace(" ","");
 
-            // Get the result text from the response string
-//            resultText = resultString;
-//
-//            // Compare Food Cal DAO to get calorie
-//            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-//            int[] compare_result = compFoodDB.compareFoodCalDB();
-//
-//            // output test
-//            System.out.println("Suggested result: " + resultText);
-//
-//            // if the compare result is empty
-//            if (compare_result == null || compare_result.length == 0) {
-//                // Process normal food event
-//                processFoodEvent();
-//            } else {
-//                // Process dialog with spinner wheel
-//                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-//                        fileName, picUriString, GalleryActivity.this,encodedString);
-//                customDialog.processDialogControllers();
-//            }
+            // Compare Food Cal DAO to get calorie
+            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+            int[] compare_result = compFoodDB.compareFoodCalDB();
+
+            // output test
+            System.out.println("Suggested result: " + resultText);
+            System.out.println("after : " + resultText.replace(" ",""));
+
+            //processFoodEvent();
+            // if the compare result is empty
+            if (compare_result == null || compare_result.length == 0) {
+                processFoodEvent();
+            } else { //If comparison matches data in the dataset
+                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
+                customDialog.processDialogControllers();
+            }
+
             super.onPostExecute(result);
         }
     }
@@ -332,6 +344,8 @@ public class CameraActivity extends AppCompatActivity {
 
                     // Get the text content
                     result_text = elem.text();
+
+
 
                     // output test
                 /*System.out.println("============");
@@ -383,57 +397,9 @@ public class CameraActivity extends AppCompatActivity {
             System.out.println("Pic File = "+picFile);
             System.out.println("Image Path = "+getImagePath(picUri));
 
-            // Use Async Task
-//            try{
-//                AsyncTaskConnect asyncTaskConnect = new AsyncTaskConnect(picFile, getImagePath(picUri), CameraActivity.this);
-//                responseString =  asyncTaskConnect.execute().get();
-//            } catch (InterruptedException e) {
-//                System.out.println("Interrupted exception");
-//            } catch (ExecutionException e) {
-//                System.out.println("Execution exception");
-//            }
             ATC atc = new ATC(picFile, getImagePath(picUri), CameraActivity.this);
             atc.execute();
 
-            // Parse response string
-//            imageUrl = getParseString(responseString, "data", "img_url");
-//
-//            // output test
-//            System.out.println(imageUrl);
-//
-//            // Use Async Task to retrieve data from google image search result with Jsoup
-//            String resultString = new String();
-//
-//            // Use Async Task
-//            try{
-//                AsyncTaskJsoup asyncTaskJsoup = new AsyncTaskJsoup(imageUrl);
-//                resultString = asyncTaskJsoup.execute().get();
-//            } catch (InterruptedException e) {
-//                System.out.println("Interrupted exception");
-//            } catch (ExecutionException e) {
-//                System.out.println("Execution exception");
-//            }
-//
-//            // Get the result text from the response string
-//            resultText = resultString;
-//
-//            // Compare Food Cal DAO to get calorie
-//            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-//            int[] compare_result = compFoodDB.compareFoodCalDB();
-//
-//            // output test
-//            System.out.println("Suggested result: " + resultText);
-//
-//            // if the compare result is empty
-//            if (compare_result.length == 0) {
-//                // Process normal food event
-//                processFoodEvent();
-//            } else {
-//                // Process dialog with spinner wheel
-//                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-//                                                            fileName, CameraActivity.this);
-//                customDialog.processDialogControllers();
-//            }
         } else if (view.getId() == R.id.cancel_item) {
             finish();
         }
