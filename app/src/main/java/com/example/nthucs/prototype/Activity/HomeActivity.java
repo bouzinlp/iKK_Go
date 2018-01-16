@@ -103,7 +103,7 @@ public class HomeActivity extends AppCompatActivity
     public ArrayList<FitnessActivity> fitnessProperties = new ArrayList<>();
 
     PieChart pieChart;
-    //String exrTime, exrStep, exrBurn, exrDist;
+    String exrTime, exrStep, exrBurn, exrDist;
     ImageView clkImg, exrImg, burnImg, distImg;
     int goalTime, goalStep, goalBurn, goalDist;
     int index;
@@ -229,7 +229,7 @@ public class HomeActivity extends AppCompatActivity
             goalBurn = _goal.getGoalBurn();
             goalDist = _goal.getGoalDist();
         }
-        setPieChart();
+        //setPieChart();
     }
 
     private void setPieChart() {
@@ -250,40 +250,40 @@ public class HomeActivity extends AppCompatActivity
             case 1: //time
                 unit = "分";
                 kind = "時間";
-                current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
-                //current = Integer.parseInt(exrTime);
+                //current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                current = Integer.parseInt(exrTime);
                 goal = goalTime;
                 colors = colors1;
                 break;
             case 2: //step
                 unit = "步";
                 kind = "步數";
-                current = Integer.parseInt(getString(R.string.homeTextView,totalSteps,""));
-                //current = Integer.parseInt(exrStep);
+                //current = Integer.parseInt(getString(R.string.homeTextView,totalSteps,""));
+                current = Integer.parseInt(exrStep);
                 goal = goalStep;
                 colors = colors2;
                 break;
             case 3: //calorie
                 unit = "大卡";
                 kind = "熱量";
-                current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalCals),""));
-                //current = Integer.parseInt(exrBurn);
+                //current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalCals),""));
+                current = Integer.parseInt(exrBurn);
                 goal = goalBurn;
                 colors = colors3;
                 break;
             case 4: //meter
                 unit = "公尺";
                 kind = "距離";
-                current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalDistance),""));
-                //current = Integer.parseInt(exrDist);
+                //current = Integer.parseInt(getString(R.string.homeTextView,Math.round(totalDistance),""));
+                current = Integer.parseInt(exrDist);
                 goal = goalDist;
                 colors = colors4;
                 break;
             default:
                 unit = "分";
                 kind = "時間";
-                current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
-                //current = Integer.parseInt(exrTime);
+                //current = Integer.parseInt(getString(R.string.homeTextView,activityTime/60,""));
+                current = Integer.parseInt(exrTime);
                 goal = goalTime;
                 colors = colors1;
                 break;
@@ -455,10 +455,11 @@ public class HomeActivity extends AppCompatActivity
             exerciseCalories.setText(getString(R.string.homeTextView,Math.round(totalCals),""));
             exerciseDistance.setText(getString(R.string.homeTextView,Math.round(totalDistance),""));
             exerciseTime.setText(getString(R.string.homeTextView,activityTime/60,""));*/
-            /*exrTime = getString(R.string.homeTextView,activityTime/60,"");
+            exrTime = getString(R.string.homeTextView,activityTime/60,"");
             exrStep = getString(R.string.homeTextView,totalSteps,"");
             exrBurn = getString(R.string.homeTextView,Math.round(totalCals),"");
-            exrDist = getString(R.string.homeTextView,Math.round(totalDistance),"");*/
+            exrDist = getString(R.string.homeTextView,Math.round(totalDistance),"");
+            setPieChart();
             pd.dismiss();
 
             updateSport();
