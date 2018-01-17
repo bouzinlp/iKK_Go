@@ -246,6 +246,11 @@ public class HomeActivity extends AppCompatActivity
         int[] colors3 = {Color.rgb(1, 165, 3), Color.RED};
         int[] colors4 = {Color.GRAY, Color.DKGRAY};
 
+        if (exrTime.length() == 0 || exrTime == null) exrTime = "0";
+        if (exrStep.length() == 0 || exrStep == null) exrStep = "0";
+        if (exrBurn.length() == 0 || exrBurn == null) exrBurn = "0";
+        if (exrDist.length() == 0 || exrDist == null) exrDist = "0";
+
         switch(index){
             case 1: //time
                 unit = "分";
@@ -409,6 +414,7 @@ public class HomeActivity extends AppCompatActivity
                                     Log.i(TAG, "Connection lost.  Reason: Service Disconnected");
                                     pd.dismiss();
                                 }
+                                setPieChart();
                             }
                         }
                 )
@@ -419,6 +425,7 @@ public class HomeActivity extends AppCompatActivity
                                 result.toString());
                         Toast.makeText(getApplicationContext(), "Google Play services connection failed. Cause:"+result.toString(), Toast.LENGTH_LONG).show();
                         pd.dismiss();
+                        setPieChart();
                     }
                 })
                 .build();
@@ -459,6 +466,7 @@ public class HomeActivity extends AppCompatActivity
             exrStep = getString(R.string.homeTextView,totalSteps,"");
             exrBurn = getString(R.string.homeTextView,Math.round(totalCals),"");
             exrDist = getString(R.string.homeTextView,Math.round(totalDistance),"");
+
             setPieChart();
             pd.dismiss();
 
