@@ -484,7 +484,7 @@ public class CameraActivity extends AppCompatActivity {
         food.setPortions(1.0f);
         food.setTakeFromCamera(true);
         food.setDatetime(new Date().getTime());
-        food.setEncodedString(encodedString);
+        //food.setEncodedString(encodedString);
         // back to main activity
         Intent result = getIntent();
         result.putExtra("com.example.nthucs.prototype.FoodList.Food", food);
