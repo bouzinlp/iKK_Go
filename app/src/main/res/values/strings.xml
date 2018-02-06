@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iKK GO!</string>
+    <string name="app_name">HealthChecker</string>
 
     <string name="purpose">圖片搜尋或文字輸入？</string>
     <string name="search_food">食物名稱</string>

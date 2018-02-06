@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/mailtext"
+            android:hint="問題回報/意見回饋..."
             android:gravity="start"
             android:layout_margin="10dp"
             android:background="#fff"/>
