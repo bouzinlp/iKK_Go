@@ -12,7 +12,12 @@
         android:layout_height="match_parent"
         android:layout_weight="6">
 
-        <TextView
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="40dp"
+            android:src="@drawable/logo"/>
+        <!--TextView
             android:text="Health"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +36,7 @@
             android:textSize="70sp"
             android:textColor="#0000A0"
             android:id="@+id/APPTitle2"
-            />
+            /-->
 
     </LinearLayout>
 
