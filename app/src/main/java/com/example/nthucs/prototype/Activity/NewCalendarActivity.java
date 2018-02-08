@@ -134,6 +134,16 @@ public class NewCalendarActivity extends AppCompatActivity
             intent_blood_pressure.setClass(NewCalendarActivity.this, MyBloodPressure.class);
             startActivity(intent_blood_pressure);
             finish();
+        } else if (id == R.id.temp_record){
+            Intent intent_temp_record = new Intent();
+            intent_temp_record.setClass(NewCalendarActivity.this, MyTemperatureRecord.class);
+            startActivity(intent_temp_record);
+            finish();
+        } else if (id == R.id.water_record){
+            Intent intent_water_record = new Intent();
+            intent_water_record.setClass(NewCalendarActivity.this, DrinkWaterDiary.class);
+            startActivity(intent_water_record);
+            finish();
         } else if (id == R.id.mail){
             Intent intent_mail = new Intent();
             intent_mail.setClass(NewCalendarActivity.this, MailActivity.class);

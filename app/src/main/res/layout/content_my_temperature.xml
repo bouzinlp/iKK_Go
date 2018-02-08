@@ -14,7 +14,9 @@
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stretchColumns="0,1">
+        android:id="@+id/tablelayout"
+        android:stretchColumns="0,1"
+        android:shrinkColumns="0">
 
         <TableRow>
             <TextView
@@ -79,6 +81,22 @@
                 android:layout_margin="10dp"
                 android:layout_weight="1"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </TableRow>
+
+        <TableRow>
+            <ImageView
+                android:id="@+id/temp_sign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/temperature_text"
+                android:src="@drawable/temp4"/>
+
+            <TextView
+                android:id="@+id/temp_comment"
+                android:layout_gravity="center"
+                android:text="您還未記錄體溫"
+                android:textSize="18sp"/>
 
         </TableRow>
     </TableLayout>

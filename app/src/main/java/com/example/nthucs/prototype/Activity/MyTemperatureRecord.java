@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -290,6 +291,8 @@ public class MyTemperatureRecord extends AppCompatActivity
         // if user updated the profile
         if (view.getId() == R.id.update_button) {
             boolean updatable = true;
+            ImageView TempSign = (ImageView) findViewById(R.id.temp_sign);
+            TextView TempComment = (TextView) findViewById(R.id.temp_comment);
             // convert integer time to calendar
             Calendar calendar = Calendar.getInstance();
             calendar.set(Calendar.YEAR, select_year);
@@ -320,6 +323,24 @@ public class MyTemperatureRecord extends AppCompatActivity
                     healthDAO.insert(tempHealth);
                 }
 
+                float T=Float.parseFloat(my_Temperature_Record_text.getText().toString());
+
+                if (T >= 40) {
+                    TempSign.setImageResource(R.drawable.temp5);
+                    TempComment.setText("高燒建議就醫");
+                } else if (T >= 37.5 && T < 40) {
+                    TempSign.setImageResource(R.drawable.temp5);
+                    TempComment.setText("可能有發燒症狀");
+                } else if (T < 37.5 && T >= 36) {
+                    TempSign.setImageResource(R.drawable.temp4);
+                    TempComment.setText("您的體溫正常");
+                } else if (T >= 35 && T < 36){
+                    TempSign.setImageResource(R.drawable.temp2);
+                    TempComment.setText("注意保暖");
+                } else {
+                    TempSign.setImageResource(R.drawable.temp2);
+                    TempComment.setText("失溫請速就醫");
+                }
                 Toast.makeText(getApplicationContext(), "更新完成", Toast.LENGTH_LONG).show();
             }
         }
