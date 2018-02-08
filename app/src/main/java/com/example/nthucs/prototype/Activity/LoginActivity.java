@@ -35,7 +35,7 @@ public class LoginActivity extends Activity {
     private CallbackManager mCallbackManager;
     private ProfileTracker mProfileTracker;
     private AccessToken accessToken;
-    private TextView title;
+    private TextView title, title2;
     private static final int REQUEST_MUTIPLE_PERMISSION = 0;
     
 
@@ -61,7 +61,9 @@ public class LoginActivity extends Activity {
         initFBManager();
         Log.v("mhealth","init");
         title = (TextView) findViewById(R.id.APPTitle);
+        title2 = (TextView) findViewById(R.id.APPTitle2);
         title.setTypeface(Typeface.createFromAsset(getAssets(),"Righteous-Regular.ttf"));
+        title2.setTypeface(Typeface.createFromAsset(getAssets(),"Righteous-Regular.ttf"));
     }
 
     @Override
