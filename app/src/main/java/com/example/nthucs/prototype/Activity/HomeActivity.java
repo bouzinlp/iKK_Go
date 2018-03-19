@@ -246,10 +246,10 @@ public class HomeActivity extends AppCompatActivity
         int[] colors3 = {Color.rgb(1, 165, 3), Color.RED};
         int[] colors4 = {Color.GRAY, Color.DKGRAY};
 
-        if (exrTime.length() == 0 || exrTime == null) exrTime = "0";
-        if (exrStep.length() == 0 || exrStep == null) exrStep = "0";
-        if (exrBurn.length() == 0 || exrBurn == null) exrBurn = "0";
-        if (exrDist.length() == 0 || exrDist == null) exrDist = "0";
+        if ( exrTime == null) exrTime = "0";
+        if ( exrStep == null) exrStep = "0";
+        if ( exrBurn == null) exrBurn = "0";
+        if (exrDist == null) exrDist = "0";
 
         switch(index){
             case 1: //time

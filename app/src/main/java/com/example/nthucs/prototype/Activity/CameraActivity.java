@@ -21,7 +21,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +95,9 @@ public class CameraActivity extends AppCompatActivity {
     private CalorieDAO calorieDAO;
 
     private Context context;
+
+    //讓user選多種食物當中的一類
+    List<String> food_choose_list = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -263,6 +270,13 @@ public class CameraActivity extends AppCompatActivity {
                     System.out.println(predictionResults.get(0).data().get(0).name());
                     responseString = new String(predictionResults.get(0).data().get(0).name());
 
+                    //把多種食物加入選單內讓user選
+                    for(int i=0;i<10;i++){
+                        if(predictionResults.get(0).data().get(i).name().isEmpty() == false ){
+                            food_choose_list.add(predictionResults.get(0).data().get(i).name());
+                        }
+                    }
+
                 } catch (Exception e) {
                     // Error: File not found
                 }
@@ -287,8 +301,27 @@ public class CameraActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
-            /*ATJ atj = new ATJ(imageUrl, CameraActivity.this);
-            atj.execute();*/
+            /*創造一個選單讓user選擇要上傳哪一類食物(EX 便當裡要上傳哪一種食物)*/
+            setContentView(R.layout.custom_spinner_for_food);
+            Spinner spinner = (Spinner)findViewById(R.id.spinner);
+            Button button = (Button)findViewById(R.id.button2);
+
+            ArrayAdapter<String> lunchList = new ArrayAdapter<>(this.cameraActivity,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    food_choose_list);
+            spinner.setAdapter(lunchList);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    //Toast.makeText(GalleryActivity.this, "你選的是" + food_choose_list[position], Toast.LENGTH_SHORT).show(); // For debugging
+                    resultText = food_choose_list.get(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             resultText = result.replace(" ","");
 
@@ -303,7 +336,13 @@ public class CameraActivity extends AppCompatActivity {
             //processFoodEvent();
             // if the compare result is empty
             if (compare_result == null || compare_result.length == 0) {
-                processFoodEvent();
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Code here executes on main thread after user presses button
+                        processFoodEvent();
+                    }
+                });
+                
             } else { //If comparison matches data in the dataset
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
                 customDialog.processDialogControllers();
