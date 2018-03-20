@@ -26,6 +26,8 @@ import android.widget.Toast;
 import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.Settings.Health;
 import com.example.nthucs.prototype.Settings.HealthDAO;
+import com.example.nthucs.prototype.Settings.MyProfileDAO;
+import com.example.nthucs.prototype.Settings.Profile;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
@@ -50,12 +52,15 @@ public class DrinkWaterDiary extends AppCompatActivity
 
     // data base for profile
     private HealthDAO healthDAO;
+    private MyProfileDAO profileDAO;
 
     // list of profile
     private List<Health> healthList = new ArrayList<>();
+    private List<Profile> profileList = new ArrayList<>();
 
     // currently and temporary profile
     private Health curHealth, tempHealth;
+    private Profile profile;
 
     private Activity activity = DrinkWaterDiary.this;
     private int activityIndex = 9;
@@ -64,6 +69,7 @@ public class DrinkWaterDiary extends AppCompatActivity
     private static final int TAKE_PHOTO = 3;
     private static final String FROM_CAMERA = "scan_food";
     private static final String FROM_GALLERY = "take_photo";
+    TextView water;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +96,11 @@ public class DrinkWaterDiary extends AppCompatActivity
         profilePictureView.setProfileId(LoginActivity.facebookUserID);
         // initialize data base
         healthDAO = new HealthDAO(getApplicationContext());
+        profileDAO = new MyProfileDAO(getApplicationContext());
 
         // get all health data from data base
         healthList = healthDAO.getAll();
+        profileList = profileDAO.getAll();
 
         // get the last health data in the list
         if (healthDAO.isTableEmpty() == true) {
@@ -108,6 +116,21 @@ public class DrinkWaterDiary extends AppCompatActivity
             if (cnt == 0) curHealth = new Health();
         }
 
+        water = findViewById(R.id.water);
+        if (profileDAO.isTableEmpty()) {
+            water.setText("您尚未設定您的個人資料");
+            water.setTextSize(35.0f);
+        } else {
+            profile = profileList.get(profileList.size() - 1);
+            if (profile.getWeight() != 0) {
+                float w = profile.getWeight() * 30;
+                water.setText(String.valueOf(w) + " cc");
+                water.setTextSize(40.0f);
+            } else {
+                water.setText("您的體重為0，請先更新體重");
+                water.setTextSize(35.0f);
+            }
+        }
         // set new health profile for updated
         tempHealth = curHealth;
 
