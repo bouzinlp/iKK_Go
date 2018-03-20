@@ -15,8 +15,12 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
 
 import com.example.nthucs.prototype.FoodList.CalorieDAO;
 import com.example.nthucs.prototype.FoodList.Food;
@@ -25,7 +29,6 @@ import com.example.nthucs.prototype.R;
 import com.example.nthucs.prototype.SpinnerWheel.CustomDialog;
 import com.example.nthucs.prototype.Utility.CompFoodDB;
 import com.example.nthucs.prototype.Utility.FileUtil;
-import com.example.nthucs.prototype.Utility.HttpFileUpload;
 import com.example.nthucs.prototype.Utility.RealPathUtil;
 import com.loopj.android.http.RequestParams;
 
@@ -36,12 +39,12 @@ import org.jsoup.nodes.Document;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+
 
 /*For image recognition*/
 import clarifai2.api.ClarifaiBuilder;
@@ -50,7 +53,7 @@ import okhttp3.OkHttpClient;
 import clarifai2.dto.input.ClarifaiInput;
 import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
-import java.util.List;
+
 
 /**
  * Created by NTHUCS on 2016/7/1.
@@ -73,6 +76,9 @@ public class GalleryActivity extends AppCompatActivity {
     private String imageUrl;
     private String picUriString;
     private String realPath;
+
+    //讓user選多種食物當中的一類
+    List<String> food_choose_list = new ArrayList<String>();
 
     // Search by word
     private String resultText;
@@ -101,6 +107,9 @@ public class GalleryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String action = intent.getAction();
+
+        //以下開始實做spinner的部分 Modified on 03/16
+        //spinner = (Spinner)findViewById(R.id.spinner);
 
         // 取得顯示照片的ImageView元件
         picture = (ImageView) findViewById(R.id.picture);
@@ -206,13 +215,6 @@ public class GalleryActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
 
                 try {
-                    /*現在bug的位置出現在這裡!!!!!!*/
-
-                    //FileInputStream fstrm = new FileInputStream(PicFile);
-                    //HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
-                    //hfu.Send_Now(fstrm, PicPath);
-                    //responseString = hfu.getResponseString();
-
                     /*For image recognition , Implemented by YuJui Chen*/
                     //ReImplemented by YuJui Chen
                     /*利用線上clarifai來進行圖片分析 此處使用food model進行實作 */
@@ -233,6 +235,13 @@ public class GalleryActivity extends AppCompatActivity {
                     System.out.println(predictionResults.get(0).data().get(0).name());
                     responseString = new String(predictionResults.get(0).data().get(0).name());
 
+                    //把多種食物加入選單內讓user選
+                    for(int i=0;i<10;i++){
+                        if(predictionResults.get(0).data().get(i).name().isEmpty() == false ){
+                            food_choose_list.add(predictionResults.get(0).data().get(i).name());
+                        }
+                    }
+
                 } catch (Exception e) {
                     // Error: File not found
                 }
@@ -249,10 +258,30 @@ public class GalleryActivity extends AppCompatActivity {
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
-            //ATJ atj = new ATJ(imageUrl, GalleryActivity.this);
-            //atj.execute();
-            //super.onPostExecute(result);
+            /*創造一個選單讓user選擇要上傳哪一類食物(EX 便當)*/
+            setContentView(R.layout.custom_spinner_for_food);
+            Spinner spinner = (Spinner)findViewById(R.id.spinner);
+            Button button = (Button)findViewById(R.id.button2);
 
+            ArrayAdapter<String>  lunchList = new ArrayAdapter<>(this.galleryActivity,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    food_choose_list);
+            spinner.setAdapter(lunchList);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    //Toast.makeText(GalleryActivity.this, "你選的是" + food_choose_list[position], Toast.LENGTH_SHORT).show(); // For debugging
+                    resultText = food_choose_list.get(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+
+            // resultText 是最終選出食物的名字
             resultText = result.replace(" ","");
 
             // Compare Food Cal DAO to get calorie
@@ -263,10 +292,15 @@ public class GalleryActivity extends AppCompatActivity {
             System.out.println("Suggested result: " + resultText);
             System.out.println("after : " + resultText.replace(" ",""));
 
-            //processFoodEvent();
             // if the compare result is empty
             if (compare_result == null || compare_result.length == 0) {
-                processFoodEvent();
+                button.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        // Code here executes on main thread after user presses button
+                        processFoodEvent();
+                    }
+                });
+
             } else { //If comparison matches data in the dataset
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
                         fileName, picUriString, GalleryActivity.this,encodedString);
