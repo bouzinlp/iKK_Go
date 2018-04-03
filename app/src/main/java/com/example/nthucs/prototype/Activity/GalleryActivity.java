@@ -55,6 +55,8 @@ import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 
 
+
+
 /**
  * Created by NTHUCS on 2016/7/1.
  * Modified on 2018/1/13 by YuJui Chen
