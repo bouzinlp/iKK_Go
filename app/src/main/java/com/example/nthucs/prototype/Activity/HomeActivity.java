@@ -246,9 +246,9 @@ public class HomeActivity extends AppCompatActivity
         int[] colors3 = {Color.rgb(1, 165, 3), Color.RED};
         int[] colors4 = {Color.GRAY, Color.DKGRAY};
 
-        if ( exrTime == null) exrTime = "0";
-        if ( exrStep == null) exrStep = "0";
-        if ( exrBurn == null) exrBurn = "0";
+        if (exrTime == null) exrTime = "0";
+        if (exrStep == null) exrStep = "0";
+        if (exrBurn == null) exrBurn = "0";
         if (exrDist == null) exrDist = "0";
 
         switch(index){

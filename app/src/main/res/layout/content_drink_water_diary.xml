@@ -12,6 +12,7 @@
     tools:showIn="@layout/app_bar_drink_water_diary">
 
     <TableLayout
+        android:id="@+id/table_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:stretchColumns="0,1">
@@ -81,7 +82,31 @@
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </TableRow>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="每日建議飲水量約為體重的30倍"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="您的建議飲水量為"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <TextView
+            android:id="@+id/water"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 cc"
+            android:textColor="@color/black"
+            android:textSize="40sp"/>
     </TableLayout>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
