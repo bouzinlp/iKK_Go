@@ -271,7 +271,9 @@ public class CameraActivity extends AppCompatActivity {
                     responseString = new String(predictionResults.get(0).data().get(0).name());
 
                     //把多種食物加入選單內讓user選
-                    for(int i=0;i<10;i++){
+                    for(int i=0;i<predictionResults.get(0).data().size();i++){
+                        if(predictionResults.get(0).data().get(i).value()<0.8) //Set a break value
+                            break;
                         if(predictionResults.get(0).data().get(i).name().isEmpty() == false ){
                             food_choose_list.add(predictionResults.get(0).data().get(i).name());
                         }
@@ -342,7 +344,7 @@ public class CameraActivity extends AppCompatActivity {
                         processFoodEvent();
                     }
                 });
-                
+
             } else { //If comparison matches data in the dataset
                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
                 customDialog.processDialogControllers();
