@@ -70,7 +70,7 @@ public class GalleryActivity extends AppCompatActivity {
 
     // Picture's original name and image view
     private String fileName;
-    private ImageView picture;
+    private ImageView picture, picture2;
 
     // Picture's file, uri, urlLink;
     private File picFile;
@@ -100,6 +100,7 @@ public class GalleryActivity extends AppCompatActivity {
     RequestParams params = new RequestParams();
     String encodedString;
     Bitmap bitmaptoUpload;
+    Bitmap newBm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -264,6 +265,8 @@ public class GalleryActivity extends AppCompatActivity {
 
             /*創造一個選單讓user選擇要上傳哪一類食物(EX 便當)*/
             setContentView(R.layout.custom_spinner_for_food);
+            picture2 = findViewById(R.id.food_photo);
+            picture2.setImageBitmap(newBm);
             Spinner spinner = (Spinner)findViewById(R.id.spinner);
             Button button = (Button)findViewById(R.id.button2);
 
@@ -482,12 +485,14 @@ public class GalleryActivity extends AppCompatActivity {
         // set bitmap to imageView
         System.out.println("Width = " + bitmap.getWidth());
         System.out.println("Height = " + bitmap.getHeight());
-        Bitmap newBm = resizeBitmap(bitmap);
+        newBm = resizeBitmap(bitmap);
         System.out.println("Width = " + newBm.getWidth());
         System.out.println("Height = " + newBm.getHeight());
         //picture.setImageBitmap(bitmap);
         picture.setImageBitmap(newBm);
         picture.setVisibility(View.VISIBLE);
+        //picture2.setImageBitmap(newBm);
+        //picture2.setVisibility(View.VISIBLE);
     }
 
     private String getImagePath(Uri paramUri) {
