@@ -676,6 +676,9 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "choose_food":  //The case of choosing order (English version)
                         parameterString += eatingOrder(parameterString,result,1);
+                        if(parameterString.isEmpty() == true){
+                            parameterString += ("I'm sorry. The food you search isn't in the database.");
+                        }
                         break;
                     case "get_today_food":
                         parameterString += eatingTodayFood(parameterString,result,1);
@@ -840,6 +843,9 @@ public class ChatBotActivity extends AppCompatActivity
                         break;
                     case "choose_food_action":  //The case of choosing order
                         parameterString += eatingOrder(parameterString,result,0);
+                        if(parameterString.isEmpty() == true){
+                            parameterString += ("很抱歉，您所查詢的食物不在資料庫內");
+                        }
                         break;
                     case "get_absorb_calorie":
                         int i;
@@ -1640,7 +1646,10 @@ public class ChatBotActivity extends AppCompatActivity
             if(label == 1){ // English Version
                 if(number == 0)
                     parameterString +=(" first.");
+                    number = 1;
             }
+
+
         }
         return  parameterString;
 

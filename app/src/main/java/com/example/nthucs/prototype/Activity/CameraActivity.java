@@ -64,6 +64,8 @@ import clarifai2.dto.model.output.ClarifaiOutput;
 import clarifai2.dto.prediction.Concept;
 import okhttp3.OkHttpClient;
 
+import static android.R.attr.bitmap;
+
 public class CameraActivity extends AppCompatActivity {
 
     private MenuItem search_pic;
@@ -74,8 +76,9 @@ public class CameraActivity extends AppCompatActivity {
 
     // Picture's original name and image view
     private String fileName;
-    private ImageView picture;
+    private ImageView picture,picture2;
     private Bitmap bitmaptoUpload;
+    private Bitmap newBm;
     private String encodedString;
     // Picture's file, uri, urlLink;
     private File picFile;
@@ -238,18 +241,6 @@ public class CameraActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try {
                 try {
-                    // Set your file path here
-                    //FileInputStream fstrm = new FileInputStream(PicFile);
-
-                    // Set your server page url (and the file title/description)
-                    //HttpFileUpload hfu = new HttpFileUpload(SERVER_URL, "searchPic", "searchFood");
-
-                    // Send to server, pass file input stream and file's path
-                    //hfu.Send_Now(fstrm, PicPath);
-
-                    // Get the response string from server
-                    //responseString = hfu.getResponseString();
-
                      /*For image recognition , Implemented by YuJui Chen*/
                     //ReImplemented by YuJui Chen
                     /*利用線上clarifai來進行圖片分析 此處使用food model進行實作 */
@@ -305,6 +296,8 @@ public class CameraActivity extends AppCompatActivity {
 
             /*創造一個選單讓user選擇要上傳哪一類食物(EX 便當裡要上傳哪一種食物)*/
             setContentView(R.layout.custom_spinner_for_food);
+            picture2 = findViewById(R.id.food_photo);
+            picture2.setImageBitmap(newBm);
             Spinner spinner = (Spinner)findViewById(R.id.spinner);
             Button button = (Button)findViewById(R.id.button2);
 
@@ -539,6 +532,8 @@ public class CameraActivity extends AppCompatActivity {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         // Must compress the Image to reduce image size to make upload easy
         bitmaptoUpload.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+        newBm = bitmaptoUpload;
+        newBm.compress(Bitmap.CompressFormat.JPEG, 50, stream);
         byte[] byte_arr = stream.toByteArray();
         // Encode Image to String
         result = Base64.encodeToString(byte_arr, Base64.DEFAULT);
