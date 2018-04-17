@@ -102,6 +102,9 @@ public class GalleryActivity extends AppCompatActivity {
     Bitmap bitmaptoUpload;
     Bitmap newBm;
 
+    Button button;
+    Spinner spinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,7 +179,7 @@ public class GalleryActivity extends AppCompatActivity {
     }
 
     //AsyncTask 3種型態分別為 傳入值 更新進度 結果
-    private class ATC extends AsyncTask<String, Integer, String> {
+    private class ATC extends AsyncTask<String, Integer, List<String>> {
 
         // URL upload
         private static final String SERVER_URL = "http://uploads.im/api?upload";
@@ -189,6 +192,10 @@ public class GalleryActivity extends AppCompatActivity {
         String PicPath;
 
         GalleryActivity galleryActivity;
+
+        int[] compare_result = new int[100];
+
+        boolean isIn = false;
 
         // ProgressDialog
         private ProgressDialog uploadProgressDialog;
@@ -215,11 +222,10 @@ public class GalleryActivity extends AppCompatActivity {
             super.onPreExecute();
         }
         @Override
-        protected String doInBackground(String... urls) {
+        protected List<String> doInBackground(String... urls) {
 
                 try {
                     /*For image recognition , Implemented by YuJui Chen*/
-                    //ReImplemented by YuJui Chen
                     /*利用線上clarifai來進行圖片分析 此處使用food model進行實作 */
                     ClarifaiClient client_clarifi = new ClarifaiBuilder("c3064802a10e4254bd714f7e121e2c99")
                             .client(new OkHttpClient()) // OPTIONAL. Allows customization of OkHttp by the user
@@ -236,7 +242,7 @@ public class GalleryActivity extends AppCompatActivity {
 
                     System.out.println(predictionResults);
                     System.out.println(predictionResults.get(0).data().get(0).name());
-                    responseString = new String(predictionResults.get(0).data().get(0).name());
+                    //responseString = new String(predictionResults.get(0).data().get(0).name());
 
                     //把多種食物加入選單內讓user選
                     for(int i=0;i<predictionResults.get(0).data().size();i++){
@@ -250,25 +256,20 @@ public class GalleryActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     // Error: File not found
                 }
-                return responseString;
+                return food_choose_list;
 
         }
 
 
         @Override
-        protected void onPostExecute(String result) {
-            if (result.equals(responseString)) {
-                uploadProgressDialog.dismiss();
-            }
-            imageUrl = getParseString(responseString, "data", "img_url");
-            System.out.println(imageUrl);
-
+        protected void onPostExecute(List<String> result) {
+            uploadProgressDialog.dismiss();
             /*創造一個選單讓user選擇要上傳哪一類食物(EX 便當)*/
             setContentView(R.layout.custom_spinner_for_food);
             picture2 = findViewById(R.id.food_photo);
             picture2.setImageBitmap(newBm);
-            Spinner spinner = (Spinner)findViewById(R.id.spinner);
-            Button button = (Button)findViewById(R.id.button2);
+            spinner = (Spinner)findViewById(R.id.spinner);
+            button = (Button)findViewById(R.id.button2);
 
             ArrayAdapter<String>  lunchList = new ArrayAdapter<>(this.galleryActivity,
                     android.R.layout.simple_spinner_dropdown_item,
@@ -279,116 +280,37 @@ public class GalleryActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     //Toast.makeText(GalleryActivity.this, "你選的是" + food_choose_list[position], Toast.LENGTH_SHORT).show(); // For debugging
                     resultText = food_choose_list.get(position);
-                }
+                    // resultText 是最終選出食物的名字
+                    resultText = resultText.replace(" ","");
 
+                    // Compare Food Cal DAO to get calorie
+                    CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+                    compare_result = compFoodDB.compareFoodCalDB();
+                    isIn =true;
+                    if (compare_result == null || compare_result.length == 0) {
+                        button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                // Code here executes on main thread after user presses button
+                                processFoodEvent();
+                            }
+                        });
+
+                    } else { //If comparison matches data in the dataset
+                        button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+                                        fileName, picUriString, GalleryActivity.this, encodedString);
+                                customDialog.processDialogControllers();
+                            }
+                        });
+                    }
+                }
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
             });
 
-
-            // resultText 是最終選出食物的名字
-            resultText = result.replace(" ","");
-
-            // Compare Food Cal DAO to get calorie
-            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-            int[] compare_result = compFoodDB.compareFoodCalDB();
-
-            // output test
-            System.out.println("Suggested result: " + resultText);
-            System.out.println("after : " + resultText.replace(" ",""));
-
-            // if the compare result is empty
-            if (compare_result == null || compare_result.length == 0) {
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // Code here executes on main thread after user presses button
-                        processFoodEvent();
-                    }
-                });
-
-            } else { //If comparison matches data in the dataset
-                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                        fileName, picUriString, GalleryActivity.this,encodedString);
-                customDialog.processDialogControllers();
-            }
-        }
-    }
-
-    private class ATJ extends AsyncTask<String, Void, String> {
-        String Url;
-        GalleryActivity galleryActivity;
-        String result_text;
-        ProgressDialog prd;
-
-        public ATJ(String Url, GalleryActivity galleryActivity){
-            this.Url = Url;
-            this.galleryActivity = galleryActivity;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            prd = new ProgressDialog(galleryActivity);
-            prd.setTitle("搜尋中");
-            prd.setMessage("請等待搜尋結果");
-            prd.show();
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                try {
-                    // Connect website: google search by image
-                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).timeout(0).get();
-
-                    // Parse html with class name: _gUb
-                    //Elements elem = doc.getElementsByClass("_gUb");
-
-                    // Get the text content
-                    //result_text = elem.text();
-
-                    // output test
-                /*System.out.println("============");
-                System.out.println(elem);
-                System.out.println("============");*/
-
-                } /*catch (IOException e) {
-                    System.out.println("IO exception");
-                }*/ catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return result_text;
-            }
-            finally {
-
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // Get the result text from the response string
-            if (prd.isShowing()) prd.dismiss();
-            resultText = result.replace(" ","");
-
-            // Compare Food Cal DAO to get calorie
-            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-            int[] compare_result = compFoodDB.compareFoodCalDB();
-
-            // output test
-            System.out.println("Suggested result: " + resultText);
-            System.out.println("after : " + resultText.replace(" ",""));
-            // if the compare result is empty
-            if (compare_result == null || compare_result.length == 0) {
-                // Process normal food event
-                processFoodEvent();
-            } else {
-                // Process dialog with spinner wheel
-                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                        fileName, picUriString, GalleryActivity.this,encodedString);
-                customDialog.processDialogControllers();
-            }
         }
     }
 
