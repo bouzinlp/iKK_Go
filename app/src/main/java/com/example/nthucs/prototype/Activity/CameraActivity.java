@@ -313,10 +313,6 @@ public class CameraActivity extends AppCompatActivity {
                     CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
                     compare_result = compFoodDB.compareFoodCalDB();
 
-                    // output test
-                    System.out.println("Suggested result: " + resultText);
-                    System.out.println("after : " + resultText.replace(" ",""));
-
                     // 當按下按鈕且資料庫無資料
                     if (compare_result == null || compare_result.length == 0) {
                         button.setOnClickListener(new View.OnClickListener() {
@@ -331,8 +327,9 @@ public class CameraActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 // Code here executes on main thread after user presses button
                                 CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
-                                //CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
-                                        //fileName, imageUrl, CameraActivity.this, encodedString);
+                                System.out.println("Why "+fileName);
+                                /*CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+                                        fileName, imageUrl, CameraActivity.this, encodedString);*/
 
                                 customDialog.processDialogControllers();
                             }
@@ -401,10 +398,11 @@ public class CameraActivity extends AppCompatActivity {
     private File configFileName(String prefix, String extension) {
         if (fileName == null) {
             fileName = FileUtil.getUniqueFileName();
+            fileName = fileName+".jpg";
         }
 
         return new File(FileUtil.getExternalStorageDir(FileUtil.APP_DIR),
-                prefix + fileName + extension);
+                prefix + fileName );
     }
 
     private String getImagePath(Uri paramUri) {
@@ -438,7 +436,7 @@ public class CameraActivity extends AppCompatActivity {
         // original set to food event
         food.setTitle(resultText);
         food.setContent("blank content");
-        //food.setFileName(fileName);
+        food.setFileName(fileName);
         food.setCalorie(0.0f);
         food.setGrams(100.0f);
         food.setPortions(1.0f);

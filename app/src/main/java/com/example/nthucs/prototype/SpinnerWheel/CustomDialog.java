@@ -208,11 +208,11 @@ public class CustomDialog {
                 food.setContent("blank content");
                 food.setFileName(fileName);
                 food.setCalorie(foodCalList.get(selectedIdx).getCalorie());
-                food.setEncodedString(encodedString);
+                //food.setEncodedString(encodedString);
                 food.setGrams(100.0f);
                 food.setPortions(1.0f);
                 food.setPicUriString(picUriString);
-                food.setEncodedString(encodedString);
+                //food.setEncodedString(encodedString);
                 // distinguish parent activity
                 if (parentIsGallery == true) {
                     food.setTakeFromCamera(false);
