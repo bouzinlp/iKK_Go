@@ -102,6 +102,11 @@ public class CameraActivity extends AppCompatActivity {
     //讓user選多種食物當中的一類
     List<String> food_choose_list = new ArrayList<String>();
 
+    Button button;
+    Spinner spinner;
+
+    int[] compare_result = new int[100];
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,17 +285,9 @@ public class CameraActivity extends AppCompatActivity {
             }
         }
 
-//        @Override
-//        protected void onProgressUpdate(Integer... progress) {
-//            uploadProgressDialog.incrementProgressBy(5);
-//            super.onProgressUpdate(progress);
-//        }
-
         @Override
         protected void onPostExecute(String result) {
-            if (result.equals(responseString)) {
-                uploadProgressDialog.dismiss();
-            }
+            uploadProgressDialog.dismiss();
             imageUrl = getParseString(responseString, "data", "img_url");
             System.out.println(imageUrl);
 
@@ -298,8 +295,8 @@ public class CameraActivity extends AppCompatActivity {
             setContentView(R.layout.custom_spinner_for_food);
             picture2 = findViewById(R.id.food_photo);
             picture2.setImageBitmap(newBm);
-            Spinner spinner = (Spinner)findViewById(R.id.spinner);
-            Button button = (Button)findViewById(R.id.button2);
+            spinner = (Spinner)findViewById(R.id.spinner);
+            button = (Button)findViewById(R.id.button2);
 
             ArrayAdapter<String> lunchList = new ArrayAdapter<>(this.cameraActivity,
                     android.R.layout.simple_spinner_dropdown_item,
@@ -310,6 +307,37 @@ public class CameraActivity extends AppCompatActivity {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     //Toast.makeText(GalleryActivity.this, "你選的是" + food_choose_list[position], Toast.LENGTH_SHORT).show(); // For debugging
                     resultText = food_choose_list.get(position);
+                    resultText = resultText.replace(" ","");
+
+                    // Compare Food Cal DAO to get calorie
+                    CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
+                    compare_result = compFoodDB.compareFoodCalDB();
+
+                    // output test
+                    System.out.println("Suggested result: " + resultText);
+                    System.out.println("after : " + resultText.replace(" ",""));
+
+                    // 當按下按鈕且資料庫無資料
+                    if (compare_result == null || compare_result.length == 0) {
+                        button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                // Code here executes on main thread after user presses button
+                                processFoodEvent();
+                            }
+                        });
+
+                    } else { //當按下按鈕資料庫有資料
+                        button.setOnClickListener(new View.OnClickListener() {
+                            public void onClick(View v) {
+                                // Code here executes on main thread after user presses button
+                                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
+                                //CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,
+                                        //fileName, imageUrl, CameraActivity.this, encodedString);
+
+                                customDialog.processDialogControllers();
+                            }
+                        });
+                    }
                 }
 
                 @Override
@@ -318,108 +346,6 @@ public class CameraActivity extends AppCompatActivity {
                 }
             });
 
-            resultText = result.replace(" ","");
-
-            // Compare Food Cal DAO to get calorie
-            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-            int[] compare_result = compFoodDB.compareFoodCalDB();
-
-            // output test
-            System.out.println("Suggested result: " + resultText);
-            System.out.println("after : " + resultText.replace(" ",""));
-
-            //processFoodEvent();
-            // if the compare result is empty
-            if (compare_result == null || compare_result.length == 0) {
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        // Code here executes on main thread after user presses button
-                        processFoodEvent();
-                    }
-                });
-
-            } else { //If comparison matches data in the dataset
-                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
-                customDialog.processDialogControllers();
-            }
-
-            super.onPostExecute(result);
-        }
-    }
-
-    private class ATJ extends AsyncTask<String, Void, String> {
-        String Url;
-        CameraActivity cameraActivity;
-        String result_text;
-        ProgressDialog prd;
-
-        public ATJ(String Url, CameraActivity cameraActivity){
-            this.Url = Url;
-            this.cameraActivity = cameraActivity;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            prd = new ProgressDialog(cameraActivity);
-            prd.setTitle("搜尋中");
-            prd.setMessage("請等待搜尋結果");
-            prd.show();
-        }
-
-        @Override
-        protected String doInBackground(String... urls) {
-            try {
-                try {
-                    // Connect website: google search by image
-                    Document doc = Jsoup.connect("http://images.google.com/searchbyimage?image_url=" + Url).get();
-
-                    // Parse html with class name: _gUb
-                    Elements elem = doc.getElementsByClass("_gUb");
-
-                    // Get the text content
-                    result_text = elem.text();
-
-
-
-                    // output test
-                /*System.out.println("============");
-                System.out.println(elem);
-                System.out.println("============");*/
-                } catch (IOException e) {
-                    System.out.println("IO exception");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return result_text;
-            }
-            finally {
-
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            // Get the result text from the response string
-            if (prd.isShowing()) prd.dismiss();
-            resultText = result;
-
-            // Compare Food Cal DAO to get calorie
-            CompFoodDB compFoodDB = new CompFoodDB(resultText, foodCalList);
-            int[] compare_result = compFoodDB.compareFoodCalDB();
-
-            // output test
-            System.out.println("Suggested result: " + resultText);
-
-            // if the compare result is empty
-            if (compare_result == null || compare_result.length == 0) {
-                // Process normal food event
-                processFoodEvent();
-            } else {
-                // Process dialog with spinner wheel
-                CustomDialog customDialog = new CustomDialog(compare_result, food, foodCalList,fileName, CameraActivity.this,encodedString);
-                customDialog.processDialogControllers();
-            }
         }
     }
 
@@ -512,7 +438,7 @@ public class CameraActivity extends AppCompatActivity {
         // original set to food event
         food.setTitle(resultText);
         food.setContent("blank content");
-        food.setFileName(fileName);
+        //food.setFileName(fileName);
         food.setCalorie(0.0f);
         food.setGrams(100.0f);
         food.setPortions(1.0f);
