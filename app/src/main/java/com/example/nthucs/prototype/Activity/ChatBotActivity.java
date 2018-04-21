@@ -687,6 +687,96 @@ public class ChatBotActivity extends AppCompatActivity
                             senMessage_test();
                         }
                         break;
+                    case "get_absorb_calorie":
+                        int i;
+                        //get today's total calories
+                        for( i=0;i<todayFoods.size();i++) {
+                            total_absorb_calories += todayFoods.get(i).getCalorie();
+                        }
+                        idel_absorb_cal = sharedPreferences.getFloat("absorb",0);
+
+                        if(idel_absorb_cal == 0 || total_absorb_calories == 0){
+                            if(idel_absorb_cal == 0){
+                                parameterString += "please go to “setting” to fill in your weight loss goals";
+                            }
+                            else{
+                                parameterString += "You have not eaten any food today!";
+                            }
+                        }
+                        else {
+                            if (total_absorb_calories < idel_absorb_cal) {
+                                parameterString += "Today you have absorbed " + total_absorb_calories + "calories\n";
+                                float carolie_need = idel_absorb_cal - total_absorb_calories;
+                                parameterString += "According to daily demanded calories, You still have to absorb " + carolie_need + "" + "calories\n";
+                                parameterString += "I suggest you making up calories";
+
+                            } else if (total_absorb_calories > idel_absorb_cal) {
+                                parameterString += "Today you have absorbed " + total_absorb_calories + "calories\n";
+                                parameterString += "You have exceeded daily demanded calories" + ((total_absorb_calories - (double) idel_absorb_cal) + "")
+                                        + "calories\n";
+                                parameterString += "Do exercise more or cut food intake";
+                            } else {
+                                parameterString += "You have achieved daily demanded calories today, and you should make a rest";
+                            }
+                        }
+                        break;
+                    case "get_consume_calorie":
+                        //get today's total calories
+                        for(i=0;i<todaySports.size();i++){
+                            total_consume_calories += todaySports.get(i).getCalorie();
+                        }
+
+                        idel_consume_cal = sharedPreferences.getFloat("consume",0);
+
+                        if(idel_consume_cal == 0 || total_consume_calories == 0){
+                            if(idel_consume_cal == 0){
+                                parameterString += "please go to “setting” to fill in your weight loss goals！";
+                            }
+                            else{
+                                parameterString += "You did not do exercise today!";
+                            }
+                        }
+                        else{
+                            if(total_consume_calories > idel_consume_cal){
+                                parameterString += "You have consumed " + total_consume_calories + "calories\n";
+                                parameterString += "Please eat some food with much \n" +
+                                        "Dietary fiber and take a rest!";
+                            }
+                            else if(total_consume_calories < idel_consume_cal){
+                                parameterString += "You have consumed " + total_consume_calories + "calories\n";
+                                parameterString += "According to ideal daily calorie consumption, You still have to consume" + (idel_consume_cal-total_consume_calories)
+                                        + "calorie\n";
+                                parameterString += "Please do exercise more in order to stay ideal calorie consumption";
+                            }
+                            else{
+                                parameterString += "You have achieved ideal daily calorie consumption！ Please keep it up!";
+                            }
+                        }
+                        break;
+                    case "get_tem":
+                        parameterString += ("Your body temperture is "+tem);
+                        break;
+                    case "get_water":
+                        parameterString += ("You have drunk "+water_drunk);
+                        break;
+                    case "declare_disease":
+                        if(result.getStringParameter(disease).equals("心臟病")){
+                            curHealth.setHeartDiseasePos();
+                            //該用什麼英文？？？
+                            heart_disease = true;
+                            //healthDAO.update(curHealth);
+                            //parameterString += ("\nDebug "+curHealth.getHeartDisease());
+                        }
+                        else if(result.getStringParameter(disease).equals("diabetes")){
+                            curHealth.setDiabetesDiseasePos();
+                            diabetes_disease = true;
+                        }
+                        else if(result.getStringParameter(disease).equals("下腹突出")){
+                            //該用什麼英文？？？
+                            stomach_problem = true;
+                        }
+                        Toast.makeText(ChatBotActivity.this, "System have updated successfully!", Toast.LENGTH_SHORT).show();
+                        break;
                 }
             } else {
                 switch (result.getAction()) {
@@ -908,7 +998,7 @@ public class ChatBotActivity extends AppCompatActivity
                                 parameterString += "建議多運動以保持理想熱量消耗量";
                             }
                             else{
-                                parameterString += "您今天達成每日理想每日消耗熱量！ 請繼續保持";
+                                parameterString += "您今天達成每日理想消耗熱量！ 請繼續保持";
                             }
                         }
                         break;
@@ -925,7 +1015,7 @@ public class ChatBotActivity extends AppCompatActivity
                             //healthDAO.update(curHealth);
                             //parameterString += ("\nDebug "+curHealth.getHeartDisease());
                         }
-                        else if(result.getStringParameter(disease).equals("糖尿病")|| result.getStringParameter(disease).equals("diabetes")){
+                        else if(result.getStringParameter(disease).equals("糖尿病")){
                             curHealth.setDiabetesDiseasePos();
                             diabetes_disease = true;
                         }
