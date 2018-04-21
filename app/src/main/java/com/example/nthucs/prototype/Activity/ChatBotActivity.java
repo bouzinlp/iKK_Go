@@ -925,7 +925,7 @@ public class ChatBotActivity extends AppCompatActivity
                             //healthDAO.update(curHealth);
                             //parameterString += ("\nDebug "+curHealth.getHeartDisease());
                         }
-                        else if(result.getStringParameter(disease).equals("糖尿病")){
+                        else if(result.getStringParameter(disease).equals("糖尿病")|| result.getStringParameter(disease).equals("diabetes")){
                             curHealth.setDiabetesDiseasePos();
                             diabetes_disease = true;
                         }
